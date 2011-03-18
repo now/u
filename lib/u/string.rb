@@ -1,12 +1,7 @@
-# contents: UTF-8 String methods.
-#
-# Copyright © 2006 Nikolai Weibull <now@bitwi.se>
+# -*- coding: utf-8 -*-
 
 require 'encoding/character/utf-8/utf8'
 
-# TODO: Rework this to use a dispatch object instead, so that the encoding can
-# be changed on the fly.
-# TODO: Add String#encoding.
 module U::String
   def self.def_thunk_replacing_variant(method)
     define_method(:"#{method}!") do
@@ -153,7 +148,7 @@ module U::String
   end
 
   def inspect
-    "u#{_inspect}"
+    'u%s' % super
   end
 
   def ljust(*args)
@@ -178,24 +173,4 @@ module U::String
     Encoding::Character::UTF8.foldcase(self)
   end
   def_thunk_replacing_variant :foldcase
-
-private
-
-  Inspect = String.instance_method(:inspect)
-
-  def _inspect
-    Inspect.bind(self).call
-  end
-end
-
-class String
-  def +@
-    self.extend(Encoding::Character::UTF8::Methods)
-  end
-end
-
-module Kernel
-  def u(str)
-    str.extend(Encoding::Character::UTF8::Methods)
-  end
 end

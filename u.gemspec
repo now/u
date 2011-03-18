@@ -19,6 +19,8 @@ Gem::Specification.new do |s|
     Dir['{lib,test}/**/*.rb'] +
     %w[README Rakefile]
 
+  s.require_paths = %w[ext lib]
+
   s.add_development_dependency 'lookout', '~> 0.6.0'
   s.add_development_dependency 'yard', '~> 0.6.0'
 end
