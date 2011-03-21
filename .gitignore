@@ -1,9 +1,10 @@
 *.o
 *.so
 *.bundle
+*.gem
 *.swp
 TAGS
-ext/encoding/character/utf-8/Makefile
+/ext/encoding/character/utf-8/Makefile
 mkmf.log
 /tests/data
 /packages
