@@ -275,9 +275,9 @@ rb_utf_index_regexp(VALUE str, const char *s, const char *end, VALUE sub,
         return utf_pointer_to_offset(s, s + byte_index);
 }
 
-void Init_utf8(void);
+void Init_u(void);
 void
-Init_utf8(void)
+Init_u(void)
 {
         VALUE mU = rb_define_module("U");
 

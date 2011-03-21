@@ -64,4 +64,4 @@ have_header 'wchar.h'
 $INSTALLFILES ||= []
 $INSTALLFILES << ['unicode.h', '$(RUBYARCHDIR)', 'lib']
 
-create_makefile 'encoding/character/utf-8/utf8'
+create_makefile 'u/u'

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require 'encoding/character/utf-8/utf8'
-
 module U::String
   def downcase!
     replace(downcase)

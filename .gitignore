@@ -4,7 +4,7 @@
 *.gem
 *.swp
 TAGS
-/ext/encoding/character/utf-8/Makefile
+/ext/u/Makefile
 mkmf.log
 /tests/data
 /packages

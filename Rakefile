@@ -12,8 +12,8 @@ task :test => :extensions
 desc 'Build all C-based extensions'
 task :extensions
 [
-  'utf-8'
-].map{ |e| File.join('ext/encoding/character', e) }.each do |extension|
+  'u'
+].map{ |e| File.join('ext', e) }.each do |extension|
   makefile = File.join(extension, 'Makefile')
   so = File.join(extension, File.basename(extension).delete('-') + '.' + Config::CONFIG['DLEXT'])
   tags = File.join(extension, 'TAGS')
