@@ -7,10 +7,10 @@
 #include "rb_includes.h"
 
 VALUE
-rb_utf_strip_bang(VALUE self, VALUE str)
+rb_utf_strip_bang(VALUE str)
 {
-        VALUE left = rb_utf_lstrip_bang(self, str);
-        VALUE right = rb_utf_rstrip_bang(self, str);
+        VALUE left = rb_utf_lstrip_bang(str);
+        VALUE right = rb_utf_rstrip_bang(str);
 
         if (NIL_P(left) && NIL_P(right))
                 return Qnil;
@@ -19,9 +19,10 @@ rb_utf_strip_bang(VALUE self, VALUE str)
 }
 
 VALUE
-rb_utf_strip(VALUE self, VALUE str)
+rb_utf_strip(VALUE str)
 {
-        str = rb_utf_dup(str);
-        rb_utf_strip_bang(self, str);
-        return str;
+        VALUE dup = rb_utf_dup(str);
+        rb_utf_strip_bang(dup);
+
+        return dup;
 }

@@ -7,7 +7,7 @@
 #include "rb_includes.h"
 
 VALUE
-rb_utf_rstrip_bang(UNUSED(VALUE self), VALUE str)
+rb_utf_rstrip_bang(VALUE str)
 {
         StringValue(str);
         const char *begin = RSTRING(str)->ptr;
@@ -43,9 +43,10 @@ rb_utf_rstrip_bang(UNUSED(VALUE self), VALUE str)
 }
 
 VALUE
-rb_utf_rstrip(VALUE self, VALUE str)
+rb_utf_rstrip(VALUE str)
 {
-        str = rb_utf_dup(str);
-        rb_utf_rstrip_bang(self, str);
-        return str;
+        VALUE dup = rb_utf_dup(str);
+        rb_utf_rstrip_bang(dup);
+
+        return dup;
 }

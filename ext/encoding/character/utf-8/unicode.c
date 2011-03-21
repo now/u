@@ -16,7 +16,7 @@
 #include "rb_private.h"
 #include "rb_methods.h"
 
-static VALUE mUTF8Methods;
+static VALUE mUString;
 
 void
 need_at_least_n_arguments(int argc, int n)
@@ -35,6 +35,14 @@ need_at_least_n_arguments(int argc, int n)
                 rb_raise(rb_eArgError, "need at least %s arguments", words[n]);
         else
                 rb_raise(rb_eArgError, "need at least %d arguments", n);
+}
+
+void
+need_m_to_n_arguments(int argc, int m, int n)
+{
+        if (argc < m || argc > n)
+                rb_raise(rb_eArgError,
+                         "wrong number of arguments (%d for %d..%d)", argc, m, n);
 }
 
 unichar
@@ -184,7 +192,7 @@ VALUE
 rb_utf_new(const char *str, long len)
 {
         VALUE rbstr = rb_str_new(str, len);
-        rb_extend_object(rbstr, mUTF8Methods);
+        rb_extend_object(rbstr, mUString);
         return rbstr;
 }
 
@@ -192,7 +200,7 @@ VALUE
 rb_utf_new2(const char *str)
 {
         VALUE rbstr = rb_str_new2(str);
-        rb_extend_object(rbstr, mUTF8Methods);
+        rb_extend_object(rbstr, mUString);
         return rbstr;
 }
 
@@ -200,7 +208,7 @@ VALUE
 rb_utf_new5(VALUE obj, const char *str, long len)
 {
         VALUE rbstr = rb_str_new5(obj, str, len);
-        rb_extend_object(rbstr, mUTF8Methods);
+        rb_extend_object(rbstr, mUString);
         return rbstr;
 }
 
@@ -222,7 +230,7 @@ VALUE
 rb_utf_dup(VALUE str)
 {
         str = rb_str_dup(str);
-        rb_extend_object(str, mUTF8Methods);
+        rb_extend_object(str, mUString);
         return str;
 }
 
@@ -271,49 +279,50 @@ void Init_utf8(void);
 void
 Init_utf8(void)
 {
-        VALUE mEncoding = rb_define_module("Encoding");
-        VALUE mCharacter = rb_define_module_under(mEncoding, "Character");
-        VALUE mUTF8 = rb_define_module_under(mCharacter, "UTF8");
+        VALUE mU = rb_define_module("U");
 
-        mUTF8Methods = rb_define_module_under(mUTF8, "Methods");
+        mUString = rb_define_module_under(mU, "String");
 
-        rb_define_module_function(mUTF8, "collate", rb_utf_collate, 2);
-        rb_define_module_function(mUTF8, "aref", rb_utf_aref_m, -1);
-        rb_define_module_function(mUTF8, "aset", rb_utf_aset_m, -1);
-        rb_define_module_function(mUTF8, "casecmp", rb_utf_casecmp, 2);
-        rb_define_module_function(mUTF8, "center", rb_utf_center, -1);
-        rb_define_module_function(mUTF8, "chomp", rb_utf_chomp, -1);
-        rb_define_module_function(mUTF8, "chomp!", rb_utf_chomp_bang, -1);
-        rb_define_module_function(mUTF8, "chop", rb_utf_chop, 1);
-        rb_define_module_function(mUTF8, "chop!", rb_utf_chop_bang, 1);
-        rb_define_module_function(mUTF8, "count", rb_utf_count, -1);
-        rb_define_module_function(mUTF8, "delete", rb_utf_delete, -1);
-        rb_define_module_function(mUTF8, "delete!", rb_utf_delete_bang, -1);
-        rb_define_module_function(mUTF8, "each_char", rb_utf_each_char, 1);
-        rb_define_module_function(mUTF8, "index", rb_utf_index_m, -1);
-        rb_define_module_function(mUTF8, "insert", rb_utf_insert, 3);
-        rb_define_module_function(mUTF8, "lstrip", rb_utf_lstrip, 1);
-        rb_define_module_function(mUTF8, "lstrip!", rb_utf_lstrip_bang, 1);
-        rb_define_module_function(mUTF8, "rindex", rb_utf_rindex_m, -1);
-        rb_define_module_function(mUTF8, "rstrip", rb_utf_rstrip, 1);
-        rb_define_module_function(mUTF8, "rstrip!", rb_utf_rstrip_bang, 1);
-        rb_define_module_function(mUTF8, "squeeze", rb_utf_squeeze, -1);
-        rb_define_module_function(mUTF8, "squeeze!", rb_utf_squeeze_bang, -1);
-        rb_define_module_function(mUTF8, "strip", rb_utf_strip, 1);
-        rb_define_module_function(mUTF8, "strip!", rb_utf_strip_bang, 1);
-        rb_define_module_function(mUTF8, "to_i", rb_utf_to_i, -1);
-        rb_define_module_function(mUTF8, "hex", rb_utf_hex, 1);
-        rb_define_module_function(mUTF8, "oct", rb_utf_oct, 1);
-        rb_define_module_function(mUTF8, "tr", rb_utf_tr, 3);
-        rb_define_module_function(mUTF8, "tr_s", rb_utf_tr_s, 3);
+        rb_define_method(mUString, "collate", rb_utf_collate, 1);
+        rb_define_alias(mUString, "<=>", "collate");
+        rb_define_method(mUString, "collate", rb_utf_collate, 1);
+        rb_define_method(mUString, "[]", rb_utf_aref_m, -1);
+        rb_define_alias(mUString, "slice", "[]");
+        rb_define_method(mUString, "[]=", rb_utf_aset_m, -1);
+        rb_define_method(mUString, "casecmp", rb_utf_casecmp, 1);
+        rb_define_method(mUString, "center", rb_utf_center, -1);
+        rb_define_method(mUString, "chomp", rb_utf_chomp, -1);
+        rb_define_method(mUString, "chomp!", rb_utf_chomp_bang, -1);
+        rb_define_method(mUString, "chop", rb_utf_chop, 0);
+        rb_define_method(mUString, "chop!", rb_utf_chop_bang, 0);
+        rb_define_method(mUString, "count", rb_utf_count, -1);
+        rb_define_method(mUString, "delete", rb_utf_delete, -1);
+        rb_define_method(mUString, "delete!", rb_utf_delete_bang, -1);
+        rb_define_method(mUString, "each_char", rb_utf_each_char, 0);
+        rb_define_method(mUString, "index", rb_utf_index_m, -1);
+        rb_define_method(mUString, "insert", rb_utf_insert, 2);
+        rb_define_method(mUString, "lstrip", rb_utf_lstrip, 0);
+        rb_define_method(mUString, "lstrip!", rb_utf_lstrip_bang, 0);
+        rb_define_method(mUString, "rindex", rb_utf_rindex_m, -1);
+        rb_define_method(mUString, "rstrip", rb_utf_rstrip, 0);
+        rb_define_method(mUString, "rstrip!", rb_utf_rstrip_bang, 0);
+        rb_define_method(mUString, "squeeze", rb_utf_squeeze, -1);
+        rb_define_method(mUString, "squeeze!", rb_utf_squeeze_bang, -1);
+        rb_define_method(mUString, "strip", rb_utf_strip, 0);
+        rb_define_method(mUString, "strip!", rb_utf_strip_bang, 0);
+        rb_define_method(mUString, "to_i", rb_utf_to_i, -1);
+        rb_define_method(mUString, "hex", rb_utf_hex, 0);
+        rb_define_method(mUString, "oct", rb_utf_oct, 0);
+        rb_define_method(mUString, "tr", rb_utf_tr, 2);
+        rb_define_method(mUString, "tr_s", rb_utf_tr_s, 2);
 
-        rb_define_module_function(mUTF8, "downcase", rb_utf_downcase, 1);
-        rb_define_module_function(mUTF8, "ljust", rb_utf_ljust, -1);
-        rb_define_module_function(mUTF8, "length", rb_utf_length, 1);
-        rb_define_module_function(mUTF8, "reverse", rb_utf_reverse, 1);
-        rb_define_module_function(mUTF8, "rjust", rb_utf_rjust, -1);
-        rb_define_module_function(mUTF8, "upcase", rb_utf_upcase, 1);
+        rb_define_method(mUString, "downcase", rb_utf_downcase, 0);
+        rb_define_method(mUString, "ljust", rb_utf_ljust, -1);
+        rb_define_method(mUString, "length", rb_utf_length, 0);
+        rb_define_method(mUString, "reverse", rb_utf_reverse, 0);
+        rb_define_method(mUString, "rjust", rb_utf_rjust, -1);
+        rb_define_method(mUString, "upcase", rb_utf_upcase, 0);
 
-        rb_define_module_function(mUTF8, "foldcase", rb_utf_foldcase, 1);
-        rb_define_module_function(mUTF8, "normalize", rb_utf_normalize, -1);
+        rb_define_method(mUString, "foldcase", rb_utf_foldcase, 0);
+        rb_define_method(mUString, "normalize", rb_utf_normalize, -1);
 }

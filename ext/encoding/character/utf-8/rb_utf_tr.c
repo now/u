@@ -238,13 +238,13 @@ tr_trans(VALUE str, VALUE from, VALUE to, bool squeeze, bool replace_content)
 }
 
 VALUE
-rb_utf_tr(UNUSED(VALUE self), VALUE str, VALUE from, VALUE to)
+rb_utf_tr(VALUE str, VALUE from, VALUE to)
 {
         return tr_trans(str, from, to, false, false);
 }
 
 VALUE
-rb_utf_tr_s(UNUSED(VALUE self), VALUE str, VALUE from, VALUE to)
+rb_utf_tr_s(VALUE str, VALUE from, VALUE to)
 {
         return tr_trans(str, from, to, true, false);
 }

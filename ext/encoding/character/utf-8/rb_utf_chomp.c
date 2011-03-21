@@ -57,19 +57,19 @@ rb_utf_chomp_newlines(VALUE str)
 }
 
 VALUE
-rb_utf_chomp_bang(int argc, VALUE *argv, UNUSED(VALUE self))
+rb_utf_chomp_bang(int argc, VALUE *argv, VALUE str)
 {
-        VALUE str, rs;
-
-        rb_scan_args(argc, argv, "11", &str, &rs);
+        VALUE rs;
 
         if (RSTRING(str)->len == 0)
                 return Qnil;
 
-        if (argc == 1) {
+        if (argc == 0) {
                 rs = rb_rs;
                 if (rs == rb_default_rs)
                         rb_utf_chomp_default(str);
+        } else {
+                rs = argv[0];
         }
 
         if (NIL_P(rs))
@@ -104,11 +104,13 @@ rb_utf_chomp_bang(int argc, VALUE *argv, UNUSED(VALUE self))
 }
 
 VALUE
-rb_utf_chomp(int argc, VALUE *argv, VALUE self)
+rb_utf_chomp(int argc, VALUE *argv, VALUE str)
 {
-        StringValue(argv[0]);
-        argv[0] = rb_utf_dup(argv[0]);
-        rb_utf_chomp_bang(argc, argv, self);
-        return argv[0];
+        StringValue(str);
+
+        VALUE dup = rb_utf_dup(str);
+        rb_utf_chomp_bang(argc, argv, dup);
+
+        return dup;
 }
 

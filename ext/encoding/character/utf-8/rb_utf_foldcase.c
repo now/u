@@ -7,7 +7,7 @@
 #include "rb_includes.h"
 
 VALUE
-rb_utf_foldcase(UNUSED(VALUE self), VALUE str)
+rb_utf_foldcase(VALUE str)
 {
         return rb_utf_alloc_using(utf_foldcase(StringValuePtr(str)));
 }

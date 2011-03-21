@@ -35,15 +35,14 @@ symbol_to_mode(VALUE symbol)
 }
 
 VALUE
-rb_utf_normalize(int argc, VALUE *argv, UNUSED(VALUE self))
+rb_utf_normalize(int argc, VALUE *argv, VALUE str)
 {
-        VALUE str, rbmode;
-
-        NormalizeMode mode = NORMALIZE_DEFAULT;
-        if (rb_scan_args(argc, argv, "11", &str, &rbmode) == 2)
-                mode = symbol_to_mode(rbmode);
-
         StringValue(str);
+
+        VALUE rbmode;
+        NormalizeMode mode = NORMALIZE_DEFAULT;
+        if (rb_scan_args(argc, argv, "01", &rbmode) == 1)
+                mode = symbol_to_mode(rbmode);
 
         return rb_utf_alloc_using(utf_normalize_n(RSTRING(str)->ptr,
                                                   mode,

@@ -26,15 +26,15 @@ rb_utf_justify_one_side(char *p, const char *f, long f_len, long f_size, long n)
 }
 
 static VALUE
-rb_utf_justify(int argc, VALUE *argv, char jflag)
+rb_utf_justify(int argc, VALUE *argv, VALUE str, char jflag)
 {
-        VALUE str, w, pad;
+        VALUE w, pad;
         const char *f = " ";
         long f_len = 1;
         long f_size = 1;
         bool infect_from_pad = false;
 
-        if (rb_scan_args(argc, argv, "21", &str, &w, &pad) == 3) {
+        if (rb_scan_args(argc, argv, "11", &w, &pad) == 2) {
                 StringValue(pad);
                 f = RSTRING(pad)->ptr;
                 f_len = utf_length_n(f, RSTRING(pad)->len);
@@ -78,19 +78,19 @@ rb_utf_justify(int argc, VALUE *argv, char jflag)
 }
 
 VALUE
-rb_utf_center(int argc, VALUE *argv, UNUSED(VALUE self))
+rb_utf_center(int argc, VALUE *argv, VALUE str)
 {
-        return rb_utf_justify(argc, argv, 'c');
+        return rb_utf_justify(argc, argv, str, 'c');
 }
 
 VALUE
-rb_utf_ljust(int argc, VALUE *argv, UNUSED(VALUE self))
+rb_utf_ljust(int argc, VALUE *argv, VALUE str)
 {
-        return rb_utf_justify(argc, argv, 'l');
+        return rb_utf_justify(argc, argv, str, 'l');
 }
 
 VALUE
-rb_utf_rjust(int argc, VALUE *argv, UNUSED(VALUE self))
+rb_utf_rjust(int argc, VALUE *argv, VALUE str)
 {
-        return rb_utf_justify(argc, argv, 'r');
+        return rb_utf_justify(argc, argv, str, 'r');
 }

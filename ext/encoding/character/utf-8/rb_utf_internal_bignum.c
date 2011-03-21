@@ -7,7 +7,7 @@
 #include "rb_includes.h"
 #include "rb_utf_internal_bignum.h"
 
-/* Stolen straight from bignum.c. */
+/* XXX: Stolen straight from bignum.c. */
 #define BDIGITS(x)      ((BDIGIT *)RBIGNUM(x)->digits)
 #define BITSPERDIG      (SIZEOF_BDIGITS * CHAR_BIT)
 #define BIGRAD          ((BDIGIT_DBL)1 << BITSPERDIG)

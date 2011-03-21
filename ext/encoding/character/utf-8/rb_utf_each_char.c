@@ -7,8 +7,9 @@
 #include "rb_includes.h"
 
 VALUE
-rb_utf_each_char(UNUSED(VALUE self), VALUE str)
+rb_utf_each_char(VALUE str)
 {
+        StringValue(str);
 #if 0
         RETURN_ENUMERATOR(str, 0, 0);
 #endif

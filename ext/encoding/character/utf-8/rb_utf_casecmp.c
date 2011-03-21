@@ -7,7 +7,7 @@
 #include "rb_includes.h"
 
 VALUE
-rb_utf_casecmp(UNUSED(VALUE self), VALUE str1, VALUE str2)
+rb_utf_casecmp(VALUE str1, VALUE str2)
 {
         StringValue(str1);
         StringValue(str2);

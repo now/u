@@ -87,19 +87,17 @@ rb_utf_aset(VALUE str, VALUE index, VALUE replacement)
 }
 
 VALUE
-rb_utf_aset_m(int argc, VALUE *argv, UNUSED(VALUE self))
+rb_utf_aset_m(int argc, VALUE *argv, VALUE str)
 {
-        if (argc > 4 || argc < 3)
-                rb_raise(rb_eArgError,
-                         "wrong number of arguments (%d for 3)", argc);
+        need_m_to_n_arguments(argc, 2, 3);
 
-        StringValue(argv[0]);
+        StringValue(str);
 
-        if (argc == 3)
-                return rb_utf_aset(argv[0], argv[1], argv[2]);
+        if (argc == 2)
+                return rb_utf_aset(str, argv[0], argv[1]);
 
-        if (TYPE(argv[1]) == T_REGEXP)
-                return rb_str_subpat_set(argv[0], argv[1], NUM2INT(argv[2]), argv[3]);
+        if (TYPE(argv[0]) == T_REGEXP)
+                return rb_str_subpat_set(str, argv[0], NUM2INT(argv[1]), argv[2]);
 
-        return rb_utf_update(argv[0], NUM2LONG(argv[1]), NUM2LONG(argv[2]), argv[3]);
+        return rb_utf_update(str, NUM2LONG(argv[0]), NUM2LONG(argv[1]), argv[2]);
 }

@@ -7,7 +7,7 @@
 #include "rb_includes.h"
 
 VALUE
-rb_utf_downcase(UNUSED(VALUE self), VALUE str)
+rb_utf_downcase(VALUE str)
 {
         return rb_utf_alloc_using(utf_downcase(StringValuePtr(str)));
 }

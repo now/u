@@ -8,21 +8,18 @@
 #include "rb_utf_internal_tr.h"
 
 VALUE
-rb_utf_squeeze_bang(int argc, VALUE *argv, UNUSED(VALUE self))
+rb_utf_squeeze_bang(int argc, VALUE *argv, VALUE str)
 {
-        need_at_least_n_arguments(argc, 1);
-
-        VALUE str = argv[0];
         StringValue(str);
         if (RSTRING(str)->len == 0)
                 return Qnil;
 
         unsigned int table[TR_TABLE_SIZE];
-        if (argc == 1)
+        if (argc == 0)
                 for (int i = 0; i < TR_TABLE_SIZE; i++)
                         table[i] = ~0U;
         else
-                tr_setup_table_from_strings(table, argc - 1, &argv[1]);
+                tr_setup_table_from_strings(table, argc, &argv[0]);
 
         rb_str_modify(str);
 
@@ -59,12 +56,10 @@ rb_utf_squeeze_bang(int argc, VALUE *argv, UNUSED(VALUE self))
 }
 
 VALUE
-rb_utf_squeeze(int argc, VALUE *argv, VALUE self)
+rb_utf_squeeze(int argc, VALUE *argv, VALUE str)
 {
-        need_at_least_n_arguments(argc, 1);
-
-        StringValue(argv[0]);
-        argv[0] = rb_utf_dup(argv[0]);
-        rb_utf_squeeze_bang(argc, argv, self);
-        return argv[0];
+        StringValue(str);
+        VALUE dup = rb_utf_dup(str);
+        rb_utf_squeeze_bang(argc, argv, dup);
+        return dup;
 }

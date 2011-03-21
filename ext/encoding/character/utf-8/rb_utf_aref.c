@@ -93,19 +93,17 @@ rb_utf_aref(VALUE str, VALUE index)
 }
 
 VALUE
-rb_utf_aref_m(int argc, VALUE *argv, UNUSED(VALUE self))
+rb_utf_aref_m(int argc, VALUE *argv, VALUE str)
 {
-        StringValue(argv[0]);
+        StringValue(str);
 
-        if (argc > 3 || argc < 2)
-                rb_raise(rb_eArgError,
-                         "wrong number of arguments (%d for 2)", argc);
+        need_m_to_n_arguments(argc, 1, 2);
 
-        if (argc == 2)
-                return rb_utf_aref(argv[0], argv[1]);
+        if (argc == 1)
+                return rb_utf_aref(str, argv[0]);
 
-        if (TYPE(argv[1]) == T_REGEXP)
-                return rb_str_subpat(argv[0], argv[1], NUM2INT(argv[2]));
+        if (TYPE(argv[0]) == T_REGEXP)
+                return rb_str_subpat(str, argv[0], NUM2INT(argv[1]));
 
-        return rb_utf_substr(argv[0], NUM2INT(argv[1]), NUM2INT(argv[2]));
+        return rb_utf_substr(str, NUM2INT(argv[0]), NUM2INT(argv[1]));
 }

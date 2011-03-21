@@ -31,15 +31,15 @@ rb_utf_rindex(VALUE str, VALUE sub, long offset)
 }
 
 VALUE
-rb_utf_rindex_m(int argc, VALUE *argv, UNUSED(VALUE self))
+rb_utf_rindex_m(int argc, VALUE *argv, VALUE str)
 {
-        VALUE str, sub, rboffset;
-
-        rb_scan_args(argc, argv, "21", &str, &sub, &rboffset);
+        VALUE sub, rboffset;
 
         StringValue(str);
 
-        long offset = (argc == 3) ? NUM2LONG(rboffset) : RSTRING(str)->len;
+        rb_scan_args(argc, argv, "11", &sub, &rboffset);
+
+        long offset = (argc == 2) ? NUM2LONG(rboffset) : RSTRING(str)->len;
 
         char *begin, *end;
         rb_utf_begin_from_offset(str, offset, &begin, &end);

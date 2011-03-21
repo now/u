@@ -8,12 +8,14 @@
 #include "rb_utf_internal_bignum.h"
 
 VALUE
-rb_utf_to_i(int argc, VALUE *argv, UNUSED(VALUE self))
+rb_utf_to_i(int argc, VALUE *argv, VALUE str)
 {
-        VALUE str, rbbase;
+        StringValue(str);
+
+        VALUE rbbase;
 
         int base = 10;
-        if (rb_scan_args(argc, argv, "11", &str, &rbbase) == 2)
+        if (rb_scan_args(argc, argv, "01", &rbbase) == 1)
                 base = NUM2INT(rbbase);
 
         /* XXX: this test is actually unnecessary, as this will be checked in

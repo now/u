@@ -10,6 +10,8 @@
 
 void need_at_least_n_arguments(int argc, int n) HIDDEN;
 
+void need_m_to_n_arguments(int argc, int m, int n) HIDDEN;
+
 unichar _utf_char_validated(char const *const str,
                             char const *const str_end) HIDDEN;
 char *_utf_offset_to_pointer_validated_impl(const char *str, long offset,

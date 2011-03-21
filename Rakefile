@@ -36,8 +36,7 @@ task :extensions
 Makefile: extconf.rb
 
 TAGS:
-	@echo Running ‘ctags’ on source files…
-	@ctags -f $@ -I UNUSED,HIDDEN,_ $(SRCS)
+	ctags -f $@ -I UNUSED,HIDDEN,_ $(SRCS)
 
 tags: TAGS
 

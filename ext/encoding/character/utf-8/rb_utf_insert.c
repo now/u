@@ -7,10 +7,10 @@
 #include "rb_includes.h"
 
 VALUE
-rb_utf_insert(UNUSED(VALUE self), VALUE str, VALUE index, VALUE other)
+rb_utf_insert(VALUE str, VALUE index, VALUE other)
 {
-        long offset = NUM2LONG(index);
         StringValue(str);
+        long offset = NUM2LONG(index);
 
         long n_chars = utf_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
         /*

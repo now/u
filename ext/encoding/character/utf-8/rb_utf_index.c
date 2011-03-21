@@ -7,15 +7,14 @@
 #include "rb_includes.h"
 
 VALUE
-rb_utf_index_m(int argc, VALUE *argv, UNUSED(VALUE self))
+rb_utf_index_m(int argc, VALUE *argv, VALUE str)
 {
-        VALUE str, sub, rboffset;
-
-        long offset = 0;
-        if (rb_scan_args(argc, argv, "21", &str, &sub, &rboffset) == 3)
-                offset = NUM2LONG(rboffset);
-
         StringValue(str);
+
+        VALUE sub, rboffset;
+        long offset = 0;
+        if (rb_scan_args(argc, argv, "11", &sub, &rboffset) == 2)
+                offset = NUM2LONG(rboffset);
 
         char *begin, *end;
         if (!rb_utf_begin_from_offset(str, offset, &begin, &end)) {

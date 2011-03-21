@@ -7,7 +7,7 @@
 #include "rb_includes.h"
 
 VALUE
-rb_utf_upcase(UNUSED(VALUE self), VALUE str)
+rb_utf_upcase(VALUE str)
 {
         return rb_utf_alloc_using(utf_upcase(StringValuePtr(str)));
 }
