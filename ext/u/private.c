@@ -10,7 +10,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include "unicode.h"
+#include "u.h"
 
 #include "private.h"
 

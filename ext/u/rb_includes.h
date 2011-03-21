@@ -11,7 +11,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "unicode.h"
+#include "u.h"
 #include "private.h"
 #include "rb_private.h"
 #include "rb_methods.h"

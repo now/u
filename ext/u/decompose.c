@@ -9,7 +9,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "unicode.h"
+#include "u.h"
 
 #include "data/decompose.h"
 #include "data/compose.h"

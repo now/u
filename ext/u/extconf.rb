@@ -62,6 +62,6 @@ have_header 'sys/types.h'
 have_header 'wchar.h'
 
 $INSTALLFILES ||= []
-$INSTALLFILES << ['unicode.h', '$(RUBYARCHDIR)', 'lib']
+$INSTALLFILES << ['u.h', '$(RUBYARCHDIR)', 'lib']
 
 create_makefile 'u/u'

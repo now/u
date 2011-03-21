@@ -4,8 +4,8 @@
  * Copyright © 2007 Nikolai Weibull <now@bitwi.se>
  */
 
-#ifndef TABLES_H
-#define TABLES_H
+#ifndef RB_U_INTERNAL_TABLES_H
+#define RB_U_INTERNAL_TABLES_H
 
 
 /*
@@ -35,4 +35,4 @@ split_unicode_table_lookup(const uint8_t data[][256], const int16_t part1[], con
 */
 
 
-#endif /* TABLES_H */
+#endif /* RB_U_INTERNAL_TABLES_H */

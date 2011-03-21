@@ -15,7 +15,7 @@
 #include <string.h>
 #include <wchar.h>
 
-#include "unicode.h"
+#include "u.h"
 #include "private.h"
 
 

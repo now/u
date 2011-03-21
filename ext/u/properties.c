@@ -11,7 +11,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
-#include "unicode.h"
+#include "u.h"
 #include "private.h"
 #include "data/character-tables.h"
 
