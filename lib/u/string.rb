@@ -3,12 +3,6 @@
 require 'encoding/character/utf-8/utf8'
 
 module U::String
-  def self.def_thunk_replacing_variant(method)
-    define_method(:"#{method}!") do
-      replace(send(method))
-    end
-  end
-
   def <=>(other)
     Encoding::Character::UTF8.collate(self, other)
   end
@@ -64,7 +58,10 @@ module U::String
   def downcase
     Encoding::Character::UTF8.downcase(self)
   end
-  def_thunk_replacing_variant :downcase
+
+  def downcase!
+    replace(downcase)
+  end
 
   def each_char(&block)
     Encoding::Character::UTF8.each_char(self, &block)
@@ -109,7 +106,10 @@ module U::String
   def reverse
     Encoding::Character::UTF8.reverse(self)
   end
-  def_thunk_replacing_variant :reverse
+
+  def reverse!
+    replace(reverse)
+  end
 
   def squeeze
     Encoding::Character::UTF8.squeeze(self)
@@ -162,15 +162,24 @@ module U::String
   def upcase
     Encoding::Character::UTF8.upcase(self)
   end
-  def_thunk_replacing_variant :upcase
+
+  def upcase!
+    replace(upcase)
+  end
 
   def capitalize
     self[0].upcase + self[1..-1].downcase
   end
-  def_thunk_replacing_variant :capitalize
+
+  def capitalize!
+    replace(capitalize)
+  end
 
   def foldcase
     Encoding::Character::UTF8.foldcase(self)
   end
-  def_thunk_replacing_variant :foldcase
+
+  def foldcase!
+    replace(foldcase)
+  end
 end
