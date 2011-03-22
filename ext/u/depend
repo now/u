@@ -1,4 +1,3 @@
-break.o: break.c u.h data/break.h private.h
 decompose.o: decompose.c u.h data/decompose.h data/compose.h private.h
 private.o: private.c u.h private.h
 properties.o: properties.c u.h private.h data/character-tables.h
@@ -78,5 +77,6 @@ u_prev.o: u_prev.c u.h private.h utf8.h
 u_reverse.o: u_reverse.c u.h private.h
 u_rindex.o: u_rindex.c u.h private.h
 ucs4_to_u.o: ucs4_to_u.c u.h utf8.h private.h
+unichar_break_type.o: unichar_break_type.c u.h data/break.h private.h
 unichar_isvalid.o: unichar_isvalid.c u.h utf8.h
 unichar_to_u.o: unichar_to_u.c u.h utf8.h
