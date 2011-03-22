@@ -12,7 +12,7 @@ rb_u_insert(VALUE str, VALUE index, VALUE other)
         StringValue(str);
         long offset = NUM2LONG(index);
 
-        long n_chars = utf_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
+        long n_chars = u_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
         /*
         char *begin, *end;
         if (offset < 0)
@@ -39,7 +39,7 @@ rb_u_insert(VALUE str, VALUE index, VALUE other)
 
                 if (offset < 0)
                         s += RSTRING(str)->len;
-                byte_index = utf_offset_to_pointer(s, offset) - s;
+                byte_index = u_offset_to_pointer(s, offset) - s;
         }
 
         rb_str_update(str, byte_index, 0, other);

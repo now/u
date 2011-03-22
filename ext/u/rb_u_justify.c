@@ -15,7 +15,7 @@ rb_u_justify_one_side(char *p, const char *f, long f_len, long f_size, long n)
 
         const char *q = f;
         while (i < n) {
-                const char *q_end = utf_next(q);
+                const char *q_end = u_next(q);
                 memcpy(p, q, q_end - q);
                 p += q_end - q;
                 q = q_end;
@@ -37,14 +37,14 @@ rb_u_justify(int argc, VALUE *argv, VALUE str, char jflag)
         if (rb_scan_args(argc, argv, "11", &w, &pad) == 2) {
                 StringValue(pad);
                 f = RSTRING(pad)->ptr;
-                f_len = utf_length_n(f, RSTRING(pad)->len);
+                f_len = u_length_n(f, RSTRING(pad)->len);
                 if (f_len == 0)
                         rb_raise(rb_eArgError, "zero width padding");
                 f_size = RSTRING(pad)->len;
                 infect_from_pad = true;
         }
 
-        long len = utf_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
+        long len = u_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
 
         long width = NUM2LONG(w);
         if (width < 0 || len >= width)

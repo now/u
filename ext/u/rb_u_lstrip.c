@@ -18,7 +18,7 @@ rb_u_lstrip_bang(VALUE str)
 
         /* Remove spaces at head. */
         while (s < end && unichar_isspace(_utf_char_validated(s, end)))
-                s = utf_next(s);
+                s = u_next(s);
 
         /* If there weren’t any spaces at head, return Qnil. */
         if (s == RSTRING(str)->ptr)

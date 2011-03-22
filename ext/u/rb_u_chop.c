@@ -21,11 +21,11 @@ rb_u_chop_bang(VALUE str)
         char *last = rb_u_prev_validated(RSTRING(str)->ptr, end);
 
         if (_utf_char_validated(last, end) == '\n') {
-                char *last_but_one = utf_find_prev(RSTRING(str)->ptr, last);
+                char *last_but_one = u_find_prev(RSTRING(str)->ptr, last);
 
-                if (last_but_one != NULL && utf_char(last_but_one) == '\r')
+                if (last_but_one != NULL && u_aref_char(last_but_one) == '\r')
                         last = last_but_one;
-        } else if (!unichar_isnewline(utf_char(last))) {
+        } else if (!unichar_isnewline(u_aref_char(last))) {
                 return Qnil;
         }
 

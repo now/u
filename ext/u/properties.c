@@ -364,8 +364,8 @@ special_case_table_lookup(unichar c)
         unichar tv = ATTTABLE(c >> 8, c & 0xff);
 
         if (tv >= UNICODE_SPECIAL_CASE_TABLE_START)
-                tv = utf_char(special_case_table +
-                              tv - UNICODE_SPECIAL_CASE_TABLE_START);
+                tv = u_aref_char(special_case_table +
+                                 tv - UNICODE_SPECIAL_CASE_TABLE_START);
 
         if (tv == '\0')
                 return c;
@@ -517,14 +517,14 @@ output_marks(const char **p_inout, char *buf, bool remove_dot)
 	size_t len = 0;
 	const char *p = *p_inout;
 
-	for ( ; *p != '\0'; p = utf_next(p)) {
-		unichar c = utf_char(p);
+	for ( ; *p != '\0'; p = u_next(p)) {
+		unichar c = u_aref_char(p);
 
                 if (!s_ismark(s_type(c)))
                         break;
 
                 if (!remove_dot || c != COMBINING_DOT_ABOVE)
-                        len += unichar_to_utf(c, (buf != NULL) ? buf + len : NULL);
+                        len += unichar_to_u(c, (buf != NULL) ? buf + len : NULL);
 	}
 
 	*p_inout = p;
@@ -541,12 +541,12 @@ output_special_case(char *buf, int offset, int type, bool upper)
 	const char *p = special_case_table + offset;
 
 	if (type != UNICODE_TITLECASE_LETTER)
-		p = utf_next(p);
+		p = u_next(p);
 
 	if (upper)
-		p += utf_byte_length(p) + 1;
+		p += u_byte_length(p) + 1;
 
-	size_t len = utf_byte_length(p);
+	size_t len = u_byte_length(p);
 
 	if (buf != NULL)
 		memcpy(buf, p, len);
@@ -566,7 +566,7 @@ remove_all_combining_dot_above(unichar c, char *buf)
         size_t len = 0;
         for (size_t i = 0; i < decomp_len; i++)
                 if (decomp[i] != COMBINING_DOT_ABOVE)
-                        len += unichar_to_utf(unichar_toupper(decomp[i]),
+                        len += unichar_to_u(unichar_toupper(decomp[i]),
                                               OFFSET_IF(buf, len));
 
         free(decomp);
@@ -611,9 +611,9 @@ real_do_toupper(unichar c, int type, char *buf)
         if (type == UNICODE_TITLECASE_LETTER)
                 for (size_t i = 0; i < lengthof(title_table); i++)
                         if (title_table[i][0] == c)
-                                return unichar_to_utf(title_table[i][1], buf);
+                                return unichar_to_u(title_table[i][1], buf);
 
-        return unichar_to_utf(tv != '\0' ? tv : c, buf); 
+        return unichar_to_u(tv != '\0' ? tv : c, buf);
 }
 
 /* {{{1
@@ -623,7 +623,7 @@ static size_t
 real_toupper_one(const char **p, const char *prev, char *buf,
                  LocaleType locale_type, bool *was_i)
 {
-        unichar c = utf_char(prev);
+        unichar c = u_aref_char(prev);
         int type = s_type(c);
 
         if (locale_type == LOCALE_LITHUANIAN) {
@@ -633,8 +633,7 @@ real_toupper_one(const char **p, const char *prev, char *buf,
         }
 
         if (locale_type == LOCALE_TURKIC && c == 'i')
-                return unichar_to_utf(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE,
-                                      buf);
+                return unichar_to_u(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE, buf);
 
         if (c == COMBINING_GREEK_YPOGEGRAMMENI) {
                 /* Nasty, need to move it after other combining marks...this
@@ -642,15 +641,15 @@ real_toupper_one(const char **p, const char *prev, char *buf,
                 /* TODO: don’t we need to make sure we don’t go beyond the end
                  * of ‘p’? */
                 size_t len = output_marks(p, buf, false);
-                return len + unichar_to_utf(GREEK_CAPITAL_LETTER_IOTA,
-                                            OFFSET_IF(buf, len));
+                return len + unichar_to_u(GREEK_CAPITAL_LETTER_IOTA,
+                                          OFFSET_IF(buf, len));
         }
         
         if (IS(type, OR(UNICODE_LOWERCASE_LETTER,
                         OR(UNICODE_TITLECASE_LETTER, 0))))
                 return real_do_toupper(c, type, buf);
 
-        size_t len = s_utf_skip_lengths[*(const unsigned char *)prev];
+        size_t len = s_u_skip_lengths[*(const unsigned char *)prev];
 
         if (buf != NULL)
                 memcpy(buf, prev, len);
@@ -668,7 +667,7 @@ real_toupper(const char *str, size_t max, bool use_max, char *buf,
 
 	while ((!use_max || p < str + max) && *p != '\0') {
 		const char *prev = p;
-		p = utf_next(p);
+		p = u_next(p);
 
                 len += real_toupper_one(&p, prev, OFFSET_IF(buf, len),
                                         locale_type, &p_was_i);
@@ -726,8 +725,8 @@ utf_upcase_n(const char *str, size_t len)
 static bool
 has_more_above(const char *str)
 {
-	for (const char *p = str; *p != '\0'; p = utf_next(p)) {
-		int c_class = unichar_combining_class(utf_char(p));
+	for (const char *p = str; *p != '\0'; p = u_next(p)) {
+		int c_class = unichar_combining_class(u_aref_char(p));
 
 		if (c_class == 230)
 			return true;
@@ -753,9 +752,9 @@ real_do_tolower(unichar c, int type, char *buf)
         if (type == UNICODE_TITLECASE_LETTER)
                 for (size_t i = 0; i < lengthof(title_table); i++)
                         if (title_table[i][0] == c)
-                                return unichar_to_utf(title_table[i][2], buf);
+                                return unichar_to_u(title_table[i][2], buf);
 
-        return unichar_to_utf(tv != '\0' ? tv : c, buf);
+        return unichar_to_u(tv != '\0' ? tv : c, buf);
 }
 
 /* {{{1
@@ -766,23 +765,23 @@ tolower_turkic_i(const char **p, char *buf)
 {
         unichar i = LATIN_SMALL_LETTER_DOTLESS_I;
 
-        if (utf_char(*p) == COMBINING_DOT_ABOVE) {
+        if (u_aref_char(*p) == COMBINING_DOT_ABOVE) {
                 /* TODO: don’t we need to make sure we don’t go beyond the end
                  * of ‘p’? */
-                *p = utf_next(*p);
+                *p = u_next(*p);
                 i = LATIN_SMALL_LETTER_I;
         } 
 
-        return unichar_to_utf(i, buf);
+        return unichar_to_u(i, buf);
 }
 
 static size_t
 tolower_lithuianian_i(char *buf, unichar base, unichar combiner)
 {
-        size_t len = unichar_to_utf(base, buf);
-        len += unichar_to_utf(COMBINING_DOT_ABOVE, OFFSET_IF(buf, len));
+        size_t len = unichar_to_u(base, buf);
+        len += unichar_to_u(COMBINING_DOT_ABOVE, OFFSET_IF(buf, len));
         if (combiner != '\0')
-                len += unichar_to_utf(combiner, OFFSET_IF(buf, len));
+                len += unichar_to_u(combiner, OFFSET_IF(buf, len));
 
         return len;
 }
@@ -796,17 +795,17 @@ tolower_sigma(const char **p, char *buf, const char *end, bool use_end)
          * following simplified test would fail in the case of combining marks
          * following the sigma, but I don't think that occurs in real text.
          * The test here matches that in ICU. */
-        if ((!use_end || *p < end) && **p != '\0' && s_isalpha(s_type(utf_char(*p))))
+        if ((!use_end || *p < end) && **p != '\0' && s_isalpha(s_type(u_aref_char(*p))))
                 sigma = GREEK_SMALL_LETTER_SIGMA;
 
-        return unichar_to_utf(sigma, buf);
+        return unichar_to_u(sigma, buf);
 }
 
 static size_t
 real_tolower_one(const char **p, const char *prev, char *buf,
                  LocaleType locale_type, const char *end, bool use_end)
 {
-        unichar c = utf_char(prev);
+        unichar c = u_aref_char(prev);
         int type = s_type(c);
 
         if (locale_type == LOCALE_TURKIC && c == 'I')
@@ -853,7 +852,7 @@ no_lithuanian_i_casing:
                         OR(UNICODE_TITLECASE_LETTER, 0))))
                 return real_do_tolower(c, type, buf);
 
-        size_t len = s_utf_skip_lengths[*(const unsigned char *)prev];
+        size_t len = s_u_skip_lengths[*(const unsigned char *)prev];
 
         if (buf != NULL)
                 memcpy(buf, prev, len);
@@ -871,7 +870,7 @@ real_tolower(const char *str, size_t max, bool use_max, char *buf,
 
 	while ((!use_max || p < end) && *p != '\0') {
 		const char *prev = p;
-		p = utf_next(p);
+		p = u_next(p);
 
                 len += real_tolower_one(&p, prev, OFFSET_IF(buf, len),
                                         locale_type, end, use_max);
@@ -938,7 +937,7 @@ casefold_table_lookup(unichar c, char *folded, size_t *len)
         if (folded != NULL)
                 strcpy(folded, folded_c);
 
-        *len += utf_byte_length(folded_c);
+        *len += u_byte_length(folded_c);
 
         return true;
 }
@@ -952,13 +951,13 @@ utf_foldcase_impl(const char *str, size_t max, bool use_max)
 	size_t len = 0;
 
 again:
-	for (const char *p = str; (!use_max || p < str + max) && *p != '\0'; p = utf_next(p)) {
-		unichar c = utf_char(p);
+	for (const char *p = str; (!use_max || p < str + max) && *p != '\0'; p = u_next(p)) {
+		unichar c = u_aref_char(p);
 
                 if (casefold_table_lookup(c, OFFSET_IF(folded, len), &len))
                         continue;
 
-		len += unichar_to_utf(unichar_tolower(c), OFFSET_IF(folded, len));
+		len += unichar_to_u(unichar_tolower(c), OFFSET_IF(folded, len));
 	}
 
 	if (folded == NULL) {
@@ -1007,8 +1006,8 @@ utf_width_impl(const char *str, size_t len, bool use_len)
 
 	size_t width = 0;
 
-	for (const char *p = str; (!use_len || p < str + len) && *p != NUL; p = utf_next(p))
-		width += unichar_iswide(utf_char(p)) ? 2 : 1;
+	for (const char *p = str; (!use_len || p < str + len) && *p != NUL; p = u_next(p))
+		width += unichar_iswide(u_aref_char(p)) ? 2 : 1;
 
 	return width;
 }

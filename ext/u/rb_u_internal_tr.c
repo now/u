@@ -33,7 +33,7 @@ tr_next_char(struct tr *t)
                 return TR_FINISHED;
 
         if (_utf_char_validated(t->p, t->p_end) == '\\') {
-                char *next = utf_find_next(t->p, t->p_end);
+                char *next = u_find_next(t->p, t->p_end);
 
                 if (next == NULL) {
                         t->now = '\\';
@@ -46,7 +46,7 @@ tr_next_char(struct tr *t)
 
         t->now = _utf_char_validated(t->p, t->p_end);
 
-        char *next = utf_find_next(t->p, t->p_end);
+        char *next = u_find_next(t->p, t->p_end);
         if (next == NULL) {
                 t->p = t->p_end;
                 return TR_FOUND;
@@ -54,10 +54,10 @@ tr_next_char(struct tr *t)
         t->p = next;
 
         if (_utf_char_validated(t->p, t->p_end) == '-') {
-                next = utf_find_next(t->p, t->p_end);
+                next = u_find_next(t->p, t->p_end);
 
                 if (next != NULL) {
-                        unichar max = utf_char(next);
+                        unichar max = u_aref_char(next);
 
                         if (max < t->now) {
                                 t->p = next;

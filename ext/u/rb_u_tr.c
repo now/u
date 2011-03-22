@@ -111,17 +111,17 @@ again:
                 unichar prev_c = -1;
 
                 while (s < s_end) {
-                        unichar c0 = utf_char(s);
+                        unichar c0 = u_aref_char(s);
 
                         const char *prev = s;
-                        s = utf_next(s);
+                        s = u_next(s);
 
                         if (tr_table_lookup(translation, c0)) {
                                 unichar c = replace(c0, closure);
                                 if (prev_c == c)
                                         continue;
                                 prev_c = c;
-                                len += unichar_to_utf(c, (t != NULL) ? t + len : NULL);
+                                len += unichar_to_u(c, (t != NULL) ? t + len : NULL);
                                 modified = true;
                         } else {
                                 prev_c = -1;
@@ -136,14 +136,14 @@ again:
                         modified = true;
         } else {
                 while (s < s_end) {
-                        unichar c = utf_char(s);
+                        unichar c = u_aref_char(s);
 
                         const char *prev = s;
-                        s = utf_next(s);
+                        s = u_next(s);
 
                         if (tr_table_lookup(translation, c)) {
-                                len += unichar_to_utf(replace(c, closure),
-                                                      (t != NULL) ? t + len : NULL);
+                                len += unichar_to_u(replace(c, closure),
+                                                    (t != NULL) ? t + len : NULL);
                                 modified = true;
                         } else {
                                 if (t != NULL)
@@ -224,11 +224,11 @@ tr_trans(VALUE str, VALUE from, VALUE to, bool squeeze, bool replace_content)
                  * include it or not. */
                 struct tr_trans_closure trans_closure;
 
-                struct tr_range from_ranges[utf_length_n(RSTRING(from)->ptr, RSTRING(from)->len)];
+                struct tr_range from_ranges[u_length_n(RSTRING(from)->ptr, RSTRING(from)->len)];
                 trans_closure.from = from_ranges;
                 trans_closure.n_from = tr_ranges_setup(&tr_from, from_ranges);
 
-                struct tr_range to_ranges[utf_length_n(RSTRING(to)->ptr, RSTRING(to)->len)];
+                struct tr_range to_ranges[u_length_n(RSTRING(to)->ptr, RSTRING(to)->len)];
                 trans_closure.to = to_ranges;
                 trans_closure.n_to = tr_ranges_setup(&tr_to, to_ranges);
 

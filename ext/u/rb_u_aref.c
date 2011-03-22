@@ -62,7 +62,7 @@ rb_u_aref_num(VALUE str, long offset)
 static VALUE
 rb_u_aref_default(VALUE str, VALUE index)
 {
-        long n_chars = utf_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
+        long n_chars = u_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
 
         long begin, len;
         switch (rb_range_beg_len(index, &begin, &len, n_chars, 0)) {

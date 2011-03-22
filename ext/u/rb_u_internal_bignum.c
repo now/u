@@ -98,12 +98,12 @@ rb_u_to_inum_base_bit_length(const char *s, int base)
                 bit_length = 6;
         }
 
-        return bit_length * utf_length(s);
+        return bit_length * u_length(s);
 }
 
 static bool
 rb_u_to_inum_num_separator(const char *str, const char *s, bool verify,
-                             unichar c, unichar *non_digit)
+                           unichar c, unichar *non_digit)
 {
         if (c != '_')
                 return false;
@@ -114,7 +114,7 @@ rb_u_to_inum_num_separator(const char *str, const char *s, bool verify,
         if (*non_digit != 0)
                 rb_raise(rb_eArgError,
                          "unexpected ‘%lc’ found at position %ld",
-                         c, utf_pointer_to_offset(str, s));
+                         c, u_pointer_to_offset(str, s));
 
         *non_digit = c;
 
@@ -136,7 +136,7 @@ rb_u_to_inum_digit_value(const char *str, const char *s, unichar c,
                         return false;
                 rb_raise(rb_eArgError,
                          "non-digit character ‘%lc’ found at position %ld",
-                         c, utf_pointer_to_offset(str, s));
+                         c, u_pointer_to_offset(str, s));
         }
 
         if (value >= base) {
@@ -145,7 +145,7 @@ rb_u_to_inum_digit_value(const char *str, const char *s, unichar c,
 
                 rb_raise(rb_eArgError,
                          "value (%d) greater than base (%d) at position %ld",
-                         value, base, utf_pointer_to_offset(str, s));
+                         value, base, u_pointer_to_offset(str, s));
         }
 
         *digit_value = value;
@@ -161,8 +161,8 @@ rb_u_to_inum_as_fix(const char *str, const char *s, int sign, int base,
 
         unichar non_digit = 0;
         while (*s != '\0') {
-                unichar c = utf_char(s);
-                s = utf_next(s);
+                unichar c = u_aref_char(s);
+                s = u_next(s);
 
                 if (rb_u_to_inum_num_separator(str, s, verify, c, &non_digit))
                         continue;
@@ -177,12 +177,12 @@ rb_u_to_inum_as_fix(const char *str, const char *s, int sign, int base,
         }
 
         if (verify) {
-                while (*s != '\0' && unichar_isspace(utf_char(s)))
-                        s = utf_next(s);
+                while (*s != '\0' && unichar_isspace(u_aref_char(s)))
+                        s = u_next(s);
                 if (*s != '\0')
                         rb_raise(rb_eArgError,
                                  "trailing garbage found at position %ld",
-                                 utf_pointer_to_offset(str, s));
+                                 u_pointer_to_offset(str, s));
         }
 
         if (POSFIXABLE(value)) {
@@ -210,8 +210,8 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
         const char *s = str;
 
         /* Skip any leading whitespace. */
-        while (unichar_isspace(utf_char(s)))
-                s = utf_next(s);
+        while (unichar_isspace(u_aref_char(s)))
+                s = u_next(s);
 
         /* Figure out what sign this number uses. */
         int sign;
@@ -222,7 +222,7 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
                 if (verify)
                         rb_raise(rb_eArgError,
                                  "extra sign ‘%c’ found at position %ld",
-                                 *s, utf_pointer_to_offset(str, s));
+                                 *s, u_pointer_to_offset(str, s));
                 return INT2FIX(0);
         }
 
@@ -246,7 +246,7 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
         if (verify && *str == '_')
                 rb_raise(rb_eArgError,
                          "leading digit-separator ‘_’ found at position %ld",
-                         utf_pointer_to_offset(str, s));
+                         u_pointer_to_offset(str, s));
 
         bit_length = bit_length / BITSPERDIG + 1;
 
@@ -258,8 +258,8 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
 
         unichar non_digit = 0;
         while (true) {
-                unichar c = utf_char(s);
-                s = utf_next(s);
+                unichar c = u_aref_char(s);
+                s = u_next(s);
 
                 if (rb_u_to_inum_num_separator(str, s, verify, c, &non_digit))
                         continue;
@@ -295,12 +295,12 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
         if (str + 1 < s && s[-1] == '_')
                 rb_raise(rb_eArgError,
                          "trailing digit-separator ‘_’ found at position %ld",
-                         utf_pointer_to_offset(str, s));
+                         u_pointer_to_offset(str, s));
 
         if (*s != '\0')
                 rb_raise(rb_eArgError,
                          "trailing garbage found at position %ld",
-                         utf_pointer_to_offset(str, s));
+                         u_pointer_to_offset(str, s));
 
         return rb_big_norm(z);
 }

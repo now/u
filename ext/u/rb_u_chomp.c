@@ -13,16 +13,16 @@ rb_u_chomp_default(VALUE str)
 
         const char *end = RSTRING(str)->ptr + RSTRING(str)->len;
 
-        char *last = utf_find_prev(RSTRING(str)->ptr, end);
+        char *last = u_find_prev(RSTRING(str)->ptr, end);
         if (last == NULL)
                 return Qnil;
 
         if (_utf_char_validated(last, end) == '\n') {
-                char *last_but_one = utf_find_prev(RSTRING(str)->ptr, last);
+                char *last_but_one = u_find_prev(RSTRING(str)->ptr, last);
 
-                if (last_but_one != NULL && utf_char(last_but_one) == '\r')
+                if (last_but_one != NULL && u_aref_char(last_but_one) == '\r')
                         last = last_but_one;
-        } else if (!unichar_isnewline(utf_char(last))) {
+        } else if (!unichar_isnewline(u_aref_char(last))) {
                 return Qnil;
         }
 
@@ -40,8 +40,8 @@ rb_u_chomp_newlines(VALUE str)
 
         char *last = end;
         while (last > begin) {
-                char *last_but_one = utf_find_prev(begin, last);
-                if (last == NULL || !unichar_isnewline(utf_char(last_but_one)))
+                char *last_but_one = u_find_prev(begin, last);
+                if (last == NULL || !unichar_isnewline(u_aref_char(last_but_one)))
                         break;
                 last = last_but_one;
         }

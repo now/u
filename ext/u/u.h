@@ -164,53 +164,60 @@ char *utf_downcase_n(const char *str, size_t len);
 char *utf_foldcase(const char *str);
 char *utf_foldcase_n(const char *str, size_t len);
 
-unichar utf_char(const char *str);
-unichar utf_char_n(const char *str, size_t max);
-unichar utf_char_validated(const char *str);
-unichar utf_char_validated_n(const char *str, size_t max);
+unichar u_aref_char(const char *str);
+unichar u_aref_char_n(const char *str, size_t max);
+unichar u_aref_char_validated(const char *str);
+unichar u_aref_char_validated_n(const char *str, size_t max);
 
-extern const char * const s_utf_skip_lengths;
-#define utf_next(str)	((str) + s_utf_skip_lengths[*(const unsigned char *)(str)])
-char *utf_find_next(const char *p, const char *end);
-char *utf_prev(const char *p);
-char *utf_find_prev(const char *begin, const char *p);
-char *utf_offset_to_pointer(const char *str, long offset);
-long utf_pointer_to_offset(const char *str, const char *pos);
+extern const char * const s_u_skip_lengths;
 
-void utf_copy(char *dest, const char *src);
-void utf_copy_n(char *dest, const char *src, size_t n);
-void utf_append(char *dest, const char *src);
-void utf_append_n(char *dest, const char *src, size_t n);
-int utf_collate(const char *a, const char *b);
-char *utf_collate_key(const char *str);
-char *utf_collate_key_n(const char *str, size_t len);
-int utf_char_index(const char *str, unichar c);
-int utf_char_index_n(const char *str, unichar c, size_t len);
-int utf_char_rindex(const char *str, unichar c);
-int utf_char_rindex_n(const char *str, unichar c, size_t len);
-int utf_index(const char *haystack, const char *needle);
-int utf_index_n(const char *haystack, const char *needle, size_t len);
-int utf_rindex(const char *haystack, const char *needle);
-int utf_rindex_n(const char *haystack, const char *needle, size_t len);
+#define u_next(str) ((str) + s_u_skip_lengths[*(const unsigned char *)(str)])
+char *u_find_next(const char *p, const char *end);
+
+char *u_prev(const char *p);
+char *u_find_prev(const char *begin, const char *p);
+
+char *u_offset_to_pointer(const char *str, long offset);
+long u_pointer_to_offset(const char *str, const char *pos);
+
+void u_copy(char *dest, const char *src);
+void u_copy_n(char *dest, const char *src, size_t n);
+
+void u_append(char *dest, const char *src);
+void u_append_n(char *dest, const char *src, size_t n);
+
+int u_collate(const char *a, const char *b);
+char *u_collate_key(const char *str);
+char *u_collate_key_n(const char *str, size_t len);
+
+int u_char_index(const char *str, unichar c);
+int u_char_index_n(const char *str, unichar c, size_t len);
+int u_index(const char *haystack, const char *needle);
+int u_index_n(const char *haystack, const char *needle, size_t len);
+
+int u_char_rindex(const char *str, unichar c);
+int u_char_rindex_n(const char *str, unichar c, size_t len);
+int u_rindex(const char *haystack, const char *needle);
+int u_rindex_n(const char *haystack, const char *needle, size_t len);
+
 bool utf_has_prefix(const char *str, const char *prefix);
-long utf_length(const char *str);
-long utf_length_n(const char *str, long len);
+
+long u_length(const char *str);
+long u_length_n(const char *str, long len);
+
 size_t utf_width(const char *str);
 size_t utf_width_n(const char *str, size_t len);
-size_t utf_byte_length(const char *str);
-char *utf_reverse(const char *str);
-char *utf_reverse_n(const char *str, size_t len);
+
+size_t u_byte_length(const char *str);
+
+char *u_reverse(const char *str);
+char *u_reverse_n(const char *str, size_t len);
 
 bool utf_isvalid(const char *str);
 bool utf_isvalid_n(const char *str, size_t max, const char **end);
 
-/* XXX: should probably name stuff utf32 instead of ucs4 */
-int unichar_to_utf(unichar c, char *result);
-char *ucs4_to_utf8(unichar *str, size_t *items_read, size_t *items_written);
-char *ucs4_to_utf8_n(unichar *str, size_t len, size_t *items_read, size_t *items_written);
-unichar *utf8_to_ucs4_fast(const char *str, size_t *items_written);
-unichar *utf8_to_ucs4_fast_n(const char *str, size_t len, size_t *items_written);
-unichar *utf8_to_ucs4(const char *str, size_t *items_read, size_t *items_written);
-unichar *utf8_to_ucs4_n(const char *str, int len, size_t *items_read, size_t *items_written);
+int unichar_to_u(unichar c, char *result);
+char *ucs4_to_u(unichar *str, size_t *items_read, size_t *items_written);
+char *ucs4_to_u_n(unichar *str, size_t len, size_t *items_read, size_t *items_written);
 
 #endif /* U_H */

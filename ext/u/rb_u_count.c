@@ -21,7 +21,7 @@ rb_u_count(int argc, VALUE *argv, VALUE str)
 
         long count = 0;
         char const *p_end = RSTRING(str)->ptr + RSTRING(str)->len;
-        for (char const *p = RSTRING(str)->ptr; p < p_end; p = utf_next(p))
+        for (char const *p = RSTRING(str)->ptr; p < p_end; p = u_next(p))
                 if (tr_table_lookup(table, _utf_char_validated(p, p_end)))
                         count++;
 

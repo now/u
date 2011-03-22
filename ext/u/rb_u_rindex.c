@@ -16,14 +16,14 @@ rb_u_rindex(VALUE str, VALUE sub, long offset)
         rb_u_begin_from_offset_validated(str, offset, &s, &end);
 
         if (RSTRING(sub)->len == 0)
-                return utf_pointer_to_offset(RSTRING(str)->ptr, s);
+                return u_pointer_to_offset(RSTRING(str)->ptr, s);
 
         char *s_begin = RSTRING(str)->ptr;
         char *t = RSTRING(sub)->ptr;
         long len = RSTRING(sub)->len;
         while (s >= s_begin) {
                 if (rb_memcmp(s, t, len) == 0)
-                        return utf_pointer_to_offset(s_begin, s);
+                        return u_pointer_to_offset(s_begin, s);
                 s--;
         }
 
@@ -58,7 +58,7 @@ rb_u_rindex_m(int argc, VALUE *argv, VALUE str)
                  * rb_u_index_regexp_pointer() and rb_u_rindex_pointer(),
                  * so that one can pass a pointer to start at immediately
                  * instead of an offset that gets calculated into a pointer. */
-                offset = utf_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
+                offset = u_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
         }
 
         switch (TYPE(sub)) {

@@ -31,11 +31,11 @@ rb_u_squeeze_bang(int argc, VALUE *argv, VALUE str)
          * ‘s_end’ must lay beyond ‘s’.  Also, as we validate when we fetch the
          * character, there’s no need to validate the call to utf_next(). */
         unichar previous = _utf_char_validated(begin, end);
-        char *s = utf_next(begin);
+        char *s = u_next(begin);
         char *t = s;
         while (s < end) {
                 unichar c = _utf_char_validated(s, end);
-                char *next = utf_next(s);
+                char *next = u_next(s);
 
                 if (c != previous || !tr_table_lookup(table, c)) {
                         memmove(t, s, next - s);

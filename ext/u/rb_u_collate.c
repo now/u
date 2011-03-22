@@ -9,5 +9,5 @@
 VALUE
 rb_u_collate(VALUE str, VALUE other)
 {
-        return INT2FIX(utf_collate(StringValuePtr(str), StringValuePtr(other)));
+        return INT2FIX(u_collate(StringValuePtr(str), StringValuePtr(other)));
 }

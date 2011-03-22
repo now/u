@@ -26,7 +26,7 @@ rb_u_delete_bang(int argc, VALUE *argv, VALUE str)
         char const *s_end = s + RSTRING(str)->len;
         char *t = s;
         while (s < s_end) {
-                unichar c = utf_char(s);
+                unichar c = u_aref_char(s);
 
                 char *next = rb_u_next_validated(s, s_end);
                 if (tr_table_lookup(table, c)) {

@@ -52,7 +52,7 @@ rb_u_aset_num(VALUE str, long offset, VALUE replacement)
 static VALUE
 rb_u_aset_default(VALUE str, VALUE index, VALUE replacement)
 {
-        long n_chars = utf_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
+        long n_chars = u_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
 
         long begin, len;
         if (rb_range_beg_len(index, &begin, &len, n_chars, 2))
@@ -77,8 +77,8 @@ rb_u_aset(VALUE str, VALUE index, VALUE replacement)
                         rb_raise(rb_eIndexError, "string not matched");
                 return rb_u_update(str,
                                      begin,
-                                     utf_length_n(RSTRING(index)->ptr,
-                                                  RSTRING(index)->len),
+                                     u_length_n(RSTRING(index)->ptr,
+                                                RSTRING(index)->len),
                                      replacement);
         }
         default:

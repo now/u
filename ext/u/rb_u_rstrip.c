@@ -26,7 +26,7 @@ rb_u_rstrip_bang(VALUE str)
                 /* FIXME: Should we be validating here? */
                 const char *prev = rb_u_prev_validated(begin, t);
 
-                if (!unichar_isspace(utf_char(prev)))
+                if (!unichar_isspace(u_aref_char(prev)))
                         break;
 
                 t = prev;

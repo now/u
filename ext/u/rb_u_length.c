@@ -11,5 +11,5 @@ rb_u_length(VALUE str)
 {
         StringValue(str);
 
-        return UINT2NUM(utf_length_n(RSTRING(str)->ptr, RSTRING(str)->len));
+        return UINT2NUM(u_length_n(RSTRING(str)->ptr, RSTRING(str)->len));
 }
