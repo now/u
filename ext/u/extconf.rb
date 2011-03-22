@@ -64,4 +64,5 @@ have_header 'wchar.h'
 $INSTALLFILES ||= []
 $INSTALLFILES << ['u.h', '$(RUBYARCHDIR)', 'lib']
 
+create_header
 create_makefile 'u/u'
