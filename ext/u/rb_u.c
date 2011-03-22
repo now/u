@@ -14,7 +14,7 @@
 #include "u.h"
 #include "private.h"
 #include "rb_private.h"
-#include "rb_methods.h"
+#include "rb_u.h"
 
 static VALUE mUString;
 

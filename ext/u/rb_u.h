@@ -4,8 +4,8 @@
  * Copyright © 2006 Nikolai Weibull <now@bitwi.se>
  */
 
-#ifndef RB_METHODS_H
-#define RB_METHODS_H
+#ifndef RB_U_H
+#define RB_U_H
 
 VALUE rb_u_collate(VALUE str, VALUE other) HIDDEN;
 VALUE rb_u_downcase(VALUE str) HIDDEN;
@@ -45,4 +45,4 @@ VALUE rb_u_tr_s(VALUE str, VALUE from, VALUE to) HIDDEN;
 VALUE rb_u_foldcase(VALUE str) HIDDEN;
 VALUE rb_u_normalize(int argc, VALUE *argv, VALUE str) HIDDEN;
 
-#endif /* RB_METHODS_H */
+#endif /* RB_U_H */
