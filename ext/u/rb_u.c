@@ -319,6 +319,7 @@ Init_u(void)
         rb_define_method(mUString, "downcase", rb_u_downcase, 0);
         rb_define_method(mUString, "ljust", rb_u_ljust, -1);
         rb_define_method(mUString, "length", rb_u_length, 0);
+        rb_define_alias(mUString, "size", "length");
         rb_define_method(mUString, "reverse", rb_u_reverse, 0);
         rb_define_method(mUString, "rjust", rb_u_rjust, -1);
         rb_define_method(mUString, "upcase", rb_u_upcase, 0);

@@ -61,3 +61,26 @@ end
 
 CLEAN.include ["ext/**/{*.{o,so,#{Config::CONFIG['DLEXT']}},TAGS}"]
 CLOBBER.include ['ext/**/Makefile']
+
+task :test => %w[test/unit/case.rb test/unit/foldcase.rb] # test/unit/normalize.rb]
+
+file 'test/unit/case.rb' => %w[build/case.rb
+                               build/data/SpecialCasing.txt
+                               build/data/UnicodeData.txt] do |t|
+  ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), t.name]
+  chmod 0444, t.name
+end
+
+file 'test/unit/foldcase.rb' => %w[build/foldcase.rb
+                                   build/data/CaseFolding.txt] do |t|
+  ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), t.name]
+  chmod 0444, t.name
+end
+
+=begin
+file 'test/unit/normalize.rb' => %w[build/normalize.rb
+                                    build/data/NormalizationTest.txt] do |t|
+  ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), t.name]
+  chmod 0444, t.name
+end
+=end
