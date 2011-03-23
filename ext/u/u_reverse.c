@@ -19,7 +19,7 @@ u_reverse_impl(const char *str, size_t len, bool use_len)
 	char *r = result + len;
 	const char *p = str;
         while (r > result) {
-		uint8_t skip = s_u_skip_lengths[*(unsigned char *)p];
+		uint8_t skip = u_skip_lengths[*(unsigned char *)p];
 		r -= skip;
 		for (char *m = r; skip > 0; skip--)
 			*m++ = *p++;

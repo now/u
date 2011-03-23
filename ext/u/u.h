@@ -169,9 +169,9 @@ unichar u_aref_char_n(const char *str, size_t max);
 unichar u_aref_char_validated(const char *str);
 unichar u_aref_char_validated_n(const char *str, size_t max);
 
-extern const char * const s_u_skip_lengths;
+extern const char * const u_skip_lengths;
 
-#define u_next(str) ((str) + s_u_skip_lengths[*(const unsigned char *)(str)])
+#define u_next(str) ((str) + u_skip_lengths[*(const unsigned char *)(str)])
 char *u_find_next(const char *p, const char *end);
 
 char *u_prev(const char *p);
@@ -205,8 +205,8 @@ bool utf_has_prefix(const char *str, const char *prefix);
 long u_length(const char *str);
 long u_length_n(const char *str, long len);
 
-size_t utf_width(const char *str);
-size_t utf_width_n(const char *str, size_t len);
+size_t u_width(const char *str);
+size_t u_width_n(const char *str, size_t len);
 
 size_t u_byte_length(const char *str);
 

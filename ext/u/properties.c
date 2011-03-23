@@ -282,25 +282,6 @@ unichar_istitle(unichar c)
 
 
 /* {{{1
- * Determine whether ‘c’ is a new-line.
- */
-#define UNICHAR_NEXT_LINE               ((unichar)0x0085)
-#define UNICHAR_LINE_SEPARATOR          ((unichar)0x2028)
-#define UNICHAR_PARAGRAPH_SEPARATOR     ((unichar)0x2029)
-
-bool
-unichar_isnewline(unichar c)
-{
-        switch (c) {
-        case '\n': case '\f': case '\r': case UNICHAR_NEXT_LINE:
-        case UNICHAR_LINE_SEPARATOR: case UNICHAR_PARAGRAPH_SEPARATOR:
-                return true;
-        default:
-                return false;
-        }
-}
-
-/* {{{1
  * Determine whether ‘c’ is a hexadecimal digit, such as 0, 1, ..., 9, a, b,
  * ..., f, or A, B, ..., F.
  */
@@ -327,31 +308,6 @@ bool
 unichar_isassigned(unichar c)
 {
 	return s_type(c) != UNICODE_UNASSIGNED;
-}
-
-
-/* {{{1
- * Determine whether ‘c’ is a wide character, thus is typically rendered in a
- * double-width cell on a terminal.
- */
-bool
-unichar_iswide(unichar c)
-{
-	if (c < 0x1100)
-		return false;
-
-        return (c <= 0x115f || 				/* Hangul Jamo init. consonants */
-                c == 0x2329 || c == 0x232a || 		/* angle brackets */
-                (c >= 0x2e80 && c <= 0xa4cf && 		/* CJK ... Yi */
-                 (c < 0x302a || c > 0x302f) &&
-                 c != 0x303f && c != 0x3099 && c != 0x309a) ||
-                (c >= 0xac00 && c <= 0xd7a3) || 	/* Hangul syllables */
-                (c >= 0xf900 && c <= 0xfaff) || 	/* CJK comp. graphs */
-                (c >= 0xfe30 && c <= 0xfe6f) || 	/* CJK comp. forms */
-                (c >= 0xff00 && c <= 0xff60) || 	/* fullwidth forms */
-                (c >= 0xffe0 && c <= 0xffe6) || 	/*       -"-       */
-                (c >= 0x20000 && c <= 0x2fffd) || 	/* CJK extra stuff */
-                (c >= 0x30000 && c <= 0x3fffd));    	/*       -"-       */
 }
 
 
@@ -649,7 +605,7 @@ real_toupper_one(const char **p, const char *prev, char *buf,
                         OR(UNICODE_TITLECASE_LETTER, 0))))
                 return real_do_toupper(c, type, buf);
 
-        size_t len = s_u_skip_lengths[*(const unsigned char *)prev];
+        size_t len = u_skip_lengths[*(const unsigned char *)prev];
 
         if (buf != NULL)
                 memcpy(buf, prev, len);
@@ -852,7 +808,7 @@ no_lithuanian_i_casing:
                         OR(UNICODE_TITLECASE_LETTER, 0))))
                 return real_do_tolower(c, type, buf);
 
-        size_t len = s_u_skip_lengths[*(const unsigned char *)prev];
+        size_t len = u_skip_lengths[*(const unsigned char *)prev];
 
         if (buf != NULL)
                 memcpy(buf, prev, len);
@@ -993,43 +949,6 @@ char *
 utf_foldcase_n(const char *str, size_t len)
 {
 	return utf_foldcase_impl(str, len, true);
-}
-
-
-/* {{{1
- * The real implementation of utf_width() and utf_width_n() below.
- */
-static size_t
-utf_width_impl(const char *str, size_t len, bool use_len)
-{
-	assert(str != NULL);
-
-	size_t width = 0;
-
-	for (const char *p = str; (!use_len || p < str + len) && *p != NUL; p = u_next(p))
-		width += unichar_iswide(u_aref_char(p)) ? 2 : 1;
-
-	return width;
-}
-
-
-/* {{{1
- * Calculate the width in cells of ‘str’.
- */
-size_t
-utf_width(const char *str)
-{
-	return utf_width_impl(str, 0, false);
-}
-
-
-/* {{{1
- * Calculate the width in cells of ‘str’, which is of length ‘len’.
- */
-size_t
-utf_width_n(const char *str, size_t len)
-{
-	return utf_width_impl(str, len, true);
 }
 
 
