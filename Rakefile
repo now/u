@@ -64,23 +64,54 @@ CLOBBER.include ['ext/**/Makefile']
 
 task :test => %w[test/unit/case.rb test/unit/foldcase.rb] # test/unit/normalize.rb]
 
-file 'test/unit/case.rb' => %w[build/case.rb
+file 'test/unit/case.rb' => %w[build/test/unit/case.rb
                                build/data/SpecialCasing.txt
                                build/data/UnicodeData.txt] do |t|
-  ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), t.name]
-  chmod 0444, t.name
+  tmp = '%s.tmp' % t.name
+  rm([t.name, tmp], :force => true)
+  ruby '-w -Ilib %s > %s.tmp' % [t.prerequisites.join(' '), tmp]
+  chmod 0444, tmp
+  mv tmp, t.name
 end
 
-file 'test/unit/foldcase.rb' => %w[build/foldcase.rb
+file 'test/unit/foldcase.rb' => %w[build/test/unit/foldcase.rb
                                    build/data/CaseFolding.txt] do |t|
-  ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), t.name]
-  chmod 0444, t.name
+  tmp = '%s.tmp' % t.name
+  rm([t.name, tmp], :force => true)
+  ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
+  chmod 0444, tmp
+  mv tmp, t.name
+end
+
+task :extensions => %w[compose.h]
+file 'compose.h' => %w[build/ext/u/data/compose.rb
+                       build/data/CompositionExclusions.txt
+                       build/data/UnicodeData.txt] do |t|
+  tmp = '%s.tmp' % t.name
+  rm([t.name, tmp], :force => true)
+  ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
+  chmod 0444, tmp
+  mv tmp, t.name
+end
+
+task :extensions => %w[decompose.h]
+file 'decompose.h' => %w[build/ext/u/data/decompose.rb
+                         build/data/CompositionExclusions.txt
+                         build/data/UnicodeData.txt] do |t|
+  tmp = '%s.tmp' % t.name
+  rm([t.name, tmp], :force => true)
+  ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
+  chmod 0444, tmp
+  mv tmp, t.name
 end
 
 =begin
-file 'test/unit/normalize.rb' => %w[build/normalize.rb
+file 'test/unit/normalize.rb' => %w[build/test/unit/normalize.rb
                                     build/data/NormalizationTest.txt] do |t|
-  ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), t.name]
-  chmod 0444, t.name
+  tmp = '%s.tmp' % t.name
+  rm([t.name, tmp], :force => true)
+  ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
+  chmod 0444, tmp
+  mv tmp, t.name
 end
 =end

@@ -56,7 +56,7 @@ private
           fields = line.chomp.sub(/\s*;\s*#.*\Z/, '').split(/\s*;\s*/)
           raise RuntimeError,
             '%s:%d: wrong number of fields: %d instead of 4..5' %
-              [@path, index + 1, field.size] unless fields.size.between? 4, 5
+              [@path, index + 1, fields.size] unless fields.size.between? 4, 5
           yield fields
         end
       end
