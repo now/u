@@ -69,7 +69,7 @@ file 'test/unit/case.rb' => %w[build/test/unit/case.rb
                                build/data/UnicodeData.txt] do |t|
   tmp = '%s.tmp' % t.name
   rm([t.name, tmp], :force => true)
-  ruby '-w -Ilib %s > %s.tmp' % [t.prerequisites.join(' '), tmp]
+  ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
   chmod 0444, tmp
   mv tmp, t.name
 end
@@ -79,6 +79,21 @@ file 'test/unit/foldcase.rb' => %w[build/test/unit/foldcase.rb
   tmp = '%s.tmp' % t.name
   rm([t.name, tmp], :force => true)
   ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
+  chmod 0444, tmp
+  mv tmp, t.name
+end
+
+# TODO: Move to U::Version::Unicode
+UnicodeVersion = '5.0.0'
+
+task :extensions => %w[break.h]
+file 'break.h' => %w[build/ext/u/data/break.rb
+                     build/data/CompositionExclusions.txt
+                     build/data/UnicodeData.txt
+                     build/data/LineBreak.txt] do |t|
+  tmp = '%s.tmp' % t.name
+  rm([t.name, tmp], :force => true)
+  ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
   chmod 0444, tmp
   mv tmp, t.name
 end
