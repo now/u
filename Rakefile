@@ -98,6 +98,20 @@ file 'break.h' => %w[build/ext/u/data/break.rb
   mv tmp, t.name
 end
 
+task :extensions => %w[character-tables.h]
+file 'character-tables.h' => %w[build/ext/u/data/character-tables.rb
+                                build/data/CompositionExclusions.txt
+                                build/data/UnicodeData.txt
+                                build/data/SpecialCasing.txt
+                                build/data/CaseFolding.txt
+                                build/data/BidiMirroring.txt] do |t|
+  tmp = '%s.tmp' % t.name
+  rm([t.name, tmp], :force => true)
+  ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
+  chmod 0444, tmp
+  mv tmp, t.name
+end
+
 task :extensions => %w[compose.h]
 file 'compose.h' => %w[build/ext/u/data/compose.rb
                        build/data/CompositionExclusions.txt

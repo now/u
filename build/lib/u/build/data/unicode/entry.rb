@@ -13,7 +13,7 @@ class U::Build::Data::Unicode::Entry
     when 'Lt'
       @value = nil
       @title_to_lower = fields[U::Build::Data::Unicode::Lower].hex
-      @title_to_upper = fields[U::Build::Data::Unicode::Lower].hex
+      @title_to_upper = fields[U::Build::Data::Unicode::Upper].hex
     else
       @value = nil
     end
@@ -35,4 +35,7 @@ class U::Build::Data::Unicode::Entry
   end
 
   attr_reader :code, :type, :value, :title_to_lower, :title_to_upper, :cclass, :decomposition, :composition
+  # TODO: SpecialCasing needs this at the moment.  Make it easy to update this
+  # field in a copy instead.
+  attr_writer :value
 end
