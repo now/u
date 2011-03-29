@@ -39,14 +39,13 @@ private
       @entries = []
       data.each_with_index do |entry, code|
         next if composition_exclusions.include? code or
-          entry.decomposition.nil? or
-          entry.decompose_compat?
-        parts = entry.decomposition.split(/\s+/).map{ |s| s.hex }
-        next if data[parts[0]].cclass != Starter or parts.length == 1
+          entry.decomposition.length < 2 or
+          not entry.decomposition.canonical? or
+          data[entry.decomposition.first].cclass != Starter
         raise RuntimeError,
-          'decomposition of %04X contains more than two elements: %d' %
-            [code, parts.count] unless parts.count == 2
-        @entries << [parts, code]
+          'decomposition of %04X contains more than 2 elements: %d' %
+            [code, entry.decomposition.length] unless entry.decomposition.length == 2
+        @entries << [entry.decomposition.entries, code]
       end
     end
 

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 class U::Build::Data::Unicode::Entry
+  require 'u/build/data/unicode/entry/decomposition'
+
   def initialize(code, fields)
     # TODO: Why not processes Nl?
     case @type = fields[U::Build::Data::Unicode::Category]
@@ -18,19 +20,7 @@ class U::Build::Data::Unicode::Entry
       @value = nil
     end
     @cclass = fields[U::Build::Data::Unicode::CombiningClasses]
-    decomposition = fields[U::Build::Data::Unicode::Decomposition]
-    return if decomposition.empty?
-    if decomposition =~ /\A<.*>\s*(.*)/
-      @decompose_compat = true
-      @decomposition = $1
-    else
-      @decompose_compat = false
-      @decomposition = decomposition
-    end
-  end
-
-  def decompose_compat?
-    @decompose_compat
+    @decomposition = Decomposition.new(fields[U::Build::Data::Unicode::Decomposition])
   end
 
   attr_reader :code, :type, :value, :title_to_lower, :title_to_upper, :cclass, :decomposition

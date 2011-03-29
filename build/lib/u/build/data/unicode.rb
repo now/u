@@ -3,6 +3,7 @@
 class U::Build::Data::Unicode
   include Enumerable
 
+  require 'u/build/data/unicode/points'
   require 'u/build/data/unicode/entry'
 
   Code, Name, Category, CombiningClasses, _, Decomposition, DecimalValue, _, _, _, _, _, Upper, Lower, _ = (0..14).to_a

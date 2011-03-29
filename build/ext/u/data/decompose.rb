@@ -52,8 +52,8 @@ EOL
       @decomp_string = ''
       @decomp_string_offset = 0
       0.upto(data.last) do |i|
-        next unless data[i].decomposition
-        canon_decomp = data[i].decompose_compat? ? nil : make_decomp(i, false)
+        next if data[i].decomposition.empty?
+        canon_decomp = data[i].decomposition.canonical? ? make_decomp(i, false) : nil
         compat_decomp = make_decomp(i, true)
         compat_decomp = nil if canon_decomp and compat_decomp == canon_decomp
         canon_offset = handle_decomp(canon_decomp)
@@ -74,20 +74,19 @@ private
     def make_decomp(code, compat)
       [].tap{ |result|
         expand_decomp(code, compat).each do |item|
-          result << (Array === item ? item : [item]).pack('U')
+          result << (Array === item ? item.flatten : [item]).pack('U')
         end
       }.join('')
     end
 
     def expand_decomp(code, compat)
       [].tap{ |result|
-        @data[code].decomposition.split(/\s+/).each do |item|
-          pos = item.hex
-          if @data[pos].decomposition and
-             (compat or not @data[pos].decompose_compat?)
-            result.concat expand_decomp(pos, compat)
+        @data[code].decomposition.each do |point|
+          if not @data[point].decomposition.empty? and
+             (compat or @data[point].decomposition.canonical?)
+            result.concat expand_decomp(point, compat)
           else
-            result << pos
+            result << point
           end
         end
       }
