@@ -2,11 +2,9 @@
 
 require 'u/build'
 
-# TODO: Move composition_exclusions use here instead, as no one else cares
-# about it.
 class Compose
-  def initialize(data, name, io = $stdout)
-    compositions = Compositions.new(data)
+  def initialize(data, composition_exclusions, name, io = $stdout)
+    compositions = Compositions.new(data, composition_exclusions)
     firsts = Firsts.new(compositions)
     seconds = Seconds.new(compositions, firsts)
     first_singletons, second_singletons, reversals = Singletons.create(compositions, firsts, seconds)
@@ -37,14 +35,16 @@ private
   class Compositions
     include Enumerable
 
-    def initialize(data)
+    def initialize(data, composition_exclusions)
       @entries = []
       data.each_with_index do |entry, code|
-        next unless entry.composition
-        parts = entry.composition.split(/\s+/).map{ |s| s.hex }
+        next if composition_exclusions.include? code or
+          entry.decomposition.nil? or
+          entry.decompose_compat?
+        parts = entry.decomposition.split(/\s+/).map{ |s| s.hex }
         next if data[parts[0]].cclass != Starter or parts.length == 1
-        raise RuntimerError,
-          'decomposition of %d contains more than two elements: %d' %
+        raise RuntimeError,
+          'decomposition of %04X contains more than two elements: %d' %
             [code, parts.count] unless parts.count == 2
         @entries << [parts, code]
       end
@@ -252,7 +252,7 @@ private
     def initialize(singletons, name)
       printf "\n\nstatic const uint16_t %s[][2] = {\n", name
       singletons.each_with_index do |singleton, i|
-        raise RuntimerError,
+        raise RuntimeError,
           '%s table field too short; upgrade to unichar to fit values beyond 0xffff: %p' %
             [name, singleton] if
               singleton.second > 0xffff or singleton.code > 0xffff
@@ -301,4 +301,6 @@ private
   end
 end
 
-Compose.new(U::Build::Data::Unicode.new(U::Build::Data::CompositionExclusions.new(ARGV[0]), ARGV[1]), ARGV[2])
+Compose.new(U::Build::Data::Unicode.new(ARGV[0]),
+            U::Build::Data::CompositionExclusions.new(ARGV[1]),
+            ARGV[2])

@@ -64,9 +64,8 @@ UnicodeVersion = '5.0.0'
 
 task :extensions => %w[ext/u/data/break.h]
 file 'ext/u/data/break.h' => %w[build/ext/u/data/break.rb
-                     build/data/CompositionExclusions.txt
-                     build/data/UnicodeData.txt
-                     build/data/LineBreak.txt] do |t|
+                                build/data/UnicodeData.txt
+                                build/data/LineBreak.txt] do |t|
   tmp = '%s.tmp' % t.name
   rm([t.name, tmp], :force => true)
   ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
@@ -76,11 +75,10 @@ end
 
 task :extensions => %w[ext/u/data/character-tables.h]
 file 'ext/u/data/character-tables.h' => %w[build/ext/u/data/character-tables.rb
-                                build/data/CompositionExclusions.txt
-                                build/data/UnicodeData.txt
-                                build/data/SpecialCasing.txt
-                                build/data/CaseFolding.txt
-                                build/data/BidiMirroring.txt] do |t|
+                                           build/data/UnicodeData.txt
+                                           build/data/SpecialCasing.txt
+                                           build/data/CaseFolding.txt
+                                           build/data/BidiMirroring.txt] do |t|
   tmp = '%s.tmp' % t.name
   rm([t.name, tmp], :force => true)
   ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
@@ -90,8 +88,8 @@ end
 
 task :extensions => %w[ext/u/data/compose.h]
 file 'ext/u/data/compose.h' => %w[build/ext/u/data/compose.rb
-                       build/data/CompositionExclusions.txt
-                       build/data/UnicodeData.txt] do |t|
+                                  build/data/UnicodeData.txt
+                                  build/data/CompositionExclusions.txt] do |t|
   tmp = '%s.tmp' % t.name
   rm([t.name, tmp], :force => true)
   ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
@@ -101,8 +99,7 @@ end
 
 task :extensions => %w[ext/u/data/decompose.h]
 file 'ext/u/data/decompose.h' => %w[build/ext/u/data/decompose.rb
-                         build/data/CompositionExclusions.txt
-                         build/data/UnicodeData.txt] do |t|
+                                    build/data/UnicodeData.txt] do |t|
   tmp = '%s.tmp' % t.name
   rm([t.name, tmp], :force => true)
   ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]

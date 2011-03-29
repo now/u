@@ -58,7 +58,7 @@ EOL
         compat_decomp = nil if canon_decomp and compat_decomp == canon_decomp
         canon_offset = handle_decomp(canon_decomp)
         compat_offset = handle_decomp(compat_decomp)
-        raise RuntimerError,
+        raise RuntimeError,
           'decomposition string offset beyond not-present offset, upgrade value: offset: %d, max: %d' %
             [@decomp_string_offset, NotPresentOffset] if
               @decomp_string_offset > NotPresentOffset
@@ -110,4 +110,4 @@ private
   end
 end
 
-Decompose.new(U::Build::Data::Unicode.new(U::Build::Data::CompositionExclusions.new(ARGV[0]), ARGV[1]), ARGV[2])
+Decompose.new(U::Build::Data::Unicode.new(ARGV[0]), ARGV[1])

@@ -7,13 +7,13 @@ class U::Build::Data::Unicode
 
   Code, Name, Category, CombiningClasses, _, Decomposition, DecimalValue, _, _, _, _, _, Upper, Lower, _ = (0..14).to_a
 
-  def initialize(composition_exclusions, path)
+  def initialize(path)
     @entries = []
 
     Lines.new(path).each do |code, value|
       case value
       when Array
-        @entries << Entry.new(composition_exclusions, code, value)
+        @entries << Entry.new(code, value)
       else
         # TODO: Make sure only called once
         @pages_before_e0000 = value

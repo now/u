@@ -156,10 +156,10 @@ EOF
   }.freeze
 end
 
-data = U::Build::Data::Unicode.new(U::Build::Data::CompositionExclusions.new(ARGV[0]), ARGV[1])
+data = U::Build::Data::Unicode.new(ARGV[0])
 CharacterTables.new(data,
-                    U::Build::Data::SpecialCasing.new(data, ARGV[2]),
-                    U::Build::Data::CaseFolding.new(data, ARGV[3]),
-                    U::Build::Data::BidiMirroring.new(ARGV[4]),
-                    ARGV[5],
-                    ARGV[6])
+                    U::Build::Data::SpecialCasing.new(data, ARGV[1]),
+                    U::Build::Data::CaseFolding.new(data, ARGV[2]),
+                    U::Build::Data::BidiMirroring.new(ARGV[3]),
+                    ARGV[4],
+                    ARGV[5])

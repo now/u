@@ -79,5 +79,5 @@ private
   }.freeze
 end
 
-data = U::Build::Data::Unicode.new(U::Build::Data::CompositionExclusions.new(ARGV[0]), ARGV[1])
-Break.new(data, U::Build::Data::LineBreak.new(data, ARGV[2]), ARGV[3], ARGV[4])
+data = U::Build::Data::Unicode.new(ARGV[0])
+Break.new(data, U::Build::Data::LineBreak.new(data, ARGV[1]), ARGV[2], ARGV[3])
