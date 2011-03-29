@@ -3,6 +3,7 @@
 #ifndef BREAK_H
 #define BREAK_H
 
+
 #define UNICODE_DATA_VERSION "5.0.0"
 
 #define UNICODE_LAST_CHAR 0x10ffff

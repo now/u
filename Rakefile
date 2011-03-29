@@ -59,6 +59,57 @@ EOF
   end
 end
 
+# TODO: Move to U::Version::Unicode
+UnicodeVersion = '5.0.0'
+
+task :extensions => %w[ext/u/data/break.h]
+file 'ext/u/data/break.h' => %w[build/ext/u/data/break.rb
+                     build/data/CompositionExclusions.txt
+                     build/data/UnicodeData.txt
+                     build/data/LineBreak.txt] do |t|
+  tmp = '%s.tmp' % t.name
+  rm([t.name, tmp], :force => true)
+  ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
+  chmod 0444, tmp
+  mv tmp, t.name
+end
+
+task :extensions => %w[ext/u/data/character-tables.h]
+file 'ext/u/data/character-tables.h' => %w[build/ext/u/data/character-tables.rb
+                                build/data/CompositionExclusions.txt
+                                build/data/UnicodeData.txt
+                                build/data/SpecialCasing.txt
+                                build/data/CaseFolding.txt
+                                build/data/BidiMirroring.txt] do |t|
+  tmp = '%s.tmp' % t.name
+  rm([t.name, tmp], :force => true)
+  ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
+  chmod 0444, tmp
+  mv tmp, t.name
+end
+
+task :extensions => %w[ext/u/data/compose.h]
+file 'ext/u/data/compose.h' => %w[build/ext/u/data/compose.rb
+                       build/data/CompositionExclusions.txt
+                       build/data/UnicodeData.txt] do |t|
+  tmp = '%s.tmp' % t.name
+  rm([t.name, tmp], :force => true)
+  ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
+  chmod 0444, tmp
+  mv tmp, t.name
+end
+
+task :extensions => %w[ext/u/data/decompose.h]
+file 'ext/u/data/decompose.h' => %w[build/ext/u/data/decompose.rb
+                         build/data/CompositionExclusions.txt
+                         build/data/UnicodeData.txt] do |t|
+  tmp = '%s.tmp' % t.name
+  rm([t.name, tmp], :force => true)
+  ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
+  chmod 0444, tmp
+  mv tmp, t.name
+end
+
 CLEAN.include ["ext/**/{*.{o,so,#{Config::CONFIG['DLEXT']}},TAGS}"]
 CLOBBER.include ['ext/**/Makefile']
 
@@ -79,57 +130,6 @@ file 'test/unit/foldcase.rb' => %w[build/test/unit/foldcase.rb
   tmp = '%s.tmp' % t.name
   rm([t.name, tmp], :force => true)
   ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
-  chmod 0444, tmp
-  mv tmp, t.name
-end
-
-# TODO: Move to U::Version::Unicode
-UnicodeVersion = '5.0.0'
-
-task :extensions => %w[break.h]
-file 'break.h' => %w[build/ext/u/data/break.rb
-                     build/data/CompositionExclusions.txt
-                     build/data/UnicodeData.txt
-                     build/data/LineBreak.txt] do |t|
-  tmp = '%s.tmp' % t.name
-  rm([t.name, tmp], :force => true)
-  ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
-  chmod 0444, tmp
-  mv tmp, t.name
-end
-
-task :extensions => %w[character-tables.h]
-file 'character-tables.h' => %w[build/ext/u/data/character-tables.rb
-                                build/data/CompositionExclusions.txt
-                                build/data/UnicodeData.txt
-                                build/data/SpecialCasing.txt
-                                build/data/CaseFolding.txt
-                                build/data/BidiMirroring.txt] do |t|
-  tmp = '%s.tmp' % t.name
-  rm([t.name, tmp], :force => true)
-  ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
-  chmod 0444, tmp
-  mv tmp, t.name
-end
-
-task :extensions => %w[compose.h]
-file 'compose.h' => %w[build/ext/u/data/compose.rb
-                       build/data/CompositionExclusions.txt
-                       build/data/UnicodeData.txt] do |t|
-  tmp = '%s.tmp' % t.name
-  rm([t.name, tmp], :force => true)
-  ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
-  chmod 0444, tmp
-  mv tmp, t.name
-end
-
-task :extensions => %w[decompose.h]
-file 'decompose.h' => %w[build/ext/u/data/decompose.rb
-                         build/data/CompositionExclusions.txt
-                         build/data/UnicodeData.txt] do |t|
-  tmp = '%s.tmp' % t.name
-  rm([t.name, tmp], :force => true)
-  ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
   chmod 0444, tmp
   mv tmp, t.name
 end

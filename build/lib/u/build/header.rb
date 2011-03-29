@@ -4,7 +4,7 @@ class U::Build::Header
   require 'u/build/header/table'
 
   def initialize(name, io = $stdout)
-    header_h = name.upcase.gsub(/[^A-Z0-9]/, '_')
+    header_h = File.basename(name).upcase.gsub(/[^A-Z0-9]/, '_')
     io.puts <<EOH
 /* Automatically generated file */
 

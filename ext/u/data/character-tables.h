@@ -3,6 +3,7 @@
 #ifndef CHARACTER_TABLES_H
 #define CHARACTER_TABLES_H
 
+
 #define UNICODE_DATA_VERSION "5.0.0"
 
 #define UNICODE_LAST_CHAR 0x10ffff
@@ -14354,5 +14355,6 @@ static const struct {
 	{ 0xff62, 0xff63 },
 	{ 0xff63, 0xff62 },
 };
+
 
 #endif /* CHARACTER_TABLES_H */
