@@ -26,13 +26,13 @@ class Break
  */
 #define UNICODE_FIRST_CHAR_PART2 0xe0000
 EOH
-      U::Build::Header::Tables::Split.
-        new(0, data.last_char_part1_i, data.last, io,
+      io.puts U::Build::Header::Tables::Split.
+        new(0, data.last_char_part1_i, data.last,
             'static const int8_t break_property_data[][256]',
             "/* U+0000 through U+%s */\nstatic const int16_t break_property_table_part1[%s]" % [data.last_char_part1_X, data.pages_before_e0000],
-            "/* U+E0000 through U+%04X */\nstatic const int16_t break_property_table_part2[768]" % data.last) do |i|
+            "/* U+E0000 through U+%04X */\nstatic const int16_t break_property_table_part2[768]" % data.last){ |i|
         Mappings[line_break[i]]
-      end
+      }
     end
   end
 

@@ -17,15 +17,15 @@ class Compose
 #define COMPOSE_SECOND_SINGLE_START #{values.second_single_start}
 #define COMPOSE_TABLE_LAST #{values.last / 256}
 EOH
-      U::Build::Header::Tables::Split.
-        new(0, values.last, values.last, io,
+      io.puts U::Build::Header::Tables::Split.
+        new(0, values.last, values.last,
             'static const uint16_t compose_data[][256]',
-            'static const int16_t compose_table[COMPOSE_TABLE_LAST + 1]') do |i|
+            'static const int16_t compose_table[COMPOSE_TABLE_LAST + 1]'){ |i|
         values.include?(i) ? values[i].to_s : '0'
-      end
-      SingletonTable.new first_singletons, 'compose_first_single', io
-      SingletonTable.new second_singletons, 'compose_second_single', io
-      ComposeArray.new firsts, seconds, reversals, io
+      }
+      io.puts SingletonTable.new(first_singletons, 'compose_first_single')
+      io.puts SingletonTable.new(second_singletons, 'compose_second_single')
+      io.puts ComposeArray.new(firsts, seconds, reversals)
     end
   end
 
@@ -252,56 +252,38 @@ private
     end
   end
 
-  class SingletonTable
-    def initialize(singletons, name, io)
-      io.printf "\n\nstatic const uint16_t %s[][2] = {\n", name
+  class SingletonTable < U::Build::Header::Table
+    def initialize(singletons, name)
+      super 'static const uint16_t %s[][2]' % name
       singletons.each do |singleton|
         raise RuntimeError,
           '%s table field too short; upgrade to unichar to fit values beyond 0xffff: %p' %
             [name, singleton] if
               singleton.second > 0xffff or singleton.code > 0xffff
-	io.printf "\t{ %#06x, %#06x },\n", singleton.second, singleton.code
+        self << U::Build::Header::Table::Row.new(*[singleton.second, singleton.code].map{ |c| '%#06x' % c })
       end
-      io.puts "};"
     end
   end
 
-  class ComposeArray
-    def initialize(firsts, seconds, reversals, io)
-      @firsts, @seconds, @reversals, @io = firsts, seconds, reversals, io
-      io.printf "\n\nstatic const uint16_t compose_array[%d][%d] = {\n",
-        firsts.size, seconds.size
+  class ComposeArray < U::Build::Header::Table
+    def initialize(firsts, seconds, reversals)
+      @firsts, @seconds, @reversals = firsts, seconds, reversals
+      super 'static const uint16_t compose_array[%d][%d]' % [firsts.size, seconds.size]
       firsts.size.times do |i|
-        row(i)
-      end
-      io.puts "};\n"
-    end
-
-  private
-
-    def row(i)
-      @io.print "\t{\n\t\t"
-      column = 16
-      @seconds.size.times do |j|
-        if column + 8 > 79
-          @io.print "\n\t\t"
-          column = 16
+        row = U::Build::Header::Table::Row.new
+        seconds.size.times do |j|
+          row <<
+            if reversals.include? i, j
+              raise RuntimeError,
+                'compose_array table field too short; upgrade to unichar to fit values beyond 0xffff: %04X' %
+                  reversals[i, j] if
+                    reversals[i, j] > 0xffff
+              '%#06x' % reversals[i, j]
+            else
+              '     0'
+            end
         end
-        cell(i, j)
-        column += 8
-      end
-      @io.puts "\n\t},\n"
-    end
-
-    def cell(i, j)
-      if @reversals.include? i, j
-        raise RuntimeError,
-          'compose_array table field too short; upgrade to unichar to fit values beyond 0xffff: %04X' %
-            @reversals[i, j] if
-              @reversals[i, j] > 0xffff
-        @io.printf '0x%04x, ', @reversals[i, j]
-      else
-        @io.print '     0, '
+        self << row
       end
     end
   end

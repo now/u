@@ -1209,7 +1209,7 @@ static const int16_t combining_class_table_part1[763] = {
 	0 + UNICODE_MAX_TABLE_INDEX,
 	0 + UNICODE_MAX_TABLE_INDEX,
 	0 + UNICODE_MAX_TABLE_INDEX,
-	0 + UNICODE_MAX_TABLE_INDEX,
+	0 + UNICODE_MAX_TABLE_INDEX
 };
 
 
@@ -1981,7 +1981,7 @@ static const int16_t combining_class_table_part2[768] = {
 	0 + UNICODE_MAX_TABLE_INDEX,
 	0 + UNICODE_MAX_TABLE_INDEX,
 	0 + UNICODE_MAX_TABLE_INDEX,
-	0 + UNICODE_MAX_TABLE_INDEX,
+	0 + UNICODE_MAX_TABLE_INDEX
 };
 
 
@@ -7391,8 +7391,7 @@ static const struct {
 	{ 0x2fa1a, 17137, UNICODE_NOT_PRESENT_OFFSET },
 	{ 0x2fa1b, 17141, UNICODE_NOT_PRESENT_OFFSET },
 	{ 0x2fa1c, 6988, UNICODE_NOT_PRESENT_OFFSET },
-	{ 0x2fa1d, 17145, UNICODE_NOT_PRESENT_OFFSET },
-
+	{ 0x2fa1d, 17145, UNICODE_NOT_PRESENT_OFFSET }
 };
 static const char decomp_expansion_string[] = 
   "\x20\0" /* offset 0 */

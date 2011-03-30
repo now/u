@@ -327,7 +327,7 @@ static const int16_t compose_table[COMPOSE_TABLE_LAST + 1] = {
 	0 + UNICODE_MAX_TABLE_INDEX,
 	0 + UNICODE_MAX_TABLE_INDEX,
 	0 + UNICODE_MAX_TABLE_INDEX,
-	16 /* page 48 */,
+	16 /* page 48 */
 };
 
 
@@ -552,7 +552,7 @@ static const uint16_t compose_first_single[][2] = {
 	{ 0x3099, 0x30f8 },
 	{ 0x3099, 0x30f9 },
 	{ 0x3099, 0x30fa },
-	{ 0x3099, 0x30fe },
+	{ 0x3099, 0x30fe }
 };
 
 
@@ -574,7 +574,7 @@ static const uint16_t compose_second_single[][2] = {
 	{ 0x0d46, 0x0d4c },
 	{ 0x0dd9, 0x0dda },
 	{ 0x0dd9, 0x0ddc },
-	{ 0x0dd9, 0x0dde },
+	{ 0x0dd9, 0x0dde }
 };
 
 
@@ -1600,7 +1600,7 @@ static const uint16_t compose_array[146][31] = {
 		     0,      0,      0,      0,      0,      0,      0, 
 		     0,      0,      0,      0,      0,      0,      0, 
 		     0, 0x30dc, 0x30dd, 
-	},
+	}
 };
 
 

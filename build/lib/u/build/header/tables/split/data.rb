@@ -1,22 +1,29 @@
 # -*- coding: utf-8 -*-
 
-class U::Build::Header::Tables::Split::Data
-  def initialize(declaration, rows, io = $stdout)
-    io.printf "\n\n%s = {\n", declaration
+class U::Build::Header::Tables::Split::Data < U::Build::Header::Table
+  def initialize(declaration, rows)
+    super declaration
     rows.reject{ |row| row.homogenous? }.each_with_index do |row, index|
-      io.puts ',' unless index.zero?
-      io.printf "\t{ /* page %d, index %d */\n\t\t", row.start / 256, index
-      column = 16
+      table_row = Row.new(row.start / 256, index)
       row.each do |cell|
-        if column + cell.length + 2 > 79
-          io.print "\n\t\t"
-          column = 16
-        end
-        io.printf '%s, ', cell
-        column += cell.length + 2
+        table_row << cell
       end
-      io.print "\n\t}"
+      self << table_row
     end
-    io.puts "\n};"
+  end
+
+private
+
+  class Row < U::Build::Header::Table::Row
+    def initialize(page, index)
+      super()
+      @format = "\t{ /* page %d, index %d */\n\t\t%%s, \n\t}" % [page, index]
+    end
+
+  private
+
+    def multi_format
+      @format
+    end
   end
 end

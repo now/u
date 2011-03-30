@@ -10188,7 +10188,7 @@ static const int16_t type_table_part1[763] = {
 	UNICODE_UNASSIGNED + UNICODE_MAX_TABLE_INDEX,
 	UNICODE_OTHER_LETTER + UNICODE_MAX_TABLE_INDEX,
 	UNICODE_OTHER_LETTER + UNICODE_MAX_TABLE_INDEX,
-	75 /* page 762 */,
+	75 /* page 762 */
 };
 
 
@@ -10961,7 +10961,7 @@ static const int16_t type_table_part2[768] = {
 	UNICODE_PRIVATE_USE + UNICODE_MAX_TABLE_INDEX,
 	UNICODE_PRIVATE_USE + UNICODE_MAX_TABLE_INDEX,
 	UNICODE_PRIVATE_USE + UNICODE_MAX_TABLE_INDEX,
-	79 /* page 4351 */,
+	79 /* page 4351 */
 };
 
 
@@ -12906,7 +12906,7 @@ static const int16_t attr_table_part1[763] = {
 	0x0000 + UNICODE_MAX_TABLE_INDEX,
 	0x0000 + UNICODE_MAX_TABLE_INDEX,
 	0x0000 + UNICODE_MAX_TABLE_INDEX,
-	0x0000 + UNICODE_MAX_TABLE_INDEX,
+	0x0000 + UNICODE_MAX_TABLE_INDEX
 };
 
 
@@ -13679,7 +13679,7 @@ static const int16_t attr_table_part2[768] = {
 	0x0000 + UNICODE_MAX_TABLE_INDEX,
 	0x0000 + UNICODE_MAX_TABLE_INDEX,
 	0x0000 + UNICODE_MAX_TABLE_INDEX,
-	0x0000 + UNICODE_MAX_TABLE_INDEX,
+	0x0000 + UNICODE_MAX_TABLE_INDEX
 };
 
 
@@ -13714,7 +13714,7 @@ static const unichar title_table[][3] = {
 	{ 0x1faf, 0x0000, 0x1fa7 },
 	{ 0x1fbc, 0x0000, 0x1fb3 },
 	{ 0x1fcc, 0x0000, 0x1fc3 },
-	{ 0x1ffc, 0x0000, 0x1ff3 },
+	{ 0x1ffc, 0x0000, 0x1ff3 }
 };
 
 
@@ -13996,8 +13996,10 @@ static const struct {
 	{ 0xfb14, "\xd5\xb4\xd5\xa5" },
 	{ 0xfb15, "\xd5\xb4\xd5\xab" },
 	{ 0xfb16, "\xd5\xbe\xd5\xb6" },
-	{ 0xfb17, "\xd5\xb4\xd5\xad" },
+	{ 0xfb17, "\xd5\xb4\xd5\xad" }
 };
+
+
 static const struct {
 	unichar ch;
 	unichar mirrored_ch;
@@ -14353,7 +14355,7 @@ static const struct {
 	{ 0xff5f, 0xff60 },
 	{ 0xff60, 0xff5f },
 	{ 0xff62, 0xff63 },
-	{ 0xff63, 0xff62 },
+	{ 0xff63, 0xff62 }
 };
 
 

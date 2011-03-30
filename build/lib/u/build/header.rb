@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 class U::Build::Header
+  require 'u/build/header/table'
   require 'u/build/header/tables'
 
   def initialize(name, io = $stdout)

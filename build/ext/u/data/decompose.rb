@@ -20,34 +20,28 @@ class Decompose
 
 #define UNICODE_NOT_PRESENT_OFFSET #{NotPresentOffset}
 EOD
-
-      U::Build::Header::Tables::Split.
-        new(0, data.last_char_part1_i, data.last, io,
+      io.puts U::Build::Header::Tables::Split.
+        new(0, data.last_char_part1_i, data.last,
             'static const uint8_t cclass_data[][256]',
             'static const int16_t combining_class_table_part1[%d]' %
             data.pages_before_e0000,
-            'static const int16_t combining_class_table_part2[768]') do |i|
+            'static const int16_t combining_class_table_part2[768]'){ |i|
         data[i].cclass
-      end
-
-      DecompositionTable.new(data, io)
+      }
+      io.puts DecompositionTable.new(data)
     end
   end
 
 private
 
-  class DecompositionTable
-    def initialize(data, io)
-      @data = data
-      io.puts <<EOL
-
-
-static const struct {
+  class DecompositionTable < U::Build::Header::Table
+    def initialize(data)
+      super "static const struct {
 \tunichar ch;
 \tuint16_t canon_offset;
 \tuint16_t compat_offset;
-} decomp_table[] = {
-EOL
+} decomp_table[]"
+      @data = data
       @decomp_offsets = {}
       @decomp_string = ''
       @decomp_string_offset = 0
@@ -62,9 +56,12 @@ EOL
           'decomposition string offset beyond not-present offset, upgrade value: offset: %d, max: %d' %
             [@decomp_string_offset, NotPresentOffset] if
               @decomp_string_offset > NotPresentOffset
-        io.printf "\t{ 0x%04x, %s, %s },\n", i, canon_offset, compat_offset
+        self << U::Build::Header::Table::Row.new('%#06x' % i, canon_offset.to_s, compat_offset.to_s)
       end
-      io.printf "\n};\nstatic const char decomp_expansion_string[] = %s;\n", @decomp_string
+    end
+
+    def to_s
+      "%s\nstatic const char decomp_expansion_string[] = %s;" % [super, @decomp_string]
     end
 
 private
