@@ -24,7 +24,4 @@ class U::Build::Data::Unicode::Entry
   end
 
   attr_reader :code, :type, :value, :title_to_lower, :title_to_upper, :cclass, :decomposition
-  # TODO: SpecialCasing needs this at the moment.  Make it easy to update this
-  # field in a copy instead.
-  attr_writer :value
 end

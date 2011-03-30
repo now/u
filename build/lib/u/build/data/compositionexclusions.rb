@@ -2,16 +2,13 @@
 
 class U::Build::Data::CompositionExclusions
   def initialize(path)
-    @exclusions = {}
-    File.open(path, 'rb') do |file|
-      file.each_line do |line|
-        next if line =~ /\A(?:#|\s*\Z)/
-        @exclusions[line.chomp.sub(/\A\s*(.*?)\s*(#.*)?\Z/, '\\1').hex] = true
-      end
+    @entries = {}
+    U::Build::Data::File.each(path, 1) do |point|
+      @entries[point] = true
     end
   end
 
   def include?(code)
-    @exclusions.include? code
+    @entries.include? code
   end
 end

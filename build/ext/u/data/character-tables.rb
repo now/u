@@ -32,7 +32,9 @@ EOH
             'static const unichar attr_data[][256]',
             "/* U+0000 through U+%s */\nstatic const int16_t attr_table_part1[%s]" % [data.last_char_part1_X, data.pages_before_e0000],
             "/* U+E0000 through U+%04X */\nstatic const int16_t attr_table_part2[768]" % data.last) do |i|
-        '0x%04x' % (data[i].value or 0)
+        special_casing.include?(i) ?
+          '0x%07x' % (0x1000000 + special_casing[i].offset) :
+          '0x%04x' % (data[i].value or 0)
       end
       TitleTable.new(data, io)
       SpecialCaseTable.new(special_casing, io)
@@ -71,7 +73,7 @@ private
 static const char special_case_table[] = {
 EOF
       special_casing.each do |special_case|
-        io.printf %{ "%s\\0" /* offset %d */\n}, special_case, special_case.offset
+        io.printf %{ "%s\\0" /* offset %d */\n}, special_case.to_escaped_s, special_case.offset
       end
       puts "};\n"
     end
@@ -97,7 +99,7 @@ EOF
           'casefold_table.ch field too short; upgrade to unichar to fit values beyond 0xffff: %s' %
             casefold.char if
               casefold.char > 0xffff
-        io.printf %{\t{ 0x%04x, "%s" },\n}, casefold.char, casefold.escaped
+        io.printf %{\t{ 0x%04x, "%s" },\n}, casefold.char, casefold.to_escaped_s
       end
       io.puts "};\n"
     end
@@ -157,9 +159,10 @@ EOF
 end
 
 data = U::Build::Data::Unicode.new(ARGV[0])
+special_casing = U::Build::Data::SpecialCasing.new(data, ARGV[1])
 CharacterTables.new(data,
-                    U::Build::Data::SpecialCasing.new(data, ARGV[1]),
-                    U::Build::Data::CaseFolding.new(data, ARGV[2]),
+                    special_casing,
+                    U::Build::Data::CaseFolding.new(data, special_casing, ARGV[2]),
                     U::Build::Data::BidiMirroring.new(ARGV[3]),
                     ARGV[4],
                     ARGV[5])

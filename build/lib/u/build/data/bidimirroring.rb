@@ -5,16 +5,8 @@ class U::Build::Data::BidiMirroring
 
   def initialize(path)
     @entries = []
-    File.open(path, 'rb') do |file|
-      file.each_line.with_index do |line, index|
-        next if line =~ /\A(?:#|\s*\Z)/
-        fields = line.chomp.sub(/\s*#.*\Z/, '').split(/\s*;\s*/, -1)
-        raise RuntimeError,
-          '%s:%d: wrong number of fields: %d instead of 2' %
-            [@path, index + 1, fields.size] unless
-              fields.size == 2
-        @entries << Entry.new(fields[0].hex, fields[1].hex)
-      end
+    U::Build::Data::File.each(path, 2) do |point, mirrored|
+      @entries << Entry.new(point, mirrored.hex)
     end
   end
 

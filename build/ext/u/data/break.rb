@@ -26,7 +26,6 @@ class Break
  */
 #define UNICODE_FIRST_CHAR_PART2 0xe0000
 EOH
-
       U::Build::Header::Table.
         new(0, data.last_char_part1_i, data.last, io,
             'static const int8_t break_property_data[][256]',

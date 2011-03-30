@@ -21,4 +21,12 @@ class U::Build::Data::Unicode::Points
     end
     self
   end
+
+  def to_s
+    @points.pack('U*')
+  end
+
+  def to_escaped_s
+    to_s.unpack('H*').first.gsub(/../, '\\x\0')
+  end
 end

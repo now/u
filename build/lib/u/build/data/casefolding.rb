@@ -3,9 +3,9 @@
 class U::Build::Data::CaseFolding
   include Enumerable
 
-  def initialize(data, path)
+  def initialize(data, special_casing, path)
     @entries = []
-    Lines.new(data, path).each do |entry|
+    File.new(data, special_casing, path).each do |entry|
       @entries << entry
     end
   end
@@ -17,16 +17,16 @@ class U::Build::Data::CaseFolding
   end
 
   class Entry
-    def initialize(char, string)
-      @char, @string = char, string
+    def initialize(char, points)
+      @char, @points = char, points
     end
 
     def to_s
-      @string
+      @points.to_s
     end
 
-    def escaped
-      @string.unpack('H*')[0].gsub(/(.{2})/, '\\x\1')
+    def to_escaped_s
+      @points.to_escaped_s
     end
 
     attr_reader :char
@@ -34,38 +34,31 @@ class U::Build::Data::CaseFolding
 
 private
 
-  class Lines
-    def initialize(data, path)
-      @data, @path = data, path
+  class File
+    def initialize(data, special_casing, path)
+      @data, @special_casing, @path = data, special_casing, path
     end
 
     def each
-      File.open(@path, 'rb') do |file|
-        file.each_line.with_index do |line, index|
-          next if line =~ /\A(?:#|\s*\Z)/
-          fields = line.chomp.sub(/\s*#.*\Z/, '').split(/\s*;\s*/, -1)
-          raise RuntimeError,
-            '%s:%d: wrong number of fields: %d instead of 4' %
-              [@path, index + 1, fields.size] unless
-                fields.size == 4
-          # Simple and Turkic rules are dealt with in code.
-          next if ['S', 'T'].include? fields[Status]
-          code = fields[Code].hex
-          # TODO: This splitting and mapping is duplicated.
-          values = fields[Mapping].split(/\s+/).map{ |s| s.hex }
-          next if simple? values, code
-          yield Entry.new(code, values.pack('U*'))
-        end
+      U::Build::Data::File.each(@path, 4) do |point, status, mapping|
+        next if simple_or_turkic? status
+        points = U::Build::Data::Unicode::Points.new(mapping)
+        next if simple? points, point
+        yield Entry.new(point, points)
       end
     end
 
   private
 
-    def simple?(values, code)
-      values.size == 1 and
-        not (@data[code].value and @data[code].value >= 0x1000000) and
+    def simple_or_turkic?(status)
+      %w[S T].include? status
+    end
+
+    def simple?(points, code)
+      points.length == 1 and
+        not @special_casing.include? code and
         @data[code].type and
-        lower(code) == values[0]
+        lower(code) == points.first
     end
 
     def lower(code)
@@ -81,6 +74,4 @@ private
       end
     end
   end
-
-  Code, Status, Mapping = (0..2).to_a
 end
