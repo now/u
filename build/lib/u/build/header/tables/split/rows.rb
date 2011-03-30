@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-class U::Build::Header::Table::Rows
+class U::Build::Header::Tables::Split::Rows
   include Enumerable
 
   def initialize(first, last)
     @rows = []
     first.step(last, 256) do |i|
-      @rows[i / 256] = U::Build::Header::Table::Row.new(i){ |c| yield(c) }
+      @rows[i / 256] = U::Build::Header::Tables::Split::Row.new(i){ |c| yield(c) }
     end
   end
 

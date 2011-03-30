@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-class U::Build::Header::Table
-  require 'u/build/header/table/row'
-  require 'u/build/header/table/rows'
-  require 'u/build/header/table/data'
-  require 'u/build/header/table/part1'
-  require 'u/build/header/table/part2'
+class U::Build::Header::Tables::Split
+  require 'u/build/header/tables/split/row'
+  require 'u/build/header/tables/split/rows'
+  require 'u/build/header/tables/split/data'
+  require 'u/build/header/tables/split/part1'
+  require 'u/build/header/tables/split/part2'
 
   def initialize(first, middle, last, io, data, part1, part2 = nil)
     rows = Rows.new(0, last){ |c| yield(c) }

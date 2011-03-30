@@ -20,14 +20,14 @@ class CharacterTables
 
 #define UNICODE_SPECIAL_CASE_TABLE_START 0x1000000
 EOH
-      U::Build::Header::Table.
+      U::Build::Header::Tables::Split.
         new(0, data.last_char_part1_i, data.last, io,
             'static const char type_data[][256]',
             "/* U+0000 through U+%s */\nstatic const int16_t type_table_part1[%s]" % [data.last_char_part1_X, data.pages_before_e0000],
             "/* U+E0000 through U+%04X */\nstatic const int16_t type_table_part2[768]" % data.last) do |i|
         Mappings[data[i].type]
       end
-      U::Build::Header::Table.
+      U::Build::Header::Tables::Split.
         new(0, data.last_char_part1_i, data.last, io,
             'static const unichar attr_data[][256]',
             "/* U+0000 through U+%s */\nstatic const int16_t attr_table_part1[%s]" % [data.last_char_part1_X, data.pages_before_e0000],

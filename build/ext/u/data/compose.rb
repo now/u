@@ -17,7 +17,7 @@ class Compose
 #define COMPOSE_SECOND_SINGLE_START #{values.second_single_start}
 #define COMPOSE_TABLE_LAST #{values.last / 256}
 EOH
-      U::Build::Header::Table.
+      U::Build::Header::Tables::Split.
         new(0, values.last, values.last, io,
             'static const uint16_t compose_data[][256]',
             'static const int16_t compose_table[COMPOSE_TABLE_LAST + 1]') do |i|

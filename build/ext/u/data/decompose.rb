@@ -21,7 +21,7 @@ class Decompose
 #define UNICODE_NOT_PRESENT_OFFSET #{NotPresentOffset}
 EOD
 
-      U::Build::Header::Table.
+      U::Build::Header::Tables::Split.
         new(0, data.last_char_part1_i, data.last, io,
             'static const uint8_t cclass_data[][256]',
             'static const int16_t combining_class_table_part1[%d]' %

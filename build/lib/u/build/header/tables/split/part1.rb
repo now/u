@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class U::Build::Header::Table::Part1
+class U::Build::Header::Tables::Split::Part1
   def initialize(declaration, first, last, rows, set = 0, io = $stdout)
     io.printf "\n\n%s = {\n", declaration
     # TODO: Check if we can use each or something, instead, or if we can use

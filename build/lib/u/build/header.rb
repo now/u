@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 class U::Build::Header
-  require 'u/build/header/table'
+  require 'u/build/header/tables'
 
   def initialize(name, io = $stdout)
     header_h = File.basename(name).upcase.gsub(/[^A-Z0-9]/, '_')

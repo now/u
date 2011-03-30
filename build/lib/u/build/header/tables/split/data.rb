@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class U::Build::Header::Table::Data
+class U::Build::Header::Tables::Split::Data
   def initialize(declaration, rows, io = $stdout)
     io.printf "\n\n%s = {\n", declaration
     rows.reject{ |row| row.homogenous? }.each_with_index do |row, index|
@@ -15,8 +15,8 @@ class U::Build::Header::Table::Data
         io.printf '%s, ', cell
         column += cell.length + 2
       end
-      print "\n\t}"
+      io.print "\n\t}"
     end
-    puts "\n};"
+    io.puts "\n};"
   end
 end

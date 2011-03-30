@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class U::Build::Header::Table::Row
+class U::Build::Header::Tables::Split::Row
   include Enumerable
 
   def initialize(start)
