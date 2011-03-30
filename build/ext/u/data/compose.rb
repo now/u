@@ -21,12 +21,11 @@ EOH
         new(0, values.last, values.last, io,
             'static const uint16_t compose_data[][256]',
             'static const int16_t compose_table[COMPOSE_TABLE_LAST + 1]') do |i|
-        # TODO: Why #to_s?
         values.include?(i) ? values[i].to_s : '0'
       end
-      SingletonTable.new first_singletons, 'compose_first_single'
-      SingletonTable.new second_singletons, 'compose_second_single'
-      ComposeArray.new firsts, seconds, reversals
+      SingletonTable.new first_singletons, 'compose_first_single', io
+      SingletonTable.new second_singletons, 'compose_second_single', io
+      ComposeArray.new firsts, seconds, reversals, io
     end
   end
 
@@ -44,14 +43,15 @@ private
           data[entry.decomposition.first].cclass != Starter
         raise RuntimeError,
           'decomposition of %04X contains more than 2 elements: %d' %
-            [code, entry.decomposition.length] unless entry.decomposition.length == 2
+            [code, entry.decomposition.length] unless
+              entry.decomposition.length == 2
         @entries << [entry.decomposition.entries, code]
       end
     end
 
     def each_with_index
       @entries.each do |parts, code|
-        yield parts, code
+        yield parts[0], parts[1], code
       end
       self
     end
@@ -69,15 +69,29 @@ private
     Starter = '0'.freeze
   end
 
+  class Commons
+    include Enumerable
+
+    def initialize(compositions)
+      @entries = Hash.new(0)
+      compositions.each do |first, second|
+        selection = yield(first, second) and @entries[selection] += 1
+      end
+    end
+
+    def each
+      @entries.keys.sort.each do |code|
+        yield code if @entries[code] > 1
+      end
+      self
+    end
+  end
+
   class Firsts
     include Enumerable
 
     def initialize(compositions)
-      entries = Hash.new(0)
-      compositions.each do |first, second|
-        entries[first] += 1
-      end
-      @entries, @size = enumerate_ordered(entries)
+      self.commons = Commons.new(compositions){ |first, second| first }
     end
 
     def each
@@ -88,8 +102,7 @@ private
     end
 
     def size
-      # TODO: Is @size and @entries.length the same
-      @size
+      @entries.length
     end
 
     def include?(code)
@@ -100,30 +113,22 @@ private
       @entries[code]
     end
 
-  private
+  protected
 
-    # TODO: Can we create a new one here instead of using #delete?
-    def enumerate_ordered(entries)
-      n = 0
-      entries.keys.sort.each do |code|
-        if entries[code] == 1
-          entries.delete(code)
-          next
-        end
-        entries[code] = n
-        n += 1
+    def commons=(commons)
+      @entries = {}
+      commons.each do |code|
+        @entries[code] = @entries.size
       end
-      [entries, n]
+      commons
     end
   end
 
   class Seconds < Firsts
     def initialize(compositions, firsts)
-      entries = Hash.new(0)
-      compositions.each do |first, second|
-        entries[second] += 1 if firsts.include? first
-      end
-      @entries, @size = enumerate_ordered(entries)
+      self.commons = Commons.new(compositions){ |first, second|
+        second if firsts.include? first
+      }
     end
   end
 
@@ -135,13 +140,13 @@ private
         first_singletons = []
         second_singletons = []
         reversals = Reversals.new
-        compositions.each_with_index do |composition, code|
-          if firsts.include? composition[0] and seconds.include? composition[1]
-            reversals[firsts[composition[0]], seconds[composition[1]]] = code
-          elsif not firsts.include? composition[0]
-            first_singletons << Singleton.new(composition[0], composition[1], code)
+        compositions.each_with_index do |first, second, code|
+          if firsts.include? first and seconds.include? second
+            reversals[firsts[first], seconds[second]] = code
+          elsif not firsts.include? first
+            first_singletons << Singleton.new(first, second, code)
           else
-            second_singletons << Singleton.new(composition[1], composition[0], code)
+            second_singletons << Singleton.new(second, first, code)
           end
         end
         [new(first_singletons), new(second_singletons), reversals]
@@ -248,53 +253,55 @@ private
   end
 
   class SingletonTable
-    def initialize(singletons, name)
-      printf "\n\nstatic const uint16_t %s[][2] = {\n", name
-      singletons.each_with_index do |singleton, i|
+    def initialize(singletons, name, io)
+      io.printf "\n\nstatic const uint16_t %s[][2] = {\n", name
+      singletons.each do |singleton|
         raise RuntimeError,
           '%s table field too short; upgrade to unichar to fit values beyond 0xffff: %p' %
             [name, singleton] if
               singleton.second > 0xffff or singleton.code > 0xffff
-	printf "\t{ %#06x, %#06x },\n", singleton.second, singleton.code
+	io.printf "\t{ %#06x, %#06x },\n", singleton.second, singleton.code
       end
-      puts "};"
+      io.puts "};"
     end
   end
 
   class ComposeArray
-    def initialize(firsts, seconds, reversals)
-      @firsts, @seconds, @reversals = firsts, seconds, reversals
-      printf "\n\nstatic const uint16_t compose_array[%d][%d] = {\n", firsts.size, seconds.size
+    def initialize(firsts, seconds, reversals, io)
+      @firsts, @seconds, @reversals, @io = firsts, seconds, reversals, io
+      io.printf "\n\nstatic const uint16_t compose_array[%d][%d] = {\n",
+        firsts.size, seconds.size
       firsts.size.times do |i|
         row(i)
       end
-      puts "};\n"
+      io.puts "};\n"
     end
 
   private
 
     def row(i)
-      print "\t{\n\t\t"
+      @io.print "\t{\n\t\t"
       column = 16
       @seconds.size.times do |j|
         if column + 8 > 79
-          print "\n\t\t"
+          @io.print "\n\t\t"
           column = 16
         end
         cell(i, j)
         column += 8
       end
-      puts "\n\t},\n"
+      @io.puts "\n\t},\n"
     end
 
     def cell(i, j)
       if @reversals.include? i, j
         raise RuntimeError,
-          'compose_array table field too short; upgrade to unichar to fit values beyond 0xffff: %d' %
-            @reversals[i, j] if @reversals[i, j] > 0xffff
-        printf '0x%04x, ', @reversals[i, j]
+          'compose_array table field too short; upgrade to unichar to fit values beyond 0xffff: %04X' %
+            @reversals[i, j] if
+              @reversals[i, j] > 0xffff
+        @io.printf '0x%04x, ', @reversals[i, j]
       else
-        print '     0, '
+        @io.print '     0, '
       end
     end
   end
