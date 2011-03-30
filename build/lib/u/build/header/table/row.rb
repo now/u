@@ -19,7 +19,7 @@ class U::Build::Header::Table::Row
         lines << Line.new if lines.last.length + cell.length + 2 > 61
         lines.last << cell
       end
-      multi_format % lines.join(", \n\t\t")
+      multi_format % lines.join(",\n\t\t")
     else
       "\t{ %s }" % @cells.join(', ')
     end
@@ -27,10 +27,8 @@ class U::Build::Header::Table::Row
 
 private
 
-  # TODO: Remove redundant , in future.
-  # TODO: Remove terminating space in future.
   def multi_format
-    "\t{\n\t\t%s, \n\t}"
+    "\t{\n\t\t%s\n\t}"
   end
 
   class Line

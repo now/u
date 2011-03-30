@@ -17,7 +17,7 @@ private
   class Row < U::Build::Header::Table::Row
     def initialize(page, index)
       super()
-      @format = "\t{ /* page %d, index %d */\n\t\t%%s, \n\t}" % [page, index]
+      @format = "\t{ /* page %d, index %d */\n\t\t%%s\n\t}" % [page, index]
     end
 
   private
