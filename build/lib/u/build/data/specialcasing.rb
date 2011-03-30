@@ -60,7 +60,7 @@ private
     def each
       U::Build::Data::File.each(@path, 5..6) do |point, lower, title, upper, condition, _comment|
         raise RuntimeError,
-          'special case for code point that does not have a type: %d' %
+          'special case for code point that does not have a type: %04X' %
             point unless
               @data[point].type
         # We deal with conditional special cases in code.
