@@ -14,9 +14,7 @@ class U::Build::Header::Table::Row
     if @cells.reduce(0){ |i, cell| i + cell.length + 2 } > 65
       lines = [Line.new]
       @cells.each_with_index do |cell, i|
-        # TODO: Change this to 62.  This is set to 61 to match the current
-        # format.
-        lines << Line.new if lines.last.length + cell.length + 2 > 61
+        lines << Line.new if lines.last.length + cell.length + 2 > 62
         lines.last << cell
       end
       multi_format % lines.join(",\n\t\t")
