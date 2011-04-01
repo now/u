@@ -261,36 +261,30 @@ compose_index(unichar c)
 }
 
 static bool
-lookup_compose(const uint16_t table[][2], uint16_t index, unichar c,
-               unichar *result)
-{
-        if (c != table[index][0])
-                return false;
-
-        *result = table[index][1];
-
-        return true;
-}
-
-static bool
 combine(unichar a, unichar b, unichar *result)
 {
         if (combine_hangul(a, b, result))
                 return true;
 
         uint16_t index_a = compose_index(a);
-        if (index_a >= COMPOSE_FIRST_SINGLE_START && index_a < COMPOSE_SECOND_START)
-                return lookup_compose(compose_first_single,
-                                      index_a - COMPOSE_FIRST_SINGLE_START,
-                                      b,
-                                      result);
+        if (index_a >= COMPOSE_FIRST_SINGLE_START && index_a < COMPOSE_SECOND_START) {
+                if (b != compose_first_single[index_a - COMPOSE_FIRST_SINGLE_START][0])
+                        return false;
+
+                *result = compose_first_single[index_a - COMPOSE_FIRST_SINGLE_START][1];
+
+                return true;
+        }
 
         uint16_t index_b = compose_index(b);
-        if (index_b >= COMPOSE_SECOND_SINGLE_START)
-                return lookup_compose(compose_second_single,
-                                      index_b - COMPOSE_SECOND_SINGLE_START,
-                                      a,
-                                      result);
+        if (index_b >= COMPOSE_SECOND_SINGLE_START) {
+                if (a != compose_second_single[index_b - COMPOSE_SECOND_SINGLE_START][0])
+                        return false;
+
+                *result = compose_second_single[index_b - COMPOSE_SECOND_SINGLE_START][1];
+
+                return true;
+        }
 
         if (index_a >= COMPOSE_FIRST_START &&
             index_a < COMPOSE_FIRST_SINGLE_START &&
