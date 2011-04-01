@@ -64,27 +64,21 @@ private
       "%s\nstatic const char decomp_expansion_string[] = %s;" % [super, @decomp_string]
     end
 
-private
+  private
 
     NotPresentOffset = 65535
 
-    def make_decomp(code, compat)
-      [].tap{ |result|
-        expand_decomp(code, compat).each do |item|
-          result << (Array === item ? item.flatten : [item]).pack('U')
-        end
-      }.join('')
+    def make_decomp(point, compatible)
+      expand_decomp(point, compatible).flatten.pack('U*')
     end
 
-    def expand_decomp(code, compat)
-      [].tap{ |result|
-        @data[code].decomposition.each do |point|
-          if not @data[point].decomposition.empty? and
-             (compat or @data[point].decomposition.canonical?)
-            result.concat expand_decomp(point, compat)
-          else
-            result << point
-          end
+    def expand_decomp(point, compatible)
+      @data[point].decomposition.map{ |part|
+        if not @data[part].decomposition.empty? and
+            (compatible or @data[part].decomposition.canonical?)
+          expand_decomp(part, compatible)
+        else
+          part
         end
       }
     end
