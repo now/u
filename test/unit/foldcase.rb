@@ -234,6 +234,9 @@ Expectations do
   expect 'ɍ'.u do 'Ɍ'.u.foldcase end
   expect 'ɏ'.u do 'Ɏ'.u.foldcase end
   expect 'ι'.u do 'ͅ'.u.foldcase end
+  expect 'ͱ'.u do 'Ͱ'.u.foldcase end
+  expect 'ͳ'.u do 'Ͳ'.u.foldcase end
+  expect 'ͷ'.u do 'Ͷ'.u.foldcase end
   expect 'ά'.u do 'Ά'.u.foldcase end
   expect 'έ'.u do 'Έ'.u.foldcase end
   expect 'ή'.u do 'Ή'.u.foldcase end
@@ -270,6 +273,7 @@ Expectations do
   expect 'ϋ'.u do 'Ϋ'.u.foldcase end
   expect 'ΰ'.u do 'ΰ'.u.foldcase end
   expect 'σ'.u do 'ς'.u.foldcase end
+  expect 'ϗ'.u do 'Ϗ'.u.foldcase end
   expect 'β'.u do 'ϐ'.u.foldcase end
   expect 'θ'.u do 'ϑ'.u.foldcase end
   expect 'φ'.u do 'ϕ'.u.foldcase end
@@ -430,6 +434,16 @@ Expectations do
   expect 'ԏ'.u do 'Ԏ'.u.foldcase end
   expect 'ԑ'.u do 'Ԑ'.u.foldcase end
   expect 'ԓ'.u do 'Ԓ'.u.foldcase end
+  expect 'ԕ'.u do 'Ԕ'.u.foldcase end
+  expect 'ԗ'.u do 'Ԗ'.u.foldcase end
+  expect 'ԙ'.u do 'Ԙ'.u.foldcase end
+  expect 'ԛ'.u do 'Ԛ'.u.foldcase end
+  expect 'ԝ'.u do 'Ԝ'.u.foldcase end
+  expect 'ԟ'.u do 'Ԟ'.u.foldcase end
+  expect 'ԡ'.u do 'Ԡ'.u.foldcase end
+  expect 'ԣ'.u do 'Ԣ'.u.foldcase end
+  expect 'ԥ'.u do 'Ԥ'.u.foldcase end
+  expect 'ԧ'.u do 'Ԧ'.u.foldcase end
   expect 'ա'.u do 'Ա'.u.foldcase end
   expect 'բ'.u do 'Բ'.u.foldcase end
   expect 'գ'.u do 'Գ'.u.foldcase end
@@ -588,6 +602,7 @@ Expectations do
   expect 'ẙ'.u do 'ẙ'.u.foldcase end
   expect 'aʾ'.u do 'ẚ'.u.foldcase end
   expect 'ṡ'.u do 'ẛ'.u.foldcase end
+  expect 'ss'.u do 'ẞ'.u.foldcase end
   expect 'ạ'.u do 'Ạ'.u.foldcase end
   expect 'ả'.u do 'Ả'.u.foldcase end
   expect 'ấ'.u do 'Ấ'.u.foldcase end
@@ -633,6 +648,9 @@ Expectations do
   expect 'ỵ'.u do 'Ỵ'.u.foldcase end
   expect 'ỷ'.u do 'Ỷ'.u.foldcase end
   expect 'ỹ'.u do 'Ỹ'.u.foldcase end
+  expect 'ỻ'.u do 'Ỻ'.u.foldcase end
+  expect 'ỽ'.u do 'Ỽ'.u.foldcase end
+  expect 'ỿ'.u do 'Ỿ'.u.foldcase end
   expect 'ἀ'.u do 'Ἀ'.u.foldcase end
   expect 'ἁ'.u do 'Ἁ'.u.foldcase end
   expect 'ἂ'.u do 'Ἂ'.u.foldcase end
@@ -883,7 +901,14 @@ Expectations do
   expect 'ⱨ'.u do 'Ⱨ'.u.foldcase end
   expect 'ⱪ'.u do 'Ⱪ'.u.foldcase end
   expect 'ⱬ'.u do 'Ⱬ'.u.foldcase end
+  expect 'ɑ'.u do 'Ɑ'.u.foldcase end
+  expect 'ɱ'.u do 'Ɱ'.u.foldcase end
+  expect 'ɐ'.u do 'Ɐ'.u.foldcase end
+  expect 'ɒ'.u do 'Ɒ'.u.foldcase end
+  expect 'ⱳ'.u do 'Ⱳ'.u.foldcase end
   expect 'ⱶ'.u do 'Ⱶ'.u.foldcase end
+  expect 'ȿ'.u do 'Ȿ'.u.foldcase end
+  expect 'ɀ'.u do 'Ɀ'.u.foldcase end
   expect 'ⲁ'.u do 'Ⲁ'.u.foldcase end
   expect 'ⲃ'.u do 'Ⲃ'.u.foldcase end
   expect 'ⲅ'.u do 'Ⲅ'.u.foldcase end
@@ -934,6 +959,97 @@ Expectations do
   expect 'ⳟ'.u do 'Ⳟ'.u.foldcase end
   expect 'ⳡ'.u do 'Ⳡ'.u.foldcase end
   expect 'ⳣ'.u do 'Ⳣ'.u.foldcase end
+  expect 'ⳬ'.u do 'Ⳬ'.u.foldcase end
+  expect 'ⳮ'.u do 'Ⳮ'.u.foldcase end
+  expect 'ꙁ'.u do 'Ꙁ'.u.foldcase end
+  expect 'ꙃ'.u do 'Ꙃ'.u.foldcase end
+  expect 'ꙅ'.u do 'Ꙅ'.u.foldcase end
+  expect 'ꙇ'.u do 'Ꙇ'.u.foldcase end
+  expect 'ꙉ'.u do 'Ꙉ'.u.foldcase end
+  expect 'ꙋ'.u do 'Ꙋ'.u.foldcase end
+  expect 'ꙍ'.u do 'Ꙍ'.u.foldcase end
+  expect 'ꙏ'.u do 'Ꙏ'.u.foldcase end
+  expect 'ꙑ'.u do 'Ꙑ'.u.foldcase end
+  expect 'ꙓ'.u do 'Ꙓ'.u.foldcase end
+  expect 'ꙕ'.u do 'Ꙕ'.u.foldcase end
+  expect 'ꙗ'.u do 'Ꙗ'.u.foldcase end
+  expect 'ꙙ'.u do 'Ꙙ'.u.foldcase end
+  expect 'ꙛ'.u do 'Ꙛ'.u.foldcase end
+  expect 'ꙝ'.u do 'Ꙝ'.u.foldcase end
+  expect 'ꙟ'.u do 'Ꙟ'.u.foldcase end
+  expect 'ꙡ'.u do 'Ꙡ'.u.foldcase end
+  expect 'ꙣ'.u do 'Ꙣ'.u.foldcase end
+  expect 'ꙥ'.u do 'Ꙥ'.u.foldcase end
+  expect 'ꙧ'.u do 'Ꙧ'.u.foldcase end
+  expect 'ꙩ'.u do 'Ꙩ'.u.foldcase end
+  expect 'ꙫ'.u do 'Ꙫ'.u.foldcase end
+  expect 'ꙭ'.u do 'Ꙭ'.u.foldcase end
+  expect 'ꚁ'.u do 'Ꚁ'.u.foldcase end
+  expect 'ꚃ'.u do 'Ꚃ'.u.foldcase end
+  expect 'ꚅ'.u do 'Ꚅ'.u.foldcase end
+  expect 'ꚇ'.u do 'Ꚇ'.u.foldcase end
+  expect 'ꚉ'.u do 'Ꚉ'.u.foldcase end
+  expect 'ꚋ'.u do 'Ꚋ'.u.foldcase end
+  expect 'ꚍ'.u do 'Ꚍ'.u.foldcase end
+  expect 'ꚏ'.u do 'Ꚏ'.u.foldcase end
+  expect 'ꚑ'.u do 'Ꚑ'.u.foldcase end
+  expect 'ꚓ'.u do 'Ꚓ'.u.foldcase end
+  expect 'ꚕ'.u do 'Ꚕ'.u.foldcase end
+  expect 'ꚗ'.u do 'Ꚗ'.u.foldcase end
+  expect 'ꜣ'.u do 'Ꜣ'.u.foldcase end
+  expect 'ꜥ'.u do 'Ꜥ'.u.foldcase end
+  expect 'ꜧ'.u do 'Ꜧ'.u.foldcase end
+  expect 'ꜩ'.u do 'Ꜩ'.u.foldcase end
+  expect 'ꜫ'.u do 'Ꜫ'.u.foldcase end
+  expect 'ꜭ'.u do 'Ꜭ'.u.foldcase end
+  expect 'ꜯ'.u do 'Ꜯ'.u.foldcase end
+  expect 'ꜳ'.u do 'Ꜳ'.u.foldcase end
+  expect 'ꜵ'.u do 'Ꜵ'.u.foldcase end
+  expect 'ꜷ'.u do 'Ꜷ'.u.foldcase end
+  expect 'ꜹ'.u do 'Ꜹ'.u.foldcase end
+  expect 'ꜻ'.u do 'Ꜻ'.u.foldcase end
+  expect 'ꜽ'.u do 'Ꜽ'.u.foldcase end
+  expect 'ꜿ'.u do 'Ꜿ'.u.foldcase end
+  expect 'ꝁ'.u do 'Ꝁ'.u.foldcase end
+  expect 'ꝃ'.u do 'Ꝃ'.u.foldcase end
+  expect 'ꝅ'.u do 'Ꝅ'.u.foldcase end
+  expect 'ꝇ'.u do 'Ꝇ'.u.foldcase end
+  expect 'ꝉ'.u do 'Ꝉ'.u.foldcase end
+  expect 'ꝋ'.u do 'Ꝋ'.u.foldcase end
+  expect 'ꝍ'.u do 'Ꝍ'.u.foldcase end
+  expect 'ꝏ'.u do 'Ꝏ'.u.foldcase end
+  expect 'ꝑ'.u do 'Ꝑ'.u.foldcase end
+  expect 'ꝓ'.u do 'Ꝓ'.u.foldcase end
+  expect 'ꝕ'.u do 'Ꝕ'.u.foldcase end
+  expect 'ꝗ'.u do 'Ꝗ'.u.foldcase end
+  expect 'ꝙ'.u do 'Ꝙ'.u.foldcase end
+  expect 'ꝛ'.u do 'Ꝛ'.u.foldcase end
+  expect 'ꝝ'.u do 'Ꝝ'.u.foldcase end
+  expect 'ꝟ'.u do 'Ꝟ'.u.foldcase end
+  expect 'ꝡ'.u do 'Ꝡ'.u.foldcase end
+  expect 'ꝣ'.u do 'Ꝣ'.u.foldcase end
+  expect 'ꝥ'.u do 'Ꝥ'.u.foldcase end
+  expect 'ꝧ'.u do 'Ꝧ'.u.foldcase end
+  expect 'ꝩ'.u do 'Ꝩ'.u.foldcase end
+  expect 'ꝫ'.u do 'Ꝫ'.u.foldcase end
+  expect 'ꝭ'.u do 'Ꝭ'.u.foldcase end
+  expect 'ꝯ'.u do 'Ꝯ'.u.foldcase end
+  expect 'ꝺ'.u do 'Ꝺ'.u.foldcase end
+  expect 'ꝼ'.u do 'Ꝼ'.u.foldcase end
+  expect 'ᵹ'.u do 'Ᵹ'.u.foldcase end
+  expect 'ꝿ'.u do 'Ꝿ'.u.foldcase end
+  expect 'ꞁ'.u do 'Ꞁ'.u.foldcase end
+  expect 'ꞃ'.u do 'Ꞃ'.u.foldcase end
+  expect 'ꞅ'.u do 'Ꞅ'.u.foldcase end
+  expect 'ꞇ'.u do 'Ꞇ'.u.foldcase end
+  expect 'ꞌ'.u do 'Ꞌ'.u.foldcase end
+  expect 'ɥ'.u do 'Ɥ'.u.foldcase end
+  expect 'ꞑ'.u do 'Ꞑ'.u.foldcase end
+  expect 'ꞡ'.u do 'Ꞡ'.u.foldcase end
+  expect 'ꞣ'.u do 'Ꞣ'.u.foldcase end
+  expect 'ꞥ'.u do 'Ꞥ'.u.foldcase end
+  expect 'ꞧ'.u do 'Ꞧ'.u.foldcase end
+  expect 'ꞩ'.u do 'Ꞩ'.u.foldcase end
   expect 'ff'.u do 'ﬀ'.u.foldcase end
   expect 'fi'.u do 'ﬁ'.u.foldcase end
   expect 'fl'.u do 'ﬂ'.u.foldcase end

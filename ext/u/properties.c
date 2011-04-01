@@ -179,9 +179,8 @@ unichar_isgraph(unichar c)
                    OR(UNICODE_CONTROL,
                       OR(UNICODE_FORMAT,
                          OR(UNICODE_UNASSIGNED,
-                            OR(UNICODE_PRIVATE_USE,
-                               OR(UNICODE_SURROGATE,
-                                  OR(UNICODE_SPACE_SEPARATOR, 0)))))));
+                            OR(UNICODE_SURROGATE,
+                               OR(UNICODE_SPACE_SEPARATOR, 0))))));
 }
 
 
@@ -206,8 +205,7 @@ unichar_isprint(unichar c)
                    OR(UNICODE_CONTROL,
                       OR(UNICODE_FORMAT,
                          OR(UNICODE_UNASSIGNED,
-                            OR(UNICODE_PRIVATE_USE,
-                               OR(UNICODE_SURROGATE, 0))))));
+                            OR(UNICODE_SURROGATE, 0)))));
 }
 
 

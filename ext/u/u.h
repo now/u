@@ -131,7 +131,8 @@ typedef enum {
         UNICODE_BREAK_HANGUL_V_JAMO,
         UNICODE_BREAK_HANGUL_T_JAMO,
         UNICODE_BREAK_HANGUL_LV_SYLLABLE,
-        UNICODE_BREAK_HANGUL_LVT_SYLLABLE
+        UNICODE_BREAK_HANGUL_LVT_SYLLABLE,
+        UNICODE_BREAK_CLOSE_PARENTHESIS
 } UnicodeBreakType;
 
 UnicodeBreakType unichar_break_type(unichar c);
