@@ -561,11 +561,11 @@ real_do_toupper(unichar c, int type, char *buf)
                                            tv - UNICODE_SPECIAL_CASE_TABLE_START,
                                            type, upper);
 
-        /* TODO: this should really use titlecase_table_lookup somehow. */
-        if (type == UNICODE_TITLECASE_LETTER)
-                for (size_t i = 0; i < lengthof(title_table); i++)
-                        if (title_table[i][0] == c)
-                                return unichar_to_u(title_table[i][1], buf);
+        if (type == UNICODE_TITLECASE_LETTER) {
+                unichar tu = titlecase_table_lookup(c, true);
+                if (tu != c)
+                        return unichar_to_u(tu, buf);
+        }
 
         return unichar_to_u(tv != '\0' ? tv : c, buf);
 }
@@ -702,11 +702,11 @@ real_do_tolower(unichar c, int type, char *buf)
                                            tv - UNICODE_SPECIAL_CASE_TABLE_START,
                                            type, false);
 
-        /* TODO: this should really use titlecase_table_lookup somehow. */
-        if (type == UNICODE_TITLECASE_LETTER)
-                for (size_t i = 0; i < lengthof(title_table); i++)
-                        if (title_table[i][0] == c)
-                                return unichar_to_u(title_table[i][2], buf);
+        if (type == UNICODE_TITLECASE_LETTER) {
+                unichar tu = titlecase_table_lookup(c, false);
+                if (tu != c)
+                        return unichar_to_u(tu, buf);
+        }
 
         return unichar_to_u(tv != '\0' ? tv : c, buf);
 }
