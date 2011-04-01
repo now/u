@@ -51,7 +51,7 @@ private
 
     def each
       File.open(@path, 'rb') do |file|
-        file.enum_for(:each_line).with_index do |line, index|
+        file.each_line.with_index do |line, index|
           next if line =~ /\A(?:#|\s*\Z)/
           fields = line.chomp.sub(/\s*;\s*#.*\Z/, '').split(/\s*;\s*/)
           raise RuntimeError,
@@ -103,7 +103,7 @@ private
     def each
       File.open(@path, 'rb') do |file|
         previous = -1
-        file.enum_for(:each_line).with_index do |line, index|
+        file.each_line.with_index do |line, index|
           next if line =~ /\A(?:#|\s*\Z)/
           fields = line.split(';')
           raise RuntimeError,
