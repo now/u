@@ -4,7 +4,7 @@
 #define CHARACTER_TABLES_H
 
 
-#define UNICODE_DATA_VERSION "5.0.0"
+#define UNICODE_DATA_VERSION "6.0.0"
 
 #define UNICODE_LAST_CHAR 0x10ffff
 

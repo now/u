@@ -256,10 +256,7 @@ private
     def initialize(singletons, name)
       super 'static const uint16_t %s[][2]' % name
       singletons.each do |singleton|
-        raise RuntimeError,
-          '%s table field too short; upgrade to unichar to fit values beyond 0xffff: %p' %
-            [name, singleton] if
-              singleton.second > 0xffff or singleton.code > 0xffff
+        @declaration = 'static const unichar %s[][2]' % name if singleton.second > 0xffff or singleton.code > 0xffff
         self << U::Build::Header::Table::Row.new(*[singleton.second, singleton.code].map{ |c| '%#06x' % c })
       end
     end

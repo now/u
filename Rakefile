@@ -60,7 +60,7 @@ EOF
 end
 
 # TODO: Move to U::Version::Unicode
-UnicodeVersion = '5.0.0'
+UnicodeVersion = '6.0.0'
 
 task :extensions => %w[ext/u/data/break.h]
 file 'ext/u/data/break.h' => %w[build/ext/u/data/break.rb
