@@ -31,6 +31,8 @@ VALUE rb_u_new5(VALUE obj, const char *str, long len) HIDDEN;
 
 VALUE rb_u_alloc_using(char *str) HIDDEN;
 
+VALUE rb_u_alloc_using_n(char *str, size_t length) HIDDEN;
+
 VALUE rb_u_dup(VALUE str) HIDDEN;
 
 long rb_u_index(VALUE str, VALUE sub, long offset) HIDDEN;

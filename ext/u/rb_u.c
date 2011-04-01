@@ -227,6 +227,19 @@ rb_u_alloc_using(char *str)
 }
 
 VALUE
+rb_u_alloc_using_n(char *str, size_t length)
+{
+        VALUE rbstr = rb_u_new(NULL, 0);
+
+        RSTRING(rbstr)->ptr = str;
+        RSTRING(rbstr)->aux.capa = length;
+        RSTRING(rbstr)->len = length;
+        RSTRING(rbstr)->ptr[length] = '\0';
+
+        return rbstr;
+}
+
+VALUE
 rb_u_dup(VALUE str)
 {
         str = rb_str_dup(str);

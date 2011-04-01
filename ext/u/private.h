@@ -7,6 +7,9 @@
 #ifndef PRIVATE_H
 #define PRIVATE_H
 
+#define P_WITHIN_STR(p, str, max, use_max) \
+        ((use_max) ? (p) < (str) + (max) : *(p) != '\0')
+
 #define NUL '\0'
 #define lengthof(ary)   (sizeof(ary) / sizeof((ary)[0]))
 

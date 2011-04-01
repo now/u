@@ -88,4 +88,6 @@ Expectations do
   expect 'abcde' do 'äbcdë'.u.tr('äë', 'ae') end
   expect 'ëëëëë' do 'äbcdë'.u.tr('a-zäë', 'ë') end
   expect 'ëëëëë' do 'aaaaa'.u.tr('a', 'ä-ë') end
+
+  expect "ABC\0DËF" do "abc\0dëF".u.upcase end
 end
