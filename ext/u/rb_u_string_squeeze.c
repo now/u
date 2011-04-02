@@ -1,8 +1,8 @@
 #include "rb_includes.h"
-#include "rb_u_internal_tr.h"
+#include "rb_u_string_internal_tr.h"
 
 VALUE
-rb_u_squeeze_bang(int argc, VALUE *argv, VALUE str)
+rb_u_string_squeeze_bang(int argc, VALUE *argv, VALUE str)
 {
         StringValue(str);
         if (RSTRING(str)->len == 0)
@@ -50,10 +50,10 @@ rb_u_squeeze_bang(int argc, VALUE *argv, VALUE str)
 }
 
 VALUE
-rb_u_squeeze(int argc, VALUE *argv, VALUE str)
+rb_u_string_squeeze(int argc, VALUE *argv, VALUE str)
 {
         StringValue(str);
-        VALUE dup = rb_u_dup(str);
-        rb_u_squeeze_bang(argc, argv, dup);
+        VALUE dup = rb_u_string_dup(str);
+        rb_u_string_squeeze_bang(argc, argv, dup);
         return dup;
 }

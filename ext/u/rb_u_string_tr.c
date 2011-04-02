@@ -1,5 +1,5 @@
 #include "rb_includes.h"
-#include "rb_u_internal_tr.h"
+#include "rb_u_string_internal_tr.h"
 
 struct tr_range
 {
@@ -186,7 +186,7 @@ tr_trans(VALUE str, VALUE from, VALUE to, bool squeeze, bool replace_content)
                 return replace_content ? Qnil : str;
 
         if (RSTRING(to)->len == 0)
-                return rb_u_delete_bang(1, &from, str);
+                return rb_u_string_delete_bang(1, &from, str);
 
         struct tr tr_from;
         tr_init(&tr_from,
@@ -232,13 +232,13 @@ tr_trans(VALUE str, VALUE from, VALUE to, bool squeeze, bool replace_content)
 }
 
 VALUE
-rb_u_tr(VALUE str, VALUE from, VALUE to)
+rb_u_string_tr(VALUE str, VALUE from, VALUE to)
 {
         return tr_trans(str, from, to, false, false);
 }
 
 VALUE
-rb_u_tr_s(VALUE str, VALUE from, VALUE to)
+rb_u_string_tr_s(VALUE str, VALUE from, VALUE to)
 {
         return tr_trans(str, from, to, true, false);
 }

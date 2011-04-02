@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 static VALUE
-rb_u_chomp_default(VALUE str)
+rb_u_string_chomp_default(VALUE str)
 {
         rb_str_modify(str);
 
@@ -27,7 +27,7 @@ rb_u_chomp_default(VALUE str)
 }
 
 static VALUE
-rb_u_chomp_newlines(VALUE str)
+rb_u_string_chomp_newlines(VALUE str)
 {
         char *begin = RSTRING(str)->ptr;
         char *end = begin + RSTRING(str)->len;
@@ -51,7 +51,7 @@ rb_u_chomp_newlines(VALUE str)
 }
 
 VALUE
-rb_u_chomp_bang(int argc, VALUE *argv, VALUE str)
+rb_u_string_chomp_bang(int argc, VALUE *argv, VALUE str)
 {
         VALUE rs;
 
@@ -61,7 +61,7 @@ rb_u_chomp_bang(int argc, VALUE *argv, VALUE str)
         if (argc == 0) {
                 rs = rb_rs;
                 if (rs == rb_default_rs)
-                        rb_u_chomp_default(str);
+                        rb_u_string_chomp_default(str);
         } else {
                 rs = argv[0];
         }
@@ -73,7 +73,7 @@ rb_u_chomp_bang(int argc, VALUE *argv, VALUE str)
 
         long rs_len = RSTRING(rs)->len;
         if (rs_len == 0)
-                return rb_u_chomp_newlines(str);
+                return rb_u_string_chomp_newlines(str);
 
         long len = RSTRING(str)->len;
         if (rs_len > len)
@@ -81,7 +81,7 @@ rb_u_chomp_bang(int argc, VALUE *argv, VALUE str)
 
         char last_char = RSTRING(rs)->ptr[rs_len - 1];
         if (rs_len == 1 && last_char == '\n')
-                rb_u_chomp_default(str);
+                rb_u_string_chomp_default(str);
 
         char *p = RSTRING(str)->ptr;
 
@@ -98,12 +98,12 @@ rb_u_chomp_bang(int argc, VALUE *argv, VALUE str)
 }
 
 VALUE
-rb_u_chomp(int argc, VALUE *argv, VALUE str)
+rb_u_string_chomp(int argc, VALUE *argv, VALUE str)
 {
         StringValue(str);
 
-        VALUE dup = rb_u_dup(str);
-        rb_u_chomp_bang(argc, argv, dup);
+        VALUE dup = rb_u_string_dup(str);
+        rb_u_string_chomp_bang(argc, argv, dup);
 
         return dup;
 }

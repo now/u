@@ -1,5 +1,5 @@
 #include "rb_includes.h"
-#include "rb_u_internal_bignum.h"
+#include "rb_u_string_internal_bignum.h"
 
 /* XXX: Stolen straight from bignum.c. */
 #define BDIGITS(x)      ((BDIGIT *)RBIGNUM(x)->digits)
@@ -23,7 +23,7 @@ bignew_1(VALUE klass, long len, int sign)
 #define bignew(len, sign) bignew_1(rb_cBignum, len, sign)
 
 static const char *
-rb_u_to_inum_sign(const char *s, int *sign)
+rb_u_string_to_inum_sign(const char *s, int *sign)
 {
         *sign = 1;
 
@@ -37,7 +37,7 @@ rb_u_to_inum_sign(const char *s, int *sign)
 }
 
 static const char *
-rb_u_to_inum_base(const char *s, int *base)
+rb_u_string_to_inum_base(const char *s, int *base)
 {
         if (s[0] == '0') {
                 int offset = 2;
@@ -70,7 +70,7 @@ rb_u_to_inum_base(const char *s, int *base)
 }
 
 static size_t
-rb_u_to_inum_base_bit_length(const char *s, int base)
+rb_u_string_to_inum_base_bit_length(const char *s, int base)
 {
         if (base < 2 || base > 36)
                 rb_raise(rb_eArgError, "illegal radix %d", base);
@@ -96,8 +96,8 @@ rb_u_to_inum_base_bit_length(const char *s, int base)
 }
 
 static bool
-rb_u_to_inum_num_separator(const char *str, const char *s, bool verify,
-                           unichar c, unichar *non_digit)
+rb_u_string_to_inum_num_separator(const char *str, const char *s, bool verify,
+                                  unichar c, unichar *non_digit)
 {
         if (c != '_')
                 return false;
@@ -116,8 +116,8 @@ rb_u_to_inum_num_separator(const char *str, const char *s, bool verify,
 }
 
 static bool
-rb_u_to_inum_digit_value(const char *str, const char *s, unichar c,
-                           int base, bool verify, int *digit_value)
+rb_u_string_to_inum_digit_value(const char *str, const char *s, unichar c,
+                                int base, bool verify, int *digit_value)
 {
         /* If we stumble upon a space, return false so that we may end our
          * processing and skip over any trailing white-space. */
@@ -148,8 +148,8 @@ rb_u_to_inum_digit_value(const char *str, const char *s, unichar c,
 }
 
 static VALUE
-rb_u_to_inum_as_fix(const char *str, const char *s, int sign, int base,
-                      bool verify)
+rb_u_string_to_inum_as_fix(const char *str, const char *s, int sign, int base,
+                           bool verify)
 {
         unsigned long value = 0;
 
@@ -158,11 +158,11 @@ rb_u_to_inum_as_fix(const char *str, const char *s, int sign, int base,
                 unichar c = u_aref_char(s);
                 s = u_next(s);
 
-                if (rb_u_to_inum_num_separator(str, s, verify, c, &non_digit))
+                if (rb_u_string_to_inum_num_separator(str, s, verify, c, &non_digit))
                         continue;
 
                 int digit_value;
-                if (!rb_u_to_inum_digit_value(str, s, c, base, verify, &digit_value))
+                if (!rb_u_string_to_inum_digit_value(str, s, c, base, verify, &digit_value))
                         break;
                 value *= base;
                 value += digit_value;
@@ -209,7 +209,7 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
 
         /* Figure out what sign this number uses. */
         int sign;
-        s = rb_u_to_inum_sign(s, &sign);
+        s = rb_u_string_to_inum_sign(s, &sign);
 
         /* Do we have another sign?  If so, that’s not correct. */
         if (*s == '+' || *s == '-') {
@@ -221,7 +221,7 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
         }
 
         int tmp_base = base;
-        s = rb_u_to_inum_base(s, &tmp_base);
+        s = rb_u_string_to_inum_base(s, &tmp_base);
         if (base <= 0)
                 base = tmp_base;
 
@@ -230,12 +230,12 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
                 s++;
 
         /* Figure out how many bits we need to represent the number. */
-        size_t bit_length = rb_u_to_inum_base_bit_length(str, base);
+        size_t bit_length = rb_u_string_to_inum_base_bit_length(str, base);
 
         /* If the bit_length is less than the number of bits in a VALUE we can
          * try to store it as a FIXNUM. */
         if (bit_length <= sizeof(VALUE) * CHAR_BIT)
-                return rb_u_to_inum_as_fix(str, s, sign, base, verify);
+                return rb_u_string_to_inum_as_fix(str, s, sign, base, verify);
 
         if (verify && *str == '_')
                 rb_raise(rb_eArgError,
@@ -255,11 +255,11 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
                 unichar c = u_aref_char(s);
                 s = u_next(s);
 
-                if (rb_u_to_inum_num_separator(str, s, verify, c, &non_digit))
+                if (rb_u_string_to_inum_num_separator(str, s, verify, c, &non_digit))
                         continue;
 
                 int digit_value;
-                if (!rb_u_to_inum_digit_value(str, s, c, base, verify, &digit_value))
+                if (!rb_u_string_to_inum_digit_value(str, s, c, base, verify, &digit_value))
                         break;
 
                 bool more_to_shift = true;
@@ -300,7 +300,7 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
 }
 
 VALUE
-rb_u_to_inum(VALUE str, int base, bool verify)
+rb_u_string_to_inum(VALUE str, int base, bool verify)
 {
         StringValue(str);
 

@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_insert(VALUE str, VALUE index, VALUE other)
+rb_u_string_insert(VALUE str, VALUE index, VALUE other)
 {
         StringValue(str);
         long offset = NUM2LONG(index);
@@ -11,7 +11,7 @@ rb_u_insert(VALUE str, VALUE index, VALUE other)
         char *begin, *end;
         if (offset < 0)
                 offset++;
-        rb_u_begin_from_offset_validated(str, offset, &begin, &end);
+        rb_u_string_begin_from_offset_validated(str, offset, &begin, &end);
         puts(begin);
         rb_str_update(str, begin - RSTRING(str)->ptr, 0, other);
         */

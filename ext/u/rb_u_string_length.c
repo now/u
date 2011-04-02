@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_length(VALUE str)
+rb_u_string_length(VALUE str)
 {
         StringValue(str);
 

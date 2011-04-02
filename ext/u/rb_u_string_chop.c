@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_chop_bang(VALUE str)
+rb_u_string_chop_bang(VALUE str)
 {
         StringValue(str);
 
@@ -30,12 +30,12 @@ rb_u_chop_bang(VALUE str)
 }
 
 VALUE
-rb_u_chop(VALUE str)
+rb_u_string_chop(VALUE str)
 {
         StringValue(str);
 
-        VALUE dup = rb_u_dup(str);
-        rb_u_chop_bang(dup);
+        VALUE dup = rb_u_string_dup(str);
+        rb_u_string_chop_bang(dup);
 
         return dup;
 }

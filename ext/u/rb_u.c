@@ -109,7 +109,7 @@ _utf_offset_to_pointer_failable(const char *str, long offset, const char *end)
 }
 
 static char *
-rb_u_begin_setup(VALUE str, long offset, char **base_limit, char **limit)
+rb_u_string_begin_setup(VALUE str, long offset, char **base_limit, char **limit)
 {
         char *base = RSTRING(str)->ptr;
 
@@ -126,10 +126,10 @@ rb_u_begin_setup(VALUE str, long offset, char **base_limit, char **limit)
 }
 
 bool
-rb_u_begin_from_offset(VALUE str, long offset, char **begin, char **limit)
+rb_u_string_begin_from_offset(VALUE str, long offset, char **begin, char **limit)
 {
         char *base_limit;
-        char *base = rb_u_begin_setup(str, offset, &base_limit, limit);
+        char *base = rb_u_string_begin_setup(str, offset, &base_limit, limit);
 
         *begin = _utf_offset_to_pointer_failable(base, offset, base_limit);
 
@@ -137,11 +137,11 @@ rb_u_begin_from_offset(VALUE str, long offset, char **begin, char **limit)
 }
 
 void
-rb_u_begin_from_offset_validated(VALUE str, long offset, char **begin,
-                                   char **limit)
+rb_u_string_begin_from_offset_validated(VALUE str, long offset, char **begin,
+                                        char **limit)
 {
         char *base_limit;
-        char *base = rb_u_begin_setup(str, offset, &base_limit, limit);
+        char *base = rb_u_string_begin_setup(str, offset, &base_limit, limit);
 
         *begin = _utf_offset_to_pointer_validated(base, offset, base_limit);
 }
@@ -165,13 +165,13 @@ rb_u_next_validated(const char *p, const char *end)
 }
 
 VALUE
-rb_u_update(VALUE str, long offset, long len, VALUE replacement)
+rb_u_string_update(VALUE str, long offset, long len, VALUE replacement)
 {
         if (len < 0)
                 rb_raise(rb_eIndexError, "negative length %ld", len);
 
         char *begin, *limit;
-        rb_u_begin_from_offset_validated(str, offset, &begin, &limit);
+        rb_u_string_begin_from_offset_validated(str, offset, &begin, &limit);
         char *end = _utf_offset_to_pointer_failable(begin, len, limit);
         if (end == NULL)
                 end = limit;
@@ -182,7 +182,7 @@ rb_u_update(VALUE str, long offset, long len, VALUE replacement)
 }
 
 VALUE
-rb_u_new(const char *str, long len)
+rb_u_string_new(const char *str, long len)
 {
         VALUE rbstr = rb_str_new(str, len);
         rb_extend_object(rbstr, mUString);
@@ -190,7 +190,7 @@ rb_u_new(const char *str, long len)
 }
 
 VALUE
-rb_u_new2(const char *str)
+rb_u_string_new2(const char *str)
 {
         VALUE rbstr = rb_str_new2(str);
         rb_extend_object(rbstr, mUString);
@@ -198,7 +198,7 @@ rb_u_new2(const char *str)
 }
 
 VALUE
-rb_u_new5(VALUE obj, const char *str, long len)
+rb_u_string_new5(VALUE obj, const char *str, long len)
 {
         VALUE rbstr = rb_str_new5(obj, str, len);
         rb_extend_object(rbstr, mUString);
@@ -206,9 +206,9 @@ rb_u_new5(VALUE obj, const char *str, long len)
 }
 
 VALUE
-rb_u_alloc_using(char *str)
+rb_u_string_alloc_using(char *str)
 {
-        VALUE rbstr = rb_u_new(NULL, 0);
+        VALUE rbstr = rb_u_string_new(NULL, 0);
         long len = strlen(str);
 
         RSTRING(rbstr)->ptr = str;
@@ -220,9 +220,9 @@ rb_u_alloc_using(char *str)
 }
 
 VALUE
-rb_u_alloc_using_n(char *str, size_t length)
+rb_u_string_alloc_using_n(char *str, size_t length)
 {
-        VALUE rbstr = rb_u_new(NULL, 0);
+        VALUE rbstr = rb_u_string_new(NULL, 0);
 
         RSTRING(rbstr)->ptr = str;
         RSTRING(rbstr)->aux.capa = length;
@@ -233,7 +233,7 @@ rb_u_alloc_using_n(char *str, size_t length)
 }
 
 VALUE
-rb_u_dup(VALUE str)
+rb_u_string_dup(VALUE str)
 {
         str = rb_str_dup(str);
         rb_extend_object(str, mUString);
@@ -242,7 +242,7 @@ rb_u_dup(VALUE str)
 
 /* TODO: rewrite this using the new offset-calculating functions. */
 long
-rb_u_index(VALUE str, VALUE sub, long offset)
+rb_u_string_index(VALUE str, VALUE sub, long offset)
 {
         long n_chars = u_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
 
@@ -270,8 +270,8 @@ rb_u_index(VALUE str, VALUE sub, long offset)
 }
 
 long
-rb_u_index_regexp(VALUE str, const char *s, const char *end, VALUE sub,
-                    long offset, bool reverse)
+rb_u_string_index_regexp(VALUE str, const char *s, const char *end, VALUE sub,
+                         long offset, bool reverse)
 {
         long byte_offset = _utf_offset_to_pointer_validated(s, offset, end) - s;
         long byte_startpos = rb_reg_adjust_startpos(sub, str, byte_offset, reverse);
@@ -289,47 +289,47 @@ Init_u(void)
 
         mUString = rb_define_module_under(mU, "String");
 
-        rb_define_method(mUString, "collate", rb_u_collate, 1);
+        rb_define_method(mUString, "collate", rb_u_string_collate, 1);
         rb_define_alias(mUString, "<=>", "collate");
-        rb_define_method(mUString, "collate", rb_u_collate, 1);
-        rb_define_method(mUString, "[]", rb_u_aref_m, -1);
+        rb_define_method(mUString, "collate", rb_u_string_collate, 1);
+        rb_define_method(mUString, "[]", rb_u_string_aref_m, -1);
         rb_define_alias(mUString, "slice", "[]");
-        rb_define_method(mUString, "[]=", rb_u_aset_m, -1);
-        rb_define_method(mUString, "casecmp", rb_u_casecmp, 1);
-        rb_define_method(mUString, "center", rb_u_center, -1);
-        rb_define_method(mUString, "chomp", rb_u_chomp, -1);
-        rb_define_method(mUString, "chomp!", rb_u_chomp_bang, -1);
-        rb_define_method(mUString, "chop", rb_u_chop, 0);
-        rb_define_method(mUString, "chop!", rb_u_chop_bang, 0);
-        rb_define_method(mUString, "count", rb_u_count, -1);
-        rb_define_method(mUString, "delete", rb_u_delete, -1);
-        rb_define_method(mUString, "delete!", rb_u_delete_bang, -1);
-        rb_define_method(mUString, "each_char", rb_u_each_char, 0);
-        rb_define_method(mUString, "index", rb_u_index_m, -1);
-        rb_define_method(mUString, "insert", rb_u_insert, 2);
-        rb_define_method(mUString, "lstrip", rb_u_lstrip, 0);
-        rb_define_method(mUString, "lstrip!", rb_u_lstrip_bang, 0);
-        rb_define_method(mUString, "rindex", rb_u_rindex_m, -1);
-        rb_define_method(mUString, "rstrip", rb_u_rstrip, 0);
-        rb_define_method(mUString, "rstrip!", rb_u_rstrip_bang, 0);
-        rb_define_method(mUString, "squeeze", rb_u_squeeze, -1);
-        rb_define_method(mUString, "squeeze!", rb_u_squeeze_bang, -1);
-        rb_define_method(mUString, "strip", rb_u_strip, 0);
-        rb_define_method(mUString, "strip!", rb_u_strip_bang, 0);
-        rb_define_method(mUString, "to_i", rb_u_to_i, -1);
-        rb_define_method(mUString, "hex", rb_u_hex, 0);
-        rb_define_method(mUString, "oct", rb_u_oct, 0);
-        rb_define_method(mUString, "tr", rb_u_tr, 2);
-        rb_define_method(mUString, "tr_s", rb_u_tr_s, 2);
+        rb_define_method(mUString, "[]=", rb_u_string_aset_m, -1);
+        rb_define_method(mUString, "casecmp", rb_u_string_casecmp, 1);
+        rb_define_method(mUString, "center", rb_u_string_center, -1);
+        rb_define_method(mUString, "chomp", rb_u_string_chomp, -1);
+        rb_define_method(mUString, "chomp!", rb_u_string_chomp_bang, -1);
+        rb_define_method(mUString, "chop", rb_u_string_chop, 0);
+        rb_define_method(mUString, "chop!", rb_u_string_chop_bang, 0);
+        rb_define_method(mUString, "count", rb_u_string_count, -1);
+        rb_define_method(mUString, "delete", rb_u_string_delete, -1);
+        rb_define_method(mUString, "delete!", rb_u_string_delete_bang, -1);
+        rb_define_method(mUString, "each_char", rb_u_string_each_char, 0);
+        rb_define_method(mUString, "index", rb_u_string_index_m, -1);
+        rb_define_method(mUString, "insert", rb_u_string_insert, 2);
+        rb_define_method(mUString, "lstrip", rb_u_string_lstrip, 0);
+        rb_define_method(mUString, "lstrip!", rb_u_string_lstrip_bang, 0);
+        rb_define_method(mUString, "rindex", rb_u_string_rindex_m, -1);
+        rb_define_method(mUString, "rstrip", rb_u_string_rstrip, 0);
+        rb_define_method(mUString, "rstrip!", rb_u_string_rstrip_bang, 0);
+        rb_define_method(mUString, "squeeze", rb_u_string_squeeze, -1);
+        rb_define_method(mUString, "squeeze!", rb_u_string_squeeze_bang, -1);
+        rb_define_method(mUString, "strip", rb_u_string_strip, 0);
+        rb_define_method(mUString, "strip!", rb_u_string_strip_bang, 0);
+        rb_define_method(mUString, "to_i", rb_u_string_to_i, -1);
+        rb_define_method(mUString, "hex", rb_u_string_hex, 0);
+        rb_define_method(mUString, "oct", rb_u_string_oct, 0);
+        rb_define_method(mUString, "tr", rb_u_string_tr, 2);
+        rb_define_method(mUString, "tr_s", rb_u_string_tr_s, 2);
 
-        rb_define_method(mUString, "downcase", rb_u_downcase, 0);
-        rb_define_method(mUString, "ljust", rb_u_ljust, -1);
-        rb_define_method(mUString, "length", rb_u_length, 0);
+        rb_define_method(mUString, "downcase", rb_u_string_downcase, 0);
+        rb_define_method(mUString, "ljust", rb_u_string_ljust, -1);
+        rb_define_method(mUString, "length", rb_u_string_length, 0);
         rb_define_alias(mUString, "size", "length");
-        rb_define_method(mUString, "reverse", rb_u_reverse, 0);
-        rb_define_method(mUString, "rjust", rb_u_rjust, -1);
-        rb_define_method(mUString, "upcase", rb_u_upcase, 0);
+        rb_define_method(mUString, "reverse", rb_u_string_reverse, 0);
+        rb_define_method(mUString, "rjust", rb_u_string_rjust, -1);
+        rb_define_method(mUString, "upcase", rb_u_string_upcase, 0);
 
-        rb_define_method(mUString, "foldcase", rb_u_foldcase, 0);
-        rb_define_method(mUString, "normalize", rb_u_normalize, -1);
+        rb_define_method(mUString, "foldcase", rb_u_string_foldcase, 0);
+        rb_define_method(mUString, "normalize", rb_u_string_normalize, -1);
 }

@@ -1,13 +1,13 @@
 #include "rb_includes.h"
 
 static long
-rb_u_rindex(VALUE str, VALUE sub, long offset)
+rb_u_string_rindex(VALUE str, VALUE sub, long offset)
 {
         if (RSTRING(str)->len < RSTRING(sub)->len)
                 return -1;
 
         char *s, *end;
-        rb_u_begin_from_offset_validated(str, offset, &s, &end);
+        rb_u_string_begin_from_offset_validated(str, offset, &s, &end);
 
         if (RSTRING(sub)->len == 0)
                 return u_pointer_to_offset(RSTRING(str)->ptr, s);
@@ -25,7 +25,7 @@ rb_u_rindex(VALUE str, VALUE sub, long offset)
 }
 
 VALUE
-rb_u_rindex_m(int argc, VALUE *argv, VALUE str)
+rb_u_string_rindex_m(int argc, VALUE *argv, VALUE str)
 {
         VALUE sub, rboffset;
 
@@ -36,7 +36,7 @@ rb_u_rindex_m(int argc, VALUE *argv, VALUE str)
         long offset = (argc == 2) ? NUM2LONG(rboffset) : RSTRING(str)->len;
 
         char *begin, *end;
-        rb_u_begin_from_offset(str, offset, &begin, &end);
+        rb_u_string_begin_from_offset(str, offset, &begin, &end);
         if (begin == NULL) {
                 if (offset <= 0) {
                         if (TYPE(sub) == T_REGEXP)
@@ -47,9 +47,9 @@ rb_u_rindex_m(int argc, VALUE *argv, VALUE str)
 
                 begin = end;
                 /* TODO: this converting back and forward can be optimized away
-                 * if rb_u_index_regexp() and rb_u_rindex() were split up
+                 * if rb_u_string_index_regexp() and rb_u_string_rindex() were split up
                  * into two additional functions, adding
-                 * rb_u_index_regexp_pointer() and rb_u_rindex_pointer(),
+                 * rb_u_string_index_regexp_pointer() and rb_u_string_rindex_pointer(),
                  * so that one can pass a pointer to start at immediately
                  * instead of an offset that gets calculated into a pointer. */
                 offset = u_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
@@ -58,8 +58,8 @@ rb_u_rindex_m(int argc, VALUE *argv, VALUE str)
         switch (TYPE(sub)) {
         case T_REGEXP:
                 if (RREGEXP(sub)->len > 0)
-                        offset = rb_u_index_regexp(str, begin, end, sub,
-                                                     offset, true);
+                        offset = rb_u_string_index_regexp(str, begin, end, sub,
+                                                          offset, true);
                 break;
         default: {
                 VALUE tmp = rb_check_string_type(sub);
@@ -71,7 +71,7 @@ rb_u_rindex_m(int argc, VALUE *argv, VALUE str)
         }
                 /* fall through */
         case T_STRING:
-                offset = rb_u_rindex(str, sub, offset);
+                offset = rb_u_string_rindex(str, sub, offset);
                 break;
         }
 

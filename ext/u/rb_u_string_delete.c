@@ -1,8 +1,8 @@
 #include "rb_includes.h"
-#include "rb_u_internal_tr.h"
+#include "rb_u_string_internal_tr.h"
 
 VALUE
-rb_u_delete_bang(int argc, VALUE *argv, VALUE str)
+rb_u_string_delete_bang(int argc, VALUE *argv, VALUE str)
 {
         StringValue(str);
         need_at_least_n_arguments(argc, 1);
@@ -42,12 +42,12 @@ rb_u_delete_bang(int argc, VALUE *argv, VALUE str)
 }
 
 VALUE
-rb_u_delete(int argc, VALUE *argv, VALUE str)
+rb_u_string_delete(int argc, VALUE *argv, VALUE str)
 {
         StringValue(str);
         need_at_least_n_arguments(argc, 1);
 
-        VALUE dup = rb_u_dup(str);
-        rb_u_delete_bang(argc, argv, dup);
+        VALUE dup = rb_u_string_dup(str);
+        rb_u_string_delete_bang(argc, argv, dup);
         return dup;
 }

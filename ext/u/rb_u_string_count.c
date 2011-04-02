@@ -1,8 +1,8 @@
 #include "rb_includes.h"
-#include "rb_u_internal_tr.h"
+#include "rb_u_string_internal_tr.h"
 
 VALUE
-rb_u_count(int argc, VALUE *argv, VALUE str)
+rb_u_string_count(int argc, VALUE *argv, VALUE str)
 {
         StringValue(str);
         need_at_least_n_arguments(argc, 1);

@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 static char *
-rb_u_justify_one_side(char *p, const char *f, long f_len, long f_size, long n)
+rb_u_string_justify_one_side(char *p, const char *f, long f_len, long f_size, long n)
 {
         long i;
         for (i = 0; i + f_len < n; i += f_len, p += f_size)
@@ -20,7 +20,7 @@ rb_u_justify_one_side(char *p, const char *f, long f_len, long f_size, long n)
 }
 
 static VALUE
-rb_u_justify(int argc, VALUE *argv, VALUE str, char jflag)
+rb_u_string_justify(int argc, VALUE *argv, VALUE str, char jflag)
 {
         VALUE w, pad;
         const char *f = " ";
@@ -42,9 +42,9 @@ rb_u_justify(int argc, VALUE *argv, VALUE str, char jflag)
 
         long width = NUM2LONG(w);
         if (width < 0 || len >= width)
-                return rb_u_dup(str);
+                return rb_u_string_dup(str);
 
-        VALUE res = rb_u_new5(str, 0, RSTRING(str)->len + (width - len) * f_size);
+        VALUE res = rb_u_string_new5(str, 0, RSTRING(str)->len + (width - len) * f_size);
         char *p = RSTRING(res)->ptr;
 
         long n_remaining = width - len;
@@ -54,14 +54,14 @@ rb_u_justify(int argc, VALUE *argv, VALUE str, char jflag)
                         n /= 2;
                 n_remaining -= n;
 
-                p = rb_u_justify_one_side(p, f, f_len, f_size, n);
+                p = rb_u_string_justify_one_side(p, f, f_len, f_size, n);
         }
 
         memcpy(p, RSTRING(str)->ptr, RSTRING(str)->len);
         p += RSTRING(str)->len;
 
         if (jflag != 'r')
-                p = rb_u_justify_one_side(p, f, f_len, f_size, n_remaining);
+                p = rb_u_string_justify_one_side(p, f, f_len, f_size, n_remaining);
 
         OBJ_INFECT(res, str);
 
@@ -72,19 +72,19 @@ rb_u_justify(int argc, VALUE *argv, VALUE str, char jflag)
 }
 
 VALUE
-rb_u_center(int argc, VALUE *argv, VALUE str)
+rb_u_string_center(int argc, VALUE *argv, VALUE str)
 {
-        return rb_u_justify(argc, argv, str, 'c');
+        return rb_u_string_justify(argc, argv, str, 'c');
 }
 
 VALUE
-rb_u_ljust(int argc, VALUE *argv, VALUE str)
+rb_u_string_ljust(int argc, VALUE *argv, VALUE str)
 {
-        return rb_u_justify(argc, argv, str, 'l');
+        return rb_u_string_justify(argc, argv, str, 'l');
 }
 
 VALUE
-rb_u_rjust(int argc, VALUE *argv, VALUE str)
+rb_u_string_rjust(int argc, VALUE *argv, VALUE str)
 {
-        return rb_u_justify(argc, argv, str, 'r');
+        return rb_u_string_justify(argc, argv, str, 'r');
 }

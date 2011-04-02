@@ -1,5 +1,5 @@
 #include "rb_includes.h"
-#include "rb_u_internal_tr.h"
+#include "rb_u_string_internal_tr.h"
 
 void
 tr_init(struct tr *tr, char *p, char *p_end)

@@ -4,8 +4,8 @@
  * Copyright © 2006 Nikolai Weibull <now@bitwi.se>
  */
 
-#ifndef RB_U_INTERNAL_TR_H
-#define RB_U_INTERNAL_TR_H
+#ifndef RB_U_STRING_INTERNAL_TR_H
+#define RB_U_STRING_INTERNAL_TR_H
 
 #ifndef WORD_BIT
 #  define WORD_BIT              (sizeof(int) * CHAR_BIT)
@@ -38,4 +38,4 @@ void tr_setup_table(VALUE str, unsigned int *table, bool initialize) HIDDEN;
 void tr_setup_table_from_strings(unsigned int *table, int argc,
                                  VALUE *argv) HIDDEN;
 
-#endif /* RB_U_INTERNAL_TR_H */
+#endif /* RB_U_STRING_INTERNAL_TR_H */

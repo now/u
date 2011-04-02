@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_index_m(int argc, VALUE *argv, VALUE str)
+rb_u_string_index_m(int argc, VALUE *argv, VALUE str)
 {
         StringValue(str);
 
@@ -11,7 +11,7 @@ rb_u_index_m(int argc, VALUE *argv, VALUE str)
                 offset = NUM2LONG(rboffset);
 
         char *begin, *end;
-        if (!rb_u_begin_from_offset(str, offset, &begin, &end)) {
+        if (!rb_u_string_begin_from_offset(str, offset, &begin, &end)) {
                 if (TYPE(sub) == T_REGEXP)
                         rb_backref_set(Qnil);
 
@@ -20,7 +20,7 @@ rb_u_index_m(int argc, VALUE *argv, VALUE str)
 
         switch (TYPE(sub)) {
         case T_REGEXP:
-                offset = rb_u_index_regexp(str, begin, end, sub, offset, false);
+                offset = rb_u_string_index_regexp(str, begin, end, sub, offset, false);
                 break;
         default: {
                 VALUE tmp = rb_check_string_type(sub);
@@ -32,7 +32,7 @@ rb_u_index_m(int argc, VALUE *argv, VALUE str)
         }
                 /* fall through */
         case T_STRING:
-                offset = rb_u_index(str, sub, offset);
+                offset = rb_u_string_index(str, sub, offset);
                 break;
         }
 

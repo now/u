@@ -29,7 +29,7 @@ symbol_to_mode(VALUE symbol)
 }
 
 VALUE
-rb_u_normalize(int argc, VALUE *argv, VALUE str)
+rb_u_string_normalize(int argc, VALUE *argv, VALUE str)
 {
         StringValue(str);
 
@@ -38,7 +38,7 @@ rb_u_normalize(int argc, VALUE *argv, VALUE str)
         if (rb_scan_args(argc, argv, "01", &rbmode) == 1)
                 mode = symbol_to_mode(rbmode);
 
-        return rb_u_alloc_using(utf_normalize_n(RSTRING(str)->ptr,
+        return rb_u_string_alloc_using(utf_normalize_n(RSTRING(str)->ptr,
                                                   mode,
                                                   RSTRING(str)->len));
 }

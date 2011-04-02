@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_lstrip_bang(VALUE str)
+rb_u_string_lstrip_bang(VALUE str)
 {
         StringValue(str);
         char *s = RSTRING(str)->ptr;
@@ -27,10 +27,10 @@ rb_u_lstrip_bang(VALUE str)
 }
 
 VALUE
-rb_u_lstrip(VALUE str)
+rb_u_string_lstrip(VALUE str)
 {
-        VALUE dup = rb_u_dup(str);
-        rb_u_lstrip_bang(dup);
+        VALUE dup = rb_u_string_dup(str);
+        rb_u_string_lstrip_bang(dup);
 
         return dup;
 }

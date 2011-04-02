@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_rstrip_bang(VALUE str)
+rb_u_string_rstrip_bang(VALUE str)
 {
         StringValue(str);
         const char *begin = RSTRING(str)->ptr;
@@ -37,10 +37,10 @@ rb_u_rstrip_bang(VALUE str)
 }
 
 VALUE
-rb_u_rstrip(VALUE str)
+rb_u_string_rstrip(VALUE str)
 {
-        VALUE dup = rb_u_dup(str);
-        rb_u_rstrip_bang(dup);
+        VALUE dup = rb_u_string_dup(str);
+        rb_u_string_rstrip_bang(dup);
 
         return dup;
 }
