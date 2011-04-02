@@ -1,10 +1,3 @@
-/*
- * contents: Unicode class.
- *
- * Copyright © 2005 Nikolai Weibull <work@rawuncut.elitemail.org>
- */
-
-
 #include <ruby.h>
 #include <re.h>
 #include <stdbool.h>

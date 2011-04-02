@@ -1,9 +1,3 @@
-/*
- * contents: Encoding::Character::UTF8.normalize module function.
- *
- * Copyright © 2006 Nikolai Weibull <now@bitwi.se>
- */
-
 #include "rb_includes.h"
 
 #define SYMBOL2MODE(symbol, mode, id) do {              \

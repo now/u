@@ -1,9 +1,3 @@
-/*
- * contents: Unicode character properties.
- *
- * Copyright (C) 2004 Nikolai Weibull <source@pcppopper.org>
- */
-
 #include <ruby.h>
 #include <assert.h>
 #include <locale.h>

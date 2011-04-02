@@ -1,9 +1,3 @@
-/*
- * contents: Translation (#tr) related functions.
- *
- * Copyright © 2006 Nikolai Weibull <now@bitwi.se>
- */
-
 #include "rb_includes.h"
 #include "rb_u_internal_tr.h"
 

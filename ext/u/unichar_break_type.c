@@ -1,9 +1,3 @@
-/*
- * contents: Unicode line-breaking properties.
- *
- * Copyright (C) 2004 Nikolai Weibull <source@pcppopper.org>
- */
-
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>

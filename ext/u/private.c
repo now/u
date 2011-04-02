@@ -1,9 +1,3 @@
-/*
- * contents: Private functions used by the UTF-8 character-encoding library.
- *
- * Copyright © 2007 Nikolai Weibull <now@bitwi.se>
- */
-
 #include <ruby.h>
 #include <stdbool.h>
 #include <stddef.h>

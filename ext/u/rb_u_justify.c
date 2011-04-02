@@ -1,9 +1,3 @@
-/*
- * contents: UTF8.center, UTF8.ljust, and UTF8.rjust.
- *
- * Copyright © 2006 Nikolai Weibull <now@bitwi.se>
- */
-
 #include "rb_includes.h"
 
 static char *

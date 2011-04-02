@@ -1,9 +1,3 @@
-/*
- * contents: Unicode decomposition handling.
- *
- * Copyright (C) 2004 Nikolai Weibull <source@pcppopper.org>
- */
-
 #include <ruby.h>
 #include <stdbool.h>
 #include <stddef.h>

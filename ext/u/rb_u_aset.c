@@ -1,9 +1,3 @@
-/*
- * contents: UTF8.aset module function.
- *
- * Copyright © 2006 Nikolai Weibull <now@bitwi.se>
- */
-
 #include "rb_includes.h"
 #include <re.h>
 
