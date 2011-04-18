@@ -9,8 +9,8 @@ rb_u_string_rindex(VALUE self, VALUE rbsubstring, long offset)
         if (USTRING_LENGTH(string) < USTRING_LENGTH(substring))
                 return -1;
 
-        const char *s, *end;
-        if (!rb_u_string_begin_from_offset(self, offset, &s, &end))
+        const char *s = rb_u_string_begin_from_offset(string, offset);
+        if (s == NULL)
                 return -1;
 
         if (USTRING_LENGTH(substring) == 0)
@@ -40,8 +40,9 @@ rb_u_string_rindex_m(int argc, VALUE *argv, VALUE self)
         else
                 offset = u_length_n(USTRING_STR(string), USTRING_LENGTH(string));
 
-        const char *begin, *end;
-        if (!rb_u_string_begin_from_offset(self, offset, &begin, &end)) {
+        const char *begin = rb_u_string_begin_from_offset(string, offset);
+        const char *end = USTRING_END(string);
+        if (begin == NULL) {
                 if (offset <= 0) {
                         if (TYPE(sub) == T_REGEXP)
                                 rb_backref_set(Qnil);

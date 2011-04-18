@@ -7,13 +7,15 @@ rb_u_string_substr_impl(VALUE self, long offset, long len, bool nil_on_empty)
         if (len < 0)
                 return Qnil;
 
-        const char *begin, *limit;
-        if (!rb_u_string_begin_from_offset(self, offset, &begin, &limit))
+        const UString *string = RVAL2USTRING(self);
+
+        const char *begin = rb_u_string_begin_from_offset(string, offset);
+        if (begin == NULL)
                 return Qnil;
 
-        const char *end = u_offset_to_pointer_n(begin, len, limit - begin);
+        const char *end = u_offset_to_pointer_n(begin, len, USTRING_END(string) - begin);
         if (end == NULL)
-                end = limit;
+                end = USTRING_END(string);
 
         if (nil_on_empty && begin == end)
                 return Qnil;

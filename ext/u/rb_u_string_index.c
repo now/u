@@ -28,11 +28,11 @@ rb_u_string_index(VALUE self, VALUE rbsubstring, long offset)
         const UString *string = RVAL2USTRING(self);
         const UString *substring = RVAL2USTRING_ANY(rbsubstring);
 
-        /* TODO: We never need end, as it’s always the same as
-         * USTRING_END(string).  Rewrite all callers. */
-        const char *begin, *end;
-        if (!rb_u_string_begin_from_offset(self, offset, &begin, &end))
+        const char *begin = rb_u_string_begin_from_offset(string, offset);
+        if (begin == NULL)
                 return -1;
+
+        const char *end = USTRING_END(string);
 
         long substring_length = USTRING_LENGTH(substring);
         if (end - begin < substring_length)
@@ -44,7 +44,7 @@ rb_u_string_index(VALUE self, VALUE rbsubstring, long offset)
          * more Unicodey? */
         long index = rb_memsearch(USTRING_STR(substring), substring_length,
                                   begin,
-                                  USTRING_END(string) - begin);
+                                  end - begin);
         if (index < 0)
                 return -1;
 
@@ -59,8 +59,10 @@ rb_u_string_index_m(int argc, VALUE *argv, VALUE self)
         if (rb_scan_args(argc, argv, "11", &sub, &rboffset) == 2)
                 offset = NUM2LONG(rboffset);
 
-        const char *begin, *end;
-        if (!rb_u_string_begin_from_offset(self, offset, &begin, &end)) {
+        const UString *string = RVAL2USTRING(self);
+
+        const char *begin = rb_u_string_begin_from_offset(string, offset);
+        if (begin == NULL) {
                 if (TYPE(sub) == T_REGEXP)
                         rb_backref_set(Qnil);
 

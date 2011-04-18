@@ -54,6 +54,20 @@ Expectations do
 
   expect ArgumentError do 'hëllö'.u[] end
 
+  expect ArgumentError do '*'.u * -1 end
+  expect '**********'.u do '*'.u * 10 end
+  # TODO: Test LONG_MAX.
+
+  expect 'hëll'.u do 'hëll'.u + ''.u end
+  expect 'ö'.u do ''.u + 'ö'.u end
+  expect 'hëllö'.u do 'hëll'.u + 'ö'.u end
+
+  expect TypeError do 'abc'.u =~ 'abc' end
+  expect TypeError do 'abc'.u =~ 'abc'.u end
+  expect 10 do 'FëëFiëFöö-Fum'.u =~ /Fum$/u end
+  expect nil do 'FëëFiëFöö-Fum'.u =~ /FUM$/u end
+  expect 'fööbar' do 'föö'.u =~ Object.new.tap{ |o| stub(o).=~{ |t| t + 'bar'.u } } end
+
   # TODO: Should <=>, ==, ===, eql?, and casecmp use collation or not?  When
   # should collation be used?  #collate and #collation_key?
 
@@ -123,6 +137,10 @@ Expectations do
   expect 'hëllö'.u do 'hëllö'.u.downcase end
   expect 'hëllö'.u do 'HËLLÖ'.u.downcase end
   expect "abc\0dëf".u do "ABC\0DËF".u.downcase end
+
+  expect [0x61, 0x62, 0x63, 0x00, 0x64, 0xc3, 0xab, 0x66] do
+    "abc\0dëf".u.bytes.entries
+  end
 
   expect %w[h ë l l ö] do
     'hëllö'.u.chars.entries
