@@ -1,23 +1,27 @@
 #include "rb_includes.h"
 
 static long
-rb_u_string_rindex(VALUE str, VALUE sub, long offset)
+rb_u_string_rindex(VALUE self, VALUE rbsubstring, long offset)
 {
-        if (RSTRING(str)->len < RSTRING(sub)->len)
+        const UString *string = RVAL2USTRING(self);
+        const UString *substring = RVAL2USTRING_ANY(rbsubstring);
+
+        if (USTRING_LENGTH(string) < USTRING_LENGTH(substring))
                 return -1;
 
-        char *s, *end;
-        rb_u_string_begin_from_offset_validated(str, offset, &s, &end);
+        const char *s, *end;
+        if (!rb_u_string_begin_from_offset(self, offset, &s, &end))
+                return -1;
 
-        if (RSTRING(sub)->len == 0)
-                return u_pointer_to_offset(RSTRING(str)->ptr, s);
+        if (USTRING_LENGTH(substring) == 0)
+                return offset;
 
-        char *s_begin = RSTRING(str)->ptr;
-        char *t = RSTRING(sub)->ptr;
-        long len = RSTRING(sub)->len;
-        while (s >= s_begin) {
-                if (rb_memcmp(s, t, len) == 0)
-                        return u_pointer_to_offset(s_begin, s);
+        const char *begin = USTRING_STR(string);
+        const char *t = USTRING_STR(substring);
+        long t_length = USTRING_LENGTH(substring);
+        while (s >= begin) {
+                if (rb_memcmp(s, t, t_length) == 0)
+                        return u_pointer_to_offset(begin, s);
                 s--;
         }
 
@@ -25,19 +29,19 @@ rb_u_string_rindex(VALUE str, VALUE sub, long offset)
 }
 
 VALUE
-rb_u_string_rindex_m(int argc, VALUE *argv, VALUE str)
+rb_u_string_rindex_m(int argc, VALUE *argv, VALUE self)
 {
+        const UString *string = RVAL2USTRING(self);
+
         VALUE sub, rboffset;
+        long offset;
+        if (rb_scan_args(argc, argv, "11", &sub, &rboffset) == 2)
+                offset = NUM2LONG(rboffset);
+        else
+                offset = u_length_n(USTRING_STR(string), USTRING_LENGTH(string));
 
-        StringValue(str);
-
-        rb_scan_args(argc, argv, "11", &sub, &rboffset);
-
-        long offset = (argc == 2) ? NUM2LONG(rboffset) : RSTRING(str)->len;
-
-        char *begin, *end;
-        rb_u_string_begin_from_offset(str, offset, &begin, &end);
-        if (begin == NULL) {
+        const char *begin, *end;
+        if (!rb_u_string_begin_from_offset(self, offset, &begin, &end)) {
                 if (offset <= 0) {
                         if (TYPE(sub) == T_REGEXP)
                                 rb_backref_set(Qnil);
@@ -52,14 +56,16 @@ rb_u_string_rindex_m(int argc, VALUE *argv, VALUE str)
                  * rb_u_string_index_regexp_pointer() and rb_u_string_rindex_pointer(),
                  * so that one can pass a pointer to start at immediately
                  * instead of an offset that gets calculated into a pointer. */
-                offset = u_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
+                offset = u_length_n(USTRING_STR(string), USTRING_LENGTH(string));
         }
 
+        /* TODO: Adjust this to be able to deal with UString in a fast way as
+         * well. */
         switch (TYPE(sub)) {
         case T_REGEXP:
-                if (RREGEXP(sub)->len > 0)
-                        offset = rb_u_string_index_regexp(str, begin, end, sub,
-                                                          offset, true);
+                /* TODO: What’s this first test for, exactly? */
+                if (RREGEXP(sub)->ptr == NULL || RREGEXP_SRC_LEN(sub) > 0)
+                        offset = rb_u_string_index_regexp(self, begin, sub, true);
                 break;
         default: {
                 VALUE tmp = rb_check_string_type(sub);
@@ -71,7 +77,7 @@ rb_u_string_rindex_m(int argc, VALUE *argv, VALUE str)
         }
                 /* fall through */
         case T_STRING:
-                offset = rb_u_string_rindex(str, sub, offset);
+                offset = rb_u_string_rindex(self, sub, offset);
                 break;
         }
 

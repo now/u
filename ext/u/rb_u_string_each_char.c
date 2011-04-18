@@ -1,22 +1,23 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_string_each_char(VALUE str)
+rb_u_string_each_char(VALUE self)
 {
-        StringValue(str);
-#if 0
-        RETURN_ENUMERATOR(str, 0, 0);
-#endif
+        const UString *string = RVAL2USTRING(self);
 
-        const char *s = RSTRING(str)->ptr;
-        const char *s_end = s + RSTRING(str)->len;
-        while (s < s_end) {
-                char buf[MAX_UNICHAR_BYTE_LENGTH];
-                int len = unichar_to_u(_utf_char_validated(s, s_end), buf);
-                VALUE c = rb_u_string_new(buf, len);
+        RETURN_ENUMERATOR(self, 0, 0);
+
+        const char *p = USTRING_STR(string);
+        const char *end = USTRING_END(string);
+        while (p < end) {
+                char buffer[MAX_UNICHAR_BYTE_LENGTH];
+                int len = unichar_to_u(_rb_u_aref_char_validated(p, end), buffer);
+                VALUE c = rb_u_string_new(buffer, len);
+
                 rb_yield(c);
-                s = u_next(s);
+
+                p = u_next(p);
         }
 
-        return str;
+        return self;
 }

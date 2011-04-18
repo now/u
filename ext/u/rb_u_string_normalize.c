@@ -11,6 +11,7 @@
 static NormalizeMode
 symbol_to_mode(VALUE symbol)
 {
+        /* TODO: not a symbol: %p. */
         if (!SYMBOL_P(symbol))
                 rb_raise(rb_eTypeError, "not a symbol");
 
@@ -29,16 +30,18 @@ symbol_to_mode(VALUE symbol)
 }
 
 VALUE
-rb_u_string_normalize(int argc, VALUE *argv, VALUE str)
+rb_u_string_normalize(int argc, VALUE *argv, VALUE self)
 {
-        StringValue(str);
+        const UString *string = RVAL2USTRING(self);
 
         VALUE rbmode;
         NormalizeMode mode = NORMALIZE_DEFAULT;
         if (rb_scan_args(argc, argv, "01", &rbmode) == 1)
                 mode = symbol_to_mode(rbmode);
 
-        return rb_u_string_alloc_using(utf_normalize_n(RSTRING(str)->ptr,
-                                                  mode,
-                                                  RSTRING(str)->len));
+        size_t length;
+        char *normalized = utf_normalize_n(USTRING_STR(string), mode,
+                                           USTRING_LENGTH(string), &length);
+
+        return rb_u_string_new_own(normalized, length);
 }

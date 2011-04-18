@@ -2,13 +2,11 @@
 #include "rb_u_string_internal_bignum.h"
 
 VALUE
-rb_u_string_to_i(int argc, VALUE *argv, VALUE str)
+rb_u_string_to_i(int argc, VALUE *argv, VALUE self)
 {
-        StringValue(str);
+        int base = 10;
 
         VALUE rbbase;
-
-        int base = 10;
         if (rb_scan_args(argc, argv, "01", &rbbase) == 1)
                 base = NUM2INT(rbbase);
 
@@ -17,5 +15,5 @@ rb_u_string_to_i(int argc, VALUE *argv, VALUE str)
         if (base < 0)
                 rb_raise(rb_eArgError, "illegal radix %d", base);
 
-        return rb_u_string_to_inum(str, base, false);
+        return rb_u_string_to_inum(self, base, false);
 }

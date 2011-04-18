@@ -2,102 +2,112 @@
 #include <re.h>
 
 static VALUE
-rb_u_string_substr(VALUE str, long offset, long len)
+rb_u_string_substr_impl(VALUE self, long offset, long len, bool nil_on_empty)
 {
         if (len < 0)
                 return Qnil;
 
-        char *begin, *limit;
-        if (!rb_u_string_begin_from_offset(str, offset, &begin, &limit))
+        const char *begin, *limit;
+        if (!rb_u_string_begin_from_offset(self, offset, &begin, &limit))
                 return Qnil;
-        char *end = _utf_offset_to_pointer_failable(begin, len, limit);
+
+        const char *end = u_offset_to_pointer_n(begin, len, limit - begin);
         if (end == NULL)
                 end = limit;
 
-        VALUE substr = (begin == end) ?
-                rb_u_string_new5(str, NULL, 0) :
-                rb_u_string_new5(str, begin, end - begin);
-
-        OBJ_INFECT(substr, str);
-
-        return substr;
-}
-
-static VALUE
-rb_u_string_substr_and_infect(VALUE str, long offset, long len, VALUE source)
-{
-        VALUE substr = rb_u_string_substr(str, offset, len);
-        OBJ_INFECT(substr, source);
-        return substr;
-}
-
-/* XXX: Stolen straight from string.c. */
-static VALUE
-rb_str_subpat(VALUE str, VALUE re, int nth)
-{
-        if (rb_reg_search(re, str, 0, 0) >= 0)
-                return rb_reg_nth_match(nth, rb_backref_get());
-
-        return Qnil;
-}
-
-static VALUE
-rb_u_string_aref_num(VALUE str, long offset)
-{
-        char *begin, *limit;
-        if (!rb_u_string_begin_from_offset(str, offset, &begin, &limit))
+        if (nil_on_empty && begin == end)
                 return Qnil;
 
-        char *end = rb_u_next_validated(begin, limit);
+        VALUE substr = rb_u_string_new(begin, end - begin);
 
-        return rb_u_string_new(begin, end - begin);
+        OBJ_INFECT(substr, self);
+
+        return substr;
 }
 
 static VALUE
-rb_u_string_aref_default(VALUE str, VALUE index)
+rb_u_string_substr(VALUE self, long offset, long len)
 {
-        long n_chars = u_length_n(RSTRING(str)->ptr, RSTRING(str)->len);
+        return rb_u_string_substr_impl(self, offset, len, false);
+}
+
+#ifndef HAVE_RB_REG_BACKREF_NUMBER
+static int
+rb_reg_backref_number(UNUSED(VALUE match), VALUE backref)
+{
+        return NUM2INT(backref);
+}
+#endif
+
+static VALUE
+rb_u_string_subpat(VALUE self, VALUE re, VALUE backref)
+{
+        if (rb_reg_search(re, StringValue(self), 0, 0) < 0)
+                return Qnil;
+
+        VALUE match = rb_backref_get();
+        VALUE nth = rb_reg_nth_match(rb_reg_backref_number(match, backref), match);
+
+        /* TODO: If this pattern appears in the future, add
+         * rb_u_string_new_rb_nilable. */
+        return NIL_P(nth) ? Qnil : rb_u_string_new_rb(nth);
+}
+
+static VALUE
+rb_u_string_aref_num(VALUE self, long offset)
+{
+        return rb_u_string_substr_impl(self, offset, 1, true);
+}
+
+static VALUE
+rb_u_string_aref_default(VALUE self, VALUE index)
+{
+        const UString *string = RVAL2USTRING(self);
+        long n_chars = u_length_n(USTRING_STR(string), USTRING_LENGTH(string));
 
         long begin, len;
         switch (rb_range_beg_len(index, &begin, &len, n_chars, 0)) {
         case Qfalse:
-                return rb_u_string_aref_num(str, NUM2LONG(index));
+                return rb_u_string_aref_num(self, NUM2LONG(index));
         case Qnil:
                 return Qnil;
         default:
-                return rb_u_string_substr_and_infect(str, begin, len, index);
+                return rb_u_string_substr(self, begin, len);
         }
 }
 
 static VALUE
-rb_u_string_aref(VALUE str, VALUE index)
+rb_u_string_aref(VALUE self, VALUE index)
 {
+        if (TYPE(index) == T_STRING || rb_obj_is_kind_of(index, rb_cUString)) {
+                if (rb_u_string_index(self, index, 0) == -1)
+                        return Qnil;
+
+                return TYPE(index) == T_STRING ?
+                        rb_u_string_new(RSTRING_PTR(index), RSTRING_LEN(index)) :
+                        rb_u_string_dup(index);
+        }
+
         switch (TYPE(index)) {
         case T_FIXNUM:
-                return rb_u_string_aref_num(str, FIX2LONG(index));
+                return rb_u_string_aref_num(self, FIX2LONG(index));
         case T_REGEXP:
-                return rb_str_subpat(str, index, 0);
-        case T_STRING:
-                if (rb_u_string_index(str, index, 0) != -1)
-                        return rb_u_string_dup(index);
-                return Qnil;
+                return rb_u_string_subpat(self, index, INT2FIX(0));
         default:
-                return rb_u_string_aref_default(str, index);
+                return rb_u_string_aref_default(self, index);
         }
 }
 
 VALUE
-rb_u_string_aref_m(int argc, VALUE *argv, VALUE str)
+rb_u_string_aref_m(int argc, VALUE *argv, VALUE self)
 {
-        StringValue(str);
-
         need_m_to_n_arguments(argc, 1, 2);
 
         if (argc == 1)
-                return rb_u_string_aref(str, argv[0]);
+                return rb_u_string_aref(self, argv[0]);
 
         if (TYPE(argv[0]) == T_REGEXP)
-                return rb_str_subpat(str, argv[0], NUM2INT(argv[1]));
+                return rb_u_string_subpat(self, argv[0], argv[1]);
 
-        return rb_u_string_substr(str, NUM2INT(argv[0]), NUM2INT(argv[1]));
+        return rb_u_string_substr(self, NUM2LONG(argv[0]), NUM2LONG(argv[1]));
 }

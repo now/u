@@ -10,6 +10,9 @@
 #define P_WITHIN_STR(p, str, max, use_max) \
         ((use_max) ? (p) < (str) + (max) : *(p) != '\0')
 
+#define OFFSET_IF(buf, len) \
+        (((buf) != NULL) ? (buf) + (len) : NULL)
+
 #define NUL '\0'
 #define lengthof(ary)   (sizeof(ary) / sizeof((ary)[0]))
 
@@ -49,6 +52,6 @@ bool binary_search_unicode_table(const void *table, size_t n, size_t sizeof_entr
             : (fallback)))
 
 unichar *_utf_normalize_wc(const char *str, size_t max_len, bool use_len,
-                           NormalizeMode mode) HIDDEN;
+                           size_t *new_length, NormalizeMode mode) HIDDEN;
 
 #endif /* PRIVATE_H */

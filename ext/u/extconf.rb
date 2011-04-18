@@ -61,8 +61,23 @@ have_header 'string.h'
 have_header 'sys/types.h'
 have_header 'wchar.h'
 
+have_func 'rb_reg_backref_number', 'ruby.h'
+
 $INSTALLFILES ||= []
 $INSTALLFILES << ['u.h', '$(RUBYARCHDIR)', 'lib']
 
 create_header
 create_makefile 'u/u'
+File.open('Makefile', 'ab') do |f|
+  f.puts <<EOF
+Makefile: extconf.rb depend
+	ruby $<
+
+TAGS: $(SRCS)
+	ctags -f $@ -I UNUSED,HIDDEN,_ $^
+
+tags: TAGS
+
+.PHONY: tags
+EOF
+end

@@ -27,8 +27,6 @@
 #define GREEK_SMALL_LETTER_SIGMA                ((unichar)0x03c3)
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
 
-#define OFFSET_IF(buf, len)    (((buf) != NULL) ? (buf) + (len) : NULL)
-
 /* {{{1
  * Macros for accessing the Unicode character attribute table.
  *
@@ -819,7 +817,7 @@ real_tolower(const char *str, size_t max, bool use_max, char *buf,
         const char *end = str + max;
 	size_t len = 0;
 
-	while ((!use_max || p < end) && *p != '\0') {
+        while (P_WITHIN_STR(p, str, max, use_max)) {
 		const char *prev = p;
 		p = u_next(p);
 
@@ -833,7 +831,7 @@ real_tolower(const char *str, size_t max, bool use_max, char *buf,
 
 /* {{{1 */
 static char *
-utf_downcase_impl(const char *str, size_t max, bool use_max)
+utf_downcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
 {
 	assert(str != NULL);
 
@@ -843,6 +841,9 @@ utf_downcase_impl(const char *str, size_t max, bool use_max)
 	char *result = ALLOC_N(char, len + 1);
 	real_tolower(str, max, use_max, result, locale_type);
 	result[len] = '\0';
+
+        if (new_length != NULL)
+                *new_length = len;
 
 	return result;
 }
@@ -855,7 +856,7 @@ utf_downcase_impl(const char *str, size_t max, bool use_max)
 char *
 utf_downcase(const char *str)
 {
-	return utf_downcase_impl(str, 0, false);
+	return utf_downcase_impl(str, 0, false, NULL);
 }
 
 
@@ -865,9 +866,9 @@ utf_downcase(const char *str)
  * most ‘len˚ bytes from ‘str’.
  */
 char *
-utf_downcase_n(const char *str, size_t len)
+utf_downcase_n(const char *str, size_t len, size_t *new_length)
 {
-	return utf_downcase_impl(str, len, true);
+	return utf_downcase_impl(str, len, true, new_length);
 }
 
 
@@ -894,7 +895,7 @@ casefold_table_lookup(unichar c, char *folded, size_t *len)
 }
 
 static char *
-utf_foldcase_impl(const char *str, size_t max, bool use_max)
+utf_foldcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
 {
 	assert(str != NULL);
 
@@ -902,7 +903,7 @@ utf_foldcase_impl(const char *str, size_t max, bool use_max)
 	size_t len = 0;
 
 again:
-	for (const char *p = str; (!use_max || p < str + max) && *p != '\0'; p = u_next(p)) {
+	for (const char *p = str; P_WITHIN_STR(p, str, max, use_max); p = u_next(p)) {
 		unichar c = u_aref_char(p);
 
                 if (casefold_table_lookup(c, OFFSET_IF(folded, len), &len))
@@ -920,6 +921,9 @@ again:
 
 	folded[len] = '\0';
 
+        if (new_length != NULL)
+                *new_length = len;
+
 	return folded;
 }
 
@@ -931,7 +935,7 @@ again:
 char *
 utf_foldcase(const char *str)
 {
-	return utf_foldcase_impl(str, 0, false);
+	return utf_foldcase_impl(str, 0, false, NULL);
 }
 
 
@@ -941,9 +945,9 @@ utf_foldcase(const char *str)
  * string.
  */
 char *
-utf_foldcase_n(const char *str, size_t len)
+utf_foldcase_n(const char *str, size_t len, size_t *new_length)
 {
-	return utf_foldcase_impl(str, len, true);
+	return utf_foldcase_impl(str, len, true, new_length);
 }
 
 

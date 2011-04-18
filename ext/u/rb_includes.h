@@ -15,6 +15,6 @@
 #include "u.h"
 #include "private.h"
 #include "rb_private.h"
-#include "rb_u.h"
+#include "rb_u_string.h"
 
 #endif /* RB_INCLUDES_H */

@@ -20,8 +20,8 @@ u_collate(const char *a, const char *b)
 	assert(a != NULL);
 	assert(b != NULL);
 
-	unichar *a_norm = _utf_normalize_wc(a, 0, false, NORMALIZE_ALL_COMPOSE);
-	unichar *b_norm = _utf_normalize_wc(b, 0, false, NORMALIZE_ALL_COMPOSE);
+	unichar *a_norm = _utf_normalize_wc(a, 0, false, NULL, NORMALIZE_ALL_COMPOSE);
+	unichar *b_norm = _utf_normalize_wc(b, 0, false, NULL, NORMALIZE_ALL_COMPOSE);
 
 	int result = wcscoll((wchar_t *)a_norm, (wchar_t *)b_norm);
 
@@ -31,6 +31,40 @@ u_collate(const char *a, const char *b)
 	return result;
 }
 
+
+int
+u_collate_n(const char *a, size_t a_len, const char *b, size_t b_len)
+{
+        size_t a_norm_length;
+	unichar * const a_norm = _utf_normalize_wc(a, a_len, true,
+                                                   &a_norm_length,
+                                                   NORMALIZE_ALL_COMPOSE);
+
+        size_t b_norm_length;
+	unichar * const b_norm = _utf_normalize_wc(b, b_len, true,
+                                                   &b_norm_length,
+                                                   NORMALIZE_ALL_COMPOSE);
+
+        int result = 0;
+
+        unichar *a_p = a_norm;
+        unichar *a_end = a_norm + a_norm_length;
+        unichar *b_p = b_norm;
+        unichar *b_end = b_norm + b_norm_length;
+        while (a_p < a_end && b_p < b_end) {
+//                fwprintf(stderr, L"%s, %s\n", a_p, b_p);
+                result = wcscoll((wchar_t *)a_p, (wchar_t *)b_p);
+                if (result != 0)
+                        break;
+                a_p += wcslen((wchar_t *)a_p) + 1;
+                b_p += wcslen((wchar_t *)b_p) + 1;
+        }
+
+	free(a_norm);
+	free(b_norm);
+
+	return result;
+}
 
 /* {{{1
  * We need UTF-8 encoding of numbers to encode the weights if
@@ -85,7 +119,9 @@ utf_collate_key_impl(const char *str, size_t len, bool use_len)
 {
 	assert(str != NULL);
 
-	unichar *str_norm = _utf_normalize_wc(str, len, use_len, NORMALIZE_ALL_COMPOSE);
+        /* TODO: Implement _n by removing all '\0' from the input before using
+         * it. */
+	unichar *str_norm = _utf_normalize_wc(str, len, use_len, NULL, NORMALIZE_ALL_COMPOSE);
 	size_t xfrm_len = wcsxfrm(NULL, (wchar_t *)str_norm, 0);
 	wchar_t result_wc[xfrm_len + 1];
 	wcsxfrm(result_wc, (wchar_t *)str_norm, xfrm_len + 1);
@@ -94,7 +130,7 @@ utf_collate_key_impl(const char *str, size_t len, bool use_len)
 	for (size_t i = 0; i < xfrm_len; i++)
 		result_len += _utf_encode(NULL, result_wc[i]);
 
-	char *result = malloc(sizeof(char) * (result_len +1));
+	char *result = malloc(sizeof(char) * (result_len + 1));
 	result_len = 0;
 	for (size_t i = 0; i < xfrm_len; i++)
 		result_len += _utf_encode(result + result_len, result_wc[i]);

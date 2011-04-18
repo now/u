@@ -47,14 +47,38 @@ tr_trans_replace_exclude(UNUSED(unichar c), void *closure)
 }
 
 static int
-tr_trans_replace_include_offset_of(struct tr_range *ranges, int range)
+tr_trans_replace_include_offset_of(struct tr_range *ranges, int range, unichar c)
 {
         int offset = 0;
 
         for (int i = 0; i < range; i++)
                 offset += ranges[i].end - ranges[i].begin + 1;
+        offset += c - ranges[range].begin;
 
         return offset;
+}
+
+static int
+tr_trans_replace_include_find_from_range(struct tr_trans_closure *closure, unichar c)
+{
+        for (int i = closure->n_from - 1; i >= 0; i--)
+                if (closure->from[i].begin <= c && c <= closure->from[i].end)
+                        return i;
+
+        return -1;
+}
+
+static unichar
+tr_trans_replace_include_find_to_unichar(struct tr_trans_closure *closure, int offset)
+{
+        for (int i = 0, seen = 0; i < closure->n_to; i++) {
+                int size = closure->to[i].end - closure->to[i].begin + 1;
+                if (seen + size > offset)
+                        return closure->to[i].begin + (offset - seen);
+                seen += size;
+        }
+
+        return closure->to[closure->n_to - 1].end;
 }
 
 static unichar
@@ -62,183 +86,189 @@ tr_trans_replace_include(unichar c, void *v_closure)
 {
         struct tr_trans_closure *closure = (struct tr_trans_closure *)v_closure;
 
-        for (int i = closure->n_from - 1; i >= 0; i--) {
-                if (closure->from[i].begin >= c && closure->from[i].end <= c) {
-                        int offset = tr_trans_replace_include_offset_of(closure->from, i);
-                        int j;
-                        for (j = 0; j < closure->n_to && offset > 0; j++)
-                                offset -= closure->to[j].end - closure->to[j].begin + 1;
+        int from = tr_trans_replace_include_find_from_range(closure, c);
+        if (from == -1)
+                return closure->to[closure->n_to - 1].end;
 
-                        if (offset > 0)
-                                return closure->to[closure->n_to - 1].end;
+        int offset = tr_trans_replace_include_offset_of(closure->from, from, c);
 
-                        return closure->to[j].end - offset;
+        return tr_trans_replace_include_find_to_unichar(closure, offset);
+}
+
+static long
+tr_trans_real_squeeze(const char *str, const char *end,
+                      struct tr_table *translation,
+                      unichar (*replace)(unichar, void *), void *closure,
+                      char *result, bool *modified)
+{
+        long len = 0;
+
+        const char *p = str;
+
+        unichar prev_c = UNICODE_N_CODEPOINTS;
+        while (p < end) {
+                unichar c0 = u_aref_char(p);
+
+                const char *prev = p;
+                p = u_next(p);
+
+                if (tr_table_lookup(translation, c0)) {
+                        unichar c = replace(c0, closure);
+                        if (prev_c == c)
+                                continue;
+                        prev_c = c;
+                        len += unichar_to_u(c, OFFSET_IF(result, len));
+                        if (c != c0)
+                                *modified = true;
+                } else {
+                        long run = p - prev;
+                        if (result != NULL)
+                                memcpy(result + len, prev, run);
+                        len += run;
+
+                        prev_c = UNICODE_N_CODEPOINTS;
+                }
+
+        }
+
+        if (end - str > len)
+                *modified = true;
+
+        return len;
+}
+
+static long
+tr_trans_real_standard(const char *str, const char *end,
+                       struct tr_table *translation,
+                       unichar (*replace)(unichar, void *), void *closure,
+                       char *result, bool *modified)
+{
+        long len = 0;
+
+        const char *p = str;
+
+        while (p < end) {
+                unichar c = u_aref_char(p);
+
+                const char *prev = p;
+                p = u_next(p);
+
+                if (tr_table_lookup(translation, c)) {
+                        unichar replacement = replace(c, closure);
+                        len += unichar_to_u(replacement, OFFSET_IF(result, len));
+                        if (replacement != c)
+                                *modified = true;
+                } else {
+                        long run = p - prev;
+                        if (result != NULL)
+                                memcpy(result + len, prev, run);
+                        len += run;
                 }
         }
 
-        return closure->to[closure->n_to - 1].end;
+        return len;
 }
 
-static VALUE
-tr_trans_do(VALUE src, unsigned int *translation,
-            unichar (*replace)(unichar, void *), void *closure, bool squeeze,
-            UNUSED(bool replace_content))
+static long
+tr_trans_real(const char *str, const char *end,
+              struct tr_table *translation,
+              unichar (*replace)(unichar, void *), void *closure, bool squeeze,
+              char *result, bool *modified)
 {
-        VALUE dst = Qnil;
-        long len;
+        if (squeeze)
+                return tr_trans_real_squeeze(str, end,
+                                             translation,
+                                             replace, closure,
+                                             result, modified);
+        else
+                return tr_trans_real_standard(str, end,
+                                              translation,
+                                              replace, closure,
+                                              result, modified);
+}
 
-again:
-        len = 0;
 
-        const char *s = RSTRING(src)->ptr;
-        const char *s_end = s + RSTRING(src)->len;
+static VALUE
+tr_trans_do(VALUE self, struct tr_table *translation,
+            unichar (*replace)(unichar, void *), void *closure, bool squeeze)
+{
+        const UString *string = RVAL2USTRING(self);
 
-        char *t = NULL;
-
-        if (dst != Qnil)
-                t = RSTRING(dst)->ptr;
-
+        const char *begin = USTRING_STR(string);
+        const char *end = USTRING_END(string);
         bool modified = false;
+        long len = tr_trans_real(begin, end,
+                                 translation,
+                                 replace, closure, squeeze,
+                                 NULL, &modified);
+        if (!modified)
+                return self;
+        char *result = ALLOC_N(char, len + 1);
+        tr_trans_real(begin, end,
+                      translation,
+                      replace, closure, squeeze,
+                      result, &modified);
+        result[len] = '\0';
 
-        /* TODO: this should really be refactored… */
-        if (squeeze) {
-                unichar prev_c = -1;
-
-                while (s < s_end) {
-                        unichar c0 = u_aref_char(s);
-
-                        const char *prev = s;
-                        s = u_next(s);
-
-                        if (tr_table_lookup(translation, c0)) {
-                                unichar c = replace(c0, closure);
-                                if (prev_c == c)
-                                        continue;
-                                prev_c = c;
-                                len += unichar_to_u(c, (t != NULL) ? t + len : NULL);
-                                modified = true;
-                        } else {
-                                prev_c = -1;
-                                if (t != NULL)
-                                        memcpy(t + len, prev, s - prev);
-                                len += s - prev;
-                        }
-
-                }
-
-                if (RSTRING(src)->len > (t + len - RSTRING(src)->ptr))
-                        modified = true;
-        } else {
-                while (s < s_end) {
-                        unichar c = u_aref_char(s);
-
-                        const char *prev = s;
-                        s = u_next(s);
-
-                        if (tr_table_lookup(translation, c)) {
-                                len += unichar_to_u(replace(c, closure),
-                                                    (t != NULL) ? t + len : NULL);
-                                modified = true;
-                        } else {
-                                if (t != NULL)
-                                        memcpy(t + len, prev, s - prev);
-                                len += s - prev;
-                        }
-                }
-        }
-
-#ifdef RB_STR_REPLACE_IS_EXTERN
-        if (replace_content && !modified)
-                return Qnil;
-#endif
-
-        if (dst == Qnil) {
-#ifdef RB_STR_REPLACE_IS_EXTERN
-                if (replace_content && len <= RSTRING(src)->len)
-                        dst = src;
-                else
-#endif
-                        dst = rb_str_buf_new(len);
-                goto again;
-        }
-
-        t[len] = '\0';
-        RSTRING(dst)->len = len;
-
-#ifdef RB_STR_REPLACE_IS_EXTERN
-        if (dst != src && replace_content) {
-                rb_str_replace(src, dst);
-                return src;
-        }
-#endif
-
-        return dst;
+        return rb_u_string_new_own(result, len);
 }
 
 static VALUE
-tr_trans(VALUE str, VALUE from, VALUE to, bool squeeze, bool replace_content)
+tr_trans(VALUE self, VALUE rbfrom, VALUE rbto, bool squeeze)
 {
-        StringValue(str);
-        StringValue(from);
-        StringValue(to);
+        const UString *string = RVAL2USTRING(self);
+        const UString *from = RVAL2USTRING_ANY(rbfrom);
+        const UString *to = RVAL2USTRING_ANY(rbto);
 
-        if (RSTRING(str)->ptr == NULL || RSTRING(str)->len == 0)
-                return replace_content ? Qnil : str;
+        if (USTRING_STR(string) == NULL || USTRING_LENGTH(string) == 0)
+                return self;
 
-        if (RSTRING(to)->len == 0)
-                return rb_u_string_delete_bang(1, &from, str);
+        if (USTRING_LENGTH(to) == 0)
+                return rb_u_string_delete(1, &rbfrom, self);
 
         struct tr tr_from;
-        tr_init(&tr_from,
-                RSTRING(from)->ptr,
-                RSTRING(from)->ptr + RSTRING(from)->len);
+        tr_init(&tr_from, USTRING_STR(from), USTRING_END(from));
 
         struct tr tr_to;
-        tr_init(&tr_to,
-                RSTRING(to)->ptr,
-                RSTRING(to)->ptr + RSTRING(to)->len);
+        tr_init(&tr_to, USTRING_STR(to), USTRING_END(to));
 
-        unsigned int translation[TR_TABLE_SIZE];
-        tr_setup_table(from, translation, true);
+        struct tr_table translation;
+        tr_table_initialize(&translation, rbfrom);
 
-        tr_init(&tr_from,
-                RSTRING(from)->ptr,
-                RSTRING(from)->ptr + RSTRING(from)->len);
         if (tr_should_exclude(&tr_from)) {
                 /* This case is easy.  Just include everything by default and
                  * exclude the rest as always.  Replace characters found by the
                  * last character found in tr_to. */
                 while (tr_next(&tr_to) != TR_FINISHED)
                        ; /* We just need the last replacement character. */
-                return tr_trans_do(str, translation, tr_trans_replace_exclude,
-                                   &tr_to.now, squeeze, replace_content);
-        } else {
-                /* This case is hard.  We need a full-fledged lookup of what
-                 * character to translate to, not simply a check whether to
-                 * include it or not. */
-                struct tr_trans_closure trans_closure;
-
-                struct tr_range from_ranges[u_length_n(RSTRING(from)->ptr, RSTRING(from)->len)];
-                trans_closure.from = from_ranges;
-                trans_closure.n_from = tr_ranges_setup(&tr_from, from_ranges);
-
-                struct tr_range to_ranges[u_length_n(RSTRING(to)->ptr, RSTRING(to)->len)];
-                trans_closure.to = to_ranges;
-                trans_closure.n_to = tr_ranges_setup(&tr_to, to_ranges);
-
-                return tr_trans_do(str, translation, tr_trans_replace_include,
-                                   &trans_closure, squeeze, replace_content);
+                return tr_trans_do(self, &translation, tr_trans_replace_exclude,
+                                   &tr_to.now, squeeze);
         }
+
+        /* This case is hard.  We need a full-fledged lookup of what character
+         * to translate to, not simply a check whether to include it or not. */
+        struct tr_trans_closure trans_closure;
+
+        struct tr_range from_ranges[u_length_n(USTRING_STR(from), USTRING_LENGTH(from))];
+        trans_closure.from = from_ranges;
+        trans_closure.n_from = tr_ranges_setup(&tr_from, from_ranges);
+
+        struct tr_range to_ranges[u_length_n(USTRING_STR(to), USTRING_LENGTH(to))];
+        trans_closure.to = to_ranges;
+        trans_closure.n_to = tr_ranges_setup(&tr_to, to_ranges);
+
+        return tr_trans_do(self, &translation, tr_trans_replace_include,
+                           &trans_closure, squeeze);
 }
 
 VALUE
-rb_u_string_tr(VALUE str, VALUE from, VALUE to)
+rb_u_string_tr(VALUE self, VALUE from, VALUE to)
 {
-        return tr_trans(str, from, to, false, false);
+        return tr_trans(self, from, to, false);
 }
 
 VALUE
-rb_u_string_tr_s(VALUE str, VALUE from, VALUE to)
+rb_u_string_tr_s(VALUE self, VALUE from, VALUE to)
 {
-        return tr_trans(str, from, to, true, false);
+        return tr_trans(self, from, to, true);
 }

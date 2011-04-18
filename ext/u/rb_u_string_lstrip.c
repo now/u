@@ -1,36 +1,20 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_string_lstrip_bang(VALUE str)
+rb_u_string_lstrip(VALUE self)
 {
-        StringValue(str);
-        char *s = RSTRING(str)->ptr;
-        if (s == NULL || RSTRING(str)->len == 0)
-                return Qnil;
+        const UString *string = RVAL2USTRING(self);
 
-        char *end = s + RSTRING(str)->len;
+        const char *begin = USTRING_STR(string);
+        if (begin == NULL)
+                return self;
 
-        /* Remove spaces at head. */
-        while (s < end && unichar_isspace(_utf_char_validated(s, end)))
-                s = u_next(s);
+        const char *end = USTRING_END(string);
+        const char *p = begin;
+        while (p < end && unichar_isspace(_rb_u_aref_char_validated(p, end)))
+                p = u_next(p);
+        if (p == begin)
+                return self;
 
-        /* If there weren’t any spaces at head, return Qnil. */
-        if (s == RSTRING(str)->ptr)
-                return Qnil;
-
-        rb_str_modify(str);
-        RSTRING(str)->len = end - s;
-        memmove(RSTRING(str)->ptr, s, RSTRING(str)->len);
-        RSTRING(str)->ptr[RSTRING(str)->len] = '\0';
-
-        return str;
-}
-
-VALUE
-rb_u_string_lstrip(VALUE str)
-{
-        VALUE dup = rb_u_string_dup(str);
-        rb_u_string_lstrip_bang(dup);
-
-        return dup;
+        return rb_u_string_new(p, end - p);
 }

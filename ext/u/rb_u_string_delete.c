@@ -1,53 +1,54 @@
 #include "rb_includes.h"
 #include "rb_u_string_internal_tr.h"
 
-VALUE
-rb_u_string_delete_bang(int argc, VALUE *argv, VALUE str)
+static long
+rb_u_string_delete_loop(const UString *string, struct tr_table *table,
+                        char *result)
 {
-        StringValue(str);
-        need_at_least_n_arguments(argc, 1);
+        long count = 0;
 
-        if (RSTRING(str)->len == 0)
-                return Qnil;
+        const char *p = USTRING_STR(string);
+        const char *end = USTRING_END(string);
+        char *base = result;
+        while (p < end) {
+                unichar c = u_aref_char(p);
+                const char *next = rb_u_next_validated(p, end);
 
-        unsigned int table[TR_TABLE_SIZE];
-        tr_setup_table_from_strings(table, argc, &argv[0]);
-
-        rb_str_modify(str);
-
-        bool modified = false;
-        char *s = RSTRING(str)->ptr;
-        char const *s_end = s + RSTRING(str)->len;
-        char *t = s;
-        while (s < s_end) {
-                unichar c = u_aref_char(s);
-
-                char *next = rb_u_next_validated(s, s_end);
-                if (tr_table_lookup(table, c)) {
-                        modified = true;
-                } else {
-                        memmove(t, s, next - s);
-                        t += next - s;
+                if (!tr_table_lookup(table, c)) {
+                        long run = next - p;
+                        if (base != NULL) {
+                                memcpy(base, p, run);
+                                base += run;
+                        }
+                        count += run;
                 }
 
-                s = next;
+                p = next;
         }
-        *t = '\0';
-        RSTRING(str)->len = t - RSTRING(str)->ptr;
 
-        if (modified)
-                return str;
-
-        return Qnil;
+        return count;
 }
 
 VALUE
-rb_u_string_delete(int argc, VALUE *argv, VALUE str)
+rb_u_string_delete(int argc, VALUE *argv, VALUE self)
 {
-        StringValue(str);
+        const UString *string = RVAL2USTRING(self);
+
         need_at_least_n_arguments(argc, 1);
 
-        VALUE dup = rb_u_string_dup(str);
-        rb_u_string_delete_bang(argc, argv, dup);
-        return dup;
+        if (USTRING_LENGTH(string) == 0)
+                return self;
+
+        struct tr_table table;
+        tr_table_initialize_from_strings(&table, argc, argv);
+
+        long count = rb_u_string_delete_loop(string, &table, NULL);
+        if (count == 0)
+                return self;
+
+        char *remaining = ALLOC_N(char, count + 1);
+        rb_u_string_delete_loop(string, &table, remaining);
+        remaining[count] = '\0';
+
+        return rb_u_string_new_own(remaining, count);
 }

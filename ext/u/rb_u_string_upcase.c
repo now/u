@@ -1,12 +1,14 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_string_upcase(VALUE str)
+rb_u_string_upcase(VALUE self)
 {
-        StringValue(str);
+        const UString *string = RVAL2USTRING(self);
 
         size_t length;
+        char *upcased = utf_upcase_n(USTRING_STR(string),
+                                     USTRING_LENGTH(string),
+                                     &length);
 
-        char *upcased = utf_upcase_n(RSTRING_PTR(str), RSTRING_LEN(str), &length);
-        return rb_u_string_alloc_using_n(upcased, length);
+        return rb_u_string_new_own(upcased, length);
 }

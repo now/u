@@ -1,18 +1,26 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_string_casecmp(VALUE str1, VALUE str2)
+rb_u_string_casecmp(VALUE self, VALUE rbother)
 {
-        StringValue(str1);
-        StringValue(str2);
+        const UString *string = RVAL2USTRING(self);
+        const UString *other = RVAL2USTRING_ANY(rbother);
 
-        char *folded1 = utf_foldcase(RSTRING(str1)->ptr);
-        char *folded2 = utf_foldcase(RSTRING(str2)->ptr);
+        size_t folded_length;
+        char *folded = utf_foldcase_n(USTRING_STR(string),
+                                      USTRING_LENGTH(string),
+                                      &folded_length);
 
-        int result = u_collate(folded1, folded2);
+        size_t folded_other_length;
+        char *folded_other = utf_foldcase_n(USTRING_STR(other),
+                                            USTRING_LENGTH(other),
+                                            &folded_other_length);
 
-        free(folded2);
-        free(folded1);
+        int result = u_collate_n(folded, folded_length,
+                                 folded_other, folded_other_length);
+
+        free(folded_other);
+        free(folded);
 
         return INT2FIX(result);
 }

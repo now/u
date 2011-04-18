@@ -1,109 +1,95 @@
 #include "rb_includes.h"
 
 static VALUE
-rb_u_string_chomp_default(VALUE str)
+rb_u_string_chomp_default(VALUE self)
 {
-        rb_str_modify(str);
+        const UString *string = RVAL2USTRING(self);
 
-        const char *end = RSTRING(str)->ptr + RSTRING(str)->len;
+        const char *begin = USTRING_STR(string);
+        const char *end = USTRING_END(string);
 
-        char *last = u_find_prev(RSTRING(str)->ptr, end);
+        const char *last = u_find_prev(begin, end);
         if (last == NULL)
-                return Qnil;
+                return self;
 
-        if (_utf_char_validated(last, end) == '\n') {
-                char *last_but_one = u_find_prev(RSTRING(str)->ptr, last);
+        if (_rb_u_aref_char_validated(last, end) == '\n') {
+                const char *last_but_one = u_find_prev(begin, last);
 
+                /* TODO: We can use *last_but_one here. */
                 if (last_but_one != NULL && u_aref_char(last_but_one) == '\r')
                         last = last_but_one;
         } else if (!unichar_isnewline(u_aref_char(last))) {
-                return Qnil;
+                return self;
         }
 
-        RSTRING(str)->len -= (RSTRING(str)->ptr + RSTRING(str)->len) - last;
-        *last = '\0';
-
-        return str;
+        return rb_u_string_new(begin, last - begin);
 }
 
 static VALUE
-rb_u_string_chomp_newlines(VALUE str)
+rb_u_string_chomp_newlines(VALUE self)
 {
-        char *begin = RSTRING(str)->ptr;
-        char *end = begin + RSTRING(str)->len;
+        const UString *string = RVAL2USTRING(self);
+        const char *begin = USTRING_STR(string);
+        const char *end = USTRING_END(string);
 
-        char *last = end;
+        const char *last = end;
         while (last > begin) {
-                char *last_but_one = u_find_prev(begin, last);
+                const char *last_but_one = u_find_prev(begin, last);
                 if (last == NULL || !unichar_isnewline(u_aref_char(last_but_one)))
                         break;
                 last = last_but_one;
         }
 
         if (last == end)
-                return Qnil;
+                return self;
 
-        rb_str_modify(str);
-        RSTRING(str)->len -= end - last;
-        *last = '\0';
-
-        return str;
+        return rb_u_string_new(begin, last - begin);
 }
 
 VALUE
-rb_u_string_chomp_bang(int argc, VALUE *argv, VALUE str)
+rb_u_string_chomp(int argc, VALUE *argv, VALUE self)
 {
-        VALUE rs;
+        const UString *string = RVAL2USTRING(self);
 
-        if (RSTRING(str)->len == 0)
+        long length = USTRING_LENGTH(string);
+        if (length == 0)
                 return Qnil;
 
+        VALUE rs;
         if (argc == 0) {
                 rs = rb_rs;
                 if (rs == rb_default_rs)
-                        rb_u_string_chomp_default(str);
+                        return rb_u_string_chomp_default(self);
         } else {
-                rs = argv[0];
+                rb_scan_args(argc, argv, "01", &rs);
         }
 
         if (NIL_P(rs))
-                return Qnil;
+                return self;
 
-        StringValue(rs);
+        const UString *separator = RVAL2USTRING_ANY(rs);
 
-        long rs_len = RSTRING(rs)->len;
-        if (rs_len == 0)
-                return rb_u_string_chomp_newlines(str);
+        long separator_length = USTRING_LENGTH(separator);
+        if (separator_length == 0)
+                return rb_u_string_chomp_newlines(self);
 
-        long len = RSTRING(str)->len;
-        if (rs_len > len)
-                return Qnil;
+        if (separator_length > length)
+                return self;
 
-        char last_char = RSTRING(rs)->ptr[rs_len - 1];
-        if (rs_len == 1 && last_char == '\n')
-                rb_u_string_chomp_default(str);
+        char last_char = USTRING_STR(separator)[separator_length - 1];
+        if (separator_length == 1 && last_char == '\n')
+                return rb_u_string_chomp_default(self);
 
-        char *p = RSTRING(str)->ptr;
+        if (!utf_isvalid_n(USTRING_STR(separator), separator_length, NULL) ||
+            USTRING_STR(string)[length - 1] != last_char ||
+            (separator_length > 1 &&
+             rb_memcmp(USTRING_STR(separator),
+                       USTRING_END(string) - separator_length,
+                       separator_length) != 0))
+                return self;
 
-        if (p[len - 1] != last_char ||
-            (rs_len > 1 &&
-             rb_memcmp(RSTRING(rs)->ptr, p + len - rs_len, rs_len) != 0))
-                return Qnil;
-
-        rb_str_modify(str);
-        RSTRING(str)->len -= rs_len;
-        RSTRING(str)->ptr[RSTRING(str)->len] = '\0';
-
-        return str;
-}
-
-VALUE
-rb_u_string_chomp(int argc, VALUE *argv, VALUE str)
-{
-        StringValue(str);
-
-        VALUE dup = rb_u_string_dup(str);
-        rb_u_string_chomp_bang(argc, argv, dup);
-
-        return dup;
+        /* TODO: It would be nice to share the underlying char * in this case.
+         * This would require reference counting. Call the function
+         * rb_u_string_new_ref(). */
+        return rb_u_string_new(USTRING_STR(string), length - separator_length);
 }

@@ -153,7 +153,7 @@ void unicode_canonical_ordering(unichar *str, size_t len);
 unichar *unicode_canonical_decomposition(unichar c, size_t *result_len);
 
 char *utf_normalize(const char *str, NormalizeMode mode);
-char *utf_normalize_n(const char *str, NormalizeMode mode, size_t len);
+char *utf_normalize_n(const char *str, NormalizeMode mode, size_t len, size_t *new_length);
 
 
 
@@ -161,9 +161,9 @@ char *utf_normalize_n(const char *str, NormalizeMode mode, size_t len);
 char *utf_upcase(const char *str);
 char *utf_upcase_n(const char *str, size_t len, size_t *new_length);
 char *utf_downcase(const char *str);
-char *utf_downcase_n(const char *str, size_t len);
+char *utf_downcase_n(const char *str, size_t len, size_t *new_length);
 char *utf_foldcase(const char *str);
-char *utf_foldcase_n(const char *str, size_t len);
+char *utf_foldcase_n(const char *str, size_t len, size_t *new_length);
 
 unichar u_aref_char(const char *str);
 unichar u_aref_char_n(const char *str, size_t max);
@@ -179,6 +179,8 @@ char *u_prev(const char *p);
 char *u_find_prev(const char *begin, const char *p);
 
 char *u_offset_to_pointer(const char *str, long offset);
+char *u_offset_to_pointer_n(const char *str, long offset, size_t n);
+
 long u_pointer_to_offset(const char *str, const char *pos);
 
 void u_copy(char *dest, const char *src);
@@ -188,6 +190,7 @@ void u_append(char *dest, const char *src);
 void u_append_n(char *dest, const char *src, size_t n);
 
 int u_collate(const char *a, const char *b);
+int u_collate_n(const char *a, size_t a_len, const char *b, size_t b_len);
 char *u_collate_key(const char *str);
 char *u_collate_key_n(const char *str, size_t len);
 

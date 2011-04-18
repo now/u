@@ -2,10 +2,10 @@
 #include "rb_u_string_internal_bignum.h"
 
 /* XXX: Stolen straight from bignum.c. */
-#define BDIGITS(x)      ((BDIGIT *)RBIGNUM(x)->digits)
+#define BDIGITS(x)      (RBIGNUM_DIGITS(x))
 #define BITSPERDIG      (SIZEOF_BDIGITS * CHAR_BIT)
 #define BIGRAD          ((BDIGIT_DBL)1 << BITSPERDIG)
-#define BIGDN(x)        RSHIFT(x, BITSPERDIG)
+#define BIGDN(x)        RSHIFT((x), BITSPERDIG)
 #define BIGLO(x)        ((BDIGIT)((x) & (BIGRAD - 1)))
 
 static VALUE
@@ -13,9 +13,27 @@ bignew_1(VALUE klass, long len, int sign)
 {
     NEWOBJ(big, struct RBignum);
     OBJSETUP(big, klass, T_BIGNUM);
-    big->sign = sign ? 1 : 0;
+    RBIGNUM_SET_SIGN(big, sign ? 1 : 0);
+#ifdef RBIGNUM_EMBED_LEN_MAX
+#define RBIGNUM_SET_LEN(b,l) \
+    ((RBASIC(b)->flags & RBIGNUM_EMBED_FLAG) ? \
+     (void)(RBASIC(b)->flags = \
+            (RBASIC(b)->flags & ~RBIGNUM_EMBED_LEN_MASK) | \
+            ((l) << RBIGNUM_EMBED_LEN_SHIFT)) : \
+     (void)(RBIGNUM(b)->as.heap.len = (l)))
+
+    if (len <= RBIGNUM_EMBED_LEN_MAX) {
+        RBASIC(big)->flags |= RBIGNUM_EMBED_FLAG;
+        RBIGNUM_SET_LEN(big, len);
+    }
+    else {
+        RBIGNUM(big)->as.heap.digits = ALLOC_N(BDIGIT, len);
+        RBIGNUM(big)->as.heap.len = len;
+    }
+#else
     big->len = len;
     big->digits = ALLOC_N(BDIGIT, len);
+#endif
 
     return (VALUE)big;
 }
@@ -97,22 +115,46 @@ rb_u_string_to_inum_base_bit_length(const char *s, int base)
 
 static bool
 rb_u_string_to_inum_num_separator(const char *str, const char *s, bool verify,
-                                  unichar c, unichar *non_digit)
+                                  unichar c, bool *previous_was_separator)
 {
-        if (c != '_')
+        if (c != '_') {
+                *previous_was_separator = false;
+
                 return false;
+        }
 
-        if (!verify)
-                return true;
+        if (*previous_was_separator) {
+                if (verify)
+                        rb_raise(rb_eArgError,
+                                 "unexpected ‘%lc’ found at position %ld",
+                                 c, u_pointer_to_offset(str, s));
+                else
+                        return false;
+        }
 
-        if (*non_digit != 0)
-                rb_raise(rb_eArgError,
-                         "unexpected ‘%lc’ found at position %ld",
-                         c, u_pointer_to_offset(str, s));
-
-        *non_digit = c;
+        *previous_was_separator = true;
 
         return true;
+}
+
+#define UNICHAR_FULLWIDTH_A     0xff21
+#define UNICHAR_FULLWIDTH_Z     0xff3a
+#define UNICHAR_FULLWIDTH_a     0xff41
+#define UNICHAR_FULLWIDTH_z     0xff5a
+
+static int
+unichar_zdigit_value(unichar c)
+{
+	if (c >= 'a' && c <= 'z')
+		return c - 'a' + 10;
+	else if (c >= 'A' && c <= 'Z')
+		return c - 'A' + 10;
+        else if (c >= UNICHAR_FULLWIDTH_a && c <= UNICHAR_FULLWIDTH_z)
+                return c - UNICHAR_FULLWIDTH_a + 10;
+        else if (c >= UNICHAR_FULLWIDTH_A && c <= UNICHAR_FULLWIDTH_Z)
+                return c - UNICHAR_FULLWIDTH_A + 10;
+	else
+		return unichar_digit_value(c);
 }
 
 static bool
@@ -124,7 +166,8 @@ rb_u_string_to_inum_digit_value(const char *str, const char *s, unichar c,
         if (unichar_isspace(c))
                 return false;
 
-        int value = unichar_xdigit_value(c);
+        int value = unichar_zdigit_value(c);
+
         if (value == -1) {
                 if (!verify)
                         return false;
@@ -153,12 +196,12 @@ rb_u_string_to_inum_as_fix(const char *str, const char *s, int sign, int base,
 {
         unsigned long value = 0;
 
-        unichar non_digit = 0;
+        bool previous_was_separator = false;
         while (*s != '\0') {
                 unichar c = u_aref_char(s);
                 s = u_next(s);
 
-                if (rb_u_string_to_inum_num_separator(str, s, verify, c, &non_digit))
+                if (rb_u_string_to_inum_num_separator(str, s, verify, c, &previous_was_separator))
                         continue;
 
                 int digit_value;
@@ -166,8 +209,6 @@ rb_u_string_to_inum_as_fix(const char *str, const char *s, int sign, int base,
                         break;
                 value *= base;
                 value += digit_value;
-
-                non_digit = 0;
         }
 
         if (verify) {
@@ -250,36 +291,32 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
         MEMZERO(zds, BDIGIT, bit_length);
         int big_len = 1;
 
-        unichar non_digit = 0;
+        bool previous_was_separator = false;
         while (true) {
                 unichar c = u_aref_char(s);
                 s = u_next(s);
 
-                if (rb_u_string_to_inum_num_separator(str, s, verify, c, &non_digit))
+                if (rb_u_string_to_inum_num_separator(str, s, verify, c, &previous_was_separator))
                         continue;
 
                 int digit_value;
                 if (!rb_u_string_to_inum_digit_value(str, s, c, base, verify, &digit_value))
                         break;
 
-                bool more_to_shift = true;
-                while (more_to_shift) {
-                        BDIGIT_DBL num = digit_value;
-
-                        for (int i = 0; i < big_len; i++) {
+                int i = 0;
+                BDIGIT_DBL num = digit_value;
+                while (true) {
+                        for ( ; i < big_len; i++) {
                                 num += (BDIGIT_DBL)zds[i] * base;
                                 zds[i] = BIGLO(num);
                                 num = BIGDN(num);
                         }
 
-                        more_to_shift = false;
-                        if (num != 0) {
-                                big_len++;
-                                more_to_shift = true;
-                        }
-                }
+                        if (num == 0)
+                                break;
 
-                non_digit = 0;
+                        big_len++;
+                }
         }
 
         if (!verify)
@@ -300,18 +337,16 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
 }
 
 VALUE
-rb_u_string_to_inum(VALUE str, int base, bool verify)
+rb_u_string_to_inum(VALUE self, int base, bool verify)
 {
-        StringValue(str);
+        const UString *string = RVAL2USTRING(self);
 
-        char *s;
-        if (verify)
-                s = StringValueCStr(str);
-        else
-                s = RSTRING(str)->ptr;
+        const char *s = USTRING_STR(string);
+        if (verify && (s == NULL || memchr(s, '\0', USTRING_LENGTH(string))))
+                rb_raise(rb_eArgError, "string contains null byte");
 
         if (s != NULL) {
-                long len = RSTRING(str)->len;
+                long len = USTRING_LENGTH(string);
                 /* no sentinel somehow */
                 if (s[len] != '\0') {
                         char *p = ALLOCA_N(char, len + 1);

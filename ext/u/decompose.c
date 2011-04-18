@@ -325,8 +325,7 @@ normalize_wc_decompose(const char *str, size_t max_len, bool use_len,
 {
         size_t n = 0;
         size_t prev_start = 0;
-        const char *end = str + max_len;
-        for (const char *p = str; (!use_len || p < end) && *p != NUL; p = u_next(p)) {
+        for (const char *p = str; P_WITHIN_STR(p, str, max_len, use_len); p = u_next(p)) {
                 unichar c = u_aref_char(p);
                 size_t prev_n = n;
 
@@ -353,21 +352,22 @@ normalize_wc_decompose(const char *str, size_t max_len, bool use_len,
 }
 
 static unichar *
-normalize_wc_compose(unichar *buf, size_t len)
+normalize_wc_compose(unichar *buf, size_t len, size_t *new_length)
 {
         int new_len = len;
         size_t prev_start = 0;
-        int prev_cc = 0;
+        int prev_cc = UNICODE_LAST_CHAR + 1;
 
         for (size_t i = 0; i < len; i++) {
                 int cc = COMBINING_CLASS(buf[i]);
                 size_t j = i - (len - new_len);
 
-                if (j > 0 && (prev_cc == 0 || prev_cc < cc) &&
+                if (j > 0 && (prev_cc == UNICODE_LAST_CHAR + 1 || prev_cc < cc) &&
                     combine(buf[prev_start], buf[i], &buf[prev_start])) {
                         new_len--;
                         prev_cc = (j + 1 == prev_start) ?
-                                  0 : COMBINING_CLASS(buf[j - 1]);
+                                UNICODE_LAST_CHAR + 1 :
+                                COMBINING_CLASS(buf[j - 1]);
                 } else {
                         if (cc == 0)
                                 prev_start = j;
@@ -379,11 +379,14 @@ normalize_wc_compose(unichar *buf, size_t len)
 
         buf[new_len] = NUL;
 
+        if (new_length != NULL)
+                *new_length = new_len;
+
         return buf;
 }
 
 unichar *
-_utf_normalize_wc(const char *str, size_t max_len, bool use_len, NormalizeMode mode)
+_utf_normalize_wc(const char *str, size_t max_len, bool use_len, size_t *new_length, NormalizeMode mode)
 {
         size_t n;
         normalize_wc_decompose(str, max_len, use_len, mode, NULL, &n);
@@ -394,7 +397,7 @@ _utf_normalize_wc(const char *str, size_t max_len, bool use_len, NormalizeMode m
         if (!(mode == NORMALIZE_NFC || mode == NORMALIZE_NFKC))
                 return buf;
 
-        return normalize_wc_compose(buf, n);
+        return normalize_wc_compose(buf, n, new_length);
 }
 
 
@@ -406,10 +409,11 @@ _utf_normalize_wc(const char *str, size_t max_len, bool use_len, NormalizeMode m
 char *
 utf_normalize(const char *str, NormalizeMode mode)
 {
-        unichar *wcs = _utf_normalize_wc(str, 0, false, mode);
+        unichar *wcs = _utf_normalize_wc(str, 0, false, NULL, mode);
         char *utf = ucs4_to_u(wcs, NULL, NULL);
 
         free(wcs);
+
         return utf;
 }
 
@@ -419,12 +423,14 @@ utf_normalize(const char *str, NormalizeMode mode)
  * bytes are normalized from ‘str’.
  */
 char *
-utf_normalize_n(const char *str, NormalizeMode mode, size_t len)
+utf_normalize_n(const char *str, NormalizeMode mode, size_t len, size_t *new_length)
 {
-        unichar *wcs = _utf_normalize_wc(str, len, true, mode);
-        char *utf = ucs4_to_u(wcs, NULL, NULL);
+        size_t new_length_wcs;
+        unichar *wcs = _utf_normalize_wc(str, len, true, &new_length_wcs, mode);
+        char *utf = ucs4_to_u_n(wcs, new_length_wcs, NULL, new_length);
 
         free(wcs);
+
         return utf;
 }
 

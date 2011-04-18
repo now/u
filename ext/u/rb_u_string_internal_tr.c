@@ -2,17 +2,17 @@
 #include "rb_u_string_internal_tr.h"
 
 void
-tr_init(struct tr *tr, char *p, char *p_end)
+tr_init(struct tr *tr, const char *p, const char *end)
 {
         tr->p = p;
-        tr->p_end = p_end;
+        tr->end = end;
         tr->inside_range = false;
 }
 
 bool
 tr_should_exclude(struct tr *tr)
 {
-        if (tr->p + 1 < tr->p_end && *tr->p == '^') {
+        if (tr->p + 1 < tr->end && *tr->p == '^') {
                 tr->p++;
                 return true;
         }
@@ -23,33 +23,36 @@ tr_should_exclude(struct tr *tr)
 static enum tr_state
 tr_next_char(struct tr *t)
 {
-        if (t->p == t->p_end)
+        if (t->p == t->end)
                 return TR_FINISHED;
 
-        if (_utf_char_validated(t->p, t->p_end) == '\\') {
-                char *next = u_find_next(t->p, t->p_end);
+        if (_rb_u_aref_char_validated(t->p, t->end) == '\\') {
+                const char *next = u_find_next(t->p, t->end);
 
                 if (next == NULL) {
                         t->now = '\\';
-                        t->p = t->p_end;
+                        t->p = t->end;
                         return TR_FOUND;
                 }
 
                 t->p = next;
         }
 
-        t->now = _utf_char_validated(t->p, t->p_end);
+        t->now = _rb_u_aref_char_validated(t->p, t->end);
 
-        char *next = u_find_next(t->p, t->p_end);
+        const char *next = u_find_next(t->p, t->end);
         if (next == NULL) {
-                t->p = t->p_end;
+                t->p = t->end;
                 return TR_FOUND;
         }
         t->p = next;
 
-        if (_utf_char_validated(t->p, t->p_end) == '-') {
-                next = u_find_next(t->p, t->p_end);
-
+        if (_rb_u_aref_char_validated(t->p, t->end) == '-') {
+                next = u_find_next(t->p, t->end);
+                /* TODO: Make this simpler.  Perhaps we don’t need
+                 * TR_READ_ANOTHER, as we advance it here ourselves.  I got to
+                 * check the offsets here.  Perhaps TR_READ_ANOTHER should also
+                 * have advanced t->p one more step. */
                 if (next != NULL) {
                         unichar max = u_aref_char(next);
 
@@ -60,6 +63,9 @@ tr_next_char(struct tr *t)
 
                         t->inside_range = true;
                         t->max = max;
+
+                        next = u_find_next(next, t->end);
+                        t->p = (next != NULL) ? next : t->end;
                 }
         }
 
@@ -87,49 +93,73 @@ tr_next(struct tr *t)
 }
 
 static void
-tr_table_set(unsigned int *table, unichar c, unsigned int value)
+tr_table_set(struct tr_table *table, bool *buffer, unichar c, bool value)
 {
-        unsigned int offset = c / WORD_BIT;
-        unsigned int bit = c % WORD_BIT;
+        if (c < lengthof(table->continuous)) {
+                buffer[c] = value;
+                return;
+        }
 
-        table[offset] = (table[offset] & ~(1U << bit)) | ((value & 1U) << bit);
+        if (NIL_P(table->sparse))
+                table->sparse = rb_hash_new();
+
+        rb_hash_aset(table->sparse, UINT2NUM(c), value ? Qtrue : Qfalse);
 }
 
-void
-tr_setup_table(VALUE str, unsigned int *table, bool initialize)
+static void
+tr_table_add(struct tr_table *table, const UString *string)
 {
-        unsigned int buf[TR_TABLE_SIZE];
-
         struct tr tr;
-        tr_init(&tr, RSTRING(str)->ptr, RSTRING(str)->ptr + RSTRING(str)->len);
+        tr_init(&tr, USTRING_STR(string), USTRING_END(string));
 
         bool exclude = tr_should_exclude(&tr);
 
-        if (initialize)
-                for (int i = 0; i < TR_TABLE_SIZE; i++)
-                        table[i] = ~0U;
+        bool buffer[lengthof(table->continuous)];
 
-        unsigned int buf_initializer = exclude ? ~0U : 0U;
-        for (int i = 0; i < TR_TABLE_SIZE; i++)
-                buf[i] = buf_initializer;
+        for (size_t i = 0; i < lengthof(buffer); i++)
+                buffer[i] = exclude;
 
-        unsigned int buf_setter = !exclude;
         while (tr_next(&tr) != TR_FINISHED)
-                tr_table_set(buf, tr.now, buf_setter);
+                tr_table_set(table, buffer, tr.now, !exclude);
 
-        for (int i = 0; i < TR_TABLE_SIZE; i++)
-                table[i] &= buf[i];
+        for (size_t i = 0; i < lengthof(table->continuous); i++)
+                table->continuous[i] = table->continuous[i] && buffer[i];
 }
 
 void
-tr_setup_table_from_strings(unsigned int *table, int argc, VALUE *argv)
+tr_table_initialize(struct tr_table *table, VALUE rbstring)
 {
-    bool initialize = true;
-    for (int i = 0; i < argc; i++) {
-            VALUE s = argv[i];
+        const UString *string = RVAL2USTRING_ANY(rbstring);
 
-            StringValue(s);
-            tr_setup_table(s, table, initialize);
-            initialize = false;
-    }
+        struct tr tr;
+        tr_init(&tr, USTRING_STR(string), USTRING_END(string));
+
+        table->exclude = tr_should_exclude(&tr);
+
+        for (size_t i = 0; i < lengthof(table->continuous); i++)
+                table->continuous[i] = true;
+
+        table->sparse = Qnil;
+
+        tr_table_add(table, string);
+}
+
+void
+tr_table_initialize_from_strings(struct tr_table *table, int argc, VALUE *argv)
+{
+    tr_table_initialize(table, argv[0]);
+    for (int i = 1; i < argc; i++)
+            tr_table_add(table, RVAL2USTRING_ANY(argv[i]));
+}
+
+bool
+tr_table_lookup(struct tr_table *table, unichar c)
+{
+        if (c < lengthof(table->continuous))
+                return table->continuous[c];
+
+        VALUE value = NIL_P(table->sparse) ?
+                Qnil : rb_hash_lookup(table->sparse, UINT2NUM(c));
+
+        return NIL_P(value) ? table->exclude : RTEST(value);
 }

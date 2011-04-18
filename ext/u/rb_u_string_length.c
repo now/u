@@ -1,9 +1,9 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_string_length(VALUE str)
+rb_u_string_length(VALUE self)
 {
-        StringValue(str);
+        const UString *string = RVAL2USTRING(self);
 
-        return UINT2NUM(u_length_n(RSTRING(str)->ptr, RSTRING(str)->len));
+        return UINT2NUM(u_length_n(USTRING_STR(string), USTRING_LENGTH(string)));
 }

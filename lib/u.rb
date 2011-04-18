@@ -8,10 +8,6 @@ end
 
 class String
   def u
-    dup.u!
-  end
-
-  def u!
-    self.extend(U::String)
+    U::String.new(self)
   end
 end

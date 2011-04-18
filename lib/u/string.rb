@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+=begin
 module U::String
   def downcase!
     replace(downcase)
@@ -37,3 +38,4 @@ module U::String
     replace(foldcase)
   end
 end
+=end

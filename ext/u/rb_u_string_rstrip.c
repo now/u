@@ -1,46 +1,27 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_string_rstrip_bang(VALUE str)
+rb_u_string_rstrip(VALUE self)
 {
-        StringValue(str);
-        const char *begin = RSTRING(str)->ptr;
-        if (begin == NULL || RSTRING(str)->len == 0)
-                return Qnil;
+        const UString *string = RVAL2USTRING(self);
 
-        const char *end = begin + RSTRING(str)->len;
-        const char *t = end;
+        const char *begin = USTRING_STR(string);
+        if (begin == NULL)
+                return self;
 
-        /* Remove trailing '\0'’s. */
-        while (t > begin && t[-1] == '\0')
-                t--;
+        const char *end = USTRING_END(string);
+        const char *p = end;
+        while (p > begin) {
+                const char *prev = rb_u_prev_validated(begin, p);
+                unichar c = u_aref_char(prev);
 
-        /* Remove trailing spaces. */
-        while (t > begin) {
-                /* FIXME: Should we be validating here? */
-                const char *prev = rb_u_prev_validated(begin, t);
-
-                if (!unichar_isspace(u_aref_char(prev)))
+                if (c != '\0' && !unichar_isspace(c))
                         break;
 
-                t = prev;
+                p = prev;
         }
+        if (p == end)
+                return self;
 
-        if (t == end)
-                return Qnil;
-
-        rb_str_modify(str);
-        RSTRING(str)->len = t - begin;
-        RSTRING(str)->ptr[RSTRING(str)->len] = '\0';
-
-        return str;
-}
-
-VALUE
-rb_u_string_rstrip(VALUE str)
-{
-        VALUE dup = rb_u_string_dup(str);
-        rb_u_string_rstrip_bang(dup);
-
-        return dup;
+        return rb_u_string_new(begin, p - begin);
 }
