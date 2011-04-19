@@ -30,6 +30,7 @@ task :extensions
 
   file makefile => ['extconf.rb', 'depend'].map{ |tail| File.join(extension, tail) } do
     Dir.chdir(extension) do
+      ruby 'extconf.rb'
       sh 'make'
     end
   end
