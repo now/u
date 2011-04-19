@@ -129,6 +129,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "count", rb_u_string_count, -1);
         rb_define_method(rb_cUString, "delete", rb_u_string_delete, -1);
         rb_define_method(rb_cUString, "downcase", rb_u_string_downcase, 0);
+        rb_define_method(rb_cUString, "each", rb_u_string_each_line, -1);
         rb_define_method(rb_cUString, "each_byte", rb_u_string_each_byte, 0);
         rb_define_method(rb_cUString, "each_char", rb_u_string_each_char, 0);
         rb_define_method(rb_cUString, "each_line", rb_u_string_each_line, -1);
