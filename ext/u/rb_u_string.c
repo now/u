@@ -35,7 +35,6 @@ rb_u_string_create(VALUE rb, const char *str, long length)
         return USTRING2RVAL(string);
 }
 
-
 static VALUE
 rb_u_string_alloc(UNUSED(VALUE klass))
 {
@@ -132,11 +131,13 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "downcase", rb_u_string_downcase, 0);
         rb_define_method(rb_cUString, "each_byte", rb_u_string_each_byte, 0);
         rb_define_method(rb_cUString, "each_char", rb_u_string_each_char, 0);
+        rb_define_method(rb_cUString, "each_line", rb_u_string_each_line, -1);
         rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, 0);
         rb_define_method(rb_cUString, "hex", rb_u_string_hex, 0);
         rb_define_method(rb_cUString, "index", rb_u_string_index_m, -1);
         rb_define_method(rb_cUString, "inspect", rb_u_string_inspect, 0);
         rb_define_method(rb_cUString, "length", rb_u_string_length, 0);
+        rb_define_method(rb_cUString, "lines", rb_u_string_each_line, -1);
         rb_define_method(rb_cUString, "ljust", rb_u_string_ljust, -1);
         rb_define_method(rb_cUString, "lstrip", rb_u_string_lstrip, 0);
         rb_define_method(rb_cUString, "normalize", rb_u_string_normalize, -1);

@@ -71,6 +71,7 @@ VALUE rb_u_string_downcase(VALUE self);
 VALUE rb_u_string_dup(VALUE self);
 VALUE rb_u_string_each_byte(VALUE self);
 VALUE rb_u_string_each_char(VALUE self);
+VALUE rb_u_string_each_line(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_equal(VALUE self, VALUE other);
 VALUE rb_u_string_eql(VALUE self, VALUE other);
 VALUE rb_u_string_foldcase(VALUE self);

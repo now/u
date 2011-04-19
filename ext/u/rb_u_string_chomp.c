@@ -63,7 +63,6 @@ rb_u_string_chomp(int argc, VALUE *argv, VALUE self)
         } else {
                 rb_scan_args(argc, argv, "01", &rs);
         }
-
         if (NIL_P(rs))
                 return self;
 

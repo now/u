@@ -142,8 +142,50 @@ Expectations do
     "abc\0dëf".u.bytes.entries
   end
 
-  expect %w[h ë l l ö] do
+  expect ['h'.u, 'ë'.u, 'l'.u, 'l'.u, 'ö'.u] do
     'hëllö'.u.chars.entries
+  end
+
+  expect ["hello\n".u, 'world'.u] do
+    saved_rs = $/
+    begin
+      $/ = "\n"
+      "hello\nworld".u.lines.entries
+    ensure
+      $/ = saved_rs
+    end
+  end
+
+  expect ["hello\n\n\n".u, 'world'.u] do
+      "hello\n\n\nworld".u.lines('').entries
+  end
+
+  expect ['hello!'.u, 'world'.u] do
+    saved_rs = $/
+    begin
+      $/ = '!'
+      'hello!world'.u.lines.entries
+    ensure
+      $/ = saved_rs
+    end
+  end
+
+  expect ["hello\nworld".u] do
+    saved_rs = $/
+    begin
+      $/ = nil
+      "hello\nworld".u.lines.entries
+    ensure
+      $/ = saved_rs
+    end
+  end
+
+  expect ['hëll hëllö'.u, ' world'.u] do
+    'hëll hëllö world'.u.lines('llö').entries
+  end
+
+  expect ["hello\0".u, 'world'.u] do
+    "hello\0world".u.lines("\0").entries
   end
 
   expect "abc\0ss".u do "abc\0ß".u.foldcase end
