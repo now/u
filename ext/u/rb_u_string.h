@@ -55,6 +55,8 @@ VALUE rb_u_string_new(const char *str, long length);
 VALUE rb_u_string_new_own(const char *str, long length);
 VALUE rb_u_string_new_rb(VALUE str);
 
+VALUE rb_u_string_check_type(VALUE str);
+
 const char *rb_u_string_begin_from_offset(const UString *string, long offset);
 
 long rb_u_string_index(VALUE self, VALUE sub, long offset);
@@ -73,6 +75,7 @@ VALUE rb_u_string_each_byte(VALUE self);
 VALUE rb_u_string_each_char(VALUE self);
 VALUE rb_u_string_each_line(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_empty(VALUE self);
+VALUE rb_u_string_ends_with(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_equal(VALUE self, VALUE other);
 VALUE rb_u_string_eql(VALUE self, VALUE other);
 VALUE rb_u_string_foldcase(VALUE self);

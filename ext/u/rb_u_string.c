@@ -63,6 +63,15 @@ rb_u_string_new_rb(VALUE str)
         return rb_u_string_create(str, NULL, 0);
 }
 
+VALUE
+rb_u_string_check_type(VALUE str)
+{
+        if (rb_obj_is_kind_of(str, rb_cUString))
+                return str;
+
+        return rb_check_string_type(str);
+}
+
 static VALUE
 rb_u_string_initialize(int argc, VALUE *argv, VALUE self)
 {
@@ -134,6 +143,8 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "each_char", rb_u_string_each_char, 0);
         rb_define_method(rb_cUString, "each_line", rb_u_string_each_line, -1);
         rb_define_method(rb_cUString, "empty", rb_u_string_empty, 0);
+        rb_define_method(rb_cUString, "end_with", rb_u_string_ends_with, -1);
+        rb_define_method(rb_cUString, "ends_with", rb_u_string_ends_with, -1);
         rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, 0);
         rb_define_method(rb_cUString, "hex", rb_u_string_hex, 0);
         rb_define_method(rb_cUString, "index", rb_u_string_index_m, -1);

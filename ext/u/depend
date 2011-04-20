@@ -27,6 +27,8 @@ rb_u_string_each_line.o: rb_u_string_each_line.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_empty.o: rb_u_string_empty.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
+rb_u_string_ends_with.o: rb_u_string_ends_with.c rb_includes.h extconf.h \
+ u.h private.h rb_private.h rb_u_string.h
 rb_u_string_eql.o: rb_u_string_eql.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_equal.o: rb_u_string_equal.c rb_includes.h extconf.h u.h \
