@@ -102,6 +102,7 @@ VALUE rb_u_string_strip(VALUE self);
 VALUE rb_u_string_times(VALUE self, VALUE rbtimes);
 VALUE rb_u_string_to_i(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_to_str(VALUE self);
+VALUE rb_u_string_to_sym(VALUE self);
 VALUE rb_u_string_tr(VALUE self, VALUE from, VALUE to);
 VALUE rb_u_string_tr_s(VALUE self, VALUE from, VALUE to);
 VALUE rb_u_string_upcase(VALUE self);

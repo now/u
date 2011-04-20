@@ -179,6 +179,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "include?", rb_u_string_include, 1);
         rb_define_method(rb_cUString, "index", rb_u_string_index_m, -1);
         rb_define_method(rb_cUString, "inspect", rb_u_string_inspect, 0);
+        rb_define_method(rb_cUString, "intern", rb_u_string_to_sym, 0);
         rb_define_method(rb_cUString, "length", rb_u_string_length, 0);
         rb_define_method(rb_cUString, "lines", rb_u_string_each_line, -1);
         rb_define_method(rb_cUString, "ljust", rb_u_string_ljust, -1);
@@ -194,6 +195,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "to_i", rb_u_string_to_i, -1);
         rb_define_method(rb_cUString, "to_s", rb_u_string_to_str, 0);
         rb_define_method(rb_cUString, "to_str", rb_u_string_to_str, 0);
+        rb_define_method(rb_cUString, "to_sym", rb_u_string_to_sym, 0);
         rb_define_method(rb_cUString, "tr", rb_u_string_tr, 2);
         rb_define_method(rb_cUString, "tr_s", rb_u_string_tr_s, 2);
         rb_define_method(rb_cUString, "upcase", rb_u_string_upcase, 0);

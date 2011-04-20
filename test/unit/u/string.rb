@@ -255,6 +255,9 @@ Expectations do
   expect nil do 'föö'.u.index(//, -100) end
   expect nil do 'föö'.u.index(//, -100); $~ end
 
+  expect :koala do 'koala'.u.intern end
+  expect :'köälä' do 'köälä'.u.intern end
+
   expect 0 do ''.u.length end
   expect 4 do '1234'.u.length end
   expect 6 do "1234\r\n".u.length end
@@ -340,6 +343,9 @@ Expectations do
   expect 1 do '1__2'.u.to_i(10) end
   expect 1 do '1_z'.u.to_i(10) end
   expect 1 do '١'.u.to_i end
+
+  expect :koala do 'koala'.u.to_sym end
+  expect :'köälä' do 'köälä'.u.to_sym end
 
   # TODO: Add tests for Unicode whitespace characters
   expect 'あ'.u do 'あ'.u.strip end
