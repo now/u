@@ -41,6 +41,8 @@ rb_u_string_hash.o: rb_u_string_hash.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_hex.o: rb_u_string_hex.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h rb_u_string_internal_bignum.h
+rb_u_string_include.o: rb_u_string_include.c rb_includes.h extconf.h u.h \
+  private.h rb_private.h rb_u_string.h
 rb_u_string_index.o: rb_u_string_index.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_inspect.o: rb_u_string_inspect.c rb_includes.h extconf.h u.h \

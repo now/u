@@ -224,6 +224,12 @@ Expectations do
   expect 15 do 'fred'.u.hex end
   # TODO: Add tests for Unicode digit values
 
+  expect 'fööbär'.u.to.include?('f'.u)
+  expect 'fööbär'.u.to.include?('föö'.u)
+  expect 'fööbär'.u.to.include?('bär'.u)
+  expect 'fööbär'.u.not.to.include?('bäz'.u)
+  expect 'fööbär'.u.not.to.include?('z'.u)
+
   expect 0 do 'hëllö'.u.index('') end
   expect 0 do 'hëllö'.u.index('h') end
   expect 4 do 'hëllö'.u.index('ö') end

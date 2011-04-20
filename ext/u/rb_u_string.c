@@ -176,6 +176,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "gsub", rb_u_string_gsub, -1);
         rb_define_method(rb_cUString, "hash", rb_u_string_hash, 0);
         rb_define_method(rb_cUString, "hex", rb_u_string_hex, 0);
+        rb_define_method(rb_cUString, "include?", rb_u_string_include, 1);
         rb_define_method(rb_cUString, "index", rb_u_string_index_m, -1);
         rb_define_method(rb_cUString, "inspect", rb_u_string_inspect, 0);
         rb_define_method(rb_cUString, "length", rb_u_string_length, 0);
