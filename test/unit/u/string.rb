@@ -188,6 +188,9 @@ Expectations do
     "hello\0world".u.lines("\0").entries
   end
 
+  expect ''.to.be.empty?
+  expect 'not'.not.to.be.empty?
+
   expect "abc\0ss".u do "abc\0ß".u.foldcase end
 
   expect 255 do '0xff'.u.hex end
