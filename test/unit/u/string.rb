@@ -188,8 +188,8 @@ Expectations do
     "hello\0world".u.lines("\0").entries
   end
 
-  expect ''.to.be.empty?
-  expect 'not'.not.to.be.empty?
+  expect ''.u.to.be.empty?
+  expect 'not'.u.not.to.be.empty?
 
   expect 'abc'.to.end_with?('c')
   expect 'abc'.not.to.end_with?('d')
