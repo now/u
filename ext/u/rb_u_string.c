@@ -170,8 +170,8 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "each_char", rb_u_string_each_char, 0);
         rb_define_method(rb_cUString, "each_line", rb_u_string_each_line, -1);
         rb_define_method(rb_cUString, "empty?", rb_u_string_empty, 0);
-        rb_define_method(rb_cUString, "end_with", rb_u_string_ends_with, -1);
-        rb_define_method(rb_cUString, "ends_with", rb_u_string_ends_with, -1);
+        rb_define_method(rb_cUString, "end_with?", rb_u_string_ends_with, -1);
+        rb_define_method(rb_cUString, "ends_with?", rb_u_string_ends_with, -1);
         rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, 0);
         rb_define_method(rb_cUString, "gsub", rb_u_string_gsub, -1);
         rb_define_method(rb_cUString, "hash", rb_u_string_hash, 0);

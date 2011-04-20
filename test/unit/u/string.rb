@@ -191,12 +191,12 @@ Expectations do
   expect ''.u.to.be.empty?
   expect 'not'.u.not.to.be.empty?
 
-  expect 'abc'.to.end_with?('c')
-  expect 'abc'.not.to.end_with?('d')
-  expect 'cbä'.to.end_with?('ä')
-  expect 'cbä'.not.to.end_with?('äb')
-  expect 'cbä'.to.end_with?('a', 'ä')
-  expect 'cbä'.not.to.end_with?
+  expect 'abc'.u.to.end_with?('c')
+  expect 'abc'.u.not.to.end_with?('d')
+  expect 'cbä'.u.to.end_with?('ä')
+  expect 'cbä'.u.not.to.end_with?('äb')
+  expect 'cbä'.u.to.end_with?('a', 'ä')
+  expect 'cbä'.u.not.to.end_with?
 
   expect "abc\0ss".u do "abc\0ß".u.foldcase end
 
