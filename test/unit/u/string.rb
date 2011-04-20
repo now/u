@@ -211,6 +211,10 @@ Expectations do
   expect true do 'hëllö'.u.taint.gsub(/./, '*'.u).tainted? end
   expect ArgumentError do 'hëllö'.gsub end
 
+  expect true do 'hëllö'.u.hash == 'hëllö'.u.hash end
+  expect false do 'hëllö'.u.hash == 'hëlLÖ'.u.hash end
+  expect false do 'a'.u.hash == "a\0".u.hash end
+
   expect 255 do '0xff'.u.hex end
   expect(-255) do '-0xff'.u.hex end
   expect 255 do 'ff'.u.hex end

@@ -81,6 +81,7 @@ VALUE rb_u_string_equal(VALUE self, VALUE other);
 VALUE rb_u_string_eql(VALUE self, VALUE other);
 VALUE rb_u_string_foldcase(VALUE self);
 VALUE rb_u_string_gsub(int argc, VALUE *argv, VALUE self);
+VALUE rb_u_string_hash(VALUE self);
 VALUE rb_u_string_hex(VALUE self);
 VALUE rb_u_string_index_m(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_inspect(VALUE self);

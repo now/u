@@ -174,6 +174,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "ends_with", rb_u_string_ends_with, -1);
         rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, 0);
         rb_define_method(rb_cUString, "gsub", rb_u_string_gsub, -1);
+        rb_define_method(rb_cUString, "hash", rb_u_string_hash, 0);
         rb_define_method(rb_cUString, "hex", rb_u_string_hex, 0);
         rb_define_method(rb_cUString, "index", rb_u_string_index_m, -1);
         rb_define_method(rb_cUString, "inspect", rb_u_string_inspect, 0);
