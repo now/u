@@ -35,6 +35,8 @@ rb_u_string_equal.o: rb_u_string_equal.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_foldcase.o: rb_u_string_foldcase.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
+rb_u_string_gsub.o: rb_u_string_gsub.c rb_includes.h extconf.h u.h \
+ private.h rb_private.h rb_u_string.h
 rb_u_string_hex.o: rb_u_string_hex.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h rb_u_string_internal_bignum.h
 rb_u_string_index.o: rb_u_string_index.c rb_includes.h extconf.h u.h \

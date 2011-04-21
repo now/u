@@ -60,7 +60,11 @@ rb_u_string_new_own(const char *str, long length)
 VALUE
 rb_u_string_new_rb(VALUE str)
 {
-        return rb_u_string_create(str, NULL, 0);
+        VALUE result = rb_u_string_create(str, NULL, 0);
+
+        OBJ_INFECT(result, str);
+
+        return result;
 }
 
 VALUE
@@ -70,6 +74,26 @@ rb_u_string_check_type(VALUE str)
                 return str;
 
         return rb_check_string_type(str);
+}
+
+VALUE
+rb_u_string_object_as_string(VALUE object)
+{
+        if (TYPE(object) == T_STRING || rb_obj_is_kind_of(object, rb_cUString))
+                return object;
+
+        static ID id_to_s;
+        if (id_to_s == 0)
+                id_to_s = rb_intern("to_s");
+
+        VALUE str = rb_funcall(object, id_to_s, 0);
+        if (TYPE(str) != T_STRING)
+                return rb_any_to_s(object);
+
+        if (OBJ_TAINTED(object))
+                OBJ_TAINT(str);
+
+        return str;
 }
 
 static VALUE
@@ -82,6 +106,7 @@ rb_u_string_initialize(int argc, VALUE *argv, VALUE self)
         if (!NIL_P(rb)) {
                 StringValue(rb);
                 string->rb = rb_str_freeze(rb);
+                OBJ_INFECT(self, string->rb);
         }
 
         return Qnil;
@@ -99,6 +124,8 @@ rb_u_string_initialize_copy(VALUE self, VALUE rboriginal)
         string->rb = original->rb;
         string->c = original->c;
         string->length = original->length;
+
+        OBJ_INFECT(self, rboriginal);
 
         return self;
 }
@@ -146,6 +173,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "end_with", rb_u_string_ends_with, -1);
         rb_define_method(rb_cUString, "ends_with", rb_u_string_ends_with, -1);
         rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, 0);
+        rb_define_method(rb_cUString, "gsub", rb_u_string_gsub, -1);
         rb_define_method(rb_cUString, "hex", rb_u_string_hex, 0);
         rb_define_method(rb_cUString, "index", rb_u_string_index_m, -1);
         rb_define_method(rb_cUString, "inspect", rb_u_string_inspect, 0);

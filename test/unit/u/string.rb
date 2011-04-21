@@ -200,6 +200,17 @@ Expectations do
 
   expect "abc\0ss".u do "abc\0ß".u.foldcase end
 
+  expect 'bbc'.u do 'abc'.u.gsub('a', 'b') end
+  expect 'h*ll*'.u do 'hello'.u.gsub(/[aeiou]/u, '*'.u) end
+  expect 'h*ll*'.u do 'hëllö'.u.gsub(/[äëïöü]/u, '*'.u) end
+  expect 'h<ë>ll<ö>'.u do 'hëllö'.u.gsub(/([äëïöü])/u, '<\\1>'.u) end
+  # TODO: Relies on #hash, which isn’t available yet
+  # expect 'h<ë>ll<ö>'.u do 'hëllö'.u.gsub(/([ëö])/u, 'ë'.u => '<ë>'.u, 'ö'.u => '<ö>'.u) end
+  expect 'h ë l l ö '.u do 'hëllö'.u.gsub(/./u){ |s| s[0].to_s + ' ' } end
+  expect 'HËLL-ö'.u do 'hëllö'.u.gsub(/(hëll)(.)/u){ |s| $1.u.upcase + '-'.u + $2.u } end
+  expect true do 'hëllö'.u.taint.gsub(/./, '*'.u).tainted? end
+  expect ArgumentError do 'hëllö'.gsub end
+
   expect 255 do '0xff'.u.hex end
   expect(-255) do '-0xff'.u.hex end
   expect 255 do 'ff'.u.hex end

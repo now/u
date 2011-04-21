@@ -18,7 +18,8 @@ char *rb_u_prev_validated(const char *begin, const char *p) HIDDEN;
 
 char *rb_u_next_validated(const char *p, const char *end) HIDDEN;
 
-long rb_u_string_index_regexp(VALUE self, const char *begin, VALUE regex, bool reverse) HIDDEN;
+VALUE rb_u_pattern_argument(VALUE pattern, bool quote) HIDDEN;
 
+long rb_u_string_index_regexp(VALUE self, const char *begin, VALUE regex, bool reverse) HIDDEN;
 
 #endif /* RB_PRIVATE_H */

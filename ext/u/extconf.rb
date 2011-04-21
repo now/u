@@ -62,6 +62,18 @@ have_header 'sys/types.h'
 have_header 'wchar.h'
 
 have_func 'rb_reg_backref_number', 'ruby.h'
+checking_for 'number of arguments to rb_reg_regsub' do
+  $defs.push '-DHAVE_RB_REG_REGSUB4' if try_compile <<EOC
+#include <ruby.h>
+#include <re.h>
+int
+main(void)
+{
+    rb_reg_regsub(Qnil, Qnil, NULL, Qnil);
+    return 0;
+}
+EOC
+end
 
 $INSTALLFILES ||= []
 $INSTALLFILES << ['u.h', '$(RUBYARCHDIR)', 'lib']

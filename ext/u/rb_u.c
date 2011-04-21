@@ -1,4 +1,5 @@
 #include <ruby.h>
+#include <re.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -68,6 +69,26 @@ rb_u_next_validated(const char *p, const char *end)
         if (next > end)
                 rb_raise(rb_eArgError, "input isn’t valid UTF-8");
         return next;
+}
+
+VALUE
+rb_u_pattern_argument(VALUE pattern, bool quote)
+{
+        VALUE string;
+
+        switch (TYPE(pattern)) {
+        case T_REGEXP:
+                return pattern;
+        case T_STRING:
+                string = pattern;
+                break;
+        default:
+                string = rb_check_string_type(pattern);
+                if (NIL_P(string))
+                        Check_Type(pattern, T_REGEXP);
+        }
+
+        return rb_reg_regcomp(quote ? rb_reg_quote(string) : string);
 }
 
 void Init_u(void);

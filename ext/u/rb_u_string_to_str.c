@@ -9,13 +9,20 @@ rb_u_string_to_str(VALUE self)
 {
         const UString *string = RVAL2USTRING(self);
 
-        if (!NIL_P(string->rb))
-                return string->rb;
+        VALUE result;
 
-        /* TODO: Check all rb_str_new calls. */
+        if (!NIL_P(string->rb))
+                result = string->rb;
+        else
+                result =
+                /* TODO: Check all rb_str_new calls. */
 #ifdef HAVE_RUBY_ENCODING_H
-        return rb_enc_str_new(USTRING_STR(string), USTRING_LENGTH(string), rb_utf8_encoding());
+                rb_enc_str_new(USTRING_STR(string), USTRING_LENGTH(string), rb_utf8_encoding());
 #else
-        return rb_str_new(USTRING_STR(string), USTRING_LENGTH(string));
+                rb_str_new(USTRING_STR(string), USTRING_LENGTH(string));
 #endif
+
+        OBJ_INFECT(result, self);
+
+        return result;
 }
