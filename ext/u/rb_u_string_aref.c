@@ -33,26 +33,17 @@ rb_u_string_substr(VALUE self, long offset, long len)
         return rb_u_string_substr_impl(self, offset, len, false);
 }
 
-#ifndef HAVE_RB_REG_BACKREF_NUMBER
-static int
-rb_reg_backref_number(UNUSED(VALUE match), VALUE backref)
-{
-        return NUM2INT(backref);
-}
-#endif
-
 static VALUE
-rb_u_string_subpat(VALUE self, VALUE re, VALUE backref)
+rb_u_string_subpat(VALUE self, VALUE re, VALUE reference)
 {
         if (rb_reg_search(re, StringValue(self), 0, 0) < 0)
                 return Qnil;
 
-        VALUE match = rb_backref_get();
-        VALUE nth = rb_reg_nth_match(rb_reg_backref_number(match, backref), match);
+        VALUE match = rb_u_pattern_match_reference(reference);
 
         /* TODO: If this pattern appears in the future, add
          * rb_u_string_new_rb_nilable. */
-        return NIL_P(nth) ? Qnil : rb_u_string_new_rb(nth);
+        return NIL_P(match) ? Qnil : rb_u_string_new_rb(match);
 }
 
 static VALUE

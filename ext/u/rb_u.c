@@ -91,6 +91,21 @@ rb_u_pattern_argument(VALUE pattern, bool quote)
         return rb_reg_regcomp(quote ? rb_reg_quote(string) : string);
 }
 
+#ifndef HAVE_RB_REG_BACKREF_NUMBER
+static int
+rb_reg_backref_number(UNUSED(VALUE match), VALUE backref)
+{
+        return NUM2INT(backref);
+}
+#endif
+
+VALUE
+rb_u_pattern_match_reference(VALUE reference)
+{
+        VALUE match = rb_backref_get();
+	return rb_reg_nth_match(rb_reg_backref_number(match, reference), match);
+}
+
 void Init_u(void);
 void
 Init_u(void)

@@ -68,12 +68,38 @@ rb_u_string_new_rb(VALUE str)
 }
 
 VALUE
+rb_u_string_new_subsequence(VALUE self, long begin, long length)
+{
+        const UString *string = RVAL2USTRING(self);
+
+        /* TODO: Create a subsequence of self, starting at begin and running
+         * through length bytes.  The returned value should be infected. */
+        VALUE result = rb_u_string_new(USTRING_STR(string) + begin, length);
+
+        OBJ_INFECT(result, self);
+
+        return result;
+}
+
+VALUE
 rb_u_string_check_type(VALUE str)
 {
         if (rb_obj_is_kind_of(str, rb_cUString))
                 return str;
 
         return rb_check_string_type(str);
+}
+
+VALUE
+rb_u_string_validate_type(VALUE str)
+{
+        VALUE converted = rb_u_string_check_type(str);
+
+        if (NIL_P(converted))
+                rb_raise(rb_eTypeError, "type mismatch: %s given",
+                         rb_obj_classname(str));
+
+        return converted;
 }
 
 VALUE
@@ -186,6 +212,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "lstrip", rb_u_string_lstrip, 0);
         rb_define_method(rb_cUString, "normalize", rb_u_string_normalize, -1);
         rb_define_method(rb_cUString, "oct", rb_u_string_oct, 0);
+        rb_define_method(rb_cUString, "partition", rb_u_string_partition, 1);
         rb_define_method(rb_cUString, "reverse", rb_u_string_reverse, 0);
         rb_define_method(rb_cUString, "rindex", rb_u_string_rindex_m, -1);
         rb_define_method(rb_cUString, "rjust", rb_u_string_rjust, -1);
