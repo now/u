@@ -1,6 +1,6 @@
 #include "rb_includes.h"
 
-static long
+long
 rb_u_string_rindex(VALUE self, VALUE rbsubstring, long offset)
 {
         const UString *string = RVAL2USTRING(self);

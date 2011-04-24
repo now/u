@@ -286,6 +286,12 @@ Expectations do
   expect TypeError do 'hëllö'.u.partition(0) end
   expect ['föö'.u, '-'.u, 'bär'.u] do 'föö-bär'.u.partition(stub(:to_str => '-')) end
 
+  expect ['hël'.u, 'l'.u, 'ö'.u] do 'hëllö'.u.rpartition(/l/u) end
+  expect ['hël'.u, 'l'.u, 'ö'.u] do 'hëllö'.u.rpartition('l'.u) end
+  expect ['hël'.u, 'l'.u, 'ö'.u] do 'hëllö'.u.rpartition('l') end
+  expect TypeError do 'hëllö'.u.rpartition(0) end
+  expect ['föö'.u, '-'.u, 'bär'.u] do 'föö-bär'.u.rpartition(stub(:to_str => '-')) end
+
   expect 'ateb'.u do 'beta'.u.reverse end
   expect 'madamImadam'.u do 'madamImadam'.u.reverse end
   expect "alpha\0beta".u do "ateb\0ahpla".u.reverse end

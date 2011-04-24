@@ -82,6 +82,12 @@ rb_u_string_new_subsequence(VALUE self, long begin, long length)
 }
 
 VALUE
+rb_u_string_new_empty(VALUE self)
+{
+        return rb_u_string_new_subsequence(self, 0, 0);
+}
+
+VALUE
 rb_u_string_check_type(VALUE str)
 {
         if (rb_obj_is_kind_of(str, rb_cUString))
@@ -216,6 +222,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "reverse", rb_u_string_reverse, 0);
         rb_define_method(rb_cUString, "rindex", rb_u_string_rindex_m, -1);
         rb_define_method(rb_cUString, "rjust", rb_u_string_rjust, -1);
+        rb_define_method(rb_cUString, "rpartition", rb_u_string_rpartition, 1);
         rb_define_method(rb_cUString, "rstrip", rb_u_string_rstrip, 0);
         rb_define_method(rb_cUString, "squeeze", rb_u_string_squeeze, -1);
         rb_define_method(rb_cUString, "strip", rb_u_string_strip, 0);

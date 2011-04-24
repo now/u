@@ -55,6 +55,7 @@ VALUE rb_u_string_new(const char *str, long length);
 VALUE rb_u_string_new_own(const char *str, long length);
 VALUE rb_u_string_new_rb(VALUE str);
 VALUE rb_u_string_new_subsequence(VALUE self, long begin, long length);
+VALUE rb_u_string_new_empty(VALUE self);
 
 VALUE rb_u_string_check_type(VALUE str);
 VALUE rb_u_string_validate_type(VALUE str);
@@ -62,7 +63,10 @@ VALUE rb_u_string_object_as_string(VALUE object);
 
 const char *rb_u_string_begin_from_offset(const UString *string, long offset);
 
+/* TODO: Rename sub. */
+/* TODO: Move to rb_private.h. */
 long rb_u_string_index(VALUE self, VALUE sub, long offset);
+long rb_u_string_rindex(VALUE self, VALUE rbsubstring, long offset);
 
 VALUE rb_u_string_aref_m(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_center(int argc, VALUE *argv, VALUE self);
@@ -99,6 +103,7 @@ VALUE rb_u_string_plus(VALUE self, VALUE rbother);
 VALUE rb_u_string_reverse(VALUE self);
 VALUE rb_u_string_rindex_m(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_rjust(int argc, VALUE *argv, VALUE self);
+VALUE rb_u_string_rpartition(VALUE self, VALUE separator);
 VALUE rb_u_string_rstrip(VALUE self);
 VALUE rb_u_string_squeeze(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_strip(VALUE self);
