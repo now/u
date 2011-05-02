@@ -105,6 +105,7 @@ VALUE rb_u_string_rindex_m(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_rjust(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_rpartition(VALUE self, VALUE separator);
 VALUE rb_u_string_rstrip(VALUE self);
+VALUE rb_u_string_scan(VALUE self, VALUE pattern);
 VALUE rb_u_string_squeeze(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_strip(VALUE self);
 VALUE rb_u_string_times(VALUE self, VALUE rbtimes);

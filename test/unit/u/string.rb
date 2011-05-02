@@ -325,6 +325,37 @@ Expectations do
   expect '     あ'.u do '     あ'.u.rstrip end
   expect 'あ'.u do 'あ     '.u.rstrip end
 
+  expect ['crüel'.u, 'wörld'.u] do 'crüel wörld'.u.scan(/\w+/u) end
+  expect ['crü'.u, 'el '.u, 'wör'.u] do 'crüel wörld'.u.scan(/.../u) end
+  expect [['crü'.u], ['el '.u], ['wör'.u]] do 'crüel wörld'.u.scan(/(...)/u) end
+  expect ['crüel'.u, 'wörld'.u] do
+    [].tap{ |result|
+      'crüel wörld'.u.scan(/\w+/u) do |word|
+        result << word
+      end
+    }
+  end
+
+  expect ['crü'.u, 'el '.u, 'wör'.u] do
+    [].tap{ |result|
+      'crüel wörld'.u.scan(/.../u) do |word|
+        result << word
+      end
+    }
+  end
+
+  expect [['crü'.u], ['el '.u], ['wör'.u]] do
+    [].tap{ |result|
+      'crüel wörld'.u.scan(/(...)/u) do |word|
+        result << word
+      end
+    }
+  end
+
+  expect true do 'crüel wörld'.u.taint.scan(/\w+/u)[0].tainted? end
+
+  expect [''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u] do 'crüel wörld'.u.scan(//u) end
+
   expect 'äbc'.u do 'äääbbbbccc'.u.squeeze end
   expect 'ää bb cc'.u do 'ää   bb   cc'.u.squeeze(' ') end
   expect 'BxTÿWz'.u do 'BxTÿÿÿWzzz'.u.squeeze('a-zä-ÿ') end
