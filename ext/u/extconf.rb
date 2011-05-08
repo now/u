@@ -61,6 +61,19 @@ have_header 'string.h'
 have_header 'sys/types.h'
 have_header 'wchar.h'
 
+checking_for 'broken RMATCH_REGS' do
+  $defs.push '-DHAVE_BROKEN_RMATCH_REGS' unless try_compile <<EOC
+#include <ruby.h>
+#include <re.h>
+int
+main(void)
+{
+        struct re_registers *registers = RMATCH_REGS(Qnil);
+        return 0;
+}
+EOC
+end
+
 have_func 'rb_reg_backref_number', 'ruby.h'
 have_func 'rb_memhash', 'ruby.h'
 checking_for 'number of arguments to rb_reg_regsub' do

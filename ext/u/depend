@@ -2,6 +2,7 @@ decompose.o: decompose.c u.h data/decompose.h data/compose.h private.h
 private.o: private.c u.h private.h
 properties.o: properties.c u.h private.h data/character-tables.h
 rb_u.o: rb_u.c u.h private.h rb_private.h rb_u_string.h
+rb_u_re.o: rb_u_re.c
 rb_u_string.o: rb_u_string.c u.h private.h rb_private.h rb_u_string.h
 rb_u_string_aref.o: rb_u_string_aref.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h

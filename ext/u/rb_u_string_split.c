@@ -1,9 +1,5 @@
 #include "rb_includes.h"
-#include <re.h>
-
-/* TODO: Move this to common location (and wrap all callers) */
-#undef RMATCH_REGS
-#define RMATCH_REGS(obj)  ((R_CAST(RMatch)(obj))->regs)
+#include "rb_u_re.h"
 
 VALUE
 rb_u_string_split(VALUE self, const char *separator, long length)

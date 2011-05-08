@@ -1,5 +1,5 @@
 #include "rb_includes.h"
-#include <re.h>
+#include "rb_u_re.h"
 
 static VALUE
 rb_u_string_substr_impl(VALUE self, long offset, long len, bool nil_on_empty)

@@ -1,5 +1,5 @@
 #include "rb_includes.h"
-#include <re.h>
+#include "rb_u_re.h"
 
 /* TODO: Return VALUE. */
 long

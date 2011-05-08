@@ -1,8 +1,5 @@
 #include "rb_includes.h"
-#include <re.h>
-
-#undef RMATCH_REGS
-#define RMATCH_REGS(obj)  ((R_CAST(RMatch)(obj))->regs)
+#include "rb_u_re.h"
 
 VALUE
 rb_u_string_gsub(int argc, VALUE *argv, VALUE self)

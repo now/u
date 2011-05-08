@@ -1,5 +1,5 @@
 #include "rb_includes.h"
-#include <re.h>
+#include "rb_u_re.h"
 
 static VALUE
 rb_u_string_rpartition_failure(VALUE self)
