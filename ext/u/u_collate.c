@@ -51,8 +51,7 @@ u_collate_n(const char *a, size_t a_len, const char *b, size_t b_len)
         unichar *a_end = a_norm + a_norm_length;
         unichar *b_p = b_norm;
         unichar *b_end = b_norm + b_norm_length;
-        while (a_p < a_end && b_p < b_end) {
-//                fwprintf(stderr, L"%s, %s\n", a_p, b_p);
+        while (a_p <= a_end && b_p <= b_end) {
                 result = wcscoll((wchar_t *)a_p, (wchar_t *)b_p);
                 if (result != 0)
                         break;

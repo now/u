@@ -79,6 +79,8 @@ rb_u_string_rstrip.o: rb_u_string_rstrip.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_scan.o: rb_u_string_scan.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
+rb_u_string_split.o: rb_u_string_split.c rb_includes.h extconf.h u.h \
+  private.h rb_private.h rb_u_string.h
 rb_u_string_squeeze.o: rb_u_string_squeeze.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
 rb_u_string_strip.o: rb_u_string_strip.c rb_includes.h extconf.h u.h \

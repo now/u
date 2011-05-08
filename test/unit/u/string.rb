@@ -356,6 +356,84 @@ Expectations do
 
   expect [''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u] do 'crüel wörld'.u.scan(//u) end
 
+  expect [] do ''.u.split(''.u, 1) end
+  expect ['abc'.u] do 'abc'.u.split(''.u, 1) end
+
+  expect [' ä '.u, ' b '.u, ' c '.u] do ' ä | b | c '.u.split('|'.u) end
+  expect ['ä|b|c'.u] do 'ä|b|c'.u.split('|'.u, 1) end
+  expect ['ä'.u, 'b|c'.u] do 'ä|b|c'.u.split('|'.u, 2) end
+  expect ['ä'.u, 'b'.u, 'c'.u] do 'ä|b|c'.u.split('|'.u, 3) end
+  expect ['ä'.u, 'b'.u, 'c'.u, ''.u] do 'ä|b|c|'.u.split('|'.u, -1) end
+  expect ['ä'.u, 'b'.u, 'c'.u, ''.u, ''.u] do 'ä|b|c||'.u.split('|'.u, -1) end
+  expect ['ä'.u, ''.u, 'b'.u, 'c'.u] do 'ä||b|c|'.u.split('|'.u) end
+  expect ['ä'.u, ''.u, 'b'.u, 'c'.u, ''.u] do 'ä||b|c|'.u.split('|'.u, -1) end
+
+  expect [] do
+    saved_rs = $;
+    $; = nil
+    begin
+      '  '.u.split
+    ensure
+      $; = saved_rs
+    end
+  end
+
+  expect [''.u] do
+    saved_rs = $;
+    $; = nil
+    begin
+      '  '.u.split(nil, -1)
+    ensure
+      $; = saved_rs
+    end
+  end
+
+  expect ['ä'.u, 'b c'.u] do
+    saved_rs = $;
+    $; = nil
+    begin
+      'ä b c'.u.split(nil, 2)
+    ensure
+      $; = saved_rs
+    end
+  end
+
+  # TODO: Test this with limits
+  expect ['ä'.u, 'b'.u, 'c'.u] do
+    saved_rs = $;
+    $; = nil
+    begin
+      " ä  b\t c ".u.split
+    ensure
+      $; = saved_rs
+    end
+  end
+
+  expect ['ä'.u, 'b'.u, 'c'.u] do
+    saved_rs = $;
+    $; = nil
+    begin
+      " ä  b\t c".u.split
+    ensure
+      $; = saved_rs
+    end
+  end
+
+  expect ['ä'.u, 'b'.u, 'c'.u] do
+    saved_rs = $;
+    $; = nil
+    begin
+      " ä  b\t c ".u.split(' ')
+    ensure
+      $; = saved_rs
+    end
+  end
+
+  expect [] do ''.split(//u, 1) end
+  expect ['ä'.u, 'b'.u, 'c'.u] do 'äXXbXXcXX'.u.split(/X./u) end
+  expect ['ä'.u, 'b'.u, 'c'.u] do 'äbc'.u.split(//u) end
+  expect ['b'.u, 'c'.u] do 'bäc'.u.split(/ä?/u) end
+
   expect 'äbc'.u do 'äääbbbbccc'.u.squeeze end
   expect 'ää bb cc'.u do 'ää   bb   cc'.u.squeeze(' ') end
   expect 'BxTÿWz'.u do 'BxTÿÿÿWzzz'.u.squeeze('a-zä-ÿ') end

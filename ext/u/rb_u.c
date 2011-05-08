@@ -71,6 +71,15 @@ rb_u_next_validated(const char *p, const char *end)
         return next;
 }
 
+void
+rb_u_validate(const char *string, long length)
+{
+        const char *end;
+
+        if (!utf_isvalid_n(string, length, &end))
+                rb_raise(rb_eArgError, "invalid byte sequence at byte %ld", end - string);
+}
+
 VALUE
 rb_u_pattern_argument(VALUE pattern, bool quote)
 {

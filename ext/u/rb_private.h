@@ -18,6 +18,8 @@ char *rb_u_prev_validated(const char *begin, const char *p) HIDDEN;
 
 char *rb_u_next_validated(const char *p, const char *end) HIDDEN;
 
+void rb_u_validate(const char *string, long length) HIDDEN;
+
 VALUE rb_u_pattern_argument(VALUE pattern, bool quote) HIDDEN;
 VALUE rb_u_pattern_match_reference(VALUE reference) HIDDEN;
 

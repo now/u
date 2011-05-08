@@ -225,6 +225,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "rpartition", rb_u_string_rpartition, 1);
         rb_define_method(rb_cUString, "rstrip", rb_u_string_rstrip, 0);
         rb_define_method(rb_cUString, "scan", rb_u_string_scan, 1);
+        rb_define_method(rb_cUString, "split", rb_u_string_split_m, -1);
         rb_define_method(rb_cUString, "squeeze", rb_u_string_squeeze, -1);
         rb_define_method(rb_cUString, "strip", rb_u_string_strip, 0);
         rb_define_method(rb_cUString, "to_i", rb_u_string_to_i, -1);
