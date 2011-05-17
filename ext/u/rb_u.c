@@ -71,6 +71,15 @@ rb_u_next_validated(const char *p, const char *end)
         return next;
 }
 
+int
+rb_unichar_to_u(unichar c, char *result)
+{
+        if (!unichar_isvalid(c))
+                rb_raise(rb_eArgError, "not a Unicode character: %ld", c);
+
+        return unichar_to_u(c, result);
+}
+
 VALUE
 rb_u_pattern_argument(VALUE pattern, bool quote)
 {

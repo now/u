@@ -200,6 +200,88 @@ Expectations do
 
   expect "abc\0ss".u do "abc\0ß".u.foldcase end
 
+  expect 'äbc'.u do 'äbc'.u % [] end
+  expect ArgumentError.new('invalid flag ‘ ’ given to directive ‘%’') do '% %'.u % [] end
+  expect ArgumentError.new('invalid flags “ #” given to directive ‘%’') do '% #%'.u % [] end
+  expect ArgumentError.new('invalid flags “ #+-0” given to directive ‘%’') do '% #+-0%'.u % [] end
+  expect ArgumentError.new('directive does not take an argument: %') do '%1$%'.u % [] end
+  expect '%'.u do '%%'.u % [] end
+  expect 'ä%c'.u do 'ä%%c'.u % [] end
+
+  expect ArgumentError.new('invalid flag ‘ ’ given to directive ‘c’') do '% c'.u % 0x00e4 end
+  expect ArgumentError.new('directive does not allow specifying a precision: c') do '%.1c'.u % [0x00e4] end
+  expect ArgumentError.new('need at least one argument') do '%cbc'.u % [] end
+  expect 'äbc'.u do '%cbc'.u % 0x00e4 end
+  expect ' äbc'.u do '%2cbc'.u % 0x00e4 end
+  expect 'ä bc'.u do '%-2cbc'.u % 0x00e4 end
+  expect ArgumentError.new('need at least two arguments') do '%*cbc'.u % 0x00e4 end
+  expect ' äbc'.u do '%*cbc'.u % [2, 0x00e4] end
+  expect ArgumentError.new('cannot use positional argument numbers after absolute argument numbers') do '%*1$cbc'.u % [2, 0x00e4] end
+  expect ' äbc'.u do '%2$*1$cbc'.u % [2, 0x00e4] end
+  #expect ' äbc'.u do '%<a>cbc'.u % { :a => 0x00e4 } end
+  expect ArgumentError.new('one Hash argument required when using named arguments in format') do '%<a>cbc'.u % 0x00e4 end
+  expect 'äbc'.u do '%<a>cbc'.u % { :a => 0x00e4 } end
+  expect ' äbc'.u do '%<a>2cbc'.u % { :a => 0x00e4 } end
+
+  # TODO: Add flag checks?
+  expect 'äbc'.u do '%sc'.u % ['äb'.u] end
+  expect 'äc'.u do '%.1sc'.u % ['äb'.u] end
+  expect ' äbc'.u do '%3sc'.u % ['äb'.u] end
+  expect 'äb c'.u do '%-3sc'.u % ['äb'.u] end
+  expect '  äc'.u do '%3.1sc'.u % ['äb'.u] end
+  expect 'ä  c'.u do '%-3.1sc'.u % ['äb'.u] end
+  expect 'äbc'.u do '%{a}c'.u % { :a => 'äb'.u } end
+  expect 'äb3.3c'.u do '%{a}3.3c'.u % { :a => 'äb'.u } end
+
+  # TODO: Add flag checks?
+  expect '"äbc".u'.u do '%p'.u % ['äbc'.u] end
+
+  expect '123'.u do '%d'.u % 123 end
+  expect '123'.u do '%d'.u % 123.to_f end
+  expect '123'.u do '%d'.u % '123' end
+  expect '123'.u do '%d'.u % '123'.u end
+  expect '123'.u do '%d'.u % stub(:to_int => 123) end
+  # TODO: Bignum
+  expect ArgumentError do '%d'.u % '123.0' end
+  expect ArgumentError do '%d'.u % '123.0'.u end
+
+  expect '+123'.u do '%+d'.u % 123 end
+  expect ' 123'.u do '% d'.u % 123 end
+
+  expect '   123'.u do '%6d'.u % 123 end
+  expect '  +123'.u do '%+6d'.u % 123 end
+
+  expect '000123'.u do '%06d'.u % 123 end
+  expect '+00123'.u do '%+06d'.u % 123 end
+  expect ' 00123'.u do '% 06d'.u % 123 end
+
+  expect '123   '.u do '%-6d'.u % 123 end
+  expect '+123  '.u do '%-+6d'.u % 123 end
+  expect ' 123  '.u do '%- 6d'.u % 123 end
+
+  expect '123   '.u do
+    saved_verbose = $VERBOSE
+    $VERBOSE = nil
+    begin
+      '%-06d'.u % 123
+    ensure
+      $VERBOSE = saved_verbose
+    end
+  end
+
+  expect '000123'.u do '%.6d'.u % 123 end
+  expect '+000123'.u do '%+.6d'.u % 123 end
+  expect ' 000123'.u do '% .6d'.u % 123 end
+  expect '-000123'.u do '%.6d'.u % -123 end
+
+  expect '   000123'.u do '%9.6d'.u % 123 end
+  expect '  +000123'.u do '%+9.6d'.u % 123 end
+  expect '   000123'.u do '% 9.6d'.u % 123 end
+  expect '  -000123'.u do '%9.6d'.u % -123 end
+
+  expect Bignum do 12345678901234567890 end
+  expect '12345678901234567890'.u do '%d'.u % 12345678901234567890 end
+
   expect 'bbc'.u do 'abc'.u.gsub('a', 'b') end
   expect 'h*ll*'.u do 'hello'.u.gsub(/[aeiou]/u, '*'.u) end
   expect 'h*ll*'.u do 'hëllö'.u.gsub(/[äëïöü]/u, '*'.u) end
