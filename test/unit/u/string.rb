@@ -241,23 +241,27 @@ Expectations do
   expect '123'.u do '%d'.u % '123' end
   expect '123'.u do '%d'.u % '123'.u end
   expect '123'.u do '%d'.u % stub(:to_int => 123) end
-  # TODO: Bignum
   expect ArgumentError do '%d'.u % '123.0' end
   expect ArgumentError do '%d'.u % '123.0'.u end
 
-  expect '+123'.u do '%+d'.u % 123 end
   expect ' 123'.u do '% d'.u % 123 end
+  expect '+123'.u do '%+d'.u % 123 end
+  expect '-123'.u do '%d'.u % -123 end
 
   expect '   123'.u do '%6d'.u % 123 end
+  expect '   123'.u do '% 6d'.u % 123 end
   expect '  +123'.u do '%+6d'.u % 123 end
+  expect '  -123'.u do '%6d'.u % -123 end
 
   expect '000123'.u do '%06d'.u % 123 end
-  expect '+00123'.u do '%+06d'.u % 123 end
   expect ' 00123'.u do '% 06d'.u % 123 end
+  expect '+00123'.u do '%+06d'.u % 123 end
+  expect '-00123'.u do '%06d'.u % -123 end
 
   expect '123   '.u do '%-6d'.u % 123 end
-  expect '+123  '.u do '%-+6d'.u % 123 end
   expect ' 123  '.u do '%- 6d'.u % 123 end
+  expect '+123  '.u do '%-+6d'.u % 123 end
+  expect '-123  '.u do '%-6d'.u % -123 end
 
   expect '123   '.u do
     saved_verbose = $VERBOSE
@@ -270,17 +274,63 @@ Expectations do
   end
 
   expect '000123'.u do '%.6d'.u % 123 end
-  expect '+000123'.u do '%+.6d'.u % 123 end
   expect ' 000123'.u do '% .6d'.u % 123 end
+  expect '+000123'.u do '%+.6d'.u % 123 end
   expect '-000123'.u do '%.6d'.u % -123 end
 
   expect '   000123'.u do '%9.6d'.u % 123 end
-  expect '  +000123'.u do '%+9.6d'.u % 123 end
   expect '   000123'.u do '% 9.6d'.u % 123 end
+  expect '  +000123'.u do '%+9.6d'.u % 123 end
   expect '  -000123'.u do '%9.6d'.u % -123 end
 
+  # TODO: Need a lot more tests for Bignum code-paths.
   expect Bignum do 12345678901234567890 end
   expect '12345678901234567890'.u do '%d'.u % 12345678901234567890 end
+
+  expect '173'.u do '%o'.u % 123 end
+
+  expect ' 173'.u do '% o'.u % 123 end
+  expect '+173'.u do '%+o'.u % 123 end
+  expect '-173'.u do '%+o'.u % -123 end
+
+  expect '   173'.u do '%6o'.u % 123 end
+  expect '   173'.u do '% 6o'.u % 123 end
+  expect '  +173'.u do '%+6o'.u % 123 end
+  expect '  -173'.u do '%+6o'.u % -123 end
+
+  expect '000173'.u do '%06o'.u % 123 end
+  expect ' 00173'.u do '% 06o'.u % 123 end
+  expect '+00173'.u do '%+06o'.u % 123 end
+  expect '-00173'.u do '%+06o'.u % -123 end
+
+  expect '173   '.u do '%-6o'.u % 123 end
+  expect ' 173  '.u do '%- 6o'.u % 123 end
+  expect '+173  '.u do '%-+6o'.u % 123 end
+  expect '-173  '.u do '%-+6o'.u % -123 end
+
+  expect '000173'.u do '%.6o'.u % 123 end
+  expect ' 000173'.u do '% .6o'.u % 123 end
+  expect '+000173'.u do '%+.6o'.u % 123 end
+  expect '-000173'.u do '%+.6o'.u % -123 end
+
+  expect '   000173'.u do '%9.6o'.u % 123 end
+  expect '   000173'.u do '% 9.6o'.u % 123 end
+  expect '  +000173'.u do '%+9.6o'.u % 123 end
+  expect '  -000173'.u do '%+9.6o'.u % -123 end
+
+  # TODO: Add expect warning() for this: expect '-173'.u do '%+ o'.u % -123 end
+  # TODO: Add expect warning() for this: expect '+173'.u do '%+ o'.u % 123 end
+  expect '0173'.u do '%#o'.u % 123 end
+  expect '..7605'.u do '%o'.u % -123 end
+  # TODO: Add expect warning() for this: expect '..7605'.u do '%#o'.u % -123 end
+=begin
+ *   sprintf("%20.8o", 123)  #=> "            00000173"
+ *   sprintf("%20.8o", -123) #=> "            ..777605"
+ *   sprintf("%#20.8o", 123)  #=> "            00000173"
+ *   sprintf("%#20.8o", -123) #=> "            ..777605"
+=end
+
+  # TODO: Need to do some Bignum tests for unsigned.
 
   expect 'bbc'.u do 'abc'.u.gsub('a', 'b') end
   expect 'h*ll*'.u do 'hello'.u.gsub(/[aeiou]/u, '*'.u) end
