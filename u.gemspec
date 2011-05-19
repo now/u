@@ -21,6 +21,6 @@ Gem::Specification.new do |s|
 
   s.require_paths = %w[ext lib]
 
-  s.add_development_dependency 'lookout', '~> 0.6.0'
+  s.add_development_dependency 'lookout', '~> 2.1.0'
   s.add_development_dependency 'yard', '~> 0.6.0'
 end

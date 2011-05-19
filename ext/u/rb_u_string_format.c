@@ -273,8 +273,8 @@ directive_flags(const char **p, const char *end,
                         goto setup_argument;
                 }
 
-                if ((flags & flag) && RTEST(ruby_verbose)) \
-                        rb_warn("repeated flag in format: ‘%c’", c);
+                if (flags & flag)
+                        rb_warning("repeated flag in format: ‘%c’", c);
                 flags |= flag;
 
                 *p = u_next(*p);
@@ -501,274 +501,278 @@ directive_integer_value(VALUE argument, VALUE *bignum)
         }
 }
 
-/* TODO: OK, this is what we need to output:
- * [padding][sign]([prefix]|[dots])([signbits]|[zeros])<string>[padding]
- *
- * padding is width - precision, and only one will ever be output
- * sign is a single character
- * prefix is at most two characters (“0x”)
- * dots is at most two characters (“..”)
- * signbits is a single character repeated precision - length times
- * zeros is a single character repeated precision - length times
- * string is the string representation of the argument
- *
- * I guess sign and prefix/dots can be kept in a single buffer, four
- * char’s long.
- *
- * The function that turns a long/Bignum to a string should
- */
 static void
 directive_number_output(int flags, int width, int precision,
-                        char sign, const char *prefix, const char *digits, int length,
+                        const char *prefix, unichar precision_filler, const char *digits, int length,
                         VALUE result)
 {
-        if (sign != '\0' && width > 0)
-                width--;
+        int prefix_length = strlen(prefix);
+        width -= prefix_length;
 
-        if (prefix != NULL)
-                width -= strlen(prefix);
+        if (precision > 0)
+                flags &= ~DIRECTIVE_FLAGS_ZERO;
 
-        if (precision < length) {
-                /* TODO: What is this test good for? */
-                if (precision == 0 && length == 1 && *digits == '0')
-                        length = 0;
+        if (precision < length)
                 precision = length;
-        }
         width -= precision;
 
-        if (width > 0 && !(flags & DIRECTIVE_FLAGS_MINUS) && !(flags & DIRECTIVE_FLAGS_ZERO))
+        if (!(flags & DIRECTIVE_FLAGS_MINUS) && !(flags & DIRECTIVE_FLAGS_ZERO))
                 rb_u_buffer_append_unichar_n(result, ' ', width);
 
-        if (sign != '\0')
-                rb_u_buffer_append_unichar(result, sign);
+        rb_u_buffer_append(result, prefix, prefix_length);
 
-        if (prefix != NULL)
-                rb_u_buffer_append(result, prefix, strlen(prefix));
-
-        /* TODO: This shouldn’t be done for octal.  Why isn’t width + precision
-         * used below, instead? */
-        if (width > 0 && !(flags & DIRECTIVE_FLAGS_MINUS) && (flags & DIRECTIVE_FLAGS_ZERO))
+        if (!(flags & DIRECTIVE_FLAGS_MINUS) && (flags & DIRECTIVE_FLAGS_ZERO))
                 rb_u_buffer_append_unichar_n(result, '0', width);
 
-        if (precision > length && !(flags & DIRECTIVE_FLAGS_MINUS)) {
-                /* TODO: Pass in this character.  In case of a negative
-                 * argument to, for example, %o, it should be the the first
-                 * character of digits. */
-                char c = '0';
-
-                rb_u_buffer_append_unichar_n(result, c, precision - length);
-        }
+        rb_u_buffer_append_unichar_n(result, precision_filler, precision - length);
 
         rb_u_buffer_append(result, digits, length);
 
-        if (width > 0 && (flags & DIRECTIVE_FLAGS_MINUS))
+        if (flags & DIRECTIVE_FLAGS_MINUS)
                 rb_u_buffer_append_unichar_n(result, ' ', width);
 }
+
+/* NOTE: This is actually a bit excessive, as the longest output won’t
+        * be expressed in binary, but octal, but let’s simply leave it at
+        * that. We can thus divide this by four without issues. */
+#define DIGITS_BUFFER_SIZE (sizeof(long) * CHAR_BIT)
 
 #define BASE2FORMAT(base) \
         ((base) == 10 ? "%ld" : ((base) == 16 ? "%lx" : "%lo"))
 
 static inline bool
-directive_number_sign(unichar directive, bool negative, int flags, char *sign_char)
+directive_number_sign(unichar directive, bool negative, int flags, char *sign)
 {
         if (flags & DIRECTIVE_FLAGS_PLUS && flags & DIRECTIVE_FLAGS_SPACE)
-                rb_warn("‘%lc’ directive ignores ‘ ’ flag when ‘+’ flags has been specified",
-                        directive);
+                rb_warning("‘%lc’ directive ignores ‘ ’ flag when ‘+’ flag has been specified",
+                           directive);
 
         if (negative) {
-                *sign_char = '-';
+                sign[0] = '-';
                 return true;
         }
 
         if (flags & DIRECTIVE_FLAGS_PLUS)
-                *sign_char = '+';
+                sign[0] = '+';
         else if (flags & DIRECTIVE_FLAGS_SPACE)
-                *sign_char = ' ';
+                sign[0] = ' ';
         else
-                *sign_char = '\0';
+                sign[0] = '\0';
 
         return false;
 }
 
-static inline void
-directive_number_long_signed(unichar directive, int flags, int width, int precision, long argument,
-                             int base, const char *prefix,
-                             VALUE result)
+static inline int
+directive_number_long_signed(unichar directive, int flags, long argument,
+                             int base, char *sign, const char **digits, char *buffer)
 {
-        char sign;
-        if (directive_number_sign(directive, argument < 0, flags, &sign))
+        if (directive_number_sign(directive, argument < 0, flags, sign))
                 argument = -argument;
 
-        /* NOTE: This is actually a bit excessive, as the longest output won’t
-         * be expressed in binary, but octal, but let’s simply leave it at
-         * that. We can thus divide this by four without issues. */
-        char digits[sizeof(long) * CHAR_BIT];
-        int length = snprintf(digits, sizeof(digits), BASE2FORMAT(base), argument);
-
-        return directive_number_output(flags, width, precision, sign, prefix, digits, length, result);
+        *digits = buffer;
+        return snprintf(buffer, DIGITS_BUFFER_SIZE, BASE2FORMAT(base), argument);
 }
 
-#define BITSPERDIG (SIZEOF_BDIGITS*CHAR_BIT)
-#define EXTENDSIGN(n, l) (((~0 << (n)) >> (((n)*(l)) % BITSPERDIG)) & ~(~0 << (n)))
-
-static char *
-directive_number_replace_bits(char *digits, int base)
+static inline int
+directive_number_bignum_signed(unichar directive, int flags, VALUE argument,
+                               int base, char *sign, const char **digits, VALUE *str)
 {
-        char *p = digits;
+        *str = rb_big2str(argument, base);
+        *digits = RSTRING_PTR(*str);
+        if (directive_number_sign(directive, *digits[0] == '-', flags, sign))
+                (*digits)++;
+
+        /* TODO: Why aren’t we passing around width and precision as longs? */
+        return rb_long2int(RSTRING_END(*str) - *digits);
+}
+
+static inline void
+directive_number_check_flags(unichar directive, int flags, int precision)
+{
+        if ((flags & DIRECTIVE_FLAGS_MINUS) && (flags & DIRECTIVE_FLAGS_ZERO))
+                rb_warning("‘%lc’ directive ignores ‘0’ flag when ‘-’ flag has been specified",
+                           directive);
+
+        if (precision > 0 && (flags & DIRECTIVE_FLAGS_ZERO))
+                rb_warning("‘%lc’ directive ignores ‘0’ flag when precision (%d) has been specified",
+                           directive, precision);
+}
+
+static inline int
+directive_signed_number(unichar directive, int flags, int precision, VALUE argument,
+                        int base, char *sign, const char **digits, char *buffer, VALUE *str)
+{
+        directive_number_check_flags(directive, flags, precision);
+
+        VALUE bignum = Qundef;
+        long lvalue = directive_integer_value(argument, &bignum);
+
+        return (bignum == Qundef) ?
+                directive_number_long_signed(directive, flags, lvalue, base, sign, digits, buffer) :
+                directive_number_bignum_signed(directive, flags, bignum, base, sign, digits, str);
+}
+
+static const char *
+directive_number_skip_bits(const char *digits, int base)
+{
+        const char *p = digits;
 
         if (base == 16)
                 while (*p == 'f' || *p == 'F')
                         p++;
         else if (base == 8) {
-                *p |= EXTENDSIGN(3, strlen(p));
+                p++;
                 while (*p == '7')
                         p++;
         } else if (base == 2)
                 while (*p == '1')
                         p++;
 
-        p -= 3;
-        p[0] = '.';
-        p[1] = '.';
-
-        return p;
+        return p - 1;
 }
 
-static inline void
-directive_number_long_unsigned(unichar directive, int flags, int width, int precision, long argument,
-                               int base, const char *suggested_prefix,
-                               VALUE result)
+static inline int
+directive_number_long_unsigned(long argument,
+                               int base, char *prefix, const char **digits, char *buffer)
 {
-        char buffer[sizeof(long) * CHAR_BIT + 3];
-        char *digits = buffer + 3;
-        (void)snprintf(digits, sizeof(buffer) - 3, BASE2FORMAT(base), (unsigned long)argument);
-
-        const char *prefix = suggested_prefix;
+        *digits = buffer;
+        int length = snprintf(buffer, DIGITS_BUFFER_SIZE, BASE2FORMAT(base), (unsigned long)argument);
 
         if (argument < 0) {
-                digits = directive_number_replace_bits(digits, base);
-                precision -= 2;
-                /* TODO: Why these RTESTs?  Rb_warn() takes care of this. */
-                if (base == 8 && prefix != NULL) {
-                        if (RTEST(ruby_verbose))
-                                rb_warn("‘%lc’ directive ignores ‘#’ flag when given a negative argument",
-                                        directive, precision);
-                        prefix = NULL;
-                }
-                if (flags & DIRECTIVE_FLAGS_ZERO) {
-                        if (RTEST(ruby_verbose))
-                                rb_warn("‘%lc’ directive ignores ‘0’ flag when given a negative argument",
-                                        directive);
-                        flags &= ~DIRECTIVE_FLAGS_ZERO;
-                }
+                *digits = directive_number_skip_bits(buffer, base);
+                length -= *digits - buffer;
+                strcat(prefix, "..");
         }
 
-        return directive_number_output(flags, width, precision,
-                                       '\0',
-                                       prefix,
-                                       digits, strlen(digits),
-                                       result);
+        return length;
 }
 
-static inline void
-directive_number_bignum_signed(unichar directive, int flags, int width, int precision, VALUE argument,
-                               int base, const char *prefix,
-                               VALUE result)
+static inline int
+directive_number_bignum_unsigned(VALUE argument,
+                                 int base, char *prefix, const char **digits, VALUE *str)
 {
-        base = base;
+        if (!RBIGNUM_SIGN(argument)) {
+                argument = rb_big_clone(argument);
+                rb_big_2comp(argument);
+        }
 
-        VALUE str = rb_big2str(argument, 10);
-        const char *digits = RSTRING_PTR(str);
-        /* TODO: Why aren’t we passing around width and precision as longs? */
-        int length = rb_long2int(RSTRING_END(str) - digits);
+        *str = rb_big2str0(argument, base, RBIGNUM_SIGN(argument));
+        *digits = RSTRING_PTR(*str);
+        if (*digits[0] == '-') {
+                (*digits)++;
+                /* TODO: This is a bit ugly, but until we can get rid of
+                 * EXTENDSIGN, we need to do it this way. */
+                *digits = directive_number_skip_bits(*digits, base);
+                strcat(prefix, "..");
+        }
 
-        char sign;
-        if (directive_number_sign(directive, digits[0] == '-', flags, &sign))
-                digits++;
-
-        return directive_number_output(flags, width, precision, sign, prefix, digits, length, result);
+        return rb_long2int(RSTRING_END(*str) - *digits);
 }
 
-static inline void
-directive_number_bignum_unsigned(unichar directive, int flags, int width, int precision, long argument,
-                                 int base, const char *prefix,
-                                 VALUE result)
-{
-        directive = directive;
-        flags = flags;
-        width = width;
-        precision = precision;
-        argument = argument;
-        base = base;
-        prefix = prefix;
-        result = result;
-}
-
-static inline void
-directive_number_check_flags(unichar directive, int flags, int precision)
-{
-        if ((flags & DIRECTIVE_FLAGS_MINUS) && (flags & DIRECTIVE_FLAGS_ZERO) && RTEST(ruby_verbose))
-                rb_warn("‘%lc’ directive ignores ‘0’ flag when ‘-’ flag has been specified",
-                        directive);
-
-        if (precision > 0 && (flags & DIRECTIVE_FLAGS_ZERO) && RTEST(ruby_verbose))
-                rb_warn("‘%lc’ directive ignores ‘0’ flag when precision (%d) has been specified",
-                        directive, precision);
-}
-
-static inline void
-directive_signed_number(unichar directive, int flags, int width, int precision, VALUE argument,
-                        int base, const char *prefix,
-                        VALUE result)
+static inline int
+directive_unsigned_number(unichar directive, int flags, int precision, VALUE argument,
+                          int base, char *prefix, const char **digits, char *buffer, VALUE *str)
 {
         directive_number_check_flags(directive, flags, precision);
 
         VALUE bignum = Qundef;
         long lvalue = directive_integer_value(argument, &bignum);
-        if (bignum == Qundef)
-                directive_number_long_signed(directive, flags, width, precision, lvalue, base, prefix, result);
-        else
-                directive_number_bignum_signed(directive, flags, width, precision, bignum, base, prefix, result);
+
+        return (bignum == Qundef) ?
+                directive_number_long_unsigned(lvalue, base, prefix, digits, buffer) :
+                directive_number_bignum_unsigned(bignum, base, prefix, digits, str);
 }
 
-static inline void
-directive_unsigned_number(unichar directive, int flags, int width, int precision, VALUE argument,
-                          int base, const char *prefix,
-                          VALUE result)
+static inline int
+directive_signed_or_unsigned_number(unichar directive, int flags, int precision, VALUE argument,
+                                    int base, char *prefix, const char **digits, char *buffer, VALUE *str)
 {
-        directive_number_check_flags(directive, flags, precision);
+        if (!(flags & DIRECTIVE_FLAGS_SHARP))
+                for (char *p = prefix; *p != '\0'; p++)
+                        *p = '\0';
 
-        VALUE bignum = Qundef;
-        long lvalue = directive_integer_value(argument, &bignum);
-        if (bignum == Qundef)
-                directive_number_long_unsigned(directive, flags, width, precision, lvalue, base, prefix, result);
-        else
-                directive_number_bignum_unsigned(directive, flags, width, precision, bignum, base, prefix, result);
-}
+        if (!(flags & (DIRECTIVE_FLAGS_PLUS | DIRECTIVE_FLAGS_SPACE)))
+                return directive_unsigned_number(directive, flags, precision, argument, base, prefix, digits, buffer, str);
 
-static inline void
-directive_signed_or_unsigned_number(unichar directive, int flags, int width, int precision, VALUE argument,
-                                    int base, const char *suggested_prefix,
-                                    VALUE result)
-{
-        const char *prefix = (flags & DIRECTIVE_FLAGS_SHARP) ? suggested_prefix : NULL;
+        /* Move prefix forward one position to make room for sign. */
+        for (char *p = prefix + strlen(prefix); p > prefix; p--)
+                *p = *(p - 1);
 
-        if (flags & (DIRECTIVE_FLAGS_PLUS | DIRECTIVE_FLAGS_SPACE))
-                directive_signed_number(directive, flags, width, precision, argument, base, prefix, result);
-        else
-                directive_unsigned_number(directive, flags, width, precision, argument, base, prefix, result);
+        return directive_signed_number(directive, flags, precision, argument, base, prefix, digits, buffer, str);
 }
 
 static void
 directive_integer(unichar directive, int flags, int width, int precision, VALUE argument, VALUE result)
 {
-        directive_signed_number(directive, flags, width, precision, argument, 10, "", result);
+        char sign[] = "\0\0";
+        char buffer[DIGITS_BUFFER_SIZE];
+        VALUE str;
+        const char *digits;
+        int length = directive_signed_number(directive, flags, precision, argument, 10, sign, &digits, buffer, &str);
+
+        directive_number_output(flags, width, precision, sign, '0', digits, length, result);
+}
+
+static bool
+directive_number_is_unsigned(char *prefix)
+{
+        return strstr(prefix, "..") != NULL;
+}
+
+static void
+directive_unsigned_number_output(unichar directive, int flags, int width, int precision,
+                                 char *prefix, const char *digits, int length,
+                                 VALUE result)
+{
+        if (directive_number_is_unsigned(prefix)) {
+                if (flags & DIRECTIVE_FLAGS_ZERO)
+                        rb_warning("‘%lc’ directive ignores ‘0’ flag when given a negative argument",
+                                   directive);
+
+                directive_number_output(flags & ~DIRECTIVE_FLAGS_ZERO, width, precision - 2,
+                                        prefix, digits[0], digits, length,
+                                        result);
+        } else
+                directive_number_output(flags, width, precision, prefix, '0', digits, length, result);
+
 }
 
 static void
 directive_octal(unichar directive, int flags, int width, int precision, VALUE argument, VALUE result)
 {
-        directive_signed_or_unsigned_number(directive, flags, width, precision, argument, 8, "0", result);
+        char prefix[] = "0\0\0\0\0";
+        char buffer[DIGITS_BUFFER_SIZE];
+        VALUE str;
+        const char *digits;
+        int length = directive_signed_or_unsigned_number(directive, flags, precision, argument, 8, prefix, &digits, buffer, &str);
+
+        if ((precision > 0 || directive_number_is_unsigned(prefix))
+            && (flags & DIRECTIVE_FLAGS_SHARP)) {
+                if (directive_number_is_unsigned(prefix))
+                        rb_warning("‘%lc’ directive ignores ‘#’ flag when given a negative argument",
+                                   directive);
+
+                for (char *p = prefix; *p != '\0'; p++)
+                        *p = *(p + 1);
+        }
+
+        directive_unsigned_number_output(directive, flags, width, precision, prefix, digits, length, result);
+}
+
+static void
+directive_hexadecimal(unichar directive, int flags, int width, int precision, VALUE argument, VALUE result)
+{
+        char prefix[] = "0x\0\0\0\0";
+        if (directive == 'X')
+                prefix[1] = 'X';
+        char buffer[DIGITS_BUFFER_SIZE];
+        VALUE str;
+        const char *digits;
+        int length = directive_signed_or_unsigned_number(directive, flags, precision, argument, 16, prefix, &digits, buffer, &str);
+
+        /* TODO: Need to upcase. */
+
+        directive_unsigned_number_output(directive, flags, width, precision, prefix, digits, length, result);
 }
 
 static void
@@ -816,7 +820,9 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
                 { 'd', DIRECTIVE_FLAGS_NUMBER, true, true, directive_integer },
                 { 'i', DIRECTIVE_FLAGS_NUMBER, true, true, directive_integer },
                 { 'u', DIRECTIVE_FLAGS_NUMBER, true, true, directive_integer },
-                { 'o', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_octal }
+                { 'o', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_octal },
+                { 'x', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_hexadecimal },
+                { 'X', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_hexadecimal }
         };
 
         for (size_t i = 0; i < lengthof(directives); i++)

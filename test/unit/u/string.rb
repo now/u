@@ -278,10 +278,20 @@ Expectations do
   expect '+000123'.u do '%+.6d'.u % 123 end
   expect '-000123'.u do '%.6d'.u % -123 end
 
+  expect '   000123'.u do
+    with_verbose(nil) do
+      '%09.6d'.u % 123
+    end
+  end
   expect '   000123'.u do '%9.6d'.u % 123 end
   expect '   000123'.u do '% 9.6d'.u % 123 end
   expect '  +000123'.u do '%+9.6d'.u % 123 end
   expect '  -000123'.u do '%9.6d'.u % -123 end
+
+  expect '000123   '.u do '%-9.6d'.u % 123 end
+  expect ' 000123  '.u do '%- 9.6d'.u % 123 end
+  expect '+000123  '.u do '%-+9.6d'.u % 123 end
+  expect '-000123  '.u do '%-9.6d'.u % -123 end
 
   # TODO: Need a lot more tests for Bignum code-paths.
   expect Bignum do 12345678901234567890 end
@@ -318,19 +328,125 @@ Expectations do
   expect '  +000173'.u do '%+9.6o'.u % 123 end
   expect '  -000173'.u do '%+9.6o'.u % -123 end
 
-  # TODO: Add expect warning() for this: expect '-173'.u do '%+ o'.u % -123 end
-  # TODO: Add expect warning() for this: expect '+173'.u do '%+ o'.u % 123 end
+  expect '+173'.u do
+    with_verbose(nil) do
+      '%+ o'.u % 123
+    end
+  end
+  expect warning('‘o’ directive ignores ‘ ’ flag when ‘+’ flag has been specified') do
+    '%+ o'.u % 123
+  end
+  expect '-173'.u do
+    with_verbose(nil) do
+      '%+ o'.u % -123
+    end
+  end
   expect '0173'.u do '%#o'.u % 123 end
   expect '..7605'.u do '%o'.u % -123 end
-  # TODO: Add expect warning() for this: expect '..7605'.u do '%#o'.u % -123 end
-=begin
- *   sprintf("%20.8o", 123)  #=> "            00000173"
- *   sprintf("%20.8o", -123) #=> "            ..777605"
- *   sprintf("%#20.8o", 123)  #=> "            00000173"
- *   sprintf("%#20.8o", -123) #=> "            ..777605"
-=end
+  expect '..7605'.u do
+    with_verbose(nil) do
+      '%#o'.u % -123
+    end
+  end
+  expect warning('‘o’ directive ignores ‘#’ flag when given a negative argument') do
+    '%#o'.u % -123
+  end
+
+  expect '   ..7777605'.u do '%12.9o'.u % -123 end
+  expect '   000000173'.u do '%#12.9o'.u % 123 end
+  expect '   ..7777605'.u do
+    with_verbose(nil) do
+      '%#12.9o'.u % -123
+    end
+  end
 
   # TODO: Need to do some Bignum tests for unsigned.
+
+  expect '10e'.u do '%x'.u % 0x10e end
+
+  expect '0x10e'.u do '%#x'.u % 0x10e end
+
+  expect ' 10e'.u do '% x'.u % +0x10e end
+  expect '+10e'.u do '%+x'.u % +0x10e end
+  expect '-10e'.u do '%+x'.u % -0x10e end
+
+  expect ' 0x10e'.u do '%# x'.u % +0x10e end
+  expect '+0x10e'.u do '%#+x'.u % +0x10e end
+  expect '-0x10e'.u do '%#+x'.u % -0x10e end
+
+  expect '   10e'.u do '%6x'.u % 0x10e end
+  expect '   10e'.u do '% 6x'.u % 0x10e end
+  expect '  +10e'.u do '%+6x'.u % 0x10e end
+  expect '  -10e'.u do '%+6x'.u % -0x10e end
+
+  expect ' 0x10e'.u do '%#6x'.u % 0x10e end
+  expect ' 0x10e'.u do '%# 6x'.u % 0x10e end
+  expect '+0x10e'.u do '%#+6x'.u % 0x10e end
+  expect '-0x10e'.u do '%#+6x'.u % -0x10e end
+
+  expect '00010e'.u do '%06x'.u % 0x10e end
+  expect ' 0010e'.u do '% 06x'.u % 0x10e end
+  expect '+0010e'.u do '%+06x'.u % 0x10e end
+  expect '-0010e'.u do '%+06x'.u % -0x10e end
+
+  expect '0x010e'.u do '%#06x'.u % 0x10e end
+  expect ' 0x10e'.u do '%# 06x'.u % 0x10e end
+  expect '+0x10e'.u do '%#+06x'.u % 0x10e end
+  expect '-0x10e'.u do '%#+06x'.u % -0x10e end
+
+  expect '10e   '.u do '%-6x'.u % 0x10e end
+  expect ' 10e  '.u do '%- 6x'.u % 0x10e end
+  expect '+10e  '.u do '%-+6x'.u % 0x10e end
+  expect '-10e  '.u do '%-+6x'.u % -0x10e end
+
+  expect '0x10e '.u do '%#-6x'.u % 0x10e end
+  expect ' 0x10e'.u do '%#- 6x'.u % 0x10e end
+  expect '+0x10e'.u do '%#-+6x'.u % 0x10e end
+  expect '-0x10e'.u do '%#-+6x'.u % -0x10e end
+
+  expect '00010e'.u do '%.6x'.u % 0x10e end
+  expect ' 00010e'.u do '% .6x'.u % 0x10e end
+  expect '+00010e'.u do '%+.6x'.u % 0x10e end
+  expect '-00010e'.u do '%+.6x'.u % -0x10e end
+
+  expect '0x00010e'.u do '%#.6x'.u % 0x10e end
+  expect ' 0x00010e'.u do '%# .6x'.u % 0x10e end
+  expect '+0x00010e'.u do '%#+.6x'.u % 0x10e end
+  expect '-0x00010e'.u do '%#+.6x'.u % -0x10e end
+
+  expect '   00010e'.u do '%9.6x'.u % 0x10e end
+  expect '   00010e'.u do '% 9.6x'.u % 0x10e end
+  expect '  +00010e'.u do '%+9.6x'.u % 0x10e end
+  expect '  -00010e'.u do '%+9.6x'.u % -0x10e end
+
+  expect ' 0x00010e'.u do '%#9.6x'.u % 0x10e end
+  expect ' 0x00010e'.u do '%# 9.6x'.u % 0x10e end
+  expect '+0x00010e'.u do '%#+9.6x'.u % 0x10e end
+  expect '-0x00010e'.u do '%#+9.6x'.u % -0x10e end
+
+  expect '+10e'.u do
+    with_verbose(nil) do
+      '%+ x'.u % 0x10e
+    end
+  end
+  expect warning('‘x’ directive ignores ‘ ’ flag when ‘+’ flag has been specified') do
+    '%+ x'.u % 0x10e
+  end
+  expect '-10e'.u do
+    with_verbose(nil) do
+      '%+ x'.u % -0x10e
+    end
+  end
+  expect '..fef2'.u do '%x'.u % -0x10e end
+  expect '0x..fef2'.u do '%#x'.u % -0x10e end
+  expect '   ..ffffef2'.u do '%12.9x'.u % -0x10e end
+  expect ' 0x00000010e'.u do '%#12.9x'.u % 0x10e end
+  expect ' 0x..ffffef2'.u do '%#12.9x'.u % -0x10e end
+
+  #expect '10E'.u do '%X'.u % 0x10e end
+
+  #expect '0X10E'.u do '%#X'.u % 0x10e end
+
 
   expect 'bbc'.u do 'abc'.u.gsub('a', 'b') end
   expect 'h*ll*'.u do 'hello'.u.gsub(/[aeiou]/u, '*'.u) end
