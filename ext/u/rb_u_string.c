@@ -180,6 +180,7 @@ Init_u_string(VALUE mU)
         rb_define_alloc_func(rb_cUString, rb_u_string_alloc);
         rb_define_private_method(rb_cUString, "initialize", rb_u_string_initialize, -1);
         rb_define_private_method(rb_cUString, "initialize_copy", rb_u_string_initialize_copy, 1);
+        rb_define_method(rb_cUString, "%", rb_u_string_format_m, 1);
         rb_define_method(rb_cUString, "*", rb_u_string_times, 1);
         rb_define_method(rb_cUString, "+", rb_u_string_plus, 1);
         rb_define_method(rb_cUString, "<=>", rb_u_string_collate, 1);
@@ -205,6 +206,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "end_with?", rb_u_string_ends_with, -1);
         rb_define_method(rb_cUString, "ends_with?", rb_u_string_ends_with, -1);
         rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, 0);
+        rb_define_method(rb_cUString, "format", rb_u_string_format_m, 1);
         rb_define_method(rb_cUString, "gsub", rb_u_string_gsub, -1);
         rb_define_method(rb_cUString, "hash", rb_u_string_hash, 0);
         rb_define_method(rb_cUString, "hex", rb_u_string_hex, 0);

@@ -17,7 +17,11 @@ char *rb_u_prev_validated(const char *begin, const char *p) HIDDEN;
 
 char *rb_u_next_validated(const char *p, const char *end) HIDDEN;
 
+int rb_unichar_to_u(unichar c, char *result);
+
 void rb_u_validate(const char *string, long length) HIDDEN;
+
+VALUE rb_u_pattern_argument(VALUE pattern, bool quote);
 
 long rb_u_string_index_regexp(VALUE self, const char *begin, VALUE regex, bool reverse) HIDDEN;
 

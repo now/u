@@ -74,8 +74,14 @@ main(void)
 EOC
 end
 
+have_func 'rb_long2int', 'ruby.h'
+have_func 'rb_hash_lookup2', 'ruby.h'
+# TODO: Do we need to include encoding.h?
+have_func 'rb_intern3', 'ruby.h'
 have_func 'rb_reg_backref_number', 'ruby.h'
 have_func 'rb_memhash', 'ruby.h'
+# TODO: Do we need to include encoding.h?
+have_func 'rb_utf8_encoding', 'ruby.h'
 checking_for 'number of arguments to rb_reg_regsub' do
   $defs.push '-DHAVE_RB_REG_REGSUB4' if try_compile <<EOC
 #include <ruby.h>
@@ -88,6 +94,8 @@ main(void)
 }
 EOC
 end
+
+have_var 'rb_eKeyError', 'ruby.h'
 
 $INSTALLFILES ||= []
 $INSTALLFILES << ['u.h', '$(RUBYARCHDIR)', 'lib']
