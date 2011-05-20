@@ -475,7 +475,7 @@ directive_inspect(unichar directive, int flags, int width, int precision, VALUE 
 }
 
 static long
-directive_integer_value(VALUE argument, VALUE *bignum)
+directive_integer_value_m(VALUE argument, VALUE *bignum)
 {
         switch (TYPE(argument)) {
         case T_FLOAT: {
@@ -488,7 +488,7 @@ directive_integer_value(VALUE argument, VALUE *bignum)
                 return 0;
         }
         case T_STRING:
-                return directive_integer_value(rb_str_to_inum(argument, 0, true), bignum);
+                return directive_integer_value_m(rb_str_to_inum(argument, 0, true), bignum);
         case T_BIGNUM:
                 *bignum = argument;
                 return 0;
@@ -496,9 +496,18 @@ directive_integer_value(VALUE argument, VALUE *bignum)
                 return FIX2LONG(argument);
         default:
                 if (rb_obj_is_kind_of(argument, rb_cUString))
-                        return directive_integer_value(rb_u_string_to_inum(argument, 0, true), bignum);
-                return directive_integer_value(rb_Integer(argument), bignum);
+                        return directive_integer_value_m(rb_u_string_to_inum(argument, 0, true), bignum);
+                return directive_integer_value_m(rb_Integer(argument), bignum);
         }
+}
+
+static long
+directive_integer_value(VALUE argument, int base, VALUE *bignum)
+{
+        long value = directive_integer_value_m(argument, bignum);
+        if (base == 2 && *bignum == Qundef)
+                return directive_integer_value_m(rb_int2big(value), bignum);
+        return value;
 }
 
 static void
@@ -605,7 +614,7 @@ directive_signed_number(unichar directive, int flags, int precision, VALUE argum
         directive_number_check_flags(directive, flags, precision);
 
         VALUE bignum = Qundef;
-        long lvalue = directive_integer_value(argument, &bignum);
+        long lvalue = directive_integer_value(argument, base, &bignum);
 
         return (bignum == Qundef) ?
                 directive_number_long_signed(directive, flags, lvalue, base, sign, digits, buffer) :
@@ -659,10 +668,7 @@ directive_number_bignum_unsigned(VALUE argument,
         *str = rb_big2str0(argument, base, RBIGNUM_SIGN(argument));
         *digits = RSTRING_PTR(*str);
         if (*digits[0] == '-') {
-                (*digits)++;
-                /* TODO: This is a bit ugly, but until we can get rid of
-                 * EXTENDSIGN, we need to do it this way. */
-                *digits = directive_number_skip_bits(*digits, base);
+                *digits = directive_number_skip_bits(*digits + 1, base);
                 strcat(prefix, "..");
         }
 
@@ -676,14 +682,14 @@ directive_unsigned_number(unichar directive, int flags, int precision, VALUE arg
         directive_number_check_flags(directive, flags, precision);
 
         VALUE bignum = Qundef;
-        long lvalue = directive_integer_value(argument, &bignum);
+        long lvalue = directive_integer_value(argument, base, &bignum);
 
         return (bignum == Qundef) ?
                 directive_number_long_unsigned(lvalue, base, prefix, digits, buffer) :
                 directive_number_bignum_unsigned(bignum, base, prefix, digits, str);
 }
 
-static inline int
+static int
 directive_signed_or_unsigned_number(unichar directive, int flags, int precision, VALUE argument,
                                     int base, char *prefix, const char **digits, char *buffer, VALUE *str)
 {
@@ -746,8 +752,10 @@ directive_octal(unichar directive, int flags, int width, int precision, VALUE ar
         const char *digits;
         int length = directive_signed_or_unsigned_number(directive, flags, precision, argument, 8, prefix, &digits, buffer, &str);
 
-        if ((precision > 0 || directive_number_is_unsigned(prefix))
-            && (flags & DIRECTIVE_FLAGS_SHARP)) {
+        if ((flags & DIRECTIVE_FLAGS_SHARP) &&
+            (precision > 0 ||
+             directive_number_is_unsigned(prefix) ||
+             (length == 1 && digits[0] == '0'))) {
                 if (directive_number_is_unsigned(prefix))
                         rb_warning("‘%lc’ directive ignores ‘#’ flag when given a negative argument",
                                    directive);
@@ -770,7 +778,23 @@ directive_hexadecimal(unichar directive, int flags, int width, int precision, VA
         const char *digits;
         int length = directive_signed_or_unsigned_number(directive, flags, precision, argument, 16, prefix, &digits, buffer, &str);
 
-        /* TODO: Need to upcase. */
+        if (directive == 'X')
+                for (char *p = (char *)digits; *p != '\0'; p++)
+                        *p = unichar_toupper(*p);
+
+        directive_unsigned_number_output(directive, flags, width, precision, prefix, digits, length, result);
+}
+
+static void
+directive_binary(unichar directive, int flags, int width, int precision, VALUE argument, VALUE result)
+{
+        char prefix[] = "0b\0\0\0\0";
+        if (directive == 'B')
+                prefix[1] = 'B';
+        char buffer[DIGITS_BUFFER_SIZE];
+        VALUE str;
+        const char *digits;
+        int length = directive_signed_or_unsigned_number(directive, flags, precision, argument, 2, prefix, &digits, buffer, &str);
 
         directive_unsigned_number_output(directive, flags, width, precision, prefix, digits, length, result);
 }
@@ -822,7 +846,9 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
                 { 'u', DIRECTIVE_FLAGS_NUMBER, true, true, directive_integer },
                 { 'o', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_octal },
                 { 'x', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_hexadecimal },
-                { 'X', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_hexadecimal }
+                { 'X', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_hexadecimal },
+                { 'b', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_binary },
+                { 'B', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_binary }
         };
 
         for (size_t i = 0; i < lengthof(directives); i++)
