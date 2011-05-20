@@ -549,7 +549,7 @@ directive_number_output(int flags, int width, int precision,
 #define BASE2FORMAT(base) \
         ((base) == 10 ? "%ld" : ((base) == 16 ? "%lx" : "%lo"))
 
-static inline bool
+static bool
 directive_number_sign(unichar directive, bool negative, int flags, char *sign)
 {
         if (flags & DIRECTIVE_FLAGS_PLUS && flags & DIRECTIVE_FLAGS_SPACE)
@@ -595,7 +595,7 @@ directive_number_bignum_signed(unichar directive, int flags, VALUE argument,
         return rb_long2int(RSTRING_END(*str) - *digits);
 }
 
-static inline void
+static void
 directive_number_check_flags(unichar directive, int flags, int precision)
 {
         if ((flags & DIRECTIVE_FLAGS_MINUS) && (flags & DIRECTIVE_FLAGS_ZERO))
@@ -607,7 +607,7 @@ directive_number_check_flags(unichar directive, int flags, int precision)
                            directive, precision);
 }
 
-static inline int
+static int
 directive_signed_number(unichar directive, int flags, int precision, VALUE argument,
                         int base, char *sign, const char **digits, char *buffer, VALUE *str)
 {
