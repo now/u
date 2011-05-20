@@ -208,6 +208,14 @@ Expectations do
   expect '%'.u do '%%'.u % [] end
   expect 'ä%c'.u do 'ä%%c'.u % [] end
 
+  expect "%\nb".u do "%\nb".u % [] end
+  expect ArgumentError.new('directive does not allow specifying a width: %') do "%12\nb".u % [] end
+  expect 'b%'.u do "b%".u % [] end
+  expect ArgumentError.new('directive missing after absolute argument number') do "b%12".u % [] end
+  expect ArgumentError.new('directive missing after flags') do "b%#".u % [] end
+  expect ArgumentError.new('directive missing after absolute argument number') do "b%1$".u % [] end
+  expect ArgumentError.new('directive missing after argument name') do "b%<a>".u % [] end
+
   expect ArgumentError.new('invalid flag ‘ ’ given to directive ‘c’') do '% c'.u % 0x00e4 end
   expect ArgumentError.new('directive does not allow specifying a precision: c') do '%.1c'.u % [0x00e4] end
   expect ArgumentError.new('need at least one argument') do '%cbc'.u % [] end

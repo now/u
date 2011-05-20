@@ -101,6 +101,9 @@ directive_argument_number(const char **p, const char *end, const char *type,
         *p = u_next(q);
         *argument_number = n;
 
+        if (*p == end)
+                rb_raise(rb_eArgError, "directive missing after %s", type);
+
         return true;
 }
 
@@ -134,6 +137,9 @@ directive_argument_name(const char **p, const char *end, char right,
 #endif
 
         *p = rb_u_next_validated(q, end);
+
+        if (*p == end)
+                rb_raise(rb_eArgError, "directive missing after argument name");
 }
 
 static VALUE
@@ -280,7 +286,7 @@ directive_flags(const char **p, const char *end,
                 *p = u_next(*p);
         }
 
-        if (*p == end)
+        if (flags != DIRECTIVE_FLAGS_NONE && *p == end)
                 rb_raise(rb_eArgError, "directive missing after flags");
 
 setup_argument:
@@ -297,6 +303,9 @@ directive_width(const char **p, const char *end,
                 struct format_arguments *arguments,
                 int *flags)
 {
+        if (*p == end)
+                return 0;
+
         unichar c = _rb_u_aref_char_validated(*p, end);
 
         if (c != '*')
@@ -322,6 +331,9 @@ directive_width(const char **p, const char *end,
 static int
 directive_precision(const char **p, const char *end)
 {
+        if (*p == end)
+                return 0;
+
         unichar c = _rb_u_aref_char_validated(*p, end);
 
         if (c != '.')
@@ -816,14 +828,23 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
 
         int precision = directive_precision(p, end);
 
-        unichar c = _rb_u_aref_char_validated(*p, end);
+        unichar c = (*p == end) ? '\0' : _rb_u_aref_char_validated(*p, end);
         *p = u_next(*p);
         switch (c) {
         case '%':
-                directive_validate_flags(c, flags, DIRECTIVE_FLAGS_NONE);
-                directive_validate_argument_not_given(c, argument);
-                directive_validate_width_not_given(c, width);
-                directive_validate_precision_not_given(c, precision);
+        case '\0':
+                directive_validate_flags('%', flags, DIRECTIVE_FLAGS_NONE);
+                directive_validate_argument_not_given('%', argument);
+                directive_validate_width_not_given('%', width);
+                directive_validate_precision_not_given('%', precision);
+                directive_escape('%', result);
+                return;
+        case '\n':
+                directive_validate_flags('%', flags, DIRECTIVE_FLAGS_NONE);
+                directive_validate_argument_not_given('%', argument);
+                directive_validate_width_not_given('%', width);
+                directive_validate_precision_not_given('%', precision);
+                directive_escape('%', result);
                 directive_escape(c, result);
                 return;
         default:
