@@ -1,5 +1,6 @@
 #include "rb_includes.h"
 #include <limits.h>
+#include <math.h>
 #include <intern.h>
 #include "rb_u_buffer.h"
 #include "rb_u_string_internal_bignum.h"
@@ -332,12 +333,12 @@ static int
 directive_precision(const char **p, const char *end)
 {
         if (*p == end)
-                return 0;
+                return -1;
 
         unichar c = _rb_u_aref_char_validated(*p, end);
 
         if (c != '.')
-                return 0;
+                return -1;
 
         *p = u_next(*p);
 
@@ -396,7 +397,7 @@ directive_validate_width_not_given(unichar c, int width)
 static void
 directive_validate_precision_not_given(unichar c, int precision)
 {
-        if (precision != 0)
+        if (precision >= 0)
                 rb_raise(rb_eArgError,
                          "directive does not allow specifying a precision: %lc",
                          c);
@@ -530,7 +531,7 @@ directive_number_output(int flags, int width, int precision,
         int prefix_length = strlen(prefix);
         width -= prefix_length;
 
-        if (precision > 0)
+        if (precision >= 0)
                 flags &= ~DIRECTIVE_FLAGS_ZERO;
 
         if (precision < length)
@@ -553,10 +554,10 @@ directive_number_output(int flags, int width, int precision,
                 rb_u_buffer_append_unichar_n(result, ' ', width);
 }
 
-/* NOTE: This is actually a bit excessive, as the longest output won’t
-        * be expressed in binary, but octal, but let’s simply leave it at
-        * that. We can thus divide this by four without issues. */
-#define DIGITS_BUFFER_SIZE (sizeof(long) * CHAR_BIT)
+#define BITS2DECIMALDIGITS(n) (((long)(n) * 146) / 485 + 1) /* log2(10) ≈ 146/485 */
+#define BITS2OCTALDIGITS(n) ((long)(n) * 3 + 1) /* log2(8) = 3 */
+
+#define DIGITS_BUFFER_SIZE (BITS2OCTALDIGITS(sizeof(long) * CHAR_BIT) + 1)
 
 #define BASE2FORMAT(base) \
         ((base) == 10 ? "%ld" : ((base) == 16 ? "%lx" : "%lo"))
@@ -614,7 +615,7 @@ directive_number_check_flags(unichar directive, int flags, int precision)
                 rb_warning("‘%lc’ directive ignores ‘0’ flag when ‘-’ flag has been specified",
                            directive);
 
-        if (precision > 0 && (flags & DIRECTIVE_FLAGS_ZERO))
+        if (precision >= 0 && (flags & DIRECTIVE_FLAGS_ZERO))
                 rb_warning("‘%lc’ directive ignores ‘0’ flag when precision (%d) has been specified",
                            directive, precision);
 }
@@ -747,7 +748,10 @@ directive_unsigned_number_output(unichar directive, int flags, int width, int pr
                         rb_warning("‘%lc’ directive ignores ‘0’ flag when given a negative argument",
                                    directive);
 
-                directive_number_output(flags & ~DIRECTIVE_FLAGS_ZERO, width, precision - 2,
+                directive_number_output(flags & ~DIRECTIVE_FLAGS_ZERO,
+                                        width,
+                                        precision < 0 ? precision :
+                                                (precision - 2 >= 0 ? precision - 2 : 0),
                                         prefix, digits[0], digits, length,
                                         result);
         } else
@@ -765,7 +769,7 @@ directive_octal(unichar directive, int flags, int width, int precision, VALUE ar
         int length = directive_signed_or_unsigned_number(directive, flags, precision, argument, 8, prefix, &digits, buffer, &str);
 
         if ((flags & DIRECTIVE_FLAGS_SHARP) &&
-            (precision > 0 ||
+            (precision >= 0 ||
              directive_number_is_unsigned(prefix) ||
              (length == 1 && digits[0] == '0'))) {
                 if (directive_number_is_unsigned(prefix))
@@ -811,6 +815,119 @@ directive_binary(unichar directive, int flags, int width, int precision, VALUE a
         directive_unsigned_number_output(directive, flags, width, precision, prefix, digits, length, result);
 }
 
+static inline void
+directive_float_nan(unichar directive, int flags, int width, VALUE result)
+{
+        /* sign? + NaN + \0 */
+        char buffer[1 + 3 + 1] = "\0";
+        int length = 3;
+
+        directive_number_sign(directive, false, flags, buffer);
+        if (buffer[0] != '\0')
+                length++;
+
+        strcat(buffer, "NaN");
+
+        directive_pad(flags, width - length, buffer, length, result);
+}
+
+static inline void
+directive_float_inf(unichar directive, int flags, int width, double argument, VALUE result)
+{
+        /* sign? + Inf + \0 */
+        char buffer[1 + 3 + 1] = "\0";
+        int length = 3;
+
+        directive_number_sign(directive, argument < 0.0, flags, buffer);
+        if (buffer[0] != '\0')
+                length++;
+
+        strcat(buffer, "Inf");
+
+        directive_pad(flags, width - length, buffer, length, result);
+}
+
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+static void
+directive_float_format(unichar directive, int flags, int width, int precision, double argument, VALUE result)
+{
+        /* % + flags{0,4} + width_digits? + (. + precision_digits)? + \0 */
+        char format[1 +
+                    4 +
+                    BITS2DECIMALDIGITS(sizeof(width) * CHAR_BIT) +
+                    1 +
+                    BITS2DECIMALDIGITS(sizeof(precision) * CHAR_BIT) +
+                    1];
+        char *p = format;
+        const char *end = format + sizeof(format);
+
+        *p++ = '%';
+        if (flags & DIRECTIVE_FLAGS_SHARP)
+                *p++ = '#';
+        if (flags & DIRECTIVE_FLAGS_PLUS)
+                *p++ = '+';
+        if (flags & DIRECTIVE_FLAGS_MINUS)
+                *p++ = '-';
+        if (flags & DIRECTIVE_FLAGS_ZERO)
+                *p++ = '0';
+        if (flags & DIRECTIVE_FLAGS_SPACE)
+                *p++ = ' ';
+
+        if (width > 0)
+                p += snprintf(p, end - p, "%d", width);
+
+        if (precision >= 0)
+                p += snprintf(p, end - p, ".%d", precision);
+
+        *p++ = directive;
+        *p = '\0';
+
+        int exponent = 0;
+        frexp(argument, &exponent);
+        /* sign? +
+         * prefix? +
+         * character-before-separator? +
+         * (decimal_digits or characters after exponent) +
+         * separator? +
+         * precision? +
+         * exponent-char?
+         * exponent-±?
+         */
+        int needed = 1 +
+                2 +
+                1 +
+                abs(BITS2DECIMALDIGITS(exponent)) +
+                1 +
+                (precision >= 0 ? precision : 0) +
+                1 +
+                1;
+        if (needed < width)
+                needed = width;
+        needed += 1;
+        char buffer[needed];
+        int length = snprintf(buffer, needed, format, argument);
+        if (length > needed)
+                rb_raise(rb_eRuntimeError,
+                         "buffer calculation size is wrong: %d < %d",
+                         needed, length);
+
+        rb_u_buffer_append(result, buffer, length);
+}
+#pragma GCC diagnostic warning "-Wformat-nonliteral"
+
+static void
+directive_float(unichar directive, int flags, int width, int precision, VALUE argument, VALUE result)
+{
+        double value = RFLOAT_VALUE(rb_Float(argument));
+
+        if (isnan(value))
+                directive_float_nan(directive, flags, width, result);
+        else if (isinf(value))
+                directive_float_inf(directive, flags, width, value, result);
+        else
+                directive_float_format(directive, flags, width, precision, value, result);
+}
+
 static void
 directive(const char **p, const char *end, struct format_arguments *arguments, VALUE result)
 {
@@ -828,24 +945,22 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
 
         int precision = directive_precision(p, end);
 
-        unichar c = (*p == end) ? '\0' : _rb_u_aref_char_validated(*p, end);
-        *p = u_next(*p);
+        unichar c = '\0';
+        if (*p < end) {
+                c = _rb_u_aref_char_validated(*p, end);
+                *p = u_next(*p);
+        }
         switch (c) {
         case '%':
         case '\0':
-                directive_validate_flags('%', flags, DIRECTIVE_FLAGS_NONE);
-                directive_validate_argument_not_given('%', argument);
-                directive_validate_width_not_given('%', width);
-                directive_validate_precision_not_given('%', precision);
-                directive_escape('%', result);
-                return;
         case '\n':
                 directive_validate_flags('%', flags, DIRECTIVE_FLAGS_NONE);
                 directive_validate_argument_not_given('%', argument);
                 directive_validate_width_not_given('%', width);
                 directive_validate_precision_not_given('%', precision);
                 directive_escape('%', result);
-                directive_escape(c, result);
+                if (c == '\n' || (c == '\0' && *p != end))
+                        directive_escape(c, result);
                 return;
         default:
                 break;
@@ -869,7 +984,14 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
                 { 'x', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_hexadecimal },
                 { 'X', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_hexadecimal },
                 { 'b', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_binary },
-                { 'B', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_binary }
+                { 'B', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_binary },
+                { 'f', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float },
+                { 'g', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float },
+                { 'G', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float },
+                { 'e', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float },
+                { 'E', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float },
+                { 'a', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float },
+                { 'A', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float }
         };
 
         for (size_t i = 0; i < lengthof(directives); i++)

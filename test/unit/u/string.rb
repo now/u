@@ -209,6 +209,8 @@ Expectations do
   expect 'ä%c'.u do 'ä%%c'.u % [] end
 
   expect "%\nb".u do "%\nb".u % [] end
+  expect "%\0b".u do "%\0b".u % [] end
+  expect "%\0%".u do "%\0%".u % [] end
   expect ArgumentError.new('directive does not allow specifying a width: %') do "%12\nb".u % [] end
   expect 'b%'.u do "b%".u % [] end
   expect ArgumentError.new('directive missing after absolute argument number') do "b%12".u % [] end
@@ -511,6 +513,93 @@ Expectations do
   expect ' 0b..1111011'.u do '%#12.9b'.u % -0b101 end
 
   expect '0B101'.u do '%#B'.u % 0b101 end
+
+  expect 'NaN'.u do '%f'.u % (0.0/0.0) end
+  expect 'NaN'.u do '%-f'.u % (0.0/0.0) end
+  expect '+NaN'.u do '%+f'.u % (0.0/0.0) end
+  expect ' NaN'.u do '% f'.u % (0.0/0.0) end
+
+  expect '   NaN'.u do '%6f'.u % (0.0/0.0) end
+  expect '  +NaN'.u do '%+6f'.u % (0.0/0.0) end
+  expect '   NaN'.u do '% 6f'.u % (0.0/0.0) end
+  expect '  +NaN'.u do with_verbose(nil){ '%+ 6f'.u % (0.0/0.0) } end
+
+  expect '   NaN'.u do '%06f'.u % (0.0/0.0) end
+  expect '  +NaN'.u do '%+06f'.u % (0.0/0.0) end
+  expect '   NaN'.u do '% 06f'.u % (0.0/0.0) end
+  expect '  +NaN'.u do with_verbose(nil){ '%+ 06f'.u % (0.0/0.0) } end
+
+  expect 'NaN   '.u do '%-6f'.u % (0.0/0.0) end
+  expect 'NaN   '.u do '%-06f'.u % (0.0/0.0) end
+  expect '+NaN  '.u do '%-+6f'.u % (0.0/0.0) end
+  expect '+NaN  '.u do '%-+06f'.u % (0.0/0.0) end
+  expect ' NaN  '.u do '%- 6f'.u % (0.0/0.0) end
+  expect ' NaN  '.u do '%- 06f'.u % (0.0/0.0) end
+
+  expect 'Inf'.u do '%f'.u % (1.0/0.0) end
+  expect 'Inf'.u do '%-f'.u % (1.0/0.0) end
+  expect '+Inf'.u do '%+f'.u % (1.0/0.0) end
+  expect '-Inf'.u do '%+f'.u % -(1.0/0.0) end
+  expect ' Inf'.u do '% f'.u % (1.0/0.0) end
+
+  expect '   Inf'.u do '%6f'.u % (1.0/0.0) end
+  expect '  +Inf'.u do '%+6f'.u % (1.0/0.0) end
+  expect '  -Inf'.u do '%+6f'.u % -(1.0/0.0) end
+  expect '   Inf'.u do '% 6f'.u % (1.0/0.0) end
+  expect '  +Inf'.u do with_verbose(nil){ '%+ 6f'.u % (1.0/0.0) } end
+
+  expect '   Inf'.u do '%06f'.u % (1.0/0.0) end
+  expect '  +Inf'.u do '%+06f'.u % (1.0/0.0) end
+  expect '  -Inf'.u do '%+06f'.u % -(1.0/0.0) end
+  expect '   Inf'.u do '% 06f'.u % (1.0/0.0) end
+  expect '  +Inf'.u do with_verbose(nil){ '%+ 06f'.u % (1.0/0.0) } end
+
+  expect 'Inf   '.u do '%-6f'.u % (1.0/0.0) end
+  expect 'Inf   '.u do '%-06f'.u % (1.0/0.0) end
+  expect '+Inf  '.u do '%-+6f'.u % (1.0/0.0) end
+  expect '+Inf  '.u do '%-+06f'.u % (1.0/0.0) end
+  expect '-Inf  '.u do '%-+6f'.u % -(1.0/0.0) end
+  expect '-Inf  '.u do '%-+06f'.u % -(1.0/0.0) end
+  expect ' Inf  '.u do '%- 6f'.u % (1.0/0.0) end
+  expect ' Inf  '.u do '%- 06f'.u % (1.0/0.0) end
+
+  # TODO: Probably sizeof(double)-dependent
+  expect '179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368'.u do '%.0f'.u % 179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368 end
+
+  expect '       -0.'.u do '%#10.0f'.u % -0.5 end
+
+  expect '0x2p+1'.u do '%.0a'.u % 3.875 end
+  expect '-0x2.0p+1'.u do '%.1a'.u % -3.9921875 end
+  expect '0x0p+0'.u do '%a'.u % 0.0 end
+  expect '-0x0p+0'.u do '%a'.u % -0.0 end
+  expect '0x1p+1'.u do '%a'.u % 2.0 end
+  expect '0x1p+0'.u do '%a'.u % 1.0 end
+  expect '0x1p-1'.u do '%a'.u % 0.5 end
+  expect '0x1p+10'.u do '%a'.u % 1024 end
+  # TODO: Probably sizeof(double)-dependent
+  expect '0x1.23456p+789'.u do '%a'.u % 3.704450999893983e+237 end
+  # TODO: Probably sizeof(double)-dependent
+  expect '0x0.0000000000001p-1022'.u do '%a'.u % 4.9e-324 end
+
+  expect '   -0x1p+0'.u do '%10a'.u % -1 end
+  expect ' -0x1.8p+0'.u do '%10a'.u % -1.5 end
+  expect ' -0x1.4p+0'.u do '%10a'.u % -1.25 end
+  expect ' -0x1.2p+0'.u do '%10a'.u % -1.125 end
+  expect ' -0x1.1p+0'.u do '%10a'.u % -1.0625 end
+  expect '-0x1.08p+0'.u do '%10a'.u % -1.03125 end
+
+  expect '-0x0001p+0'.u do '%010a'.u % -1 end
+  expect '-0x01.8p+0'.u do '%010a'.u % -1.5 end
+  expect '-0x01.4p+0'.u do '%010a'.u % -1.25 end
+  expect '-0x01.2p+0'.u do '%010a'.u % -1.125 end
+  expect '-0x01.1p+0'.u do '%010a'.u % -1.0625 end
+  expect '-0x1.08p+0'.u do '%010a'.u % -1.03125 end
+
+  expect '1.000000e+06'.u do '%e' % 1.000000e+06 end
+  expect '1.000000E+06'.u do '%E' % 1.000000E+06 end
+
+  expect '1e+06'.u do '%g' % 1e+06 end
+  expect '1E+06'.u do '%G' % 1E+06 end
 
   expect 'bbc'.u do 'abc'.u.gsub('a', 'b') end
   expect 'h*ll*'.u do 'hello'.u.gsub(/[aeiou]/u, '*'.u) end
