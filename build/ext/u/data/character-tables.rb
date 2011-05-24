@@ -3,7 +3,7 @@
 require 'u/build'
 
 class CharacterTables
-  def initialize(data, special_casing, casefolding, bidi_mirroring, name, version, io = $stdout)
+  def initialize(data, special_casing, casefolding, name, version, io = $stdout)
     U::Build::Header.new(name, io) do
       io.puts <<EOH
 #define UNICODE_DATA_VERSION "#{version}"
@@ -39,7 +39,6 @@ EOH
       io.puts TitleTable.new(data)
       io.puts SpecialCaseTable.new(special_casing)
       io.puts CasefoldTable.new(casefolding)
-      io.puts BidiMirroringTable.new(bidi_mirroring)
     end
   end
 
@@ -91,18 +90,6 @@ static const struct {
             casefold.char if
               casefold.char > 0xffff
         self << U::Build::Header::Table::Row.new('%#06x' % casefold.char, '"%s"' % casefold.to_escaped_s)
-      end
-    end
-  end
-
-  class BidiMirroringTable < U::Build::Header::Table
-    def initialize(bidi_mirroring)
-      super "static const struct {
-\tunichar ch;
-\tunichar mirrored_ch;
-} bidi_mirroring_table[]"
-      bidi_mirroring.each do |bidi_mirror|
-        self << U::Build::Header::Table::Row.new('%#06x' % bidi_mirror.char, '%#06x' % bidi_mirror.mirrored)
       end
     end
   end
@@ -160,6 +147,5 @@ special_casing = U::Build::Data::SpecialCasing.new(data, ARGV[1])
 CharacterTables.new(data,
                     special_casing,
                     U::Build::Data::CaseFolding.new(data, special_casing, ARGV[2]),
-                    U::Build::Data::BidiMirroring.new(ARGV[3]),
-                    ARGV[4],
-                    ARGV[5])
+                    ARGV[3],
+                    ARGV[4])

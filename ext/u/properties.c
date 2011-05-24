@@ -7,6 +7,7 @@
 #include <string.h>
 #include "u.h"
 #include "private.h"
+#include "data/bidi-mirroring.h"
 #include "data/character-tables.h"
 
 
