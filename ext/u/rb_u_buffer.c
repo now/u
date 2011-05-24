@@ -176,6 +176,79 @@ rb_u_buffer_initialize(int argc, VALUE *argv, VALUE self)
         return Qnil;
 }
 
+static VALUE
+rb_u_buffer_initialize_copy(VALUE self, VALUE rboriginal)
+{
+        UBuffer *buffer = RVAL2UBUFFER(self);
+        const UBuffer *original = RVAL2UBUFFER(rboriginal);
+
+        /* TODO: Can this happen? */
+        if (buffer == original)
+                return self;
+
+        buffer->initially_allocated = original->initially_allocated;
+
+        rb_u_buffer_append(self, original->c, original->length);
+
+        OBJ_INFECT(self, rboriginal);
+
+        return self;
+}
+
+VALUE
+rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
+{
+        need_at_least_n_arguments(argc, 1);
+
+        for (int i = 0; i < argc; i++)
+                if (rb_obj_is_kind_of(argv[i], rb_cUBuffer)) {
+                        const UBuffer *buffer = RVAL2UBUFFER(argv[i]);
+
+                        rb_u_buffer_append(self, buffer->c, buffer->length);
+                } else {
+                        const UString *string = RVAL2USTRING_ANY(argv[i]);
+
+                        rb_u_buffer_append(self,
+                                           USTRING_STR(string),
+                                           USTRING_LENGTH(string));
+                }
+        
+        return self;
+}
+
+VALUE
+rb_u_buffer_eql(VALUE self, VALUE rbother)
+{
+        if (self == rbother)
+                return Qtrue;
+
+        if (!rb_obj_is_kind_of(rbother, rb_cUBuffer))
+                return Qfalse;
+
+        const UBuffer *buffer = RVAL2UBUFFER(self);
+        const UBuffer *other = RVAL2UBUFFER(rbother);
+
+        return buffer->length == other->length &&
+                memcmp(buffer->c, other->c, other->length) == 0 ?
+                Qtrue : Qfalse;
+}
+
+VALUE
+rb_u_buffer_hash(VALUE self)
+{
+        const UBuffer *buffer = RVAL2UBUFFER(self);
+
+        return INT2FIX(rb_memhash(buffer->c, buffer->length));
+}
+
+VALUE
+rb_u_buffer_to_s(VALUE self)
+{
+        const UBuffer *buffer = RVAL2UBUFFER(self);
+
+        return rb_str_new(buffer->c, buffer->length);
+}
+
 VALUE
 rb_u_buffer_to_u(VALUE self)
 {
@@ -200,26 +273,6 @@ rb_u_buffer_to_u_bang(VALUE self)
         return rb_u_string_new_own(c, length);
 }
 
-/*
-static VALUE
-rb_u_buffer_initialize_copy(VALUE self, VALUE rboriginal)
-{
-        UString *string = RVAL2USTRING(self);
-        const UString *original = RVAL2USTRING(rboriginal);
-
-        if (string == original)
-                return self;
-
-        string->rb = original->rb;
-        string->c = original->c;
-        string->length = original->length;
-
-        OBJ_INFECT(self, rboriginal);
-
-        return self;
-}
-*/
-
 void
 Init_u_buffer(VALUE mU)
 {
@@ -227,64 +280,14 @@ Init_u_buffer(VALUE mU)
 
         rb_define_alloc_func(rb_cUBuffer, rb_u_buffer_alloc);
         rb_define_private_method(rb_cUBuffer, "initialize", rb_u_buffer_initialize, -1);
-        /*
         rb_define_private_method(rb_cUBuffer, "initialize_copy", rb_u_buffer_initialize_copy, 1);
-        */
-        /*
-        rb_define_method(rb_cUString, "%", rb_u_string_format_m, 1);
-        rb_define_method(rb_cUString, "*", rb_u_string_times, 1);
-        rb_define_method(rb_cUString, "+", rb_u_string_plus, 1);
-        rb_define_method(rb_cUString, "<=>", rb_u_string_collate, 1);
-        rb_define_method(rb_cUString, "==", rb_u_string_equal, 1);
-        rb_define_method(rb_cUString, "===", rb_u_string_equal, 1);
-        rb_define_method(rb_cUString, "=~", rb_u_string_match, 1);
-        rb_define_method(rb_cUString, "eql?", rb_u_string_eql, 1);
-        rb_define_method(rb_cUString, "bytes", rb_u_string_each_byte, 0);
-        rb_define_method(rb_cUString, "casecmp", rb_u_string_casecmp, 1);
-        rb_define_method(rb_cUString, "center", rb_u_string_center, -1);
-        rb_define_method(rb_cUString, "chars", rb_u_string_each_char, 0);
-        rb_define_method(rb_cUString, "[]", rb_u_string_aref_m, -1);
-        rb_define_method(rb_cUString, "chomp", rb_u_string_chomp, -1);
-        rb_define_method(rb_cUString, "chop", rb_u_string_chop, 0);
-        rb_define_method(rb_cUString, "count", rb_u_string_count, -1);
-        rb_define_method(rb_cUString, "delete", rb_u_string_delete, -1);
-        rb_define_method(rb_cUString, "downcase", rb_u_string_downcase, 0);
-        rb_define_method(rb_cUString, "each", rb_u_string_each_line, -1);
-        rb_define_method(rb_cUString, "each_byte", rb_u_string_each_byte, 0);
-        rb_define_method(rb_cUString, "each_char", rb_u_string_each_char, 0);
-        rb_define_method(rb_cUString, "each_line", rb_u_string_each_line, -1);
-        rb_define_method(rb_cUString, "empty?", rb_u_string_empty, 0);
-        rb_define_method(rb_cUString, "end_with?", rb_u_string_ends_with, -1);
-        rb_define_method(rb_cUString, "ends_with?", rb_u_string_ends_with, -1);
-        rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, 0);
-        rb_define_method(rb_cUString, "format", rb_u_string_format_m, 1);
-        rb_define_method(rb_cUString, "gsub", rb_u_string_gsub, -1);
-        rb_define_method(rb_cUString, "hash", rb_u_string_hash, 0);
-        rb_define_method(rb_cUString, "hex", rb_u_string_hex, 0);
-        rb_define_method(rb_cUString, "include?", rb_u_string_include, 1);
-        rb_define_method(rb_cUString, "index", rb_u_string_index_m, -1);
-        rb_define_method(rb_cUString, "inspect", rb_u_string_inspect, 0);
-        rb_define_method(rb_cUString, "intern", rb_u_string_to_sym, 0);
-        rb_define_method(rb_cUString, "length", rb_u_string_length, 0);
-        rb_define_method(rb_cUString, "lines", rb_u_string_each_line, -1);
-        rb_define_method(rb_cUString, "ljust", rb_u_string_ljust, -1);
-        rb_define_method(rb_cUString, "lstrip", rb_u_string_lstrip, 0);
-        rb_define_method(rb_cUString, "normalize", rb_u_string_normalize, -1);
-        rb_define_method(rb_cUString, "oct", rb_u_string_oct, 0);
-        rb_define_method(rb_cUString, "reverse", rb_u_string_reverse, 0);
-        rb_define_method(rb_cUString, "rindex", rb_u_string_rindex_m, -1);
-        rb_define_method(rb_cUString, "rjust", rb_u_string_rjust, -1);
-        rb_define_method(rb_cUString, "rstrip", rb_u_string_rstrip, 0);
-        rb_define_method(rb_cUString, "squeeze", rb_u_string_squeeze, -1);
-        rb_define_method(rb_cUString, "strip", rb_u_string_strip, 0);
-        rb_define_method(rb_cUString, "to_i", rb_u_string_to_i, -1);
-        rb_define_method(rb_cUString, "to_s", rb_u_string_to_str, 0);
-        rb_define_method(rb_cUString, "to_str", rb_u_string_to_str, 0);
-        rb_define_method(rb_cUString, "to_sym", rb_u_string_to_sym, 0);
-        rb_define_method(rb_cUString, "tr", rb_u_string_tr, 2);
-        rb_define_method(rb_cUString, "tr_s", rb_u_string_tr_s, 2);
-        rb_define_method(rb_cUString, "upcase", rb_u_string_upcase, 0);
-        */
+        rb_define_method(rb_cUBuffer, "<<", rb_u_buffer_append_m, -1);
+        rb_define_method(rb_cUBuffer, "==", rb_u_buffer_eql, 1);
+        rb_define_method(rb_cUBuffer, "append", rb_u_buffer_append_m, -1);
+        rb_define_method(rb_cUBuffer, "append_format", rb_u_buffer_append_format_m, -1);
+        rb_define_method(rb_cUBuffer, "eql?", rb_u_buffer_eql, 1);
+        rb_define_method(rb_cUBuffer, "hash", rb_u_buffer_hash, 0);
+        rb_define_method(rb_cUBuffer, "to_s", rb_u_buffer_to_s, 0);
         rb_define_method(rb_cUBuffer, "to_u", rb_u_buffer_to_u, 0);
         rb_define_method(rb_cUBuffer, "to_u!", rb_u_buffer_to_u_bang, 0);
 }

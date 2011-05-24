@@ -1,106 +1,110 @@
 decompose.o: decompose.c u.h data/decompose.h data/compose.h private.h
 private.o: private.c u.h private.h
 properties.o: properties.c u.h private.h data/character-tables.h
-rb_u.o: rb_u.c u.h private.h rb_private.h rb_u_string.h
-rb_u_re.o: rb_u_re.c
-rb_u_buffer.o: rb_u_buffer.c u.h private.h rb_private.h rb_u_string.h
+rb_private.o: rb_private.c rb_includes.h extconf.h u.h private.h \
+ rb_private.h rb_u_string.h
+rb_u.o: rb_u.c u.h private.h rb_private.h rb_u_buffer.h rb_u_string.h
+rb_u_buffer.o: rb_u_buffer.c u.h private.h rb_private.h rb_u_buffer.h \
+ rb_u_string.h
+rb_u_re.o: rb_u_re.c u.h private.h rb_private.h rb_u_re.h
 rb_u_string.o: rb_u_string.c u.h private.h rb_private.h rb_u_string.h
 rb_u_string_aref.o: rb_u_string_aref.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_casecmp.o: rb_u_string_casecmp.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_chomp.o: rb_u_string_chomp.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_chop.o: rb_u_string_chop.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_collate.o: rb_u_string_collate.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_count.o: rb_u_string_count.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
+ private.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
 rb_u_string_delete.o: rb_u_string_delete.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
+ private.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
 rb_u_string_downcase.o: rb_u_string_downcase.c rb_includes.h extconf.h \
-  u.h private.h rb_private.h rb_u_string.h
+ u.h private.h rb_private.h rb_u_string.h
 rb_u_string_each_byte.o: rb_u_string_each_byte.c rb_includes.h extconf.h \
-  u.h private.h rb_private.h rb_u_string.h
+ u.h private.h rb_private.h rb_u_string.h
 rb_u_string_each_char.o: rb_u_string_each_char.c rb_includes.h extconf.h \
-  u.h private.h rb_private.h rb_u_string.h
+ u.h private.h rb_private.h rb_u_string.h
 rb_u_string_each_line.o: rb_u_string_each_line.c rb_includes.h extconf.h \
-  u.h private.h rb_private.h rb_u_string.h
+ u.h private.h rb_private.h rb_u_string.h
 rb_u_string_empty.o: rb_u_string_empty.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_ends_with.o: rb_u_string_ends_with.c rb_includes.h extconf.h \
-  u.h private.h rb_private.h rb_u_string.h
+ u.h private.h rb_private.h rb_u_string.h
 rb_u_string_eql.o: rb_u_string_eql.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_equal.o: rb_u_string_equal.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_foldcase.o: rb_u_string_foldcase.c rb_includes.h extconf.h \
-  u.h private.h rb_private.h rb_u_string.h
+ u.h private.h rb_private.h rb_u_string.h
 rb_u_string_format.o: rb_u_string_format.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h rb_u_buffer.h \
+ rb_u_string_internal_bignum.h
 rb_u_string_gsub.o: rb_u_string_gsub.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_hash.o: rb_u_string_hash.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_hex.o: rb_u_string_hex.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h rb_u_string_internal_bignum.h
+ private.h rb_private.h rb_u_string.h rb_u_string_internal_bignum.h
 rb_u_string_include.o: rb_u_string_include.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_index.o: rb_u_string_index.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_inspect.o: rb_u_string_inspect.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_internal_bignum.o: rb_u_string_internal_bignum.c \
-  rb_includes.h extconf.h u.h private.h rb_private.h rb_u_string.h \
-  rb_u_string_internal_bignum.h
+ rb_includes.h extconf.h u.h private.h rb_private.h rb_u_string.h \
+ rb_u_string_internal_bignum.h
 rb_u_string_internal_tr.o: rb_u_string_internal_tr.c rb_includes.h \
-  extconf.h u.h private.h rb_private.h rb_u_string.h \
-  rb_u_string_internal_tr.h
+ extconf.h u.h private.h rb_private.h rb_u_string.h \
+ rb_u_string_internal_tr.h
 rb_u_string_justify.o: rb_u_string_justify.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_length.o: rb_u_string_length.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_lstrip.o: rb_u_string_lstrip.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_match.o: rb_u_string_match.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_normalize.o: rb_u_string_normalize.c rb_includes.h extconf.h \
-  u.h private.h rb_private.h rb_u_string.h
+ u.h private.h rb_private.h rb_u_string.h
 rb_u_string_oct.o: rb_u_string_oct.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h rb_u_string_internal_bignum.h
+ private.h rb_private.h rb_u_string.h rb_u_string_internal_bignum.h
 rb_u_string_partition.o: rb_u_string_partition.c rb_includes.h extconf.h \
-  u.h private.h rb_private.h rb_u_string.h
+ u.h private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_plus.o: rb_u_string_plus.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_reverse.o: rb_u_string_reverse.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_rindex.o: rb_u_string_rindex.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_rpartition.o: rb_u_string_rpartition.c rb_includes.h \
-  extconf.h u.h private.h rb_private.h rb_u_string.h
+ extconf.h u.h private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_rstrip.o: rb_u_string_rstrip.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_scan.o: rb_u_string_scan.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_split.o: rb_u_string_split.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_squeeze.o: rb_u_string_squeeze.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
+ private.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
 rb_u_string_strip.o: rb_u_string_strip.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_times.o: rb_u_string_times.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_to_i.o: rb_u_string_to_i.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h rb_u_string_internal_bignum.h
+ private.h rb_private.h rb_u_string.h rb_u_string_internal_bignum.h
 rb_u_string_to_str.o: rb_u_string_to_str.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_to_sym.o: rb_u_string_to_sym.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 rb_u_string_tr.o: rb_u_string_tr.c rb_includes.h extconf.h u.h private.h \
-  rb_private.h rb_u_string.h rb_u_string_internal_tr.h
+ rb_private.h rb_u_string.h rb_u_string_internal_tr.h
 rb_u_string_upcase.o: rb_u_string_upcase.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h
 u.o: u.c u.h
 u_append.o: u_append.c u.h private.h
 u_aref_char.o: u_aref_char.c u.h utf8.h private.h

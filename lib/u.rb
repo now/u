@@ -2,6 +2,7 @@
 
 module U
   require 'u/u'
+  require 'u/buffer'
   require 'u/string'
   require 'u/version'
 end

@@ -6,6 +6,7 @@
 #include "u.h"
 #include "private.h"
 #include "rb_private.h"
+#include "rb_u_buffer.h"
 #include "rb_u_string.h"
 
 void
@@ -94,5 +95,6 @@ Init_u(void)
 {
         VALUE mU = rb_define_module("U");
 
+        Init_u_buffer(mU);
         Init_u_string(mU);
 }

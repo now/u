@@ -1017,9 +1017,9 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
 }
 
 VALUE
-rb_u_string_format(int argc, const VALUE *argv, VALUE self)
+rb_u_buffer_append_format(int argc, const VALUE *argv, VALUE self, VALUE format)
 {
-        const UString *string = RVAL2USTRING(self);
+        const UString *string = RVAL2USTRING_ANY(format);
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
 
@@ -1031,25 +1031,41 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
                 .names = Qundef
         };
 
-        VALUE result = rb_u_buffer_new_sized(127);
-
         while (p < end) {
                 const char *q = p;
 
                 while (q < end && *q != '%')
                         q++;
 
-                rb_u_buffer_append(result, p, q - p);
+                rb_u_buffer_append(self, p, q - p);
 
                 if (q == end)
                         break;
 
                 p = q + 1;
 
-                directive(&p, end, &arguments, result);
+                directive(&p, end, &arguments, self);
         }
 
-        return rb_u_buffer_to_u_bang(result);
+        return self;
+}
+
+VALUE
+rb_u_buffer_append_format_m(int argc, const VALUE *argv, VALUE self)
+{
+        need_at_least_n_arguments(argc, 1);
+
+        return rb_u_buffer_append_format(argc - 1, argv + 1, self, argv[0]);
+}
+
+
+VALUE
+rb_u_string_format(int argc, const VALUE *argv, VALUE self)
+{
+        return rb_u_buffer_to_u_bang(rb_u_buffer_append_format(argc,
+                                                               argv,
+                                                               rb_u_buffer_new_sized(127),
+                                                               self));
 }
 
 VALUE
