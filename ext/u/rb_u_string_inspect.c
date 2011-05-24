@@ -84,7 +84,8 @@ rb_u_string_inspect(VALUE self)
 
         VALUE result = rb_str_buf_new(0);
         rb_str_buf_cat2(result, "\"");
-        const char *p = USTRING_STR(string), *end = USTRING_END(string);
+        const char *p = USTRING_STR(string);
+        const char *end = USTRING_END(string);
         while (p < end) {
                 unichar c = u_aref_char(p);
                 switch (c) {
@@ -130,6 +131,8 @@ rb_u_string_inspect(VALUE self)
         }
 
         rb_str_buf_cat2(result, "\".u");
+
+        OBJ_INFECT(result, self);
 
         return result;
 }
