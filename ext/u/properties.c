@@ -831,7 +831,7 @@ real_tolower(const char *str, size_t max, bool use_max, char *buf,
 
 /* {{{1 */
 static char *
-utf_downcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
+u_downcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
 {
 	assert(str != NULL);
 
@@ -854,9 +854,9 @@ utf_downcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
  * applicable.  Returns the freshly allocated representation.
  */
 char *
-utf_downcase(const char *str)
+u_downcase(const char *str)
 {
-	return utf_downcase_impl(str, 0, false, NULL);
+	return u_downcase_impl(str, 0, false, NULL);
 }
 
 
@@ -866,9 +866,9 @@ utf_downcase(const char *str)
  * most ‘len˚ bytes from ‘str’.
  */
 char *
-utf_downcase_n(const char *str, size_t len, size_t *new_length)
+u_downcase_n(const char *str, size_t len, size_t *new_length)
 {
-	return utf_downcase_impl(str, len, true, new_length);
+	return u_downcase_impl(str, len, true, new_length);
 }
 
 

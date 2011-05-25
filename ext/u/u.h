@@ -160,8 +160,8 @@ char *utf_normalize_n(const char *str, NormalizeMode mode, size_t len, size_t *n
 
 char *utf_upcase(const char *str);
 char *utf_upcase_n(const char *str, size_t len, size_t *new_length);
-char *utf_downcase(const char *str);
-char *utf_downcase_n(const char *str, size_t len, size_t *new_length);
+char *u_downcase(const char *str);
+char *u_downcase_n(const char *str, size_t len, size_t *new_length);
 char *u_foldcase(const char *str);
 char *u_foldcase_n(const char *str, size_t len, size_t *new_length);
 
