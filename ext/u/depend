@@ -1,7 +1,6 @@
 decompose.o: decompose.c u.h data/decompose.h data/compose.h private.h
 private.o: private.c u.h private.h
-properties.o: properties.c u.h private.h data/bidi-mirroring.h \
- data/character-tables.h
+properties.o: properties.c u.h private.h data/character-tables.h
 rb_private.o: rb_private.c rb_includes.h extconf.h u.h private.h \
  rb_private.h rb_u_string.h
 rb_u.o: rb_u.c u.h private.h rb_private.h rb_u_buffer.h rb_u_string.h
@@ -112,6 +111,7 @@ u_aref_char.o: u_aref_char.c u.h utf8.h private.h
 u_byte_length.o: u_byte_length.c u.h private.h
 u_collate.o: u_collate.c u.h utf8.h private.h
 u_copy.o: u_copy.c u.h private.h
+u_foldcase.o: u_foldcase.c u.h private.h data/case-folding.h
 u_has_prefix.o: u_has_prefix.c u.h private.h
 u_index.o: u_index.c u.h private.h
 u_isvalid.o: u_isvalid.c u.h private.h
