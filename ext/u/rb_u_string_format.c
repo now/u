@@ -31,8 +31,37 @@ struct format_arguments {
 };
 
 #ifndef HAVE_RB_LONG2INT
-#  define rb_long2int(i) \
-        ((int)(i))
+static void
+rb_out_of_int(long l)
+{
+        rb_raise(rb_eRangeError,
+                 l < 0 ?
+                        "integer %ld too small to convert to C type int" :
+                        "integer %ld too big to convert to C type int",
+                 l);
+}
+#  if defined(__GNUC__) && __GNUC__ > 2
+#    define rb_long2int(l) __extension__({ \
+        long _rb_long2int_l = (l); \
+        int _rb_long2int_i = (int)_rb_long2int_l; \
+        if ((long)_rb_long2int_i != _rb_long2int_l) \
+                rb_out_of_int(_rb_long2int_l); \
+        _rb_long2int_i; \
+})
+#  else
+static inline int
+rb_long2int(long l)
+{
+        int i = (int)l;
+
+        if ((long)i != l)
+                rb_out_of_int(l);
+
+        return i;
+}
+#endif
+#else
+#  define rb_long2int(l) ((int)(l))
 #endif
 
 #ifndef HAVE_RB_HASH_LOOKUP2
