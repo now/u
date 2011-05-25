@@ -51,25 +51,35 @@ end
 # TODO: Move to U::Version::Unicode
 UnicodeVersion = '6.0.0'
 
+def through_temporary_file(name)
+  tmp = '%s.tmp' % name
+  rm([name, tmp], :force => true)
+  yield tmp
+  mv tmp, name
+end
+
+def generate_file(name)
+  through_temporary_file name do |tmp|
+    yield tmp
+    chmod 0444, tmp
+  end
+end
+
 task :extensions => %w[ext/u/data/bidi-mirroring.h]
 file 'ext/u/data/bidi-mirroring.h' => %w[build/ext/u/data/bidi-mirroring.rb
                                          build/data/BidiMirroring.txt] do |t|
-  tmp = '%s.tmp' % t.name
-  rm([t.name, tmp], :force => true)
-  ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
-  chmod 0444, tmp
-  mv tmp, t.name
+  generate_file t.name do |tmp|
+    ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
+  end
 end
 
 task :extensions => %w[ext/u/data/break.h]
 file 'ext/u/data/break.h' => %w[build/ext/u/data/break.rb
                                 build/data/UnicodeData.txt
                                 build/data/LineBreak.txt] do |t|
-  tmp = '%s.tmp' % t.name
-  rm([t.name, tmp], :force => true)
-  ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
-  chmod 0444, tmp
-  mv tmp, t.name
+  generate_file t.name do |tmp|
+    ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
+  end
 end
 
 task :extensions => %w[ext/u/data/character-tables.h]
@@ -77,32 +87,26 @@ file 'ext/u/data/character-tables.h' => %w[build/ext/u/data/character-tables.rb
                                            build/data/UnicodeData.txt
                                            build/data/SpecialCasing.txt
                                            build/data/CaseFolding.txt] do |t|
-  tmp = '%s.tmp' % t.name
-  rm([t.name, tmp], :force => true)
-  ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
-  chmod 0444, tmp
-  mv tmp, t.name
+  generate_file t.name do |tmp|
+    ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
+  end
 end
 
 task :extensions => %w[ext/u/data/compose.h]
 file 'ext/u/data/compose.h' => %w[build/ext/u/data/compose.rb
                                   build/data/UnicodeData.txt
                                   build/data/CompositionExclusions.txt] do |t|
-  tmp = '%s.tmp' % t.name
-  rm([t.name, tmp], :force => true)
-  ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
-  chmod 0444, tmp
-  mv tmp, t.name
+  generate_file t.name do |tmp|
+    ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
+  end
 end
 
 task :extensions => %w[ext/u/data/decompose.h]
 file 'ext/u/data/decompose.h' => %w[build/ext/u/data/decompose.rb
                                     build/data/UnicodeData.txt] do |t|
-  tmp = '%s.tmp' % t.name
-  rm([t.name, tmp], :force => true)
-  ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
-  chmod 0444, tmp
-  mv tmp, t.name
+  generate_file t.name do |tmp|
+    ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
+  end
 end
 
 CLEAN.include ["ext/**/{*.{o,so,#{Config::CONFIG['DLEXT']}},TAGS}"]
@@ -113,20 +117,16 @@ task :test => %w[test/unit/case.rb test/unit/foldcase.rb] # test/unit/normalize.
 file 'test/unit/case.rb' => %w[build/test/unit/case.rb
                                build/data/SpecialCasing.txt
                                build/data/UnicodeData.txt] do |t|
-  tmp = '%s.tmp' % t.name
-  rm([t.name, tmp], :force => true)
-  ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
-  chmod 0444, tmp
-  mv tmp, t.name
+  generate_file t.name do |tmp|
+    ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
+  end
 end
 
 file 'test/unit/foldcase.rb' => %w[build/test/unit/foldcase.rb
                                    build/data/CaseFolding.txt] do |t|
-  tmp = '%s.tmp' % t.name
-  rm([t.name, tmp], :force => true)
-  ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
-  chmod 0444, tmp
-  mv tmp, t.name
+  generate_file t.name do |tmp|
+    ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
+  end
 end
 
 =begin
