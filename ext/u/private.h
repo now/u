@@ -22,12 +22,26 @@
 #  define HIDDEN
 #endif
 
-#if defined(__GNUC__)
-#  define UNUSED(u)   \
-        u __attribute__((__unused__))
+#if defined(__GNUC__) && __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
+#  define UNUSED(u) u __attribute__((__unused__))
 #else
-#  define UNUSED(u)   \
-        u
+#  define UNUSED(u) u
+#endif
+
+#if defined(__GNUC__) && __GNUC__ > 2 && defined(__OPTIMIZE__)
+#  define BOOLEAN_EXPR(expr) __extension__({ \
+        int _boolean_var_; \
+        if (expr) \
+                _boolean_var_ = 1; \
+        else \
+                _boolean_var_ = 0; \
+        _boolean_var_; \
+})
+#  define LIKELY(expr) (__builtin_expect(BOOLEAN_EXPR(expr), 1))
+#  define UNLIKELY(expr) (__builtin_expect(BOOLEAN_EXPR(expr), 0))
+#else
+#  define LIKELY(expr) (expr)
+#  define UNLIKELY(expr) (expr)
 #endif
 
 #define binary_search_middle_of(begin, end)     \

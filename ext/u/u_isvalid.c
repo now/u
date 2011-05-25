@@ -35,18 +35,18 @@ fast_validate(const char *str)
 
 		const char *last = p;
 
-		if ((*(unsigned char *)p & 0xe0) == 0xc0) { 			/* 110xxxxx */
-			if ((*(unsigned char *)p & 0x1e) == 0)
+		if ((*(unsigned char *)p & 0xe0) == 0xc0) {                     /* 110xxxxx */
+			if (UNLIKELY((*(unsigned char *)p & 0x1e) == 0))
 				goto error;
 			p++;
-			if ((*(unsigned char *)p & 0xc0) != 0x80)		/* 10xxxxxx */
+			if (UNLIKELY((*(unsigned char *)p & 0xc0) != 0x80))     /* 10xxxxxx */
 				goto error;
 		} else {
-			if ((*(unsigned char *)p & 0xf0) == 0xe0) {		/* 1110xxxx */
+			if ((*(unsigned char *)p & 0xf0) == 0xe0) {             /* 1110xxxx */
 				min = (1 << 11);
 				val = *(unsigned char *)p & 0x0f;
 				goto two_remaining;
-			} else if ((*(unsigned char *)p & 0xf8) == 0xf0) {	/* 11110xxx */
+			} else if ((*(unsigned char *)p & 0xf8) == 0xf0) {      /* 11110xxx */
 				min = (1 << 16);
 				val = *(unsigned char *)p & 0x07;
 			} else {
@@ -61,10 +61,10 @@ two_remaining:
 			p++;
 			CONTINUATION_CHAR;
 
-			if (val < min)
+			if (UNLIKELY(val < min))
 				goto error;
 
-			if (!UNICODE_ISVALID(val))
+			if (UNLIKELY(!UNICODE_ISVALID(val)))
 				goto error;
 		}
 
@@ -89,25 +89,25 @@ fast_validate_len(const char *str, size_t max_len)
 
 		const char *last = p;
 
-		if ((*(unsigned char *)p & 0xe0) == 0xc0) { 			/* 110xxxxx */
-			if (max_len - (p - str) < 2)
+		if ((*(unsigned char *)p & 0xe0) == 0xc0) {                     /* 110xxxxx */
+			if (UNLIKELY(max_len - (p - str) < 2))
 				goto error;
 
-			if ((*(unsigned char *)p & 0x1e) == 0)
+			if (UNLIKELY((*(unsigned char *)p & 0x1e) == 0))
 				goto error;
 			p++;
-			if ((*(unsigned char *)p & 0xc0) != 0x80) 		/* 10xxxxxx */
+			if (UNLIKELY((*(unsigned char *)p & 0xc0) != 0x80))     /* 10xxxxxx */
 				goto error;
 		} else {
-			if ((*(unsigned char *)p & 0xf0) == 0xe0) {		/* 1110xxxx */
-				if (max_len - (p - str) < 3)
+			if ((*(unsigned char *)p & 0xf0) == 0xe0) {             /* 1110xxxx */
+				if (UNLIKELY(max_len - (p - str) < 3))
 					goto error;
 
 				min = (1 << 11);
 				val = *(unsigned char *)p & 0x0f;
 				goto two_remaining;
-			} else if ((*(unsigned char *)p & 0xf8) == 0xf0) {	/* 11110xxx */
-				if (max_len - (p - str) < 4)
+			} else if ((*(unsigned char *)p & 0xf8) == 0xf0) {      /* 11110xxx */
+				if (UNLIKELY(max_len - (p - str) < 4))
 					goto error;
 
 				min = (1 << 16);
@@ -124,9 +124,9 @@ two_remaining:
 			p++;
 			CONTINUATION_CHAR;
 
-			if (val < min)
+			if (UNLIKELY(val < min))
 				goto error;
-			if (!UNICODE_ISVALID(val))
+			if (UNLIKELY(!UNICODE_ISVALID(val)))
 				goto error;
 		}
 
