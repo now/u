@@ -11,8 +11,8 @@
 #endif
 
 
-VALUE rb_u_pattern_argument(VALUE pattern, bool quote) HIDDEN;
-VALUE rb_u_pattern_match_reference(VALUE reference) HIDDEN;
+HIDDEN VALUE rb_u_pattern_argument(VALUE pattern, bool quote);
+HIDDEN VALUE rb_u_pattern_match_reference(VALUE reference);
 
 
 #endif

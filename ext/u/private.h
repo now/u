@@ -50,7 +50,12 @@
 #define unicode_table_lookup(table, c, index)    \
         binary_search_unicode_table(table, lengthof(table), sizeof((table)[0]), sizeof((table)[0].ch), c, index)
 
-bool binary_search_unicode_table(const void *table, size_t n, size_t sizeof_entry, size_t sizeof_char, unichar c, int *index) HIDDEN;
+HIDDEN bool binary_search_unicode_table(const void *table,
+                                        size_t n,
+                                        size_t sizeof_entry,
+                                        size_t sizeof_char,
+                                        unichar c,
+                                        int *index);
 
 #define SPLIT_UNICODE_TABLE_LOOKUP_PAGE(data, part, page, c)  \
         ((part[page] >= UNICODE_MAX_TABLE_INDEX) \
@@ -64,7 +69,10 @@ bool binary_search_unicode_table(const void *table, size_t n, size_t sizeof_entr
             ? SPLIT_UNICODE_TABLE_LOOKUP_PAGE(data, part2, ((c) - UNICODE_FIRST_CHAR_PART2) >> 8, c) \
             : (fallback)))
 
-unichar *_utf_normalize_wc(const char *str, size_t max_len, bool use_len,
-                           size_t *new_length, NormalizeMode mode) HIDDEN;
+HIDDEN unichar *_utf_normalize_wc(const char *str,
+                                  size_t max_len,
+                                  bool use_len,
+                                  size_t *new_length,
+                                  NormalizeMode mode);
 
 #endif /* PRIVATE_H */

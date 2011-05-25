@@ -28,12 +28,13 @@ struct tr_table {
         VALUE sparse;
 };
 
-void tr_init(struct tr *tr, const char *p, const char *end) HIDDEN;
-bool tr_should_exclude(struct tr *tr) HIDDEN;
-enum tr_state tr_next(struct tr *t) HIDDEN;
-void tr_table_initialize(struct tr_table *table, VALUE rbstring) HIDDEN;
-void tr_table_initialize_from_strings(struct tr_table *table, int argc,
-                                      VALUE *argv) HIDDEN;
-bool tr_table_lookup(struct tr_table *table, unichar c) HIDDEN;
+HIDDEN void tr_init(struct tr *tr, const char *p, const char *end);
+HIDDEN bool tr_should_exclude(struct tr *tr);
+HIDDEN enum tr_state tr_next(struct tr *t);
+HIDDEN void tr_table_initialize(struct tr_table *table, VALUE rbstring);
+HIDDEN void tr_table_initialize_from_strings(struct tr_table *table,
+                                             int argc,
+                                             VALUE *argv);
+HIDDEN bool tr_table_lookup(struct tr_table *table, unichar c);
 
 #endif /* RB_U_STRING_INTERNAL_TR_H */
