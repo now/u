@@ -17,7 +17,7 @@ u_width_impl(const char *str, size_t len, bool use_len)
 
 	size_t width = 0;
 
-	for (const char *p = str; (!use_len || p < str + len) && *p != NUL; p = u_next(p))
+	for (const char *p = str; (!use_len || p < str + len) && *p != '\0'; p = u_next(p))
 		width += unichar_iswide(u_aref_char(p)) ? 2 : 1;
 
 	return width;

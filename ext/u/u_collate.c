@@ -133,7 +133,7 @@ utf_collate_key_impl(const char *str, size_t len, bool use_len)
 	result_len = 0;
 	for (size_t i = 0; i < xfrm_len; i++)
 		result_len += _utf_encode(result + result_len, result_wc[i]);
-	result[result_len] = NUL;
+	result[result_len] = '\0';
 
 	free(str_norm);
 

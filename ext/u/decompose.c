@@ -346,7 +346,7 @@ normalize_wc_decompose(const char *str, size_t max_len, bool use_len,
                 unicode_canonical_ordering(buf + prev_start, n - prev_start);
 
         if (buf != NULL)
-                buf[n] = NUL;
+                buf[n] = '\0';
 
         *buf_len = n;
 }
@@ -377,7 +377,7 @@ normalize_wc_compose(unichar *buf, size_t len, size_t *new_length)
                 }
         }
 
-        buf[new_len] = NUL;
+        buf[new_len] = '\0';
 
         if (new_length != NULL)
                 *new_length = new_len;

@@ -17,9 +17,9 @@ utf_has_prefix(const char *str, const char *prefix)
 	assert(prefix != NULL);
 
 	do {
-		if (*prefix == NUL)
+		if (*prefix == '\0')
 			return true;
-		else if (*str == NUL)
+		else if (*str == '\0')
 			return false;
 	} while (*str++ == *prefix++);
 

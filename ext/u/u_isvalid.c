@@ -29,7 +29,7 @@ fast_validate(const char *str)
 	unichar min = 0;
 	const char *p;
 
-	for (p = str; *p != NUL; p++) {
+	for (p = str; *p != '\0'; p++) {
 		if (*(unsigned char *)p < 128)
 			continue;
 
@@ -83,7 +83,7 @@ fast_validate_len(const char *str, size_t max_len)
 	unichar min = 0;
 	const char *p;
 
-	for (p = str; (size_t)(p - str) < max_len && *p != NUL; p++) {
+	for (p = str; (size_t)(p - str) < max_len && *p != '\0'; p++) {
 		if (*(unsigned char *)p < 128)
 			continue;
 
@@ -147,7 +147,7 @@ utf_isvalid(const char *str)
 {
 	const char *p = fast_validate(str);
 
-	return *p == NUL;
+	return *p == '\0';
 }
 
 

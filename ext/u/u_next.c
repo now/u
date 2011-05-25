@@ -14,7 +14,7 @@
 char *
 u_find_next(const char *p, const char *end)
 {
-	if (*p != NUL) {
+	if (*p != '\0') {
 		if (end != NULL) {
 			for (p++; p < end && CONT_X(*p); p++) {
 				/* this loop intentionally left empty */

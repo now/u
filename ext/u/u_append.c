@@ -23,10 +23,10 @@ u_append_n(char *dest, const char *src, size_t n)
 {
 	const char *p;
 
-	for (p = src; n > 0 && *p != NUL; p = u_next(p), n--) {
+	for (p = src; n > 0 && *p != '\0'; p = u_next(p), n--) {
 		/* this loop intentionally left empty */;
 	}
 
 	strncat(dest, src, p - src);
-	dest[p - src] = NUL;
+	dest[p - src] = '\0';
 }

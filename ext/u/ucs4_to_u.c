@@ -17,7 +17,7 @@ ucs4_to_u_n_impl(unichar *str, size_t len, bool use_len,
 	size_t result_len = 0;
 	char *result = NULL, *p;
 
-	for (size_t i = 0; (!use_len || i < len) && str[i] != NUL; i++) {
+	for (size_t i = 0; (!use_len || i < len) && str[i] != '\0'; i++) {
 		if (str[i] >= 0x80000000) {
 			if (items_read != NULL)
 				*items_read = i;
@@ -32,7 +32,7 @@ ucs4_to_u_n_impl(unichar *str, size_t len, bool use_len,
 	size_t i;
 	for (i = 0; p < result + result_len; i++)
 		p += unichar_to_u(str[i], p);
-	*p = NUL;
+	*p = '\0';
 
 	if (items_written != NULL)
 		*items_written = p - result;

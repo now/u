@@ -50,7 +50,7 @@ again:
 
 	if (folded == NULL) {
 		folded = ALLOC_N(char, len + 1);
-		folded[0] = NUL;
+		folded[0] = '\0';
 		len = 0;
 		goto again;
 	}

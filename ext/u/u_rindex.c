@@ -89,7 +89,7 @@ u_char_rindex(const char *str, unichar c)
 {
 	char ch[7];
 
-	ch[unichar_to_u(c, ch)] = NUL;
+	ch[unichar_to_u(c, ch)] = '\0';
 
 	return str_rindex(str, ch);
 }
@@ -104,7 +104,7 @@ u_char_rindex_n(const char *str, unichar c, size_t len)
 {
 	char ch[7];
 
-	ch[unichar_to_u(c, ch)] = NUL;
+	ch[unichar_to_u(c, ch)] = '\0';
 
 	return str_rindex_n(str, ch, len);
 }

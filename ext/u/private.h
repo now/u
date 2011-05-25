@@ -13,7 +13,6 @@
 #define OFFSET_IF(buf, len) \
         (((buf) != NULL) ? (buf) + (len) : NULL)
 
-#define NUL '\0'
 #define lengthof(ary)   (sizeof(ary) / sizeof((ary)[0]))
 
 #if defined(HAVE_GNUC_VISIBILITY)

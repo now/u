@@ -126,7 +126,7 @@ u_aref_char_n(const char *str, size_t max)
 		unsigned char ch = ((const unsigned char *)str)[i];
 
 		if (!CONT_X(ch))
-			return (ch != NUL) ? UTF_BAD_INPUT_UNICHAR : UTF_INCOMPLETE_INPUT_UNICHAR;
+			return (ch != '\0') ? UTF_BAD_INPUT_UNICHAR : UTF_INCOMPLETE_INPUT_UNICHAR;
 
 		c = ADD_X(c, ch);
 	}
