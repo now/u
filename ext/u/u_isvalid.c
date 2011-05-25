@@ -145,9 +145,7 @@ error:
 bool
 u_isvalid(const char *str)
 {
-	const char *p = fast_validate(str);
-
-	return *p == '\0';
+	return *fast_validate(str) == '\0';
 }
 
 
