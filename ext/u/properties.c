@@ -896,7 +896,7 @@ casefold_table_lookup(unichar c, char *folded, size_t *len)
 }
 
 static char *
-utf_foldcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
+u_foldcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
 {
 	assert(str != NULL);
 
@@ -934,9 +934,9 @@ again:
  * freshly allocated representation.
  */
 char *
-utf_foldcase(const char *str)
+u_foldcase(const char *str)
 {
-	return utf_foldcase_impl(str, 0, false, NULL);
+	return u_foldcase_impl(str, 0, false, NULL);
 }
 
 
@@ -946,9 +946,9 @@ utf_foldcase(const char *str)
  * string.
  */
 char *
-utf_foldcase_n(const char *str, size_t len, size_t *new_length)
+u_foldcase_n(const char *str, size_t len, size_t *new_length)
 {
-	return utf_foldcase_impl(str, len, true, new_length);
+	return u_foldcase_impl(str, len, true, new_length);
 }
 
 
