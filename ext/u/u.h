@@ -217,8 +217,8 @@ size_t u_byte_length(const char *str);
 char *u_reverse(const char *str);
 char *u_reverse_n(const char *str, size_t len);
 
-bool utf_isvalid(const char *str);
-bool utf_isvalid_n(const char *str, size_t max, const char **end);
+bool u_isvalid(const char *str);
+bool u_isvalid_n(const char *str, size_t max, const char **end);
 
 int unichar_to_u(unichar c, char *result);
 char *ucs4_to_u(unichar *str, size_t *items_read, size_t *items_written);

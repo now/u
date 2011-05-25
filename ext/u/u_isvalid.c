@@ -83,7 +83,7 @@ fast_validate_len(const char *str, size_t max_len)
 	unichar min = 0;
 	const char *p;
 
-	for (p = str; (size_t)(p - str) < max_len && *p != '\0'; p++) {
+	for (p = str; (size_t)(p - str) < max_len; p++) {
 		if (*(unsigned char *)p < 128)
 			continue;
 
@@ -143,7 +143,7 @@ error:
  * Check if STR constitutes a valid UTF-8 character sequence.
  */
 bool
-utf_isvalid(const char *str)
+u_isvalid(const char *str)
 {
 	const char *p = fast_validate(str);
 
@@ -157,7 +157,7 @@ utf_isvalid(const char *str)
  * END is non-‹NULL›, END is set to the end of the valid range of bytes in STR.
  */
 bool
-utf_isvalid_n(const char *str, size_t max, const char **end)
+u_isvalid_n(const char *str, size_t max, const char **end)
 {
         const char *p = fast_validate_len(str, max);
 

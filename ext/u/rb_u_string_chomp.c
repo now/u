@@ -79,7 +79,7 @@ rb_u_string_chomp(int argc, VALUE *argv, VALUE self)
         if (separator_length == 1 && last_char == '\n')
                 return rb_u_string_chomp_default(self);
 
-        if (!utf_isvalid_n(USTRING_STR(separator), separator_length, NULL) ||
+        if (!u_isvalid_n(USTRING_STR(separator), separator_length, NULL) ||
             USTRING_STR(string)[length - 1] != last_char ||
             (separator_length > 1 &&
              rb_memcmp(USTRING_STR(separator),

@@ -105,6 +105,8 @@ rb_u_string_tr.o: rb_u_string_tr.c rb_includes.h extconf.h u.h private.h \
  rb_private.h rb_u_string.h rb_u_string_internal_tr.h
 rb_u_string_upcase.o: rb_u_string_upcase.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
+rb_u_string_valid_encoding.o: rb_u_string_valid_encoding.c rb_includes.h \
+ extconf.h u.h private.h rb_private.h rb_u_string.h
 u.o: u.c u.h
 u_append.o: u_append.c u.h private.h
 u_aref_char.o: u_aref_char.c u.h utf8.h private.h

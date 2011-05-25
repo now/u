@@ -885,4 +885,8 @@ Expectations do
   expect 'HËLLÖ'.u do 'hëllö'.u.upcase end
   expect 'HËLLÖ'.u do 'HËLLÖ'.u.upcase end
   expect "ABC\0DËF".u do "abc\0dëF".u.upcase end
+
+  expect true do 'äbc'.u.valid_encoding? end
+  expect true do "äbc\0def".u.valid_encoding? end
+  expect false do "\xc3bc".u.valid_encoding? end
 end

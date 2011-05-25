@@ -237,4 +237,5 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "tr", rb_u_string_tr, 2);
         rb_define_method(rb_cUString, "tr_s", rb_u_string_tr_s, 2);
         rb_define_method(rb_cUString, "upcase", rb_u_string_upcase, 0);
+        rb_define_method(rb_cUString, "valid_encoding?", rb_u_string_valid_encoding, 0);
 }

@@ -85,7 +85,7 @@ rb_u_validate(const char *string, long length)
 {
         const char *end;
 
-        if (!utf_isvalid_n(string, length, &end))
+        if (!u_isvalid_n(string, length, &end))
                 rb_raise(rb_eArgError, "invalid byte sequence at byte %ld", end - string);
 }
 
