@@ -952,23 +952,4 @@ utf_foldcase_n(const char *str, size_t len, size_t *new_length)
 }
 
 
-/* {{{1
- * Retrieve the mirrored representation of ‘c’ (if any) and store it in
- * ‘mirrored’.
- */
-bool
-unichar_mirror(unichar c, unichar *mirrored)
-{
-        int index;
-
-        if (!unicode_table_lookup(bidi_mirroring_table, c, &index))
-                return false;
-
-        if (mirrored != NULL)
-                *mirrored = bidi_mirroring_table[index].mirrored_ch;
-
-        return true;
-}
-
-
 /* }}}1 */
