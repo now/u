@@ -82,11 +82,20 @@ file 'ext/u/data/break.h' => %w[build/ext/u/data/break.rb
   end
 end
 
+task :extensions => %w[ext/u/data/case-folding.h]
+file 'ext/u/data/case-folding.h' => %w[build/ext/u/data/case-folding.rb
+                                       build/data/UnicodeData.txt
+                                       build/data/SpecialCasing.txt
+                                       build/data/CaseFolding.txt] do |t|
+  generate_file t.name do |tmp|
+    ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
+  end
+end
+
 task :extensions => %w[ext/u/data/character-tables.h]
 file 'ext/u/data/character-tables.h' => %w[build/ext/u/data/character-tables.rb
                                            build/data/UnicodeData.txt
-                                           build/data/SpecialCasing.txt
-                                           build/data/CaseFolding.txt] do |t|
+                                           build/data/SpecialCasing.txt] do |t|
   generate_file t.name do |tmp|
     ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
   end

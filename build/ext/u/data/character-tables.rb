@@ -3,7 +3,7 @@
 require 'u/build'
 
 class CharacterTables
-  def initialize(data, special_casing, casefolding, name, version, io = $stdout)
+  def initialize(data, special_casing, name, version, io = $stdout)
     U::Build::Header.new(name, io) do
       io.puts <<EOH
 #define UNICODE_DATA_VERSION "#{version}"
@@ -38,7 +38,6 @@ EOH
       }
       io.puts TitleTable.new(data)
       io.puts SpecialCaseTable.new(special_casing)
-      io.puts CasefoldTable.new(casefolding)
     end
   end
 
@@ -70,27 +69,6 @@ static const char special_case_table[]'
         content << (%( "%s\\0" /* offset %d */) % [special_case.to_escaped_s, special_case.offset])
       end
       self << content.join("\n")
-    end
-  end
-
-  class CasefoldTable < U::Build::Header::Table
-    def initialize(casefolding)
-      super "/*
- * Table of casefolding cases that can't be derived by lowercasing.
- */
-static const struct {
-\tuint16_t ch;
-\tchar data[#{casefolding.map{ |e| e.to_s.length }.max + 1}];
-} casefold_table[]"
-      # TODO: Check that this sort_by will be needed.  (Or should be sorted by
-      # Casefolds
-      casefolding.sort_by{ |c| c.char }.each do |casefold|
-        raise RuntimeError,
-          'casefold_table.ch field too short; upgrade to unichar to fit values beyond 0xffff: %s' %
-            casefold.char if
-              casefold.char > 0xffff
-        self << U::Build::Header::Table::Row.new('%#06x' % casefold.char, '"%s"' % casefold.to_escaped_s)
-      end
     end
   end
 
@@ -143,9 +121,7 @@ static const struct {
 end
 
 data = U::Build::Data::Unicode.new(ARGV[0])
-special_casing = U::Build::Data::SpecialCasing.new(data, ARGV[1])
 CharacterTables.new(data,
-                    special_casing,
-                    U::Build::Data::CaseFolding.new(data, special_casing, ARGV[2]),
-                    ARGV[3],
-                    ARGV[4])
+                    U::Build::Data::SpecialCasing.new(data, ARGV[1]),
+                    ARGV[2],
+                    ARGV[3])
