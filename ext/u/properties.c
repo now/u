@@ -287,7 +287,6 @@ unichar_isxdigit(unichar c)
                 (c >= UNICHAR_FULLWIDTH_a && c <= UNICHAR_FULLWIDTH_f) ||
                 (c >= UNICHAR_FULLWIDTH_A && c <= UNICHAR_FULLWIDTH_F) ||
                 (s_type(c) == UNICODE_DECIMAL_NUMBER));
-//		s_isdigit(s_type(c)));
 }
 
 
@@ -307,6 +306,29 @@ unichar_isdefined(unichar c)
         return !IS(s_type(c),
                    OR(UNICODE_UNASSIGNED,
                       OR(UNICODE_SURROGATE, 0)));
+}
+
+
+#define SOFT_HYPHEN ((unichar)0x00ad)
+#define ZERO_WIDTH_SPACE ((unichar)0x200b)
+
+
+bool
+unichar_iszerowidth(unichar c)
+{
+        if (UNLIKELY(c == SOFT_HYPHEN))
+                return false;
+
+        if (UNLIKELY(IS(s_type(c),
+                        OR(UNICODE_NON_SPACING_MARK,
+                           OR(UNICODE_ENCLOSING_MARK,
+                              OR(UNICODE_FORMAT, 0))))))
+                return true;
+
+        if (UNLIKELY((c >= 0x1160 && c < 0x1200) || c == ZERO_WIDTH_SPACE))
+                return true;
+
+        return false;
 }
 
 
