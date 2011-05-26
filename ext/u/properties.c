@@ -301,6 +301,15 @@ unichar_isassigned(unichar c)
 }
 
 
+bool
+unichar_isdefined(unichar c)
+{
+        return !IS(s_type(c),
+                   OR(UNICODE_UNASSIGNED,
+                      OR(UNICODE_SURROGATE, 0)));
+}
+
+
 /* {{{1
  * Convert ‘c’ to its uppercase representation (if any).
  */

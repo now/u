@@ -78,6 +78,7 @@ bool unichar_istitle(unichar c);
 bool unichar_isnewline(unichar c);
 bool unichar_isxdigit(unichar c);
 bool unichar_isassigned(unichar c);
+bool unichar_isdefined(unichar c);
 bool unichar_iswide(unichar c);
 bool unichar_iswide_cjk(unichar c);
 bool unichar_isvalid(unichar c);
