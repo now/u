@@ -118,6 +118,22 @@ file 'ext/u/data/decompose.h' => %w[build/ext/u/data/decompose.rb
   end
 end
 
+task :extensions => %w[ext/u/data/wide.h]
+file 'ext/u/data/wide.h' => %w[build/ext/u/data/wide.rb
+                               build/data/DerivedEastAsianWidth.txt] do |t|
+  generate_file t.name do |tmp|
+    ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, ['W', 'F'].join(' '), tmp]
+  end
+end
+
+task :extensions => %w[ext/u/data/wide-cjk.h]
+file 'ext/u/data/wide-cjk.h' => %w[build/ext/u/data/wide.rb
+                                   build/data/DerivedEastAsianWidth.txt] do |t|
+  generate_file t.name do |tmp|
+    ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, ['A'].join(' '), tmp]
+  end
+end
+
 CLEAN.include ["ext/**/{*.{o,so,#{Config::CONFIG['DLEXT']}},TAGS}"]
 CLOBBER.include ['ext/**/Makefile']
 
