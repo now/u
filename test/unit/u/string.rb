@@ -786,6 +786,15 @@ Expectations do
 
   expect [''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u] do 'crüel wörld'.u.scan(//u) end
 
+  expect 0 do ''.u.size end
+  expect 4 do '1234'.u.size end
+  expect 6 do "1234\r\n".u.size end
+  expect 7 do "\0011234\r\n".u.size end
+  expect 5 do 'hëllö'.u.size end
+  expect 6 do "\0hëllö".u.size end
+  # TODO: Why not throw an error here?
+  expect 11 do "hëllö\0agäin\303".u.size end
+
   expect [] do ''.u.split(''.u, 1) end
   expect ['abc'.u] do 'abc'.u.split(''.u, 1) end
 
