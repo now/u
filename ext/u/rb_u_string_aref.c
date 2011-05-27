@@ -27,7 +27,7 @@ rb_u_string_substr_impl(VALUE self, long offset, long len, bool nil_on_empty)
         return substr;
 }
 
-static VALUE
+VALUE
 rb_u_string_substr(VALUE self, long offset, long len)
 {
         return rb_u_string_substr_impl(self, offset, len, false);

@@ -197,6 +197,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "[]", rb_u_string_aref_m, -1);
         rb_define_method(rb_cUString, "chomp", rb_u_string_chomp, -1);
         rb_define_method(rb_cUString, "chop", rb_u_string_chop, 0);
+        rb_define_method(rb_cUString, "chr", rb_u_string_chr, 0);
         rb_define_method(rb_cUString, "count", rb_u_string_count, -1);
         rb_define_method(rb_cUString, "delete", rb_u_string_delete, -1);
         rb_define_method(rb_cUString, "downcase", rb_u_string_downcase, 0);

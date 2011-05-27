@@ -19,6 +19,8 @@ Expectations do
   expect ''.u[1, 1].to.be.nil?
   expect ''.u[1, 2].to.be.nil?
 
+  expect nil do ''.u[0] end
+
   expect 'h'.u do 'hëllö'.u[0] end
   expect 'ö'.u do 'hëllö'.u[-1] end
   expect nil do 'hëllö'.u[5] end
@@ -113,6 +115,10 @@ Expectations do
   expect "hellö\n".u do "hellö\n\r".u.chop end
   expect ''.u do ''.u.chop end
   expect ''.u do "\r\n".u.chop end
+
+  expect ''.u do ''.u.chr end
+  expect 'ä'.u do 'ä'.u.chr end
+  expect 'ä'.u do 'äbc'.u.chr end
 
   expect 5 do 'hëllö wörld'.u.count('lö') end
   expect 3 do 'hëllö wörld'.u.count('l', 'lö') end
