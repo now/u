@@ -142,6 +142,9 @@ Expectations do
     "abc\0dëf".u.bytes.entries
   end
 
+  expect 4 do 'äbc'.bytesize end
+  expect 9 do "äbc\0dëf".bytesize end
+
   expect ['h'.u, 'ë'.u, 'l'.u, 'l'.u, 'ö'.u] do
     'hëllö'.u.chars.entries
   end

@@ -10,6 +10,8 @@ rb_u_re.o: rb_u_re.c u.h private.h rb_private.h rb_u_re.h
 rb_u_string.o: rb_u_string.c u.h private.h rb_private.h rb_u_string.h
 rb_u_string_aref.o: rb_u_string_aref.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h rb_u_re.h
+rb_u_string_bytesize.o: rb_u_string_bytesize.c rb_includes.h extconf.h \
+ u.h private.h rb_private.h rb_u_string.h
 rb_u_string_casecmp.o: rb_u_string_casecmp.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_chomp.o: rb_u_string_chomp.c rb_includes.h extconf.h u.h \

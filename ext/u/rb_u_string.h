@@ -69,6 +69,7 @@ long rb_u_string_index(VALUE self, VALUE sub, long offset);
 long rb_u_string_rindex(VALUE self, VALUE rbsubstring, long offset);
 
 VALUE rb_u_string_aref_m(int argc, VALUE *argv, VALUE self);
+VALUE rb_u_string_bytesize(VALUE self);
 VALUE rb_u_string_center(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_casecmp(VALUE self, VALUE other);
 VALUE rb_u_string_chomp(int argc, VALUE *argv, VALUE self);
