@@ -85,6 +85,8 @@ rb_u_string_normalize.o: rb_u_string_normalize.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_oct.o: rb_u_string_oct.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h rb_u_string_internal_bignum.h
+rb_u_string_ord.o: rb_u_string_ord.c rb_includes.h extconf.h u.h \
+ private.h rb_private.h rb_u_string.h
 rb_u_string_partition.o: rb_u_string_partition.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_plus.o: rb_u_string_plus.c rb_includes.h extconf.h u.h \

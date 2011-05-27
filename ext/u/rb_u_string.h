@@ -106,6 +106,7 @@ VALUE rb_u_string_lstrip(VALUE self);
 VALUE rb_u_string_match(VALUE self, VALUE other);
 VALUE rb_u_string_normalize(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_oct(VALUE self);
+VALUE rb_u_string_ord(VALUE self);
 VALUE rb_u_string_partition(VALUE self, VALUE separator);
 VALUE rb_u_string_plus(VALUE self, VALUE rbother);
 VALUE rb_u_string_reverse(VALUE self);

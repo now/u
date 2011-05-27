@@ -39,8 +39,9 @@ need_m_to_n_arguments(int argc, int m, int n)
 unichar
 _rb_u_aref_char_validated(const char *str, const char *end)
 {
-        /* TODO: if str_end <= str, then throw another error
-         *         rb_raise(rb_eArgError, "empty string");*/
+        if (str >= end)
+                rb_raise(rb_eArgError, "String is empty");
+
         unichar c = u_aref_char_validated_n(str, end - str);
         switch (c) {
         case UTF_BAD_INPUT_UNICHAR:

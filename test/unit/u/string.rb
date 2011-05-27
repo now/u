@@ -706,6 +706,10 @@ Expectations do
   expect 0 do '00'.u.oct end
   expect 24 do '030OO'.u.oct end
 
+  expect ArgumentError.new('String is empty') do ''.u.ord end
+  expect 0x00e4 do 'ä'.u.ord end
+  expect 0x00e4 do 'äbc'.u.ord end
+
   expect ['hë'.u, 'l'.u, 'lö'.u] do 'hëllö'.u.partition(/l/u) end
   expect ['hë'.u, 'l'.u, 'lö'.u] do 'hëllö'.u.partition('l'.u) end
   expect ['hë'.u, 'l'.u, 'lö'.u] do 'hëllö'.u.partition('l') end
