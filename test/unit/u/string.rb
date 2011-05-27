@@ -71,6 +71,9 @@ Expectations do
   # TODO: Should <=>, ==, ===, eql?, and casecmp use collation or not?  When
   # should collation be used?  #collate and #collation_key?
 
+  expect true do 'abc'.u.ascii_only? end
+  expect false do 'äbc'.u.ascii_only? end
+
   expect 1 do 'あB'.u.casecmp('あa') end
   expect 1 do 'あB'.u.casecmp('あa'.u) end
 
@@ -142,8 +145,8 @@ Expectations do
     "abc\0dëf".u.bytes.entries
   end
 
-  expect 4 do 'äbc'.bytesize end
-  expect 9 do "äbc\0dëf".bytesize end
+  expect 4 do 'äbc'.u.bytesize end
+  expect 9 do "äbc\0dëf".u.bytesize end
 
   expect ['h'.u, 'ë'.u, 'l'.u, 'l'.u, 'ö'.u] do
     'hëllö'.u.chars.entries

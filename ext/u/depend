@@ -10,6 +10,8 @@ rb_u_re.o: rb_u_re.c u.h private.h rb_private.h rb_u_re.h
 rb_u_string.o: rb_u_string.c u.h private.h rb_private.h rb_u_string.h
 rb_u_string_aref.o: rb_u_string_aref.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h rb_u_re.h
+rb_u_string_ascii_only.o: rb_u_string_ascii_only.c rb_includes.h \
+ extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_bytesize.o: rb_u_string_bytesize.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_casecmp.o: rb_u_string_casecmp.c rb_includes.h extconf.h u.h \
@@ -118,6 +120,7 @@ u_copy.o: u_copy.c u.h private.h
 u_foldcase.o: u_foldcase.c u.h private.h data/case-folding.h
 u_has_prefix.o: u_has_prefix.c u.h private.h
 u_index.o: u_index.c u.h private.h
+u_is_ascii_only.o: u_is_ascii_only.c u.h private.h
 u_isvalid.o: u_isvalid.c u.h private.h
 u_length.o: u_length.c u.h private.h
 u_next.o: u_next.c u.h private.h utf8.h

@@ -209,6 +209,9 @@ int u_rindex_n(const char *haystack, const char *needle, size_t len);
 
 bool utf_has_prefix(const char *str, const char *prefix);
 
+bool u_is_ascii_only(const char *string);
+bool u_is_ascii_only_n(const char *string, size_t length);
+
 long u_length(const char *str);
 long u_length_n(const char *str, long len);
 
