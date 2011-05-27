@@ -31,7 +31,7 @@ rb_u_string_delete.o: rb_u_string_delete.c rb_includes.h extconf.h u.h \
 rb_u_string_downcase.o: rb_u_string_downcase.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_dump.o: rb_u_string_dump.c rb_includes.h extconf.h u.h \
- private.h rb_private.h rb_u_string.h
+ private.h rb_private.h rb_u_string.h rb_u_buffer.h
 rb_u_string_each_byte.o: rb_u_string_each_byte.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_each_char.o: rb_u_string_each_char.c rb_includes.h extconf.h \
@@ -53,6 +53,8 @@ rb_u_string_foldcase.o: rb_u_string_foldcase.c rb_includes.h extconf.h \
 rb_u_string_format.o: rb_u_string_format.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h rb_u_buffer.h \
  rb_u_string_internal_bignum.h
+rb_u_string_getbyte.o: rb_u_string_getbyte.c rb_includes.h extconf.h u.h \
+ private.h rb_private.h rb_u_string.h
 rb_u_string_gsub.o: rb_u_string_gsub.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_hash.o: rb_u_string_hash.c rb_includes.h extconf.h u.h \

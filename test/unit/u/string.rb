@@ -619,6 +619,13 @@ Expectations do
   expect '1e+06'.u do '%g' % 1e+06 end
   expect '1E+06'.u do '%G' % 1E+06 end
 
+  expect 0x00c3 do 'äbc'.u.getbyte(0) end
+  expect 0x00a4 do 'äbc'.u.getbyte(1) end
+  expect nil do 'äbc'.u.getbyte(4) end
+  expect 0x00a4 do 'äbc'.u.getbyte(-3) end
+  expect 0x00c3 do 'äbc'.u.getbyte(-4) end
+  expect nil do 'äbc'.u.getbyte(-5) end
+
   expect 'bbc'.u do 'abc'.u.gsub('a', 'b') end
   expect 'h*ll*'.u do 'hello'.u.gsub(/[aeiou]/u, '*'.u) end
   expect 'h*ll*'.u do 'hëllö'.u.gsub(/[äëïöü]/u, '*'.u) end
