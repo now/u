@@ -80,6 +80,7 @@ VALUE rb_u_string_collate(VALUE self, VALUE other);
 VALUE rb_u_string_count(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_delete(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_downcase(VALUE self);
+VALUE rb_u_string_dump(VALUE self);
 VALUE rb_u_string_dup(VALUE self);
 VALUE rb_u_string_each_byte(VALUE self);
 VALUE rb_u_string_each_char(VALUE self);
