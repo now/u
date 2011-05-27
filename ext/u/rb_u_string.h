@@ -118,6 +118,7 @@ VALUE rb_u_string_scan(VALUE self, VALUE pattern);
 VALUE rb_u_string_split(VALUE self, const char *separator, long length);
 VALUE rb_u_string_split_m(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_squeeze(int argc, VALUE *argv, VALUE self);
+VALUE rb_u_string_starts_with(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_strip(VALUE self);
 VALUE rb_u_string_substr(VALUE self, long offset, long len);
 VALUE rb_u_string_times(VALUE self, VALUE rbtimes);

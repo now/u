@@ -1,10 +1,10 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_string_ends_with(int argc, VALUE *argv, VALUE self)
+rb_u_string_starts_with(int argc, VALUE *argv, VALUE self)
 {
         const UString *string = RVAL2USTRING(self);
-        const char *end = USTRING_END(string);
+        const char *p = USTRING_STR(string);
         long p_length = USTRING_LENGTH(string);
 
         for (int i = 0; i < argc; i++) {
@@ -19,7 +19,7 @@ rb_u_string_ends_with(int argc, VALUE *argv, VALUE self)
                 if (p_length < q_length)
                         continue;
 
-                if (memcmp(end - q_length, q, q_length) == 0)
+                if (memcmp(p, q, q_length) == 0)
                         return Qtrue;
         }
 

@@ -239,6 +239,8 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "slice", rb_u_string_aref_m, -1);
         rb_define_method(rb_cUString, "split", rb_u_string_split_m, -1);
         rb_define_method(rb_cUString, "squeeze", rb_u_string_squeeze, -1);
+        rb_define_method(rb_cUString, "start_with?", rb_u_string_starts_with, -1);
+        rb_define_method(rb_cUString, "starts_with?", rb_u_string_starts_with, -1);
         rb_define_method(rb_cUString, "strip", rb_u_string_strip, 0);
         rb_define_method(rb_cUString, "to_i", rb_u_string_to_i, -1);
         rb_define_method(rb_cUString, "to_s", rb_u_string_to_str, 0);

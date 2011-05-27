@@ -877,6 +877,19 @@ Expectations do
   expect 'ää bb cc'.u do 'ää   bb   cc'.u.squeeze(' ') end
   expect 'BxTÿWz'.u do 'BxTÿÿÿWzzz'.u.squeeze('a-zä-ÿ') end
 
+  expect 'abc'.u.to.start_with?('a')
+  expect 'abc'.u.not.to.start_with?('b')
+  expect 'äbc'.u.to.start_with?('ä')
+  expect 'äbc'.u.not.to.start_with?('bc')
+  expect 'äbc'.u.to.start_with?('a', 'ä')
+  expect 'äbc'.u.not.to.start_with?
+
+  # TODO: Add tests for Unicode whitespace characters
+  expect 'あ'.u do 'あ'.u.strip end
+  expect 'あ'.u do '     あ'.u.strip end
+  expect 'あ'.u do 'あ     '.u.strip end
+  expect 'あ'.u do '     あ     '.u.strip end
+
   expect 1480 do '1480ft/sec'.u.to_i end
   expect 0 do 'speed of sound in water @20C = 1480ft/sec'.u.to_i end
   expect 0 do ' 0'.u.to_i end
@@ -906,12 +919,6 @@ Expectations do
 
   expect :koala do 'koala'.u.to_sym end
   expect :'köälä' do 'köälä'.u.to_sym end
-
-  # TODO: Add tests for Unicode whitespace characters
-  expect 'あ'.u do 'あ'.u.strip end
-  expect 'あ'.u do '     あ'.u.strip end
-  expect 'あ'.u do 'あ     '.u.strip end
-  expect 'あ'.u do '     あ     '.u.strip end
 
   expect 'hïppö' do 'hëllö'.u.tr('ël', 'ïp') end
   expect '*ë**ö' do 'hëllö'.u.tr('^aëiöu', '*') end
