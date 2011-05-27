@@ -158,6 +158,10 @@ Expectations do
     'hëllö'.u.chars.entries
   end
 
+  expect [0x0068, 0x00eb, 0x006c, 0x006c, 0x00f6] do
+    'hëllö'.u.codepoints.entries
+  end
+
   expect ["hello\n".u, 'world'.u] do
     saved_rs = $/
     begin

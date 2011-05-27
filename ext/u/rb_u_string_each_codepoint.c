@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 VALUE
-rb_u_string_each_char(VALUE self)
+rb_u_string_each_codepoint(VALUE self)
 {
         RETURN_ENUMERATOR(self, 0, NULL);
 
@@ -10,10 +10,7 @@ rb_u_string_each_char(VALUE self)
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                char buffer[MAX_UNICHAR_BYTE_LENGTH];
-                int len = unichar_to_u(_rb_u_aref_char_validated(p, end), buffer);
-
-                rb_yield(rb_u_string_new(buffer, len));
+                rb_yield(UINT2NUM(_rb_u_aref_char_validated(p, end)));
 
                 p = u_next(p);
         }

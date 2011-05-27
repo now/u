@@ -83,6 +83,7 @@ VALUE rb_u_string_downcase(VALUE self);
 VALUE rb_u_string_dup(VALUE self);
 VALUE rb_u_string_each_byte(VALUE self);
 VALUE rb_u_string_each_char(VALUE self);
+VALUE rb_u_string_each_codepoint(VALUE self);
 VALUE rb_u_string_each_line(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_empty(VALUE self);
 VALUE rb_u_string_ends_with(int argc, VALUE *argv, VALUE self);

@@ -34,6 +34,8 @@ rb_u_string_each_byte.o: rb_u_string_each_byte.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_each_char.o: rb_u_string_each_char.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
+rb_u_string_each_codepoint.o: rb_u_string_each_codepoint.c rb_includes.h \
+ extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_each_line.o: rb_u_string_each_line.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_empty.o: rb_u_string_empty.c rb_includes.h extconf.h u.h \
