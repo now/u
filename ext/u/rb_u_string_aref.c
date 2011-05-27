@@ -58,14 +58,14 @@ rb_u_string_aref_default(VALUE self, VALUE index)
         const UString *string = RVAL2USTRING(self);
         long n_chars = u_length_n(USTRING_STR(string), USTRING_LENGTH(string));
 
-        long begin, len;
-        switch (rb_range_beg_len(index, &begin, &len, n_chars, 0)) {
+        long begin, length;
+        switch (rb_range_beg_len(index, &begin, &length, n_chars, 0)) {
         case Qfalse:
                 return rb_u_string_aref_num(self, NUM2LONG(index));
         case Qnil:
                 return Qnil;
         default:
-                return rb_u_string_substr(self, begin, len);
+                return rb_u_string_substr(self, begin, length);
         }
 }
 

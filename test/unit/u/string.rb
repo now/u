@@ -43,7 +43,7 @@ Expectations do
   expect 'hë'.u do 'hëllö'.u['hë'] end
   expect 'lö'.u do 'hëllö'.u['lö'] end
   expect nil do 'hëllö'.u['other'.u] end
-  expect nil do 'hëllö'.u['other'.u] end
+  expect nil do 'hëllö'.u['other'] end
 
   expect 'hë'.u do 'hëllö'.u[/(..)(..)/u, 1] end
   expect 'll'.u do 'hëllö'.u[/(..)(..)/u, 2] end
@@ -54,6 +54,7 @@ Expectations do
 
   expect 'l'.u do 'hëllö'.u[stub(:to_int => 2)] end
 
+  expect ArgumentError do 'hëllö'.u[1, 2, 3] end
   expect ArgumentError do 'hëllö'.u[] end
 
   expect ArgumentError do '*'.u * -1 end
@@ -75,6 +76,47 @@ Expectations do
 
   expect true do 'abc'.u.ascii_only? end
   expect false do 'äbc'.u.ascii_only? end
+
+  expect 4 do 'äbc'.u.bytesize end
+  expect 9 do "äbc\0dëf".u.bytesize end
+
+  expect ''.u.byteslice(0, -2).to.be.nil?
+  expect ''.u.byteslice(0, -1).to.be.nil?
+
+  expect ''.u do ''.u.byteslice(0, 0) end
+  expect ''.u do ''.u.byteslice(0, 1) end
+  expect ''.u do ''.u.byteslice(0, 2) end
+
+  expect ''.u.byteslice(-1, -2).to.be.nil?
+  expect ''.u.byteslice(-1, -1).to.be.nil?
+  expect ''.u.byteslice(-1, 0).to.be.nil?
+  expect ''.u.byteslice(-1, 1).to.be.nil?
+  expect ''.u.byteslice(-1, 2).to.be.nil?
+  expect ''.u.byteslice(1, -2).to.be.nil?
+  expect ''.u.byteslice(1, -1).to.be.nil?
+  expect ''.u.byteslice(1, 0).to.be.nil?
+  expect ''.u.byteslice(1, 1).to.be.nil?
+  expect ''.u.byteslice(1, 2).to.be.nil?
+
+  expect nil do ''.u.byteslice(0) end
+
+  expect 'h'.u do 'hëllö'.u.byteslice(0) end
+  expect "\xb6".u do 'hëllö'.u.byteslice(-1) end
+  expect nil do 'hëllö'.u.byteslice(7) end
+  expect nil do 'hëllö'.u.byteslice(-8) end
+
+  expect "h\xc3".u do 'hëllö'.u.byteslice(0, 2) end
+  expect 'ö'.u do 'hëllö'.u.byteslice(-2, 2) end
+  expect 'll'.u do 'hëllö'.u.byteslice(3, 2) end
+
+  expect 'hë'.u do 'hëllö'.u.byteslice(0..2) end
+  expect 'hë'.u do 'hëllö'.u.byteslice(0...3) end
+  expect 'ö'.u do 'hëllö'.u.byteslice(-2..-1) end
+
+  expect 'l'.u do 'hëllö'.u.byteslice(stub(:to_int => 3)) end
+
+  expect ArgumentError do 'hëllö'.u.byteslice(1, 2, 3) end
+  expect ArgumentError do 'hëllö'.u.byteslice() end
 
   expect 1 do 'あB'.u.casecmp('あa') end
   expect 1 do 'あB'.u.casecmp('あa'.u) end
@@ -152,9 +194,6 @@ Expectations do
   expect [0x61, 0x62, 0x63, 0x00, 0x64, 0xc3, 0xab, 0x66] do
     "abc\0dëf".u.bytes.entries
   end
-
-  expect 4 do 'äbc'.u.bytesize end
-  expect 9 do "äbc\0dëf".u.bytesize end
 
   expect ['h'.u, 'ë'.u, 'l'.u, 'l'.u, 'ö'.u] do
     'hëllö'.u.chars.entries
