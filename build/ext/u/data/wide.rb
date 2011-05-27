@@ -35,11 +35,10 @@ private
     def initialize(derived_east_asian_width, types)
       super 'static const struct unichar_interval wide[]'
       wide = derived_east_asian_width.
-        inject(Hash.new{ |h, k| h[k] = [] }){ |ws, p| ws[p[1]] << p[0]; ws }.
-        select{ |k, v| types.include? k }.
-        map{ |pair| pair.last }.
-        flatten.
+        select{ |point, width| types.include? width }.
+        map{ |point, width| point }.
         sort
+      return if wide.empty?
       first = wide[0]
       last = first - 1
       wide.each do |point|
