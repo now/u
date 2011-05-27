@@ -16,6 +16,8 @@ Expectations do
     original.dup.append('de') == original.object_id
   end
 
+  expect "abc\0def".u do U::Buffer.new.append('abc', 0, 'def'.u).to_u end
+
   expect '#<U::Buffer äbc>' do U::Buffer.new.append('äbc'.u).inspect end
   expect '#<U::Buffer äbcdëwvxÿz>' do U::Buffer.new.append('äbcdëwvxÿz'.u).inspect end
   expect '#<U::Buffer äbcdëfwvxÿz>' do U::Buffer.new.append('äbcdëfwvxÿz'.u).inspect end

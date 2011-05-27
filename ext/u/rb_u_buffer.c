@@ -205,6 +205,29 @@ rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
                         const UBuffer *buffer = RVAL2UBUFFER(argv[i]);
 
                         rb_u_buffer_append(self, buffer->c, buffer->length);
+                } else if (FIXNUM_P(argv[i]) || TYPE(argv[i]) == T_BIGNUM) {
+                        unichar c = NUM2UINT(argv[i]);
+
+/* TODO: This depends on an experimental API.  Modify this once the API is
+ * stable. */
+#if 0
+                        if (rb_num_to_uint(argv[i], &c) != 0) {
+                                if (FIXNUM_P(argv[i]))
+                                        rb_raise(rb_eRangeError,
+                                                 "%ld out of char range",
+                                                 FIX2LONG(argv[i]));
+                                else
+                                        rb_raise(rb_eRangeError,
+                                                 "Bignum out of char range");
+                        }
+#endif
+
+                        if (!unichar_isvalid(c))
+                                rb_raise(rb_eRangeError,
+                                         "invalid Unicode character: %u",
+                                         c);
+
+                        rb_u_buffer_append_unichar(self, c);
                 } else {
                         const UString *string = RVAL2USTRING_ANY(argv[i]);
 
