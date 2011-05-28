@@ -9,7 +9,7 @@ static bool
 u_is_ascii_only_impl(const char *string, size_t length, bool use_length)
 {
         for (const char *p = string; P_WITHIN_STR(p, string, length, use_length); p++)
-                if (*p & 0x80)
+                if (*(unsigned char *)p > 127)
                         return false;
 
         return true;
