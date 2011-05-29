@@ -329,7 +329,7 @@ normalize_wc_decompose(const char *str, size_t max_len, bool use_len,
                 unichar c = u_aref_char(p);
                 size_t prev_n = n;
 
-                unichar *base = (buf != NULL) ? buf + n : NULL;
+                unichar *base = OFFSET_IF(buf, n);
                 if (c >= SBase && c <= SLast)
                         n += decompose_hangul(c, base);
                 else
@@ -341,6 +341,12 @@ normalize_wc_decompose(const char *str, size_t max_len, bool use_len,
                         prev_start = prev_n;
                 }
         }
+
+        /*
+        if (buf != NULL)
+                for (size_t i = 0; i < n; i++)
+                        printf("%d\n", buf[i]);
+                        */
 
         if (buf != NULL && n > 0)
                 unicode_canonical_ordering(buf + prev_start, n - prev_start);

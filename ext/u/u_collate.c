@@ -114,13 +114,23 @@ _utf_encode(char *buf, wchar_t c)
  * collation keys using str_compare().
  */
 static char *
-utf_collate_key_impl(const char *str, size_t len, bool use_len)
+utf_collate_key_impl(const char *str, size_t len, bool use_len, size_t *new_length)
 {
 	assert(str != NULL);
 
-        /* TODO: Implement _n by removing all '\0' from the input before using
-         * it. */
-	unichar *str_norm = _utf_normalize_wc(str, len, use_len, NULL, NORMALIZE_ALL_COMPOSE);
+        size_t norm_length;
+	unichar *str_norm = _utf_normalize_wc(str, len, use_len, &norm_length,
+                                              NORMALIZE_ALL_COMPOSE);
+        const unichar *p = str_norm;
+        const unichar *end = str_norm + norm_length;
+        unichar *q = str_norm;
+        while (p < end) {
+                if (*p != '\0')
+                        *q++ = *p;
+                p++;
+        }
+        *q = '\0';
+
 	size_t xfrm_len = wcsxfrm(NULL, (wchar_t *)str_norm, 0);
 	wchar_t result_wc[xfrm_len + 1];
 	wcsxfrm(result_wc, (wchar_t *)str_norm, xfrm_len + 1);
@@ -137,6 +147,9 @@ utf_collate_key_impl(const char *str, size_t len, bool use_len)
 
 	free(str_norm);
 
+        if (new_length != NULL)
+                *new_length = result_len;
+
 	return result;
 }
 
@@ -148,7 +161,7 @@ utf_collate_key_impl(const char *str, size_t len, bool use_len)
 char *
 u_collate_key(const char *str)
 {
-	return utf_collate_key_impl(str, 0, false);
+	return utf_collate_key_impl(str, 0, false, NULL);
 }
 
 
@@ -157,7 +170,7 @@ u_collate_key(const char *str)
  * compared with other collation keys using str_compare().
  */
 char *
-u_collate_key_n(const char *str, size_t len)
+u_collate_key_n(const char *str, size_t len, size_t *new_length)
 {
-	return utf_collate_key_impl(str, len, true);
+	return utf_collate_key_impl(str, len, true, new_length);
 }

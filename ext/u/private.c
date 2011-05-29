@@ -16,7 +16,7 @@
 bool
 binary_search_unicode_table(const void *table, size_t n, size_t sizeof_entry, size_t sizeof_char, unichar c, int *index)
 {
-#define ENTRY(index) ((unichar)(*(unichar *)((const char *)table + ((index) * sizeof_entry))) & char_mask)
+#define ENTRY(index) (*(unichar *)((const char *)table + ((index) * sizeof_entry)) & char_mask)
 
 	int begin = 0;
         int end = n - 1;
@@ -26,7 +26,9 @@ binary_search_unicode_table(const void *table, size_t n, size_t sizeof_entry, si
          * character.  The casefold table, for example, uses uint16_t-sized
          * characters.  To only get the interesting part of our table entry
          * we’ll have to mask the retrieved value. */
-        int char_mask = (1 << (8 * sizeof_char)) - 1;
+        unichar char_mask = sizeof_char < sizeof(unichar) ?
+                ((unichar)1 << (CHAR_BIT * sizeof_char)) - 1 :
+                (unichar)-1;
 
         /* Drop out early if we know for certain that C can’t be in the
          * decomposition table. */

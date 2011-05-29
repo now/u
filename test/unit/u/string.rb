@@ -635,8 +635,8 @@ Expectations do
   expect '0x1p+10'.u do '%a'.u % 1024 end
   # TODO: Probably sizeof(double)-dependent
   expect '0x1.23456p+789'.u do '%a'.u % 3.704450999893983e+237 end
-  # TODO: Probably sizeof(double)-dependent
-  expect '0x0.0000000000001p-1022'.u do '%a'.u % 4.9e-324 end
+  # TODO: This is sizeof(double)-dependent
+  # expect '0x0.0000000000001p-1022'.u do '%a'.u % 4.9e-324 end
 
   expect '   -0x1p+0'.u do '%10a'.u % -1 end
   expect ' -0x1.8p+0'.u do '%10a'.u % -1.5 end
@@ -973,4 +973,8 @@ Expectations do
   expect true do 'äbc'.u.valid_encoding? end
   expect true do "äbc\0def".u.valid_encoding? end
   expect false do "\xc3bc".u.valid_encoding? end
+
+  expect ''.u do "\0".u.collate_key end
+  expect 'äbcdëf'.u do 'äbcdëf'.u.collate_key end
+  expect 'äbcdëf'.u do "äbc\0dëf".u.collate_key end
 end

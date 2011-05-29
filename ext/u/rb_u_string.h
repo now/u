@@ -78,6 +78,7 @@ VALUE rb_u_string_chomp(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_chop(VALUE self);
 VALUE rb_u_string_chr(VALUE self);
 VALUE rb_u_string_collate(VALUE self, VALUE other);
+VALUE rb_u_string_collate_key(VALUE self);
 VALUE rb_u_string_count(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_delete(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_downcase(VALUE self);

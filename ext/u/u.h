@@ -195,7 +195,7 @@ void u_append_n(char *dest, const char *src, size_t n);
 int u_collate(const char *a, const char *b);
 int u_collate_n(const char *a, size_t a_len, const char *b, size_t b_len);
 char *u_collate_key(const char *str);
-char *u_collate_key_n(const char *str, size_t len);
+char *u_collate_key_n(const char *str, size_t len, size_t *new_length);
 
 int u_char_index(const char *str, unichar c);
 int u_char_index_n(const char *str, unichar c, size_t len);
