@@ -258,10 +258,11 @@ Expectations do
   expect "abc\0ss".u do "abc\0ß".u.foldcase end
 
   expect 'äbc'.u do 'äbc'.u % [] end
+
   expect ArgumentError.new('invalid flag ‘ ’ given to directive ‘%’') do '% %'.u % [] end
   expect ArgumentError.new('invalid flags “ #” given to directive ‘%’') do '% #%'.u % [] end
   expect ArgumentError.new('invalid flags “ #+-0” given to directive ‘%’') do '% #+-0%'.u % [] end
-  expect ArgumentError.new('directive does not take an argument: %') do '%1$%'.u % [] end
+  expect ArgumentError.new('directive does not take an argument: %') do '%1$%'.u % [1] end
   expect '%'.u do '%%'.u % [] end
   expect 'ä%c'.u do 'ä%%c'.u % [] end
 
@@ -285,10 +286,18 @@ Expectations do
   expect ' äbc'.u do '%*cbc'.u % [2, 0x00e4] end
   expect ArgumentError.new('cannot use positional argument numbers after absolute argument numbers') do '%*1$cbc'.u % [2, 0x00e4] end
   expect ' äbc'.u do '%2$*1$cbc'.u % [2, 0x00e4] end
-  #expect ' äbc'.u do '%<a>cbc'.u % { :a => 0x00e4 } end
-  expect ArgumentError.new('one Hash argument required when using named arguments in format') do '%<a>cbc'.u % 0x00e4 end
   expect 'äbc'.u do '%<a>cbc'.u % { :a => 0x00e4 } end
   expect ' äbc'.u do '%<a>2cbc'.u % { :a => 0x00e4 } end
+  expect ArgumentError.new('cannot use absolute argument number 1: relative argument number already used') do '%c%1$c'.u % [0x00e4] end
+  expect ArgumentError.new('cannot use absolute argument number 1: named argument already used') do '%<a>c%1$c'.u % { :a => 0x00e4 } end
+  expect ArgumentError.new('absolute argument number beyond end of argument list: 1 > 0') do '%1$%'.u % [] end
+  expect ArgumentError.new('cannot use named argument “a”: relative argument number already used') do '%c%<a>c'.u % [0x00e4] end
+  expect ArgumentError.new('cannot use named argument “a”: absolute argument number already used') do '%1$c%<a>c'.u % [0x00e4] end
+  expect ArgumentError.new('one Hash argument required when using named arguments in format') do '%<a>cbc'.u % 0x00e4 end
+  expect ArgumentError.new('named argument not found: a') do '%<a>cbc'.u % { :b => 0x00e4 } end
+  expect ArgumentError.new('cannot use positional argument numbers after absolute argument numbers') do '%1$c%c'.u % [0x00e4] end
+  expect ArgumentError.new('cannot use positional argument numbers after named arguments') do '%<a>c%c'.u % { :a => 0x00e4 } end
+  expect ArgumentError.new('need at least one argument') do '%c'.u % [] end
 
   # TODO: Add flag checks?
   expect 'äbc'.u do '%sc'.u % ['äb'.u] end

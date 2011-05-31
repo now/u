@@ -182,16 +182,15 @@ format_arguments_absolute(struct format_arguments *arguments, int absolute)
 
         if (arguments->names != Qundef)
                 rb_raise(rb_eArgError,
-                         "cannot use absolute argument number %d: argument name already given",
+                         "cannot use absolute argument number %d: named argument already used",
                          absolute);
 
         arguments->absolute = true;
 
-        if (absolute - 1 > arguments->argc)
-                /* TODO: Check error output. (%d > %d) */
+        if (absolute > arguments->argc)
                 rb_raise(rb_eArgError,
                          "absolute argument number beyond end of argument list: %d > %d",
-                         absolute, arguments->argc + 1);
+                         absolute, arguments->argc);
 
         return arguments->argv[absolute - 1];
 }
