@@ -5,6 +5,7 @@
 *.swp
 TAGS
 /ext/u/Makefile
+/ext/u/u.bundle.dSYM/
 extconf.h
 mkmf.log
 /tests/data
