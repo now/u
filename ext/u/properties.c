@@ -335,6 +335,16 @@ unichar_iszerowidth(unichar c)
 
 
 /* {{{1
+ * Determine the Unicode character type of ‘c’.
+ */
+UnicodeType
+unichar_type(unichar c)
+{
+	return s_type(c);
+}
+
+
+/* {{{1
  * Convert ‘c’ to its uppercase representation (if any).
  */
 static unichar
@@ -443,16 +453,6 @@ unichar_xdigit_value(unichar c)
                 return c - UNICHAR_FULLWIDTH_A + 10;
 	else
 		return unichar_digit_value(c);
-}
-
-
-/* {{{1
- * Determine the Unicode character type of ‘c’.
- */
-UnicodeType
-unichar_type(unichar c)
-{
-	return s_type(c);
 }
 
 
