@@ -30,22 +30,6 @@
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
 
 /* {{{1
- * Macros for accessing the Unicode character attribute table.
- *
- * TODO: Turn these macros into full-fledged functions, as this is rather silly
- * when we have ‹inline› in C99.
- */
-#define ATTR_TABLE(page) \
-	(((page) <= UNICODE_LAST_PAGE_PART1) \
-	 ? attr_table_part1[page] \
-	 : attr_table_part2[(page) - 0xe00])
-
-#define ATTTABLE(page, char) \
-	((ATTR_TABLE(page) == UNICODE_MAX_TABLE_INDEX) \
-	 ? 0 : (attr_data[ATTR_TABLE(page)][char]))
-
-
-/* {{{1
  * Internal function used for figuring out the type of a given character.
  */
 static inline int
@@ -344,13 +328,28 @@ unichar_type(unichar c)
 }
 
 
+static inline unichar
+s_attribute(unichar c)
+{
+        unichar page = c >> 8;
+        unichar index = page <= UNICODE_LAST_PAGE_PART1 ?
+                attr_table_part1[page] :
+                attr_table_part2[page - 0xe00];
+
+        if (index == UNICODE_MAX_TABLE_INDEX)
+                return 0;
+
+        return attr_data[index][c & 0xff];
+}
+
+
 /* {{{1
  * Convert ‘c’ to its uppercase representation (if any).
  */
 static unichar
 special_case_table_lookup(unichar c)
 {
-        unichar tv = ATTTABLE(c >> 8, c & 0xff);
+        unichar tv = s_attribute(c);
 
         if (tv >= UNICODE_SPECIAL_CASE_TABLE_START)
                 tv = u_aref_char(special_case_table +
@@ -431,7 +430,7 @@ int
 unichar_digit_value(unichar c)
 {
 	if (s_type(c) == UNICODE_DECIMAL_NUMBER)
-		return ATTTABLE(c >> 8, c & 0xff);
+		return s_attribute(c);
 
         return -1;
 }
@@ -579,7 +578,7 @@ static inline size_t
 real_do_toupper(unichar c, int type, char *buf)
 {
 	bool upper = (type != UNICODE_LOWERCASE_LETTER);
-	unichar tv = ATTTABLE(c >> 8, c & 0xff);
+	unichar tv = s_attribute(c);
 
 	if (tv >= UNICODE_SPECIAL_CASE_TABLE_START)
                 return output_special_case(buf,
@@ -723,7 +722,7 @@ has_more_above(const char *str)
 static inline size_t
 real_do_tolower(unichar c, int type, char *buf)
 {
-	unichar tv = ATTTABLE(c >> 8, c & 0xff);
+	unichar tv = s_attribute(c);
 
 	if (tv >= UNICODE_SPECIAL_CASE_TABLE_START)
                 return output_special_case(buf,

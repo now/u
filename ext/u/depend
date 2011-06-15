@@ -1,6 +1,7 @@
 decompose.o: decompose.c u.h data/decompose.h data/compose.h private.h
 private.o: private.c u.h private.h
-properties.o: properties.c u.h private.h data/character-tables.h
+properties.o: properties.c u.h private.h data/types.h data/attributes.h \
+ data/title-table.h
 rb_private.o: rb_private.c rb_includes.h extconf.h u.h private.h \
   rb_private.h rb_u_string.h
 rb_u.o: rb_u.c u.h private.h rb_private.h rb_u_buffer.h rb_u_string.h

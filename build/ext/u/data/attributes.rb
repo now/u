@@ -6,6 +6,8 @@ class Attributes
   def initialize(data, special_casing, name, version, io = $stdout)
     U::Build::Header.new(name, io) do
       io.puts <<EOH
+#define UNICODE_LAST_PAGE_PART1 #{data.pages_before_e0000 - 1}
+
 #define UNICODE_SPECIAL_CASE_TABLE_START 0x1000000
 EOH
       io.puts U::Build::Header::Tables::Split.
