@@ -7,7 +7,7 @@
 #include <string.h>
 #include "u.h"
 #include "private.h"
-#include "data/character-tables.h"
+#include "data/types.h"
 #include "data/attributes.h"
 #include "data/title-table.h"
 

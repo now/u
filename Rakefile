@@ -101,14 +101,6 @@ file 'ext/u/data/case-folding.h' => %w[build/ext/u/data/case-folding.rb
   end
 end
 
-task :extensions => %w[ext/u/data/character-tables.h]
-file 'ext/u/data/character-tables.h' => %w[build/ext/u/data/character-tables.rb
-                                           build/data/UnicodeData.txt] do |t|
-  generate_file t.name do |tmp|
-    ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
-  end
-end
-
 task :extensions => %w[ext/u/data/compose.h]
 file 'ext/u/data/compose.h' => %w[build/ext/u/data/compose.rb
                                   build/data/UnicodeData.txt
@@ -131,6 +123,14 @@ file 'ext/u/data/title-table.h' => %w[build/ext/u/data/title-table.rb
                                       build/data/UnicodeData.txt] do |t|
   generate_file t.name do |tmp|
     ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
+  end
+end
+
+task :extensions => %w[ext/u/data/types.h]
+file 'ext/u/data/types.h' => %w[build/ext/u/data/types.rb
+                                build/data/UnicodeData.txt] do |t|
+  generate_file t.name do |tmp|
+    ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
   end
 end
 

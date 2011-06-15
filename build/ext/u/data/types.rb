@@ -2,7 +2,7 @@
 
 require 'u/build'
 
-class CharacterTables
+class Types
   def initialize(data, name, version, io = $stdout)
     U::Build::Header.new(name, io) do
       io.puts <<EOH
@@ -78,4 +78,4 @@ private
   end
 end
 
-CharacterTables.new(U::Build::Data::Unicode.new(ARGV[0]), ARGV[1], ARGV[2])
+Types.new(U::Build::Data::Unicode.new(ARGV[0]), ARGV[1], ARGV[2])

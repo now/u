@@ -1,7 +1,7 @@
 /* Automatically generated file */
 
-#ifndef CHARACTER_TABLES_H
-#define CHARACTER_TABLES_H
+#ifndef TYPES_H
+#define TYPES_H
 
 
 #define UNICODE_DATA_VERSION "6.0.0"
@@ -13545,4 +13545,4 @@ static const int16_t type_table_part2[768] = {
 };
 
 
-#endif /* CHARACTER_TABLES_H */
+#endif /* TYPES_H */
