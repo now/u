@@ -65,6 +65,15 @@ def generate_file(name)
   end
 end
 
+task :extensions => %w[ext/u/data/attributes.h]
+file 'ext/u/data/attributes.h' => %w[build/ext/u/data/attributes.rb
+                                     build/data/UnicodeData.txt
+                                     build/data/SpecialCasing.txt] do |t|
+  generate_file t.name do |tmp|
+    ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
+  end
+end
+
 task :extensions => %w[ext/u/data/bidi-mirroring.h]
 file 'ext/u/data/bidi-mirroring.h' => %w[build/ext/u/data/bidi-mirroring.rb
                                          build/data/BidiMirroring.txt] do |t|
@@ -94,8 +103,7 @@ end
 
 task :extensions => %w[ext/u/data/character-tables.h]
 file 'ext/u/data/character-tables.h' => %w[build/ext/u/data/character-tables.rb
-                                           build/data/UnicodeData.txt
-                                           build/data/SpecialCasing.txt] do |t|
+                                           build/data/UnicodeData.txt] do |t|
   generate_file t.name do |tmp|
     ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
   end

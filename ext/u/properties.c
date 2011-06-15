@@ -8,6 +8,7 @@
 #include "u.h"
 #include "private.h"
 #include "data/character-tables.h"
+#include "data/attributes.h"
 #include "data/title-table.h"
 
 
