@@ -36,23 +36,11 @@ EOH
           '0x%07x' % (0x1000000 + special_casing[i].offset) :
           '0x%04x' % (data[i].value or 0)
       }
-      io.puts TitleTable.new(data)
       io.puts SpecialCaseTable.new(special_casing)
     end
   end
 
 private
-
-  class TitleTable < U::Build::Header::Table
-    def initialize(data)
-      super 'static const unichar title_table[][3]'
-      # TODO: Add #code to Entry and use #select on data here.
-      data.each_with_index do |entry, code|
-        next unless entry.title_to_lower
-        self << U::Build::Header::Table::Row.new(*[code, entry.title_to_upper, entry.title_to_lower].map{ |i| '%#06x' % i })
-      end
-    end
-  end
 
   class SpecialCaseTable < U::Build::Header::Table
     def initialize(special_casing)

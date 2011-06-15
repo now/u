@@ -118,6 +118,14 @@ file 'ext/u/data/decompose.h' => %w[build/ext/u/data/decompose.rb
   end
 end
 
+task :extensions => %w[ext/u/data/title-table.h]
+file 'ext/u/data/title-table.h' => %w[build/ext/u/data/title-table.rb
+                                      build/data/UnicodeData.txt] do |t|
+  generate_file t.name do |tmp|
+    ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
+  end
+end
+
 task :extensions => %w[ext/u/data/wide.h]
 file 'ext/u/data/wide.h' => %w[build/ext/u/data/wide.rb
                                build/data/DerivedEastAsianWidth.txt] do |t|

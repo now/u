@@ -8,6 +8,7 @@
 #include "u.h"
 #include "private.h"
 #include "data/character-tables.h"
+#include "data/title-table.h"
 
 
 #define COMBINING_DOT_ABOVE                     ((unichar)0x0307)
