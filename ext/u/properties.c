@@ -31,27 +31,6 @@
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
 
 /* {{{1
- * Determine whether ‘c’ is some form of punctuation or other symbol.
- */
-bool
-unichar_ispunct(unichar c)
-{
-        return IS(s_type(c),
-                  OR(UNICODE_CONNECT_PUNCTUATION,
-                     OR(UNICODE_DASH_PUNCTUATION,
-                        OR(UNICODE_OPEN_PUNCTUATION,
-                           OR(UNICODE_CLOSE_PUNCTUATION,
-                              OR(UNICODE_INITIAL_PUNCTUATION,
-                                 OR(UNICODE_FINAL_PUNCTUATION,
-                                    OR(UNICODE_OTHER_PUNCTUATION,
-                                       OR(UNICODE_MODIFIER_SYMBOL,
-                                          OR(UNICODE_MATH_SYMBOL,
-                                             OR(UNICODE_CURRENCY_SYMBOL,
-                                                OR(UNICODE_OTHER_SYMBOL, 0)))))))))))) ? true : false;
-}
-
-
-/* {{{1
  * Determine whether ‘c’ is some form of whitespace, such as space, tab or a
  * line separator (newline, carriage return, etc.).
  */
