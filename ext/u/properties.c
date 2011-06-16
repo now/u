@@ -31,16 +31,6 @@
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
 
 /* {{{1
- * Determine whether ‘c’ is a digit, such as 0, 1, or 2.
- */
-bool
-unichar_isdigit(unichar c)
-{
-	return s_type(c) == UNICODE_DECIMAL_NUMBER;
-}
-
-
-/* {{{1
  * Determine whether ‘c’ is printable and not a space or control character such
  * as tab or <NUL›, such as A, B, or C.
  */
