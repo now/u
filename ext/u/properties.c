@@ -47,15 +47,6 @@ unichar_istitle(unichar c)
 }
 
 
-bool
-unichar_isdefined(unichar c)
-{
-        return !IS(s_type(c),
-                   OR(UNICODE_UNASSIGNED,
-                      OR(UNICODE_SURROGATE, 0)));
-}
-
-
 #define SOFT_HYPHEN ((unichar)0x00ad)
 #define ZERO_WIDTH_SPACE ((unichar)0x200b)
 

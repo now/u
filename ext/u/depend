@@ -159,6 +159,8 @@ unichar_isassigned.o: unichar_isassigned.c u.h private.h data/constants.h \
  types.h
 unichar_iscntrl.o: unichar_iscntrl.c u.h private.h data/constants.h \
  types.h
+unichar_isdefined.o: unichar_isdefined.c u.h private.h data/constants.h \
+ types.h
 unichar_isdigit.o: unichar_isdigit.c u.h private.h data/constants.h \
  types.h
 unichar_isgraph.o: unichar_isgraph.c u.h private.h data/constants.h \
