@@ -181,5 +181,7 @@ unichar_iswide.o: unichar_iswide.c u.h private.h data/wide.h
 unichar_iswide_cjk.o: unichar_iswide_cjk.c u.h private.h data/wide-cjk.h
 unichar_isxdigit.o: unichar_isxdigit.c u.h private.h data/constants.h \
  types.h
+unichar_iszerowidth.o: unichar_iszerowidth.c u.h private.h \
+ data/constants.h types.h
 unichar_mirror.o: unichar_mirror.c u.h private.h data/bidi-mirroring.h
 unichar_to_u.o: unichar_to_u.c u.h utf8.h
