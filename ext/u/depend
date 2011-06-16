@@ -159,6 +159,8 @@ unichar_iscntrl.o: unichar_iscntrl.c u.h private.h data/constants.h \
  types.h
 unichar_isdigit.o: unichar_isdigit.c u.h private.h data/constants.h \
  types.h
+unichar_isgraph.o: unichar_isgraph.c u.h private.h data/constants.h \
+ types.h
 unichar_isnewline.o: unichar_isnewline.c u.h
 unichar_isvalid.o: unichar_isvalid.c u.h utf8.h
 unichar_iswide.o: unichar_iswide.c u.h private.h data/wide.h
