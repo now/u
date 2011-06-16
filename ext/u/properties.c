@@ -156,29 +156,6 @@ unichar_digit_value(unichar c)
 
 
 /* {{{1
- * Return the numeric value of ‘c’ if it's a hexadecimal digit, or -1 if not.
- */
-#define UNICHAR_FULLWIDTH_A     0xff21
-#define UNICHAR_FULLWIDTH_F     0xff26
-#define UNICHAR_FULLWIDTH_a     0xff41
-#define UNICHAR_FULLWIDTH_f     0xff46
-int
-unichar_xdigit_value(unichar c)
-{
-	if (c >= 'a' && c <= 'f')
-		return c - 'a' + 10;
-	else if (c >= 'A' && c <= 'F')
-		return c - 'A' + 10;
-        else if (c >= UNICHAR_FULLWIDTH_a && c <= UNICHAR_FULLWIDTH_f)
-                return c - UNICHAR_FULLWIDTH_a + 10;
-        else if (c >= UNICHAR_FULLWIDTH_A && c <= UNICHAR_FULLWIDTH_F)
-                return c - UNICHAR_FULLWIDTH_A + 10;
-	else
-		return unichar_digit_value(c);
-}
-
-
-/* {{{1
  * LocaleType: This ‹enum› is used for dealing with different locales for
  * turning strings into uppercase or lowercase.
  */
