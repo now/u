@@ -23,5 +23,6 @@ s_attribute(unichar c)
         return _u_attr_data[index][c & 0xff];
 }
 
+unichar _u_special_case_table_lookup(unichar c);
 
 #endif /* ATTRIBUTES_H */
