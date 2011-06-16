@@ -65,89 +65,61 @@ def generate_file(name)
   end
 end
 
-task :extensions => %w[ext/u/data/attributes.h]
-file 'ext/u/data/attributes.h' => %w[build/ext/u/data/attributes.rb
-                                     build/data/UnicodeData.txt
-                                     build/data/SpecialCasing.txt] do |t|
-  generate_file t.name do |tmp|
-    ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
+def generate_data_header(task, *arguments)
+  generate_file task.name do |tmp|
+    ruby '-w -Ibuild/lib %s > %s' % [[task.prerequisites + arguments].join(' '), tmp]
   end
 end
 
-task :extensions => %w[ext/u/data/bidi-mirroring.h]
-file 'ext/u/data/bidi-mirroring.h' => %w[build/ext/u/data/bidi-mirroring.rb
-                                         build/data/BidiMirroring.txt] do |t|
-  generate_file t.name do |tmp|
-    ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
+def data_header(headers, &block)
+  block ||= proc{ |t| generate_data_header t }
+  headers.each do |path, prerequisites|
+    task :extensions => path
+    file path => prerequisites, &block
   end
 end
 
-task :extensions => %w[ext/u/data/break.h]
-file 'ext/u/data/break.h' => %w[build/ext/u/data/break.rb
-                                build/data/UnicodeData.txt
-                                build/data/LineBreak.txt] do |t|
-  generate_file t.name do |tmp|
-    ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
-  end
-end
+data_header 'ext/u/data/attributes.h' => %w[build/ext/u/data/attributes.rb
+                                            build/data/UnicodeData.txt
+                                            build/data/SpecialCasing.txt]
 
-task :extensions => %w[ext/u/data/case-folding.h]
-file 'ext/u/data/case-folding.h' => %w[build/ext/u/data/case-folding.rb
+data_header 'ext/u/data/bidi-mirroring.h' => %w[build/ext/u/data/bidi-mirroring.rb
+                                                build/data/BidiMirroring.txt]
+
+data_header 'ext/u/data/break.h' => %w[build/ext/u/data/break.rb
                                        build/data/UnicodeData.txt
-                                       build/data/SpecialCasing.txt
-                                       build/data/CaseFolding.txt] do |t|
-  generate_file t.name do |tmp|
-    ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
-  end
+                                       build/data/LineBreak.txt]
+
+data_header 'ext/u/data/case-folding.h' => %w[build/ext/u/data/case-folding.rb
+                                              build/data/UnicodeData.txt
+                                              build/data/SpecialCasing.txt
+                                              build/data/CaseFolding.txt]
+data_header 'ext/u/data/compose.h' => %w[build/ext/u/data/compose.rb
+                                         build/data/UnicodeData.txt
+                                         build/data/CompositionExclusions.txt]
+
+data_header 'ext/u/data/constants.h' => %w[build/ext/u/data/constants.rb
+                                           build/data/UnicodeData.txt] do |t|
+  generate_data_header t, UnicodeVersion
 end
 
-task :extensions => %w[ext/u/data/compose.h]
-file 'ext/u/data/compose.h' => %w[build/ext/u/data/compose.rb
-                                  build/data/UnicodeData.txt
-                                  build/data/CompositionExclusions.txt] do |t|
-  generate_file t.name do |tmp|
-    ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
-  end
+data_header 'ext/u/data/decompose.h' => %w[build/ext/u/data/decompose.rb
+                                           build/data/UnicodeData.txt]
+
+data_header 'ext/u/data/title-table.h' => %w[build/ext/u/data/title-table.rb
+                                             build/data/UnicodeData.txt]
+
+data_header 'ext/u/data/types.h' => %w[build/ext/u/data/types.rb
+                                       build/data/UnicodeData.txt]
+
+data_header 'ext/u/data/wide.h' => %w[build/ext/u/data/wide.rb
+                                      build/data/DerivedEastAsianWidth.txt] do |t|
+  generate_data_header t, 'W', 'F'
 end
 
-task :extensions => %w[ext/u/data/decompose.h]
-file 'ext/u/data/decompose.h' => %w[build/ext/u/data/decompose.rb
-                                    build/data/UnicodeData.txt] do |t|
-  generate_file t.name do |tmp|
-    ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
-  end
-end
-
-task :extensions => %w[ext/u/data/title-table.h]
-file 'ext/u/data/title-table.h' => %w[build/ext/u/data/title-table.rb
-                                      build/data/UnicodeData.txt] do |t|
-  generate_file t.name do |tmp|
-    ruby '-w -Ibuild/lib %s %s > %s' % [t.prerequisites.join(' '), t.name, tmp]
-  end
-end
-
-task :extensions => %w[ext/u/data/types.h]
-file 'ext/u/data/types.h' => %w[build/ext/u/data/types.rb
-                                build/data/UnicodeData.txt] do |t|
-  generate_file t.name do |tmp|
-    ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, UnicodeVersion, tmp]
-  end
-end
-
-task :extensions => %w[ext/u/data/wide.h]
-file 'ext/u/data/wide.h' => %w[build/ext/u/data/wide.rb
-                               build/data/DerivedEastAsianWidth.txt] do |t|
-  generate_file t.name do |tmp|
-    ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, ['W', 'F'].join(' '), tmp]
-  end
-end
-
-task :extensions => %w[ext/u/data/wide-cjk.h]
-file 'ext/u/data/wide-cjk.h' => %w[build/ext/u/data/wide.rb
-                                   build/data/DerivedEastAsianWidth.txt] do |t|
-  generate_file t.name do |tmp|
-    ruby '-w -Ibuild/lib %s %s %s > %s' % [t.prerequisites.join(' '), t.name, ['A'].join(' '), tmp]
-  end
+data_header 'ext/u/data/wide-cjk.h' => %w[build/ext/u/data/wide.rb
+                                          build/data/DerivedEastAsianWidth.txt] do |t|
+  generate_data_header t, 'A'
 end
 
 CLEAN.include ["ext/**/{*.{o,so,#{Config::CONFIG['DLEXT']}},TAGS}"]

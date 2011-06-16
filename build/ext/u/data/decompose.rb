@@ -5,10 +5,10 @@ require 'u/build'
 class Decompose
   NotPresentOffset = 65535
 
-  def initialize(data, name, io = $stdout)
+  def initialize(data, io = $stdout)
     # TODO: Defines should be made with a list, but we can’t match formatting
     # quite yet, so wait until we have stable tests.
-    U::Build::Header.new(name, io) do
+    U::Build::Header.new(io) do
       io.puts <<EOD
 #define UNICODE_LAST_CHAR #{'0x%04x' % data.last}
 
@@ -100,4 +100,4 @@ private
   end
 end
 
-Decompose.new(U::Build::Data::Unicode.new(ARGV[0]), ARGV[1])
+Decompose.new(U::Build::Data::Unicode.new(ARGV[0]))

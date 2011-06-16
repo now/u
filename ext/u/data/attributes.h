@@ -1,9 +1,5 @@
 /* Automatically generated file */
 
-#ifndef ATTRIBUTES_H
-#define ATTRIBUTES_H
-
-
 #define UNICODE_LAST_PAGE_PART1 762
 
 #define UNICODE_SPECIAL_CASE_TABLE_START 0x1000000
@@ -3007,6 +3003,3 @@ static const char special_case_table[] = {
  "\x00\xce\x97\xcd\x82\xce\x99\x00\xce\x97\xcd\x82\xcd\x85\0" /* offset 1141 */
  "\x00\xce\xa9\xcd\x82\xce\x99\x00\xce\xa9\xcd\x82\xcd\x85\0" /* offset 1156 */
 };
-
-
-#endif /* ATTRIBUTES_H */

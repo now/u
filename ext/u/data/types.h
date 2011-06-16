@@ -1,18 +1,5 @@
 /* Automatically generated file */
 
-#ifndef TYPES_H
-#define TYPES_H
-
-
-#define UNICODE_DATA_VERSION "6.0.0"
-
-#define UNICODE_LAST_CHAR 0x10ffff
-
-#define UNICODE_MAX_TABLE_INDEX 10000
-
-#define UNICODE_LAST_CHAR_PART1 0x2faff
-
-#define UNICODE_FIRST_CHAR_PART2 0xe0000
 
 
 static const char type_data[][256] = {
@@ -13541,6 +13528,3 @@ static const int16_t type_table_part2[768] = {
 	UNICODE_PRIVATE_USE + UNICODE_MAX_TABLE_INDEX,
 	102 /* page 4351 */
 };
-
-
-#endif /* TYPES_H */

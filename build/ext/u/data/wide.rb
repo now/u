@@ -3,8 +3,8 @@
 require 'u/build'
 
 class Wide
-  def initialize(derived_east_asian_width, name, types, io = $stdout)
-    U::Build::Header.new(name, io) do
+  def initialize(derived_east_asian_width, types, io = $stdout)
+    U::Build::Header.new(io) do
       puts <<EOH
 struct unichar_interval {
   unichar first;
@@ -61,4 +61,4 @@ private
   end
 end
 
-Wide.new(U::Build::Data::DerivedEastAsianWidth.new(ARGV[0]), ARGV[1], ARGV[2..-1])
+Wide.new(U::Build::Data::DerivedEastAsianWidth.new(ARGV[0]), ARGV[1..-1])

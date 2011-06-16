@@ -3,29 +3,8 @@
 require 'u/build'
 
 class Break
-  # TODO: UnicodeData should be able to tell us #last, #last_char_part1_x, and
-  # so on without actually forcing us to load all the data.
-  def initialize(data, line_break, name, version, io = $stdout)
-    # TODO: Defines should be made with a list, but we can’t match formatting
-    # quite yet, so wait until we have stable tests.
-    U::Build::Header.new(name, io) do
-      io.puts <<EOH
-#define UNICODE_DATA_VERSION "#{version}"
-
-#define UNICODE_LAST_CHAR #{sprintf('0x%04x', data.last)}
-
-#define UNICODE_MAX_TABLE_INDEX 10000
-
-/*
- * The last code point that should be looked up in break_property_table_part1.
- */
-#define UNICODE_LAST_CHAR_PART1 #{data.last_char_part1_x}
-
-/*
- * The first code point that should be looked up in break_property_table_part2.
- */
-#define UNICODE_FIRST_CHAR_PART2 0xe0000
-EOH
+  def initialize(data, line_break, io = $stdout)
+    U::Build::Header.new(io) do
       io.puts U::Build::Header::Tables::Split.
         new(0, data.last_char_part1_i, data.last,
             'static const int8_t break_property_data[][256]',
@@ -90,4 +69,4 @@ private
 end
 
 data = U::Build::Data::Unicode.new(ARGV[0])
-Break.new(data, U::Build::Data::LineBreak.new(data, ARGV[1]), ARGV[2], ARGV[3])
+Break.new(data, U::Build::Data::LineBreak.new(data, ARGV[1]))

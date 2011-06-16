@@ -1,9 +1,5 @@
 /* Automatically generated file */
 
-#ifndef COMPOSE_H
-#define COMPOSE_H
-
-
 #define COMPOSE_FIRST_START 1
 #define COMPOSE_FIRST_SINGLE_START 147
 #define COMPOSE_SECOND_START 371
@@ -1458,6 +1454,3 @@ static const uint16_t compose_array[146][31] = {
 		     0,      0,      0,      0,      0, 0x30dc, 0x30dd
 	}
 };
-
-
-#endif /* COMPOSE_H */

@@ -3,8 +3,8 @@
 require 'u/build'
 
 class TitleTable
-  def initialize(data, name, io = $stdout)
-    U::Build::Header.new(name, io) do
+  def initialize(data, io = $stdout)
+    U::Build::Header.new(io) do
       io.puts TitleTable.new(data)
     end
   end
@@ -23,4 +23,4 @@ private
   end
 end
 
-TitleTable.new(U::Build::Data::Unicode.new(ARGV[0]), ARGV[1])
+TitleTable.new(U::Build::Data::Unicode.new(ARGV[0]))

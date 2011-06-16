@@ -1,9 +1,5 @@
 /* Automatically generated file */
 
-#ifndef TITLE_TABLE_H
-#define TITLE_TABLE_H
-
-
 
 
 static const unichar title_table[][3] = {
@@ -39,6 +35,3 @@ static const unichar title_table[][3] = {
 	{ 0x1fcc, 0x0000, 0x1fc3 },
 	{ 0x1ffc, 0x0000, 0x1ff3 }
 };
-
-
-#endif /* TITLE_TABLE_H */

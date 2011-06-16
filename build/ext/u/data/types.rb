@@ -3,19 +3,8 @@
 require 'u/build'
 
 class Types
-  def initialize(data, name, version, io = $stdout)
-    U::Build::Header.new(name, io) do
-      io.puts <<EOH
-#define UNICODE_DATA_VERSION "#{version}"
-
-#define UNICODE_LAST_CHAR #{sprintf('0x%04x', data.last)}
-
-#define UNICODE_MAX_TABLE_INDEX 10000
-
-#define UNICODE_LAST_CHAR_PART1 #{data.last_char_part1_x}
-
-#define UNICODE_FIRST_CHAR_PART2 0xe0000
-EOH
+  def initialize(data, io = $stdout)
+    U::Build::Header.new(io) do
       io.puts U::Build::Header::Tables::Split.
         new(0, data.last_char_part1_i, data.last,
             'static const char type_data[][256]',
@@ -76,4 +65,4 @@ private
   end
 end
 
-Types.new(U::Build::Data::Unicode.new(ARGV[0]), ARGV[1], ARGV[2])
+Types.new(U::Build::Data::Unicode.new(ARGV[0]))

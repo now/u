@@ -1,9 +1,5 @@
 /* Automatically generated file */
 
-#ifndef DECOMPOSE_H
-#define DECOMPOSE_H
-
-
 #define UNICODE_LAST_CHAR 0x10ffff
 
 #define UNICODE_MAX_TABLE_INDEX (0x110000 / 256)
@@ -11329,6 +11325,3 @@ static const char decomp_expansion_string[] =
   "\xe9\xbc\x8f\0" /* offset 17604 */
   "\xe9\xbc\x96\0" /* offset 17608 */
   "\xf0\xaa\x98\x80\0" /* offset 17612 */;
-
-
-#endif /* DECOMPOSE_H */

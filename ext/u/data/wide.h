@@ -1,9 +1,5 @@
 /* Automatically generated file */
 
-#ifndef WIDE_H
-#define WIDE_H
-
-
 struct unichar_interval {
   unichar first;
   unichar last;
@@ -65,6 +61,3 @@ static const struct unichar_interval wide[] = {
 	{ 0x20000, 0x2fffd },
 	{ 0x30000, 0x3fffd }
 };
-
-
-#endif /* WIDE_H */

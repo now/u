@@ -3,8 +3,8 @@
 require 'u/build'
 
 class BidiMirroring
-  def initialize(bidi_mirroring, name, io = $stdout)
-    U::Build::Header.new(name, io) do
+  def initialize(bidi_mirroring, io = $stdout)
+    U::Build::Header.new(io) do
       io.puts BidiMirroringTable.new(bidi_mirroring)
     end
   end
@@ -24,4 +24,4 @@ private
   end
 end
 
-BidiMirroring.new(U::Build::Data::BidiMirroring.new(ARGV[0]), ARGV[1])
+BidiMirroring.new(U::Build::Data::BidiMirroring.new(ARGV[0]))

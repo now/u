@@ -1,24 +1,5 @@
 /* Automatically generated file */
 
-#ifndef BREAK_H
-#define BREAK_H
-
-
-#define UNICODE_DATA_VERSION "6.0.0"
-
-#define UNICODE_LAST_CHAR 0x10ffff
-
-#define UNICODE_MAX_TABLE_INDEX 10000
-
-/*
- * The last code point that should be looked up in break_property_table_part1.
- */
-#define UNICODE_LAST_CHAR_PART1 0x2faff
-
-/*
- * The first code point that should be looked up in break_property_table_part2.
- */
-#define UNICODE_FIRST_CHAR_PART2 0xe0000
 
 
 static const int8_t break_property_data[][256] = {
@@ -25664,6 +25645,3 @@ static const int16_t break_property_table_part2[768] = {
 	UNICODE_BREAK_UNKNOWN + UNICODE_MAX_TABLE_INDEX,
 	UNICODE_BREAK_UNKNOWN + UNICODE_MAX_TABLE_INDEX
 };
-
-
-#endif /* BREAK_H */

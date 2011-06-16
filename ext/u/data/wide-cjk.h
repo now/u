@@ -1,9 +1,5 @@
 /* Automatically generated file */
 
-#ifndef WIDE_CJK_H
-#define WIDE_CJK_H
-
-
 struct unichar_interval {
   unichar first;
   unichar last;
@@ -199,6 +195,3 @@ static const struct unichar_interval wide[] = {
 	{ 0xf0000, 0xffffd },
 	{ 0x100000, 0x10fffd }
 };
-
-
-#endif /* WIDE_CJK_H */

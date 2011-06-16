@@ -1,9 +1,5 @@
 /* Automatically generated file */
 
-#ifndef BIDI_MIRRORING_H
-#define BIDI_MIRRORING_H
-
-
 
 
 static const struct {
@@ -373,6 +369,3 @@ static const struct {
 	{ 0xff62, 0xff63 },
 	{ 0xff63, 0xff62 }
 };
-
-
-#endif /* BIDI_MIRRORING_H */

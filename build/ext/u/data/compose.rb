@@ -3,13 +3,13 @@
 require 'u/build'
 
 class Compose
-  def initialize(data, composition_exclusions, name, io = $stdout)
+  def initialize(data, composition_exclusions, io = $stdout)
     compositions = Compositions.new(data, composition_exclusions)
     firsts = Firsts.new(compositions)
     seconds = Seconds.new(compositions, firsts)
     first_singletons, second_singletons, reversals = Singletons.create(compositions, firsts, seconds)
     values = Values.new(firsts, first_singletons, seconds, second_singletons)
-    U::Build::Header.new(name, io) do
+    U::Build::Header.new(io) do
       io.puts <<EOH
 #define COMPOSE_FIRST_START #{values.first_start}
 #define COMPOSE_FIRST_SINGLE_START #{values.first_single_start}
@@ -287,5 +287,4 @@ private
 end
 
 Compose.new(U::Build::Data::Unicode.new(ARGV[0]),
-            U::Build::Data::CompositionExclusions.new(ARGV[1]),
-            ARGV[2])
+            U::Build::Data::CompositionExclusions.new(ARGV[1]))

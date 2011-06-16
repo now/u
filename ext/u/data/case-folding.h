@@ -1,9 +1,5 @@
 /* Automatically generated file */
 
-#ifndef CASE_FOLDING_H
-#define CASE_FOLDING_H
-
-
 
 
 /*
@@ -173,6 +169,3 @@ static const struct {
 	{ 0xfb16, "\xd5\xbe\xd5\xb6" },
 	{ 0xfb17, "\xd5\xb4\xd5\xad" }
 };
-
-
-#endif /* CASE_FOLDING_H */

@@ -3,8 +3,8 @@
 require 'u/build'
 
 class CaseFolding
-  def initialize(casefolding, name, io = $stdout)
-    U::Build::Header.new(name, io) do
+  def initialize(casefolding, io = $stdout)
+    U::Build::Header.new(io) do
       io.puts CasefoldTable.new(casefolding)
     end
   end
@@ -36,5 +36,4 @@ end
 data = U::Build::Data::Unicode.new(ARGV[0])
 CaseFolding.new(U::Build::Data::CaseFolding.new(data,
                                                 U::Build::Data::SpecialCasing.new(data, ARGV[1]),
-                                                ARGV[2]),
-                ARGV[3])
+                                                ARGV[2]))

@@ -3,8 +3,8 @@
 require 'u/build'
 
 class Attributes
-  def initialize(data, special_casing, name, version, io = $stdout)
-    U::Build::Header.new(name, io) do
+  def initialize(data, special_casing, io = $stdout)
+    U::Build::Header.new(io) do
       io.puts <<EOH
 #define UNICODE_LAST_PAGE_PART1 #{data.pages_before_e0000 - 1}
 
@@ -45,7 +45,4 @@ static const char special_case_table[]'
 end
 
 data = U::Build::Data::Unicode.new(ARGV[0])
-Attributes.new(data,
-               U::Build::Data::SpecialCasing.new(data, ARGV[1]),
-               ARGV[2],
-               ARGV[3])
+Attributes.new(data, U::Build::Data::SpecialCasing.new(data, ARGV[1]))
