@@ -31,16 +31,6 @@
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
 
 /* {{{1
- * Determine whether ‘c’ is an uppeercase letter, such as A, B, or C
- */
-bool
-unichar_isupper(unichar c)
-{
-	return s_type(c) == UNICODE_UPPERCASE_LETTER;
-}
-
-
-/* {{{1
  * Determine whether ‘c’ is a titlecase letter, such as the slavic digraph Ǳ,
  * which at the beginning of a word is written as ǲ, where only the initial D
  * is capitalized.  (Complicated huh?)
