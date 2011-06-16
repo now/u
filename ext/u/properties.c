@@ -8,9 +8,9 @@
 #include "u.h"
 #include "private.h"
 #include "data/constants.h"
-#include "data/types.h"
 #include "data/attributes.h"
 #include "data/title-table.h"
+#include "types.h"
 
 
 #define COMBINING_DOT_ABOVE                     ((unichar)0x0307)
@@ -29,81 +29,6 @@
 #define GREEK_CAPITAL_LETTER_SIGMA              ((unichar)0x03a3)
 #define GREEK_SMALL_LETTER_SIGMA                ((unichar)0x03c3)
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
-
-/* {{{1
- * Internal function used for figuring out the type of a given character.
- */
-static inline int
-s_type(unichar c)
-{
-	const int16_t *table;
-	unsigned int page;
-
-	if (c <= UNICODE_LAST_CHAR_PART1) {
-		page = c >> 8;
-		table = type_table_part1;
-	} else if (c >= UNICODE_FIRST_CHAR_PART2 && c <= UNICODE_LAST_CHAR) {
-		page = (c - UNICODE_FIRST_CHAR_PART2) >> 8;
-		table = type_table_part2;
-	} else {
-		return UNICODE_UNASSIGNED;
-	}
-
-	if (table[page] >= UNICODE_MAX_TABLE_INDEX)
-		return table[page] - UNICODE_MAX_TABLE_INDEX;
-	else
-		return type_data[table[page]][c & 0xff];
-}
-
-
-/* {{{1
- * Bit-fiddling macros for testing the class of a type.
- */
-#define IS(type, class) (((unsigned int)1 << (type)) & (class))
-#define OR(type, rest)  (((unsigned int)1 << (type)) | (rest))
-
-
-/* {{{1
- * Internal function used to check if the given type represents a digit type.
- */
-static inline bool
-s_isdigit(int type)
-{
-        return IS(type,
-                  OR(UNICODE_DECIMAL_NUMBER,
-                     OR(UNICODE_LETTER_NUMBER,
-                        OR(UNICODE_OTHER_NUMBER, 0))));
-}
-
-
-/* {{{1
- * Internal function used to check if the given type represents an alphabetic
- * type.
- */
-static inline bool
-s_isalpha(int type)
-{
-        return IS(type,
-                  OR(UNICODE_LOWERCASE_LETTER,
-                     OR(UNICODE_UPPERCASE_LETTER,
-                        OR(UNICODE_TITLECASE_LETTER,
-                           OR(UNICODE_MODIFIER_LETTER,
-                              OR(UNICODE_OTHER_LETTER, 0))))));
-}
-
-
-/* {{{1
- * Internal function used to check if the given type represents a mark type.
- */
-static inline bool
-s_ismark(int type)
-{
-        return IS(type,
-                  OR(UNICODE_NON_SPACING_MARK,
-                     OR(UNICODE_COMBINING_MARK,
-                        OR(UNICODE_ENCLOSING_MARK, 0))));
-}
-
 
 /* {{{1
  * Determine whether ‘c’ is an alphanumeric, such as A, B, C, 0, 1, or 2.
