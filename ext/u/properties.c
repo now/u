@@ -31,24 +31,6 @@
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
 
 /* {{{1
- * Convert ‘c’ to its lowercase representation (if any).
- */
-unichar
-unichar_tolower(unichar c)
-{
-	int type = s_type(c);
-
-	if (type == UNICODE_UPPERCASE_LETTER)
-                return _u_special_case_table_lookup(c);
-        
-        if (type == UNICODE_TITLECASE_LETTER)
-                return _u_titlecase_table_lookup(c, false);
-
-        return c;
-}
-
-
-/* {{{1
  * LocaleType: This ‹enum› is used for dealing with different locales for
  * turning strings into uppercase or lowercase.
  */
