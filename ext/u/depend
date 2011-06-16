@@ -155,6 +155,8 @@ unichar_isalnum.o: unichar_isalnum.c u.h private.h data/constants.h \
  types.h
 unichar_isalpha.o: unichar_isalpha.c u.h private.h data/constants.h \
  types.h
+unichar_isassigned.o: unichar_isassigned.c u.h private.h data/constants.h \
+ types.h
 unichar_iscntrl.o: unichar_iscntrl.c u.h private.h data/constants.h \
  types.h
 unichar_isdigit.o: unichar_isdigit.c u.h private.h data/constants.h \
