@@ -48,25 +48,6 @@ unichar_istitle(unichar c)
 
 
 /* {{{1
- * Determine whether ‘c’ is a hexadecimal digit, such as 0, 1, ..., 9, a, b,
- * ..., f, or A, B, ..., F.
- */
-#define UNICHAR_FULLWIDTH_A     0xff21
-#define UNICHAR_FULLWIDTH_F     0xff26
-#define UNICHAR_FULLWIDTH_a     0xff41
-#define UNICHAR_FULLWIDTH_f     0xff46
-bool
-unichar_isxdigit(unichar c)
-{
-	return ((c >= 'a' && c <= 'f') ||
-		(c >= 'A' && c <= 'F') ||
-                (c >= UNICHAR_FULLWIDTH_a && c <= UNICHAR_FULLWIDTH_f) ||
-                (c >= UNICHAR_FULLWIDTH_A && c <= UNICHAR_FULLWIDTH_F) ||
-                (s_type(c) == UNICODE_DECIMAL_NUMBER));
-}
-
-
-/* {{{1
  * Determine whether code point ‘c’ has been assigned a code value.
  */
 bool
@@ -229,6 +210,10 @@ unichar_digit_value(unichar c)
 /* {{{1
  * Return the numeric value of ‘c’ if it's a hexadecimal digit, or -1 if not.
  */
+#define UNICHAR_FULLWIDTH_A     0xff21
+#define UNICHAR_FULLWIDTH_F     0xff26
+#define UNICHAR_FULLWIDTH_a     0xff41
+#define UNICHAR_FULLWIDTH_f     0xff46
 int
 unichar_xdigit_value(unichar c)
 {
