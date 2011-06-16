@@ -31,16 +31,6 @@
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
 
 /* {{{1
- * Determine whether ‘c’ is a lowercase letter, such as a, b, or c.
- */
-bool
-unichar_islower(unichar c)
-{
-	return s_type(c) == UNICODE_LOWERCASE_LETTER;
-}
-
-
-/* {{{1
  * Determine whether ‘c’ is printable, which works the same as
  * unichar_isgraph(), except that space characters are also printable.
  */
