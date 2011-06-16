@@ -31,16 +31,6 @@
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
 
 /* {{{1
- * Determine whether ‘c’ is an alphabetic (i.e. a letter), such as A, B, or C.
- */
-bool
-unichar_isalpha(unichar c)
-{
-	return s_isalpha(s_type(c));
-}
-
-
-/* {{{1
  * Determine whether ‘c’ is a control character, such as ‹NUL›.
  */
 bool
