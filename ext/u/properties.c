@@ -31,18 +31,6 @@
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
 
 /* {{{1
- * Determine whether ‘c’ is an alphanumeric, such as A, B, C, 0, 1, or 2.
- */
-bool
-unichar_isalnum(unichar c)
-{
-	int type = s_type(c);
-
-	return s_isdigit(type) || s_isalpha(type);
-}
-
-
-/* {{{1
  * Determine whether ‘c’ is an alphabetic (i.e. a letter), such as A, B, or C.
  */
 bool
