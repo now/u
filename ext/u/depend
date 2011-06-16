@@ -153,6 +153,8 @@ u_width.o: u_width.c u.h private.h
 ucs4_to_u.o: ucs4_to_u.c u.h utf8.h private.h
 unichar_break_type.o: unichar_break_type.c u.h data/constants.h \
  data/break.h private.h
+unichar_digit_value.o: unichar_digit_value.c u.h private.h attributes.h \
+ types.h
 unichar_isalnum.o: unichar_isalnum.c u.h private.h data/constants.h \
  types.h
 unichar_isalpha.o: unichar_isalpha.c u.h private.h data/constants.h \

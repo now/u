@@ -129,19 +129,6 @@ unichar_totitle(unichar c)
 
 
 /* {{{1
- * Return the numeric value of ‘c’ if it's a decimal digit, or -1 if not.
- */
-int
-unichar_digit_value(unichar c)
-{
-	if (s_type(c) == UNICODE_DECIMAL_NUMBER)
-		return s_attribute(c);
-
-        return -1;
-}
-
-
-/* {{{1
  * LocaleType: This ‹enum› is used for dealing with different locales for
  * turning strings into uppercase or lowercase.
  */
