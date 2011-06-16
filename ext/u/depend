@@ -185,3 +185,4 @@ unichar_iszerowidth.o: unichar_iszerowidth.c u.h private.h \
  data/constants.h types.h
 unichar_mirror.o: unichar_mirror.c u.h private.h data/bidi-mirroring.h
 unichar_to_u.o: unichar_to_u.c u.h utf8.h
+unichar_type.o: unichar_type.c u.h private.h data/constants.h types.h

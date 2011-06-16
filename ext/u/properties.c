@@ -47,16 +47,6 @@ unichar_istitle(unichar c)
 }
 
 
-/* {{{1
- * Determine the Unicode character type of ‘c’.
- */
-UnicodeType
-unichar_type(unichar c)
-{
-	return s_type(c);
-}
-
-
 static inline unichar
 s_attribute(unichar c)
 {
