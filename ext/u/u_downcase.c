@@ -4,12 +4,15 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
+
 #include "u.h"
 #include "private.h"
+
 #include "data/constants.h"
 #include "attributes.h"
 #include "titled.h"
 #include "types.h"
+
 #include "locale_type.h"
 
 
@@ -27,10 +30,11 @@
 #define GREEK_SMALL_LETTER_SIGMA                ((unichar)0x03c3)
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
 
+
 /* {{{1
  * Traverse the string checking for characters with combining class == 230
  * until a base character is found.
- */ 
+ */
 static bool
 has_more_above(const char *str)
 {
@@ -79,7 +83,7 @@ tolower_turkic_i(const char **p, char *buf)
                  * of ‘p’? */
                 *p = u_next(*p);
                 i = LATIN_SMALL_LETTER_I;
-        } 
+        }
 
         return unichar_to_u(i, buf);
 }
@@ -155,8 +159,8 @@ real_tolower_one(const char **p, const char *prev, char *buf,
 no_lithuanian_i_casing:
 
         if (c == GREEK_CAPITAL_LETTER_SIGMA)
-                return tolower_sigma(p, buf, end, use_end); 
-        
+                return tolower_sigma(p, buf, end, use_end);
+
         if (IS(type, OR(UNICODE_UPPERCASE_LETTER,
                         OR(UNICODE_TITLECASE_LETTER, 0))))
                 return real_do_tolower(c, type, buf);
