@@ -14,23 +14,19 @@ HIDDEN extern const int16_t *_u_type_table_part2;
 static inline int
 s_type(unichar c)
 {
-	const int16_t *table;
-	unsigned int page;
+        int16_t index;
 
-	if (c <= UNICODE_LAST_CHAR_PART1) {
-		page = c >> 8;
-		table = _u_type_table_part1;
-	} else if (c >= UNICODE_FIRST_CHAR_PART2 && c <= UNICODE_LAST_CHAR) {
-		page = (c - UNICODE_FIRST_CHAR_PART2) >> 8;
-		table = _u_type_table_part2;
-	} else {
-		return UNICODE_UNASSIGNED;
-	}
-
-	if (table[page] >= UNICODE_MAX_TABLE_INDEX)
-		return table[page] - UNICODE_MAX_TABLE_INDEX;
+	if (c <= UNICODE_LAST_CHAR_PART1)
+                index = _u_type_table_part1[c >> 8];
+        else if (UNICODE_FIRST_CHAR_PART2 <= c && c <= UNICODE_LAST_CHAR)
+                index = _u_type_table_part2[(c - UNICODE_FIRST_CHAR_PART2) >> 8];
 	else
-		return _u_type_data[table[page]][c & 0xff];
+		return UNICODE_UNASSIGNED;
+
+	if (index >= UNICODE_MAX_TABLE_INDEX)
+		return index - UNICODE_MAX_TABLE_INDEX;
+
+        return _u_type_data[index][c & 0xff];
 }
 
 
