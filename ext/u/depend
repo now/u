@@ -168,6 +168,8 @@ unichar_isprint.o: unichar_isprint.c u.h private.h data/constants.h \
  types.h
 unichar_ispunct.o: unichar_ispunct.c u.h private.h data/constants.h \
  types.h
+unichar_isspace.o: unichar_isspace.c u.h private.h data/constants.h \
+ types.h
 unichar_isvalid.o: unichar_isvalid.c u.h utf8.h
 unichar_iswide.o: unichar_iswide.c u.h private.h data/wide.h
 unichar_iswide_cjk.o: unichar_iswide_cjk.c u.h private.h data/wide-cjk.h
