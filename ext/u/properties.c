@@ -30,21 +30,6 @@
 #define GREEK_SMALL_LETTER_SIGMA                ((unichar)0x03c3)
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
 
-unichar
-unichar_toupper(unichar c)
-{
-	int type = s_type(c);
-
-	if (type == UNICODE_LOWERCASE_LETTER)
-                return _u_special_case_table_lookup(c);
-        
-        if (type == UNICODE_TITLECASE_LETTER)
-                return _u_titlecase_table_lookup(c, true);
-
-        return c;
-}
-
-
 /* {{{1
  * Convert ‘c’ to its lowercase representation (if any).
  */
