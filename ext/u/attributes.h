@@ -24,5 +24,7 @@ s_attribute(unichar c)
 }
 
 unichar _u_special_case_table_lookup(unichar c);
+size_t _u_special_case_output(char *buf, int offset, int type, bool upper);
+
 
 #endif /* ATTRIBUTES_H */

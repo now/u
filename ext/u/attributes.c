@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "u.h"
 #include "private.h"
@@ -31,4 +32,27 @@ _u_special_case_table_lookup(unichar c)
                 return c;
 
         return tv;
+}
+
+
+/* {{{1
+ * Output titlecases where appropriate.
+ */
+size_t
+_u_special_case_output(char *buf, int offset, int type, bool upper)
+{
+	const char *p = _u_special_case_table + offset;
+
+	if (type != UNICODE_TITLECASE_LETTER)
+		p = u_next(p);
+
+	if (upper)
+		p += u_byte_length(p) + 1;
+
+	size_t len = u_byte_length(p);
+
+	if (buf != NULL)
+		memcpy(buf, p, len);
+
+	return len;
 }
