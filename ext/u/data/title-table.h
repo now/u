@@ -2,7 +2,11 @@
 
 
 
-static const unichar title_table[][3] = {
+static const struct {
+	unichar ch;
+	unichar upper;
+	unichar lower;
+} title_table[] = {
 	{ 0x01c5, 0x01c4, 0x01c6 },
 	{ 0x01c8, 0x01c7, 0x01c9 },
 	{ 0x01cb, 0x01ca, 0x01cc },

@@ -13,7 +13,11 @@ private
 
   class TitleTable < U::Build::Header::Table
     def initialize(data)
-      super 'static const unichar title_table[][3]'
+      super "static const struct {
+\tunichar ch;
+\tunichar upper;
+\tunichar lower;
+} title_table[]"
       # TODO: Add #code to Entry and use #select on data here.
       data.each_with_index do |entry, code|
         next unless entry.title_to_lower

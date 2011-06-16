@@ -8,8 +8,8 @@
 #include "u.h"
 #include "private.h"
 #include "data/constants.h"
-#include "data/title-table.h"
 #include "attributes.h"
+#include "titled.h"
 #include "types.h"
 
 
@@ -31,23 +31,6 @@
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
 
 /* {{{1
- * Determine whether ‘c’ is a titlecase letter, such as the slavic digraph Ǳ,
- * which at the beginning of a word is written as ǲ, where only the initial D
- * is capitalized.  (Complicated huh?)
- */
-bool
-unichar_istitle(unichar c)
-{
-	/* TODO: binary search helpful? */
-	for (size_t i = 0; i < lengthof(title_table); i++)
-		if (title_table[i][0] == c)
-			return true;
-
-	return false;
-}
-
-
-/* {{{1
  * Convert ‘c’ to its uppercase representation (if any).
  */
 static unichar
@@ -66,16 +49,6 @@ special_case_table_lookup(unichar c)
 }
 
 
-static unichar
-titlecase_table_lookup(unichar c, bool want_upper)
-{
-        for (size_t i = 0; i < lengthof(title_table); i++)
-                if (title_table[i][0] == c)
-                        return title_table[i][want_upper ? 1 : 2];
-
-        return c;
-}
-
 unichar
 unichar_toupper(unichar c)
 {
@@ -85,7 +58,7 @@ unichar_toupper(unichar c)
                 return special_case_table_lookup(c);
         
         if (type == UNICODE_TITLECASE_LETTER)
-                return titlecase_table_lookup(c, true);
+                return _u_titlecase_table_lookup(c, true);
 
         return c;
 }
@@ -103,26 +76,7 @@ unichar_tolower(unichar c)
                 return special_case_table_lookup(c);
         
         if (type == UNICODE_TITLECASE_LETTER)
-                return titlecase_table_lookup(c, false);
-
-        return c;
-}
-
-
-/* {{{1
- * Convert ‘c’ to its titlecase representation (if any).
- */
-unichar
-unichar_totitle(unichar c)
-{
-	for (size_t i = 0; i < lengthof(title_table); i++)
-		if (title_table[i][0] == c ||
-                    title_table[i][1] == c ||
-                    title_table[i][2] == c)
-			return title_table[i][0];
-
-        if (s_type(c) == UNICODE_LOWERCASE_LETTER)
-                return unichar_toupper(c);
+                return _u_titlecase_table_lookup(c, false);
 
         return c;
 }
@@ -259,7 +213,7 @@ real_do_toupper(unichar c, int type, char *buf)
                                            type, upper);
 
         if (type == UNICODE_TITLECASE_LETTER) {
-                unichar tu = titlecase_table_lookup(c, true);
+                unichar tu = _u_titlecase_table_lookup(c, true);
                 if (tu != c)
                         return unichar_to_u(tu, buf);
         }
@@ -403,7 +357,7 @@ real_do_tolower(unichar c, int type, char *buf)
                                            type, false);
 
         if (type == UNICODE_TITLECASE_LETTER) {
-                unichar tu = titlecase_table_lookup(c, false);
+                unichar tu = _u_titlecase_table_lookup(c, false);
                 if (tu != c)
                         return unichar_to_u(tu, buf);
         }
