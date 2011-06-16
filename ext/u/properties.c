@@ -1,6 +1,5 @@
 #include <ruby.h>
 #include <assert.h>
-#include <locale.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -11,6 +10,7 @@
 #include "attributes.h"
 #include "titled.h"
 #include "types.h"
+#include "locale_type.h"
 
 
 #define COMBINING_DOT_ABOVE                     ((unichar)0x0307)
@@ -29,36 +29,6 @@
 #define GREEK_CAPITAL_LETTER_SIGMA              ((unichar)0x03a3)
 #define GREEK_SMALL_LETTER_SIGMA                ((unichar)0x03c3)
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
-
-/* {{{1
- * LocaleType: This ‹enum› is used for dealing with different locales for
- * turning strings into uppercase or lowercase.
- */
-typedef enum {
-	LOCALE_NORMAL,
-	LOCALE_TURKIC,
-	LOCALE_LITHUANIAN
-} LocaleType;
-
-
-/* {{{1
- * Retrieve the locale type from the environment (LC_CTYPE).
- */
-static LocaleType
-get_locale_type(void)
-{
-	const char *locale = setlocale(LC_CTYPE, NULL);
-
-	if ((locale[0] == 'a' && locale[1] == 'z') ||
-	    (locale[0] == 't' && locale[1] == 'r'))
-		return LOCALE_TURKIC;
-
-	if (locale[0] == 'l' && locale[1] == 't')
-		return LOCALE_LITHUANIAN;
-
-        return LOCALE_NORMAL;
-}
-
 
 /* {{{1
  * Put character marks found in ‘p_inout’ into itself.  If ‘remove_dot’ is
@@ -237,7 +207,7 @@ utf_upcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
 {
 	assert(str != NULL);
 
-	LocaleType locale_type = get_locale_type();
+	LocaleType locale_type = _u_locale_type();
 
 	size_t len = real_toupper(str, max, use_max, NULL, locale_type);
 	char *result = ALLOC_N(char, len + 1);
@@ -442,7 +412,7 @@ u_downcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
 {
 	assert(str != NULL);
 
-	LocaleType locale_type = get_locale_type();
+	LocaleType locale_type = _u_locale_type();
 
 	size_t len = real_tolower(str, max, use_max, NULL, locale_type);
 	char *result = ALLOC_N(char, len + 1);
