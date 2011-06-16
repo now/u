@@ -1,7 +1,9 @@
+attributes.o: attributes.c u.h private.h data/constants.h \
+ data/attributes.h attributes.h
 decompose.o: decompose.c u.h data/decompose.h data/compose.h private.h
 private.o: private.c u.h private.h
 properties.o: properties.c u.h private.h data/constants.h \
- data/attributes.h data/title-table.h types.h
+ data/title-table.h attributes.h types.h
 rb_private.o: rb_private.c rb_includes.h extconf.h u.h private.h \
  rb_private.h rb_u_string.h
 rb_u.o: rb_u.c u.h private.h rb_private.h rb_u_buffer.h rb_u_string.h

@@ -1,8 +1,5 @@
 /* Automatically generated file */
 
-#define UNICODE_LAST_PAGE_PART1 762
-
-#define UNICODE_SPECIAL_CASE_TABLE_START 0x1000000
 
 
 static const unichar attr_data[][256] = {

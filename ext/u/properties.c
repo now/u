@@ -8,8 +8,8 @@
 #include "u.h"
 #include "private.h"
 #include "data/constants.h"
-#include "data/attributes.h"
 #include "data/title-table.h"
+#include "attributes.h"
 #include "types.h"
 
 
@@ -47,21 +47,6 @@ unichar_istitle(unichar c)
 }
 
 
-static inline unichar
-s_attribute(unichar c)
-{
-        unichar page = c >> 8;
-        unichar index = page <= UNICODE_LAST_PAGE_PART1 ?
-                attr_table_part1[page] :
-                attr_table_part2[page - 0xe00];
-
-        if (index == UNICODE_MAX_TABLE_INDEX)
-                return 0;
-
-        return attr_data[index][c & 0xff];
-}
-
-
 /* {{{1
  * Convert ‘c’ to its uppercase representation (if any).
  */
@@ -71,7 +56,7 @@ special_case_table_lookup(unichar c)
         unichar tv = s_attribute(c);
 
         if (tv >= UNICODE_SPECIAL_CASE_TABLE_START)
-                tv = u_aref_char(special_case_table +
+                tv = u_aref_char(_u_special_case_table +
                                  tv - UNICODE_SPECIAL_CASE_TABLE_START);
 
         if (tv == '\0')
@@ -79,6 +64,7 @@ special_case_table_lookup(unichar c)
 
         return tv;
 }
+
 
 static unichar
 titlecase_table_lookup(unichar c, bool want_upper)
@@ -216,7 +202,7 @@ output_marks(const char **p_inout, char *buf, bool remove_dot)
 static size_t
 output_special_case(char *buf, int offset, int type, bool upper)
 {
-	const char *p = special_case_table + offset;
+	const char *p = _u_special_case_table + offset;
 
 	if (type != UNICODE_TITLECASE_LETTER)
 		p = u_next(p);
