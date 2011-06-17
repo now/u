@@ -4,6 +4,7 @@
 *.gem
 *.swp
 TAGS
+/build/data/UnicodeData.marshalled
 /ext/u/Makefile
 /ext/u/u.bundle.dSYM/
 extconf.h

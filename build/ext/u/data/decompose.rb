@@ -12,9 +12,6 @@ class Decompose
       io.puts <<EOD
 #define UNICODE_NOT_PRESENT_OFFSET UINT16_MAX
 EOD
-      io.puts U::Build::Header::Tables::Split.new(data, 'uint8_t', 'combining_class'){ |i|
-        data[i].cclass
-      }
       io.puts DecompositionTable.new(data)
     end
   end

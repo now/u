@@ -98,6 +98,12 @@ data_header 'ext/u/data/compose.h' => %w[build/ext/u/data/compose.rb
                                          build/data/UnicodeData.txt
                                          build/data/CompositionExclusions.txt]
 
+data_header 'build/data/UnicodeData.marshalled' => %w[build/ext/u/data/marshalled.rb
+                                                      build/data/UnicodeData.txt]
+
+data_header 'ext/u/data/combining-class.h' => %w[build/ext/u/data/combining-class.rb
+                                                 build/data/UnicodeData.marshalled]
+
 data_header 'ext/u/data/constants.h' => %w[build/ext/u/data/constants.rb
                                            build/data/UnicodeData.txt] do |t|
   generate_data_header t, UnicodeVersion
