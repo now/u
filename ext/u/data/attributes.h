@@ -1348,7 +1348,7 @@ static const unichar attr_data[][256] = {
 
 
 /* U+0000 through U+2FAFF */
-static const int16_t attr_table_part1[763] = {
+static const int16_t attr_table_part1[UNICODE_LAST_PAGE_PART1 + 1] = {
 	0 /* page 0 */,
 	1 /* page 1 */,
 	2 /* page 2 */,
@@ -2116,7 +2116,7 @@ static const int16_t attr_table_part1[763] = {
 
 
 /* U+E0000 through U+10FFFF */
-static const int16_t attr_table_part2[768] = {
+static const int16_t attr_table_part2[UNICODE_LAST_PAGE_PART2 + 1] = {
 	0x0000 + UNICODE_MAX_TABLE_INDEX,
 	0x0000 + UNICODE_MAX_TABLE_INDEX,
 	0x0000 + UNICODE_MAX_TABLE_INDEX,

@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 
 class U::Build::Header::Tables::Split::Part1 < U::Build::Header::Table
-  def initialize(declaration, first, last, rows, set = 0)
-    super declaration
+  class << self
+    def last_page
+      'UNICODE_LAST_PAGE_PART1'
+    end
+  end
+
+  def initialize(name, first, last, rows, set = 0)
+    super "/* U+%04X through U+%04X */\nstatic const int16_t %s[%s + 1]" % [first, last, name, self.class.last_page]
     # TODO: Check if we can use each or something, instead, or if we can use
     # an array for Rows.
     j = set

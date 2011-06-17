@@ -12,7 +12,7 @@
 #include "private.h"
 
 #define COMBINING_CLASS(c)      \
-        SPLIT_UNICODE_TABLE_LOOKUP(cclass_data, combining_class_table_part1, combining_class_table_part2, (c), 0)
+        SPLIT_UNICODE_TABLE_LOOKUP(combining_class_data, combining_class_table_part1, combining_class_table_part2, (c), 0)
 
 
 /* {{{1

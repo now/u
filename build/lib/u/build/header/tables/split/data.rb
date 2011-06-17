@@ -2,7 +2,7 @@
 
 class U::Build::Header::Tables::Split::Data < U::Build::Header::Table
   def initialize(declaration, rows)
-    super declaration
+    super 'static const %s[][256]' % declaration
     rows.reject{ |row| row.homogenous? }.each_with_index do |row, index|
       table_row = Row.new(row.start / 256, index)
       row.each do |cell|

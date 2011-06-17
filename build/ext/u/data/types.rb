@@ -5,11 +5,7 @@ require 'u/build'
 class Types
   def initialize(data, io = $stdout)
     U::Build::Header.new(io) do
-      io.puts U::Build::Header::Tables::Split.
-        new(0, data.last_char_part1_i, data.last,
-            'static const char type_data[][256]',
-            "/* U+0000 through U+%s */\nstatic const int16_t type_table_part1[%s]" % [data.last_char_part1_X, data.pages_before_e0000],
-            "/* U+E0000 through U+%04X */\nstatic const int16_t type_table_part2[768]" % data.last){ |i|
+      io.puts U::Build::Header::Tables::Split.new(data, 'char', 'type'){ |i|
         Mappings[data[i].type]
       }
     end

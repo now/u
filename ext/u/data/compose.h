@@ -273,6 +273,7 @@ static const uint16_t compose_data[][256] = {
 };
 
 
+/* U+0000 through U+30DB */
 static const int16_t compose_table[COMPOSE_TABLE_LAST + 1] = {
 	0 /* page 0 */,
 	1 /* page 1 */,

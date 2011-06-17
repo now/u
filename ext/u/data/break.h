@@ -24107,7 +24107,7 @@ static const int8_t break_property_data[][256] = {
 
 
 /* U+0000 through U+2FAFF */
-static const int16_t break_property_table_part1[763] = {
+static const int16_t break_property_table_part1[UNICODE_LAST_PAGE_PART1 + 1] = {
 	0 /* page 0 */,
 	UNICODE_BREAK_ALPHABETIC + UNICODE_MAX_TABLE_INDEX,
 	1 /* page 2 */,
@@ -24875,7 +24875,7 @@ static const int16_t break_property_table_part1[763] = {
 
 
 /* U+E0000 through U+10FFFF */
-static const int16_t break_property_table_part2[768] = {
+static const int16_t break_property_table_part2[UNICODE_LAST_PAGE_PART2 + 1] = {
 	138 /* page 3584 */,
 	139 /* page 3585 */,
 	UNICODE_BREAK_UNKNOWN + UNICODE_MAX_TABLE_INDEX,

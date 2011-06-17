@@ -17,10 +17,7 @@ class Compose
 #define COMPOSE_SECOND_SINGLE_START #{values.second_single_start}
 #define COMPOSE_TABLE_LAST #{values.last / 256}
 EOH
-      io.puts U::Build::Header::Tables::Split.
-        new(0, values.last, values.last,
-            'static const uint16_t compose_data[][256]',
-            'static const int16_t compose_table[COMPOSE_TABLE_LAST + 1]'){ |i|
+      io.puts Table.new(0, values.last, 'uint16_t compose_data', 'compose_table'){ |i|
         values.include?(i) ? values[i].to_s : '0'
       }
       io.puts SingletonTable.new(first_singletons, 'compose_first_single')
@@ -30,6 +27,26 @@ EOH
   end
 
 private
+
+  class Table
+    def initialize(first, last, data, part1)
+      rows = U::Build::Header::Tables::Split::Rows.new(0, last){ |c| yield(c) }
+      @data = U::Build::Header::Tables::Split::Data.new(data, rows)
+      @part1 = Part1.new(part1, first, last, rows, 0)
+    end
+
+    def to_s
+      "%s\n%s\n" % [@data, @part1]
+    end
+
+    class Part1 < U::Build::Header::Tables::Split::Part1
+      class << self
+        def last_page
+          'COMPOSE_TABLE_LAST'
+        end
+      end
+    end
+  end
 
   class Compositions
     include Enumerable
