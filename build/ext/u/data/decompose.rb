@@ -3,14 +3,14 @@
 require 'u/build'
 
 class Decompose
-  NotPresentOffset = 65535
+  NotPresentOffset = 1 << 16 - 1
 
   def initialize(data, io = $stdout)
     # TODO: Defines should be made with a list, but we can’t match formatting
     # quite yet, so wait until we have stable tests.
     U::Build::Header.new(io) do
       io.puts <<EOD
-#define UNICODE_NOT_PRESENT_OFFSET #{NotPresentOffset}
+#define UNICODE_NOT_PRESENT_OFFSET UINT16_MAX
 EOD
       io.puts U::Build::Header::Tables::Split.
         new(0, data.last_char_part1_i, data.last,
@@ -57,8 +57,6 @@ private
     end
 
   private
-
-    NotPresentOffset = 65535
 
     def make_decomp(point, compatible)
       expand_decomp(point, compatible).flatten.pack('U*')

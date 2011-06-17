@@ -1,6 +1,6 @@
 /* Automatically generated file */
 
-#define UNICODE_NOT_PRESENT_OFFSET 65535
+#define UNICODE_NOT_PRESENT_OFFSET UINT16_MAX
 
 
 static const uint8_t cclass_data[][256] = {
