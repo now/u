@@ -308,12 +308,15 @@ normalize_wc_decompose_one(unichar c, NormalizeMode mode, unichar *buf)
 }
 
 static void
-normalize_wc_decompose(const char *str, size_t max_len, bool use_len,
+normalize_wc_decompose(const char *str, size_t len, bool use_len,
                        NormalizeMode mode, unichar *buf, size_t *buf_len)
 {
         size_t n = 0;
         size_t prev_start = 0;
-        for (const char *p = str; P_WITHIN_STR(p, str, max_len, use_len); p = u_next(p)) {
+
+        const char *p = str;
+        const char *end = p + len;
+        while (P_WITHIN_STR(p, end, use_len)) {
                 unichar c = u_aref_char(p);
                 size_t prev_n = n;
 
@@ -328,13 +331,9 @@ normalize_wc_decompose(const char *str, size_t max_len, bool use_len,
                                                    n - prev_start);
                         prev_start = prev_n;
                 }
-        }
 
-        /*
-        if (buf != NULL)
-                for (size_t i = 0; i < n; i++)
-                        printf("%d\n", buf[i]);
-                        */
+                p = u_next(p);
+        }
 
         if (buf != NULL && n > 0)
                 unicode_canonical_ordering(buf + prev_start, n - prev_start);

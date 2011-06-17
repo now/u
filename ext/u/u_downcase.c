@@ -174,11 +174,11 @@ static size_t
 real_tolower(const char *str, size_t max, bool use_max, char *buf,
              LocaleType locale_type)
 {
-	const char *p = str;
-        const char *end = str + max;
 	size_t len = 0;
 
-        while (P_WITHIN_STR(p, str, max, use_max)) {
+	const char *p = str;
+        const char *end = str + max;
+        while (P_WITHIN_STR(p, end, use_max)) {
 		const char *prev = p;
 		p = u_next(p);
 

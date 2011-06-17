@@ -7,8 +7,8 @@
 #ifndef PRIVATE_H
 #define PRIVATE_H
 
-#define P_WITHIN_STR(p, str, max, use_max) \
-        ((use_max) ? (p) < (str) + (max) : *(p) != '\0')
+#define P_WITHIN_STR(p, end, use_end) \
+        ((use_end) ? (p) < (end) : *(p) != '\0')
 
 #define OFFSET_IF(buf, len) \
         (((buf) != NULL) ? (buf) + (len) : NULL)

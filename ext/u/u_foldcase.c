@@ -30,37 +30,41 @@ casefold_table_lookup(unichar c, char *folded, size_t *len)
         return true;
 }
 
+static size_t
+real_foldcase(const char *str, size_t max, bool use_max, char *buf)
+{
+	size_t len = 0;
+
+        const char *p = str;
+        const char *end = p + max;
+        while (P_WITHIN_STR(p, end, use_max)) {
+		unichar c = u_aref_char(p);
+                p = u_next(p);
+
+                if (casefold_table_lookup(c, OFFSET_IF(buf, len), &len))
+                        continue;
+
+		len += unichar_to_u(unichar_tolower(c), OFFSET_IF(buf, len));
+	}
+
+        return len;
+}
+
 static char *
 u_foldcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
 {
 	assert(str != NULL);
 
-	char *folded = NULL;
-	size_t len = 0;
-
-again:
-	for (const char *p = str; P_WITHIN_STR(p, str, max, use_max); p = u_next(p)) {
-		unichar c = u_aref_char(p);
-
-                if (casefold_table_lookup(c, OFFSET_IF(folded, len), &len))
-                        continue;
-
-		len += unichar_to_u(unichar_tolower(c), OFFSET_IF(folded, len));
-	}
-
-	if (folded == NULL) {
-		folded = ALLOC_N(char, len + 1);
-		folded[0] = '\0';
-		len = 0;
-		goto again;
-	}
-
-	folded[len] = '\0';
+	size_t len = real_foldcase(str, max, use_max, NULL);
+        char *result = ALLOC_N(char, len + 1);
+        result[0] = '\0';
+        real_foldcase(str, max, use_max, result);
+        result[len] = '\0';
 
         if (new_length != NULL)
                 *new_length = len;
 
-	return folded;
+	return result;
 }
 
 
