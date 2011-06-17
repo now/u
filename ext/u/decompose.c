@@ -4,17 +4,14 @@
 #include <stdint.h>
 
 #include "u.h"
+#include "private.h"
 
 #include "data/constants.h"
 #include "data/combining-class.h"
 #include "data/decompose.h"
 #include "data/compose.h"
 
-#include "private.h"
-
-#define COMBINING_CLASS(c)      \
-        SPLIT_UNICODE_TABLE_LOOKUP(combining_class_data, combining_class_table_part1, combining_class_table_part2, (c), 0)
-
+#include "combining_class.h"
 
 /* {{{1
  * Hangul syllable [de]composition constants. A lot of work I'd say.
@@ -34,16 +31,6 @@ enum {
 
 
 /* {{{1
- * Return the combinging class of ‘c’.
- */
-int
-unichar_combining_class(unichar c)
-{
-        return COMBINING_CLASS(c);
-}
-
-
-/* {{{1
  * Rearrange ‘str’ so that decomposed characters are arranged according to
  * their combining class.  Do this for at most ‘len’ bytes of data.
  */
@@ -53,7 +40,7 @@ unicode_canonical_ordering_swap(unichar *str, size_t offset, int next, bool *swa
         size_t initial = offset + 1;
 
         size_t j = initial;
-        while (j > 0 && COMBINING_CLASS(str[j - 1]) > next) {
+        while (j > 0 && s_combining_class(str[j - 1]) > next) {
                 unichar c = str[j];
                 str[j] = str[j - 1];
                 str[j - 1] = c;
@@ -68,9 +55,9 @@ unicode_canonical_ordering_reorder(unichar *str, size_t len)
 {
         bool swapped = false;
 
-        int prev = COMBINING_CLASS(str[0]);
+        int prev = s_combining_class(str[0]);
         for (size_t i = 0; i < len - 1; i++) {
-                int next = COMBINING_CLASS(str[i + 1]);
+                int next = s_combining_class(str[i + 1]);
 
                 if (next != 0 && prev > next)
                         unicode_canonical_ordering_swap(str, i, next, &swapped);
@@ -337,7 +324,7 @@ normalize_wc_decompose(const char *str, size_t max_len, bool use_len,
                 else
                         n += normalize_wc_decompose_one(c, mode, base);
 
-                if (buf != NULL && n > 0 && COMBINING_CLASS(buf[prev_n]) == 0) {
+                if (buf != NULL && n > 0 && s_combining_class(buf[prev_n]) == 0) {
                         unicode_canonical_ordering(buf + prev_start,
                                                    n - prev_start);
                         prev_start = prev_n;
@@ -367,7 +354,7 @@ normalize_wc_compose(unichar *buf, size_t len, size_t *new_length)
         int prev_cc = UNICODE_LAST_CHAR + 1;
 
         for (size_t i = 0; i < len; i++) {
-                int cc = COMBINING_CLASS(buf[i]);
+                int cc = s_combining_class(buf[i]);
                 size_t j = i - (len - new_len);
 
                 if (j > 0 && (prev_cc == UNICODE_LAST_CHAR + 1 || prev_cc < cc) &&
@@ -375,7 +362,7 @@ normalize_wc_compose(unichar *buf, size_t len, size_t *new_length)
                         new_len--;
                         prev_cc = (j + 1 == prev_start) ?
                                 UNICODE_LAST_CHAR + 1 :
-                                COMBINING_CLASS(buf[j - 1]);
+                                s_combining_class(buf[j - 1]);
                 } else {
                         if (cc == 0)
                                 prev_start = j;

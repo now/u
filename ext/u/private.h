@@ -65,9 +65,10 @@ HIDDEN bool binary_search_unicode_table(const void *table,
 #define SPLIT_UNICODE_TABLE_LOOKUP(data, part1, part2, c, fallback)    \
         (((c) <= UNICODE_LAST_CHAR_PART1) \
          ? SPLIT_UNICODE_TABLE_LOOKUP_PAGE(data, part1, (c) >> 8, c) \
-         : (((c) >= UNICODE_FIRST_CHAR_PART2 && (c) <= UNICODE_LAST_CHAR) \
+         : ((UNICODE_FIRST_CHAR_PART2 <= (c) && (c) <= UNICODE_LAST_CHAR) \
             ? SPLIT_UNICODE_TABLE_LOOKUP_PAGE(data, part2, ((c) - UNICODE_FIRST_CHAR_PART2) >> 8, c) \
             : (fallback)))
+
 
 HIDDEN unichar *_utf_normalize_wc(const char *str,
                                   size_t max_len,

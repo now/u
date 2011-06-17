@@ -1,7 +1,9 @@
 attributes.o: attributes.c u.h private.h data/constants.h \
  data/attributes.h attributes.h
-decompose.o: decompose.c u.h data/constants.h data/combining-class.h \
- data/decompose.h data/compose.h private.h
+combining_class.o: combining_class.c u.h private.h data/constants.h \
+ data/combining-class.h combining_class.h
+decompose.o: decompose.c u.h private.h data/constants.h \
+ data/combining-class.h data/decompose.h data/compose.h combining_class.h
 locale_type.o: locale_type.c u.h private.h locale_type.h
 private.o: private.c u.h private.h
 rb_private.o: rb_private.c rb_includes.h extconf.h u.h private.h \
@@ -159,6 +161,8 @@ u_width.o: u_width.c u.h private.h
 ucs4_to_u.o: ucs4_to_u.c u.h utf8.h private.h
 unichar_break_type.o: unichar_break_type.c u.h data/constants.h \
  data/break.h private.h
+unichar_combining_class.o: unichar_combining_class.c u.h private.h \
+ data/constants.h combining_class.h
 unichar_digit_value.o: unichar_digit_value.c u.h private.h \
  data/constants.h attributes.h types.h
 unichar_isalnum.o: unichar_isalnum.c u.h private.h data/constants.h \
