@@ -76,8 +76,6 @@ tolower_turkic_i(const char **p, const char *end, bool use_end, char *buf)
         unichar i = LATIN_SMALL_LETTER_DOTLESS_I;
 
         if (P_WITHIN_STR(*p, end, use_end) && u_aref_char(*p) == COMBINING_DOT_ABOVE) {
-                /* TODO: don’t we need to make sure we don’t go beyond the end
-                 * of ‘p’? */
                 *p = u_next(*p);
                 i = LATIN_SMALL_LETTER_I;
         }
