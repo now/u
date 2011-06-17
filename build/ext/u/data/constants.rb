@@ -12,7 +12,7 @@ class Constants
 
 #define UNICODE_LAST_CHAR #{'%#04x' % data.last}
 
-#define UNICODE_MAX_TABLE_INDEX 10000
+#define UNICODE_MAX_TABLE_INDEX ((UNICODE_LAST_CHAR + 1) / 256)
 
 #define UNICODE_LAST_CHAR_PART1 #{data.last_char_part1_x}
 

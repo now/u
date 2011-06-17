@@ -5,6 +5,7 @@
 
 #include "u.h"
 
+#include "data/constants.h"
 #include "data/decompose.h"
 #include "data/compose.h"
 

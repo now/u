@@ -10,14 +10,6 @@ class Decompose
     # quite yet, so wait until we have stable tests.
     U::Build::Header.new(io) do
       io.puts <<EOD
-#define UNICODE_LAST_CHAR #{'0x%04x' % data.last}
-
-#define UNICODE_MAX_TABLE_INDEX (0x110000 / 256)
-
-#define UNICODE_LAST_CHAR_PART1 #{data.last_char_part1_x}
-#define UNICODE_LAST_PAGE_PART1 #{data.pages_before_e0000 - 1}
-#define UNICODE_FIRST_CHAR_PART2 0xe0000
-
 #define UNICODE_NOT_PRESENT_OFFSET #{NotPresentOffset}
 EOD
       io.puts U::Build::Header::Tables::Split.

@@ -1,6 +1,7 @@
 attributes.o: attributes.c u.h private.h data/constants.h \
  data/attributes.h attributes.h
-decompose.o: decompose.c u.h data/decompose.h data/compose.h private.h
+decompose.o: decompose.c u.h data/constants.h data/decompose.h \
+ data/compose.h private.h
 locale_type.o: locale_type.c u.h private.h locale_type.h
 private.o: private.c u.h private.h
 rb_private.o: rb_private.c rb_includes.h extconf.h u.h private.h \
