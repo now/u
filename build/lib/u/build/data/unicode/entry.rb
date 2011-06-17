@@ -19,7 +19,7 @@ class U::Build::Data::Unicode::Entry
     else
       @value = nil
     end
-    @cclass = fields[U::Build::Data::Unicode::CombiningClasses]
+    @cclass = fields[U::Build::Data::Unicode::CombiningClasses].to_i
     @decomposition = Decomposition.new(fields[U::Build::Data::Unicode::Decomposition])
   end
 

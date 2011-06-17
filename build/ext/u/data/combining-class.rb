@@ -6,7 +6,7 @@ class CombiningClass
   def initialize(data, io = $stdout)
     U::Build::Header.new(io) do
       io.puts U::Build::Header::Tables::Split.new(data, 'uint8_t', 'combining_class'){ |i|
-        data[i].cclass
+        '%d' % data[i].cclass
       }
     end
   end
