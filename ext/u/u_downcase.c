@@ -36,9 +36,9 @@
 
 
 static inline bool
-has_more_above(const char *str)
+has_more_above(const char *str, const char *end, bool use_end)
 {
-	for (const char *p = str; *p != '\0'; p = u_next(p)) {
+	for (const char *p = str; P_WITHIN_STR(p, end, use_end); p = u_next(p)) {
 		int c_class = unichar_combining_class(u_aref_char(p));
 
 		if (c_class == CANONICAL_COMBINING_CLASS_ABOVE)
@@ -70,12 +70,12 @@ real_do_tolower(unichar c, int type, char *buf)
         return unichar_to_u(tv != '\0' ? tv : c, buf);
 }
 
-static size_t
-tolower_turkic_i(const char **p, char *buf)
+static inline size_t
+tolower_turkic_i(const char **p, const char *end, bool use_end, char *buf)
 {
         unichar i = LATIN_SMALL_LETTER_DOTLESS_I;
 
-        if (u_aref_char(*p) == COMBINING_DOT_ABOVE) {
+        if (P_WITHIN_STR(*p, end, use_end) && u_aref_char(*p) == COMBINING_DOT_ABOVE) {
                 /* TODO: don’t we need to make sure we don’t go beyond the end
                  * of ‘p’? */
                 *p = u_next(*p);
@@ -111,6 +111,38 @@ tolower_sigma(const char **p, char *buf, const char *end, bool use_end)
         return unichar_to_u(sigma, buf);
 }
 
+static inline bool
+tolower_lithuanian(unichar c, const char **p, const char *end, bool use_end, char *buf, size_t *len)
+{
+        unichar base = LATIN_SMALL_LETTER_I;
+        unichar combiner = '\0';
+
+        switch (c) {
+        case LATIN_CAPITAL_LETTER_I_WITH_GRAVE:
+                combiner = COMBINING_GRAVE_ACCENT;
+                break;
+        case LATIN_CAPITAL_LETTER_I_WITH_ACUTE:
+                combiner = COMBINING_ACUTE_ACCENT;
+                break;
+        case LATIN_CAPITAL_LETTER_I_WITH_TILDE:
+                combiner = COMBINING_TILDE;
+                break;
+        case 'I':
+        case 'J':
+        case LATIN_CAPITAL_LETTER_I_WITH_OGONEK:
+                if (!has_more_above(*p, end, use_end))
+                        return false;
+
+                base = unichar_tolower(c);
+                break;
+        default:
+                return false;
+        }
+
+        *len = tolower_lithuianian_i(buf, base, combiner);
+        return true;
+}
+
 static size_t
 real_tolower_one(const char **p, const char *prev, char *buf,
                  LocaleType locale_type, const char *end, bool use_end)
@@ -119,41 +151,14 @@ real_tolower_one(const char **p, const char *prev, char *buf,
         int type = s_type(c);
 
         if (locale_type == LOCALE_TURKIC && c == 'I')
-                return tolower_turkic_i(p, buf);
+                return tolower_turkic_i(p, end, use_end, buf);
 
-        /* Introduce an explicit dot above the lowercasing capital I’s
-         * and J’s whenever there are more accents above.
-         * [SpecialCasing.txt] */
         if (locale_type == LOCALE_LITHUANIAN) {
-                unichar base = LATIN_SMALL_LETTER_I;
-                unichar combiner = '\0';
+                size_t len;
 
-                switch (c) {
-                case LATIN_CAPITAL_LETTER_I_WITH_GRAVE:
-                        combiner = COMBINING_GRAVE_ACCENT;
-                        break;
-                case LATIN_CAPITAL_LETTER_I_WITH_ACUTE:
-                        combiner = COMBINING_ACUTE_ACCENT;
-                        break;
-                case LATIN_CAPITAL_LETTER_I_WITH_TILDE:
-                        combiner = COMBINING_TILDE;
-                        break;
-                case 'I':
-                case 'J':
-                case LATIN_CAPITAL_LETTER_I_WITH_OGONEK:
-                        if (!has_more_above(*p))
-                                goto no_lithuanian_i_casing;
-
-                        base = unichar_tolower(c);
-                        break;
-                default:
-                        goto no_lithuanian_i_casing;
-                }
-
-                return tolower_lithuianian_i(buf, base, combiner);
+                if (tolower_lithuanian(c, p, end, use_end, buf, &len))
+                        return len;
         }
-
-no_lithuanian_i_casing:
 
         if (c == GREEK_CAPITAL_LETTER_SIGMA)
                 return tolower_sigma(p, buf, end, use_end);
