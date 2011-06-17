@@ -57,7 +57,6 @@ u_foldcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
 
 	size_t len = real_foldcase(str, max, use_max, NULL);
         char *result = ALLOC_N(char, len + 1);
-        result[0] = '\0';
         real_foldcase(str, max, use_max, result);
         result[len] = '\0';
 
