@@ -34,11 +34,8 @@
 #define CANONICAL_COMBINING_CLASS_ABOVE 230
 #define CANONICAL_COMBINING_CLASS_NOT_REORDERED 0
 
-/* {{{1
- * Traverse the string checking for characters with combining class == 230
- * until a base character is found.
- */
-static bool
+
+static inline bool
 has_more_above(const char *str)
 {
 	for (const char *p = str; *p != '\0'; p = u_next(p)) {
@@ -73,9 +70,6 @@ real_do_tolower(unichar c, int type, char *buf)
         return unichar_to_u(tv != '\0' ? tv : c, buf);
 }
 
-/* {{{1
- * The real implementation of downcase.
- */
 static size_t
 tolower_turkic_i(const char **p, char *buf)
 {
@@ -195,8 +189,6 @@ real_tolower(const char *str, size_t max, bool use_max, char *buf,
 	return len;
 }
 
-
-/* {{{1 */
 static char *
 u_downcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
 {
@@ -215,28 +207,14 @@ u_downcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
 	return result;
 }
 
-
-/* {{{1
- * Convert all characters in ‘str’ to their lowercase representation if
- * applicable.  Returns the freshly allocated representation.
- */
 char *
 u_downcase(const char *str)
 {
 	return u_downcase_impl(str, 0, false, NULL);
 }
 
-
-/* {{{1
- * Convert all characters in ‘str’ to their lowercase representation if
- * applicable.  Returns the freshly allocated representation.  Do this for at
- * most ‘len˚ bytes from ‘str’.
- */
 char *
 u_downcase_n(const char *str, size_t len, size_t *new_length)
 {
 	return u_downcase_impl(str, len, true, new_length);
 }
-
-
-/* }}}1 */
