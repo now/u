@@ -31,6 +31,9 @@
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
 
 
+#define CANONICAL_COMBINING_CLASS_ABOVE 230
+#define CANONICAL_COMBINING_CLASS_NOT_REORDERED 0
+
 /* {{{1
  * Traverse the string checking for characters with combining class == 230
  * until a base character is found.
@@ -41,10 +44,10 @@ has_more_above(const char *str)
 	for (const char *p = str; *p != '\0'; p = u_next(p)) {
 		int c_class = unichar_combining_class(u_aref_char(p));
 
-		if (c_class == 230)
+		if (c_class == CANONICAL_COMBINING_CLASS_ABOVE)
 			return true;
 
-		if (c_class == 0)
+		if (c_class == CANONICAL_COMBINING_CLASS_NOT_REORDERED)
 			return false;
 	}
 
