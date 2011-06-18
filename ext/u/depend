@@ -173,6 +173,8 @@ unichar_isassigned.o: unichar_isassigned.c u.h private.h data/constants.h \
   types.h
 unichar_iscased.o: unichar_iscased.c u.h private.h data/constants.h \
   data/cased.h types.h
+unichar_iscaseignorable.o: unichar_iscaseignorable.c u.h private.h \
+  data/constants.h types.h
 unichar_iscntrl.o: unichar_iscntrl.c u.h private.h data/constants.h \
   types.h
 unichar_isdefined.o: unichar_isdefined.c u.h private.h data/constants.h \

@@ -67,6 +67,7 @@ typedef enum {
 bool unichar_isalnum(unichar c);
 bool unichar_isalpha(unichar c);
 bool unichar_iscased(unichar c);
+bool unichar_iscaseignorable(unichar c);
 bool unichar_iscntrl(unichar c);
 bool unichar_isdigit(unichar c);
 bool unichar_isgraph(unichar c);
