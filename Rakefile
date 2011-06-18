@@ -94,6 +94,10 @@ data_header 'ext/u/data/case-folding.h' => %w[build/ext/u/data/case-folding.rb
                                               build/data/UnicodeData.txt
                                               build/data/SpecialCasing.txt
                                               build/data/CaseFolding.txt]
+
+data_header 'ext/u/data/cased.h' => %w[build/ext/u/data/cased.rb
+                                       build/data/PropList.txt]
+
 data_header 'ext/u/data/compose.h' => %w[build/ext/u/data/compose.rb
                                          build/data/UnicodeData.txt
                                          build/data/CompositionExclusions.txt]
