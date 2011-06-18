@@ -141,12 +141,11 @@ tolower_lithuanian(unichar c, const char **p, const char *end, bool use_end, cha
         return true;
 }
 
-static size_t
-real_tolower_one(const char **p, const char *prev, char *buf,
-                 LocaleType locale_type, const char *end, bool use_end)
+static inline size_t
+real_tolower_one(const char **p, const char *prev, LocaleType locale_type,
+                 const char *end, bool use_end, char *buf)
 {
         unichar c = u_aref_char(prev);
-        int type = s_type(c);
 
         if (locale_type == LOCALE_TURKIC && c == 'I')
                 return tolower_turkic_i(p, end, use_end, buf);
@@ -161,6 +160,7 @@ real_tolower_one(const char **p, const char *prev, char *buf,
         if (c == GREEK_CAPITAL_LETTER_SIGMA)
                 return tolower_sigma(p, buf, end, use_end);
 
+        int type = s_type(c);
         if (IS(type, OR(UNICODE_UPPERCASE_LETTER,
                         OR(UNICODE_TITLECASE_LETTER, 0))))
                 return real_do_tolower(c, type, buf);
@@ -174,8 +174,8 @@ real_tolower_one(const char **p, const char *prev, char *buf,
 }
 
 static size_t
-real_tolower(const char *str, size_t max, bool use_max, char *buf,
-             LocaleType locale_type)
+real_tolower(const char *str, size_t max, bool use_max, LocaleType locale_type,
+             char *buf)
 {
 	size_t len = 0;
 
@@ -185,8 +185,8 @@ real_tolower(const char *str, size_t max, bool use_max, char *buf,
 		const char *prev = p;
 		p = u_next(p);
 
-                len += real_tolower_one(&p, prev, OFFSET_IF(buf, len),
-                                        locale_type, end, use_max);
+                len += real_tolower_one(&p, prev, locale_type, end, use_max,
+                                        OFFSET_IF(buf, len));
 	}
 
 	return len;
@@ -199,9 +199,9 @@ u_downcase_impl(const char *str, size_t max, bool use_max, size_t *new_length)
 
 	LocaleType locale_type = _u_locale_type();
 
-	size_t len = real_tolower(str, max, use_max, NULL, locale_type);
+	size_t len = real_tolower(str, max, use_max, locale_type, NULL);
 	char *result = ALLOC_N(char, len + 1);
-	real_tolower(str, max, use_max, result, locale_type);
+	real_tolower(str, max, use_max, locale_type, result);
 	result[len] = '\0';
 
         if (new_length != NULL)
