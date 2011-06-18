@@ -96,21 +96,6 @@ tolower_lithuianian_i(unichar base, unichar combiner, char *buf)
         return len;
 }
 
-static size_t
-tolower_sigma(const char **p, const char *end, bool use_end, char *buf)
-{
-        unichar sigma = GREEK_SMALL_LETTER_FINAL_SIGMA;
-
-        /* SIGMA maps differently depending on whether it is final or not.  The
-         * following simplified test would fail in the case of combining marks
-         * following the sigma, but I don't think that occurs in real text.
-         * The test here matches that in ICU. */
-        if ((!use_end || *p < end) && **p != '\0' && s_isalpha(s_type(u_aref_char(*p))))
-                sigma = GREEK_SMALL_LETTER_SIGMA;
-
-        return unichar_to_u(sigma, buf);
-}
-
 static inline bool
 tolower_lithuanian(unichar c, const char **p, const char *end, bool use_end, char *buf, size_t *len)
 {
@@ -141,6 +126,21 @@ tolower_lithuanian(unichar c, const char **p, const char *end, bool use_end, cha
 
         *len = tolower_lithuianian_i(base, combiner, buf);
         return true;
+}
+
+static size_t
+tolower_sigma(const char **p, const char *end, bool use_end, char *buf)
+{
+        unichar sigma = GREEK_SMALL_LETTER_FINAL_SIGMA;
+
+        /* SIGMA maps differently depending on whether it is final or not.  The
+         * following simplified test would fail in the case of combining marks
+         * following the sigma, but I don't think that occurs in real text.
+         * The test here matches that in ICU. */
+        if ((!use_end || *p < end) && **p != '\0' && s_isalpha(s_type(u_aref_char(*p))))
+                sigma = GREEK_SMALL_LETTER_SIGMA;
+
+        return unichar_to_u(sigma, buf);
 }
 
 static inline size_t
