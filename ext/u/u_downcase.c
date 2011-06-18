@@ -17,6 +17,8 @@
 
 
 #define COMBINING_DOT_ABOVE                     ((unichar)0x0307)
+#define LATIN_CAPITAL_LETTER_I                  ((unichar)0x0049)
+#define LATIN_CAPITAL_LETTER_J                  ((unichar)0x004a)
 #define LATIN_SMALL_LETTER_I                    ((unichar)0x0069)
 #define LATIN_SMALL_LETTER_DOTLESS_I            ((unichar)0x0131)
 #define LATIN_CAPITAL_LETTER_I_WITH_GRAVE       ((unichar)0x00cc)
@@ -125,8 +127,8 @@ tolower_lithuanian(unichar c, const char **p, const char *end, bool use_end, cha
         case LATIN_CAPITAL_LETTER_I_WITH_TILDE:
                 combiner = COMBINING_TILDE;
                 break;
-        case 'I':
-        case 'J':
+        case LATIN_CAPITAL_LETTER_I:
+        case LATIN_CAPITAL_LETTER_J:
         case LATIN_CAPITAL_LETTER_I_WITH_OGONEK:
                 if (!has_more_above(*p, end, use_end))
                         return false;
@@ -147,7 +149,7 @@ real_tolower_one(const char **p, const char *prev, LocaleType locale_type,
 {
         unichar c = u_aref_char(prev);
 
-        if (locale_type == LOCALE_TURKIC && c == 'I')
+        if (locale_type == LOCALE_TURKIC && c == LATIN_CAPITAL_LETTER_I)
                 return tolower_turkic_i(p, end, use_end, buf);
 
         if (locale_type == LOCALE_LITHUANIAN) {
