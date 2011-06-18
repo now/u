@@ -86,7 +86,7 @@ tolower_turkic_i(const char **p, const char *end, bool use_end, char *buf)
 }
 
 static size_t
-tolower_lithuianian_i(char *buf, unichar base, unichar combiner)
+tolower_lithuianian_i(unichar base, unichar combiner, char *buf)
 {
         size_t len = unichar_to_u(base, buf);
         len += unichar_to_u(COMBINING_DOT_ABOVE, OFFSET_IF(buf, len));
@@ -97,7 +97,7 @@ tolower_lithuianian_i(char *buf, unichar base, unichar combiner)
 }
 
 static size_t
-tolower_sigma(const char **p, char *buf, const char *end, bool use_end)
+tolower_sigma(const char **p, const char *end, bool use_end, char *buf)
 {
         unichar sigma = GREEK_SMALL_LETTER_FINAL_SIGMA;
 
@@ -139,7 +139,7 @@ tolower_lithuanian(unichar c, const char **p, const char *end, bool use_end, cha
                 return false;
         }
 
-        *len = tolower_lithuianian_i(buf, base, combiner);
+        *len = tolower_lithuianian_i(base, combiner, buf);
         return true;
 }
 
@@ -160,7 +160,7 @@ real_tolower_one(const char **p, const char *prev, LocaleType locale_type,
         }
 
         if (c == GREEK_CAPITAL_LETTER_SIGMA)
-                return tolower_sigma(p, buf, end, use_end);
+                return tolower_sigma(p, end, use_end, buf);
 
         int type = s_type(c);
         if (IS(type, OR(UNICODE_UPPERCASE_LETTER,
