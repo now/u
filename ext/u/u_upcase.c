@@ -157,11 +157,12 @@ upcase_loop(const char *string, size_t length, bool use_length,
 }
 
 static char *
-u_upcase_impl(const char *string, size_t length, bool use_length, size_t *new_length)
+u_upcase_in_locale_impl(const char *string, size_t length, bool use_length,
+                        const char *locale, size_t *new_length)
 {
 	assert(string != NULL);
 
-	LocaleType locale_type = _u_locale_type();
+	LocaleType locale_type = _u_locale_type_from_string(locale);
 
 	size_t n = upcase_loop(string, length, use_length, locale_type, NULL);
 	char *result = ALLOC_N(char, n + 1);
@@ -177,11 +178,24 @@ u_upcase_impl(const char *string, size_t length, bool use_length, size_t *new_le
 char *
 u_upcase(const char *string)
 {
-	return u_upcase_impl(string, 0, false, NULL);
+	return u_upcase_in_locale_impl(string, 0, false, NULL, NULL);
 }
 
 char *
 u_upcase_n(const char *string, size_t length, size_t *new_length)
 {
-	return u_upcase_impl(string, length, true, new_length);
+	return u_upcase_in_locale_impl(string, length, true, NULL, new_length);
+}
+
+char *
+u_upcase_in_locale(const char *string, const char *locale)
+{
+	return u_upcase_in_locale_impl(string, 0, false, locale, NULL);
+}
+
+char *
+u_upcase_in_locale_n(const char *string, size_t length, const char *locale,
+                     size_t *new_length)
+{
+	return u_upcase_in_locale_impl(string, length, true, locale, new_length);
 }
