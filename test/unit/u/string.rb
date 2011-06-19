@@ -196,6 +196,18 @@ Expectations do
   expect 'ας’'.u do 'ΑΣ’'.u.downcase end
   expect '’σ'.u do '’Σ'.u.downcase end
 
+  expect 'i'.u do 'I'.u.downcase('lt') end
+
+  expect "i\xcc\x87\xcc\x80\xcc\x87".u do "I\xcc\x80\xcc\x87".u.downcase('lt') end
+  expect "i\xcc\x87\xcc\x87".u do "I\xcc\x87".u.downcase('lt') end
+
+  expect "i\xcc\x87\xcc\x80".u do "I\xcc\x80".u.downcase('lt') end
+  expect "j\xcc\x87\xcc\x80".u do "J\xcc\x80".u.downcase('lt') end
+  expect "į\xcc\x87\xcc\x80".u do "Į\xcc\x80".u.downcase('lt') end
+  expect "i\xcc\x87\xcc\x80".u do 'Ì'.u.downcase('lt') end
+  expect "i\xcc\x87\xcc\x81".u do 'Í'.u.downcase('lt') end
+  expect "i\xcc\x87\xcc\x83".u do 'Ĩ'.u.downcase('lt') end
+
   expect 'i'.u do 'İ'.u.downcase('tr') end
   expect 'i'.u do 'İ'.u.downcase('az') end
 
