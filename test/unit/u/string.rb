@@ -189,6 +189,22 @@ Expectations do
   expect 'hëllö'.u do 'HËLLÖ'.u.downcase end
   expect "abc\0dëf".u do "ABC\0DËF".u.downcase end
 
+  expect 'σ'.u do 'Σ'.u.downcase end
+  expect 'ας'.u do 'ΑΣ'.u.downcase end
+  expect 'ασβ'.u do 'ΑΣΒ'.u.downcase end
+  expect 'ας '.u do 'ΑΣ '.u.downcase end
+  expect 'ας’'.u do 'ΑΣ’'.u.downcase end
+  expect '’σ'.u do '’Σ'.u.downcase end
+
+  expect 'i'.u do 'İ'.u.downcase('tr') end
+  expect 'i'.u do 'İ'.u.downcase('az') end
+
+  expect 'i'.u do 'İ'.u.downcase('tr') end
+  expect 'i'.u do 'İ'.u.downcase('az') end
+
+  expect 'ı'.u do 'I'.u.downcase('tr') end
+  expect 'ı'.u do 'I'.u.downcase('az') end
+
   expect '"\xC3bc\u{e4}bc".u'.u do "\xC3bcäbc".u.dump end
 
   expect [0x61, 0x62, 0x63, 0x00, 0x64, 0xc3, 0xab, 0x66] do

@@ -14,6 +14,7 @@ typedef enum {
 
 
 HIDDEN LocaleType _u_locale_type(void);
+HIDDEN LocaleType _u_locale_type_from_string(const char *locale);
 
 
 #endif /* LOCALE_TYPE_H */
