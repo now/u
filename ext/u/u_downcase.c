@@ -16,23 +16,22 @@
 #include "locale_type.h"
 
 
-#define COMBINING_DOT_ABOVE                     ((unichar)0x0307)
 #define LATIN_CAPITAL_LETTER_I                  ((unichar)0x0049)
 #define LATIN_CAPITAL_LETTER_J                  ((unichar)0x004a)
 #define LATIN_SMALL_LETTER_I                    ((unichar)0x0069)
-#define LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE   ((unichar)0x0130)
-#define LATIN_SMALL_LETTER_DOTLESS_I            ((unichar)0x0131)
 #define LATIN_CAPITAL_LETTER_I_WITH_GRAVE       ((unichar)0x00cc)
 #define LATIN_CAPITAL_LETTER_I_WITH_ACUTE       ((unichar)0x00cd)
 #define LATIN_CAPITAL_LETTER_I_WITH_TILDE       ((unichar)0x0128)
 #define LATIN_CAPITAL_LETTER_I_WITH_OGONEK      ((unichar)0x012e)
+#define LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE   ((unichar)0x0130)
+#define LATIN_SMALL_LETTER_DOTLESS_I            ((unichar)0x0131)
 #define COMBINING_GRAVE_ACCENT                  ((unichar)0x0300)
 #define COMBINING_ACUTE_ACCENT                  ((unichar)0x0301)
 #define COMBINING_TILDE                         ((unichar)0x0303)
+#define COMBINING_DOT_ABOVE                     ((unichar)0x0307)
 #define GREEK_CAPITAL_LETTER_SIGMA              ((unichar)0x03a3)
-#define GREEK_SMALL_LETTER_SIGMA                ((unichar)0x03c3)
 #define GREEK_SMALL_LETTER_FINAL_SIGMA          ((unichar)0x03c2)
-
+#define GREEK_SMALL_LETTER_SIGMA                ((unichar)0x03c3)
 
 #define CANONICAL_COMBINING_CLASS_ABOVE 230
 #define CANONICAL_COMBINING_CLASS_NOT_REORDERED 0
@@ -83,7 +82,7 @@ downcase_sigma(const char *string, const char *p, const char *end, bool use_end,
 static inline bool
 has_more_above(const char *string, const char *end, bool use_end)
 {
-	for (const char *p = string; P_WITHIN_STR(p, end, use_end); p = u_next(p)) {
+	for (const char *p = u_next(string); P_WITHIN_STR(p, end, use_end); p = u_next(p)) {
 		int c_class = unichar_combining_class(u_aref_char(p));
 
 		if (c_class == CANONICAL_COMBINING_CLASS_ABOVE)
@@ -150,7 +149,7 @@ is_before_dot(const char *p, const char *end, bool use_end)
 
 		int c_class = unichar_combining_class(u_aref_char(p));
                 if (c_class == CANONICAL_COMBINING_CLASS_ABOVE ||
-                    c_class == CANONICAL_COMBINING_CLASS_ABOVE)
+                    c_class == CANONICAL_COMBINING_CLASS_NOT_REORDERED)
                         return false;
 	}
 
@@ -180,7 +179,7 @@ is_after_i(const char *string, const char *p)
 
 		int c_class = unichar_combining_class(u_aref_char(p));
                 if (c_class == CANONICAL_COMBINING_CLASS_ABOVE ||
-                    c_class == CANONICAL_COMBINING_CLASS_ABOVE)
+                    c_class == CANONICAL_COMBINING_CLASS_NOT_REORDERED)
                         return false;
 	}
 
