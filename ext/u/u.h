@@ -167,8 +167,8 @@ char *u_downcase_in_locale(const char *string, const char *locale);
 char *u_downcase_in_locale_n(const char *string, size_t length,
                              const char *locale, size_t *new_length);
 
-char *u_foldcase(const char *str);
-char *u_foldcase_n(const char *str, size_t len, size_t *new_length);
+char *u_foldcase(const char *string);
+char *u_foldcase_n(const char *string, size_t length, size_t *new_length);
 
 char *u_upcase(const char *string);
 char *u_upcase_n(const char *string, size_t length, size_t *new_length);
