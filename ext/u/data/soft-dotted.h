@@ -1,0 +1,55 @@
+/* Automatically generated file */
+
+struct unichar_interval {
+  unichar first;
+  unichar last;
+};
+
+static int
+unichar_interval_compare(const void *key, const void *element)
+{
+        unichar c = *(unichar *)key;
+        struct unichar_interval *interval = (struct unichar_interval *)element;
+
+        if (c < interval->first)
+                return -1;
+        else if (c > interval->last)
+                return +1;
+        else
+                return 0;
+}
+
+
+static const struct unichar_interval soft_dotted[] = {
+	{ 0x0069, 0x006a },
+	{ 0x012f, 0x012f },
+	{ 0x0249, 0x0249 },
+	{ 0x0268, 0x0268 },
+	{ 0x029d, 0x029d },
+	{ 0x02b2, 0x02b2 },
+	{ 0x03f3, 0x03f3 },
+	{ 0x0456, 0x0456 },
+	{ 0x0458, 0x0458 },
+	{ 0x1d62, 0x1d62 },
+	{ 0x1d96, 0x1d96 },
+	{ 0x1da4, 0x1da4 },
+	{ 0x1da8, 0x1da8 },
+	{ 0x1e2d, 0x1e2d },
+	{ 0x1ecb, 0x1ecb },
+	{ 0x2071, 0x2071 },
+	{ 0x2148, 0x2149 },
+	{ 0x2c7c, 0x2c7c },
+	{ 0x1d422, 0x1d423 },
+	{ 0x1d456, 0x1d457 },
+	{ 0x1d48a, 0x1d48b },
+	{ 0x1d4be, 0x1d4bf },
+	{ 0x1d4f2, 0x1d4f3 },
+	{ 0x1d526, 0x1d527 },
+	{ 0x1d55a, 0x1d55b },
+	{ 0x1d58e, 0x1d58f },
+	{ 0x1d5c2, 0x1d5c3 },
+	{ 0x1d5f6, 0x1d5f7 },
+	{ 0x1d62a, 0x1d62b },
+	{ 0x1d65e, 0x1d65f },
+	{ 0x1d692, 0x1d693 }
+};

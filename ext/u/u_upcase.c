@@ -15,67 +15,57 @@
 #include "locale_type.h"
 
 
+#define LATIN_SMALL_LETTER_I                    ((unichar)0x0069)
+#define LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE   ((unichar)0x0130)
 #define COMBINING_DOT_ABOVE                     ((unichar)0x0307)
 #define COMBINING_GREEK_YPOGEGRAMMENI           ((unichar)0x0345)
-#define LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE   ((unichar)0x0130)
 #define GREEK_CAPITAL_LETTER_IOTA               ((unichar)0x0399)
+
+#define CANONICAL_COMBINING_CLASS_ABOVE 230
+#define CANONICAL_COMBINING_CLASS_NOT_REORDERED 0
 
 
 static size_t
-output_marks(const char **p_inout, bool remove_dot, char *result)
+output_marks(const char **p, const char *end, bool use_end, char *result)
 {
 	size_t length = 0;
-	const char *p = *p_inout;
 
-	for ( ; *p != '\0'; p = u_next(p)) {
-		unichar c = u_aref_char(p);
+        const char *q = u_next(*p);
+        while (P_WITHIN_STR(q, end, use_end)) {
+		unichar c = u_aref_char(q);
 
                 if (!s_ismark(s_type(c)))
                         break;
 
-                if (!remove_dot || c != COMBINING_DOT_ABOVE)
-                        length += unichar_to_u(c, OFFSET_IF(result, length));
+                length += unichar_to_u(c, OFFSET_IF(result, length));
+
+                q = u_next(q);
 	}
 
-	*p_inout = p;
+        *p = u_prev(q);
 
 	return length;
 }
 
-static size_t
-remove_all_combining_dot_above(unichar c, char *result)
+static inline bool
+is_after_soft_dotted(const char *string, const char *p)
 {
-        size_t decomp_length;
-        unichar *decomp = unicode_canonical_decomposition(c, &decomp_length);
+        if (p == string)
+                return false;
 
-        size_t length = 0;
-        for (size_t i = 0; i < decomp_length; i++)
-                if (decomp[i] != COMBINING_DOT_ABOVE)
-                        length += unichar_to_u(unichar_toupper(decomp[i]),
-                                              OFFSET_IF(result, length));
+        for (const char *q = u_prev(p); q > string; q = u_prev(q)) {
+                unichar c = u_aref_char(q);
 
-        free(decomp);
+                if (unichar_issoftdotted(c))
+                        return true;
 
-        return length;
-}
-
-static size_t
-upcase_lithuanian(const char **p, unichar c, int type, bool *was_i, char *result)
-{
-	if (c == 'i') {
-		*was_i = true;
-		return 0;
+		int c_class = unichar_combining_class(u_aref_char(p));
+                if (c_class == CANONICAL_COMBINING_CLASS_ABOVE ||
+                    c_class == CANONICAL_COMBINING_CLASS_NOT_REORDERED)
+                        return false;
 	}
 
-	if (*was_i) {
-                size_t length = remove_all_combining_dot_above(c, result);
-		return length + output_marks(p, true, OFFSET_IF(result, length));
-	}
-
-	if (!s_ismark(type))
-		*was_i = false;
-
-	return 0;
+        return unichar_issoftdotted(u_aref_char(string));
 }
 
 static inline size_t
@@ -98,40 +88,40 @@ upcase_simple(unichar c, int type, char *result)
         return unichar_to_u(tv != '\0' ? tv : c, result);
 }
 
-static size_t
-upcase_step(const char **p, const char *prev, LocaleType locale_type,
-            bool *was_i, char *result)
+static inline size_t
+upcase_step(const char *string, const char **p, const char *end, bool use_end,
+            LocaleType locale_type, char *result)
 {
-        unichar c = u_aref_char(prev);
-        int type = s_type(c);
-
-        if (locale_type == LOCALE_LITHUANIAN) {
-                size_t length = upcase_lithuanian(p, c, type, was_i, result);
-                if (length > 0)
-                        return length;
-        }
-
-        if (locale_type == LOCALE_TURKIC && c == 'i')
-                return unichar_to_u(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE, result);
+        unichar c = u_aref_char(*p);
 
         if (c == COMBINING_GREEK_YPOGEGRAMMENI) {
-                /* Nasty, need to move it after other combining marks...this
-                 * would go away if we normalized first. */
-                /* TODO: don’t we need to make sure we don’t go beyond the end
-                 * of ‘p’? */
-                size_t length = output_marks(p, result, false);
+                /* When COMBINING GREEK YPOGEGRAMMENI (U+0345) is uppercased or
+                 * titlecased, the result will be incorrect unless it is moved
+                 * to the end of any sequence of combining marks, as the
+                 * uppercase version isn’t a combining mark, but a GREEK
+                 * CAPITAL LETTER IOTA (U+0399). */
+                size_t length = output_marks(p, end, use_end, result);
                 return length + unichar_to_u(GREEK_CAPITAL_LETTER_IOTA,
                                              OFFSET_IF(result, length));
         }
 
+        if (locale_type == LOCALE_LITHUANIAN &&
+            c == COMBINING_DOT_ABOVE &&
+            is_after_soft_dotted(string, *p))
+                return 0;
+
+        if (locale_type == LOCALE_TURKIC && c == LATIN_SMALL_LETTER_I)
+                return unichar_to_u(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE, result);
+
+        int type = s_type(c);
         if (IS(type, OR(UNICODE_LOWERCASE_LETTER,
                         OR(UNICODE_TITLECASE_LETTER, 0))))
                 return upcase_simple(c, type, result);
 
-        size_t length = u_skip_lengths[*(const unsigned char *)prev];
+        size_t length = u_next(*p) - *p;
 
         if (result != NULL)
-                memcpy(result, prev, length);
+                memcpy(result, *p, length);
 
         return length;
 }
@@ -144,13 +134,11 @@ upcase_loop(const char *string, size_t length, bool use_length,
 
 	const char *p = string;
         const char *end = p + length;
-	bool p_was_i = false;
         while (P_WITHIN_STR(p, end, use_length)) {
-		const char *prev = p;
-		p = u_next(p);
-
-                n += upcase_step(&p, prev, locale_type, &p_was_i,
+                n += upcase_step(string, &p, end, use_length, locale_type,
                                  OFFSET_IF(result, n));
+
+                p = u_next(p);
 	}
 
 	return n;

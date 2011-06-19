@@ -66,25 +66,26 @@ typedef enum {
 
 bool unichar_isalnum(unichar c);
 bool unichar_isalpha(unichar c);
+bool unichar_isassigned(unichar c);
 bool unichar_iscased(unichar c);
 bool unichar_iscaseignorable(unichar c);
 bool unichar_iscntrl(unichar c);
+bool unichar_isdefined(unichar c);
 bool unichar_isdigit(unichar c);
 bool unichar_isgraph(unichar c);
 bool unichar_islower(unichar c);
+bool unichar_isnewline(unichar c);
 bool unichar_isprint(unichar c);
 bool unichar_ispunct(unichar c);
+bool unichar_issoftdotted(unichar c);
 bool unichar_isspace(unichar c);
-bool unichar_isupper(unichar c);
 bool unichar_istitle(unichar c);
-bool unichar_isnewline(unichar c);
-bool unichar_isxdigit(unichar c);
-bool unichar_isassigned(unichar c);
-bool unichar_isdefined(unichar c);
-bool unichar_iszerowidth(unichar c);
+bool unichar_isupper(unichar c);
+bool unichar_isvalid(unichar c);
 bool unichar_iswide(unichar c);
 bool unichar_iswide_cjk(unichar c);
-bool unichar_isvalid(unichar c);
+bool unichar_isxdigit(unichar c);
+bool unichar_iszerowidth(unichar c);
 
 unichar unichar_toupper(unichar c);
 unichar unichar_tolower(unichar c);

@@ -20,5 +20,5 @@ unichar_iscased(unichar c)
                      OR(UNICODE_UPPERCASE_LETTER,
                         OR(UNICODE_LOWERCASE_LETTER, 0)))) ||
                 bsearch(&c, cased, lengthof(cased), sizeof(cased[0]),
-                       unichar_interval_compare) != NULL;
+                        unichar_interval_compare) != NULL;
 }

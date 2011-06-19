@@ -1007,6 +1007,14 @@ Expectations do
   expect 'HËLLÖ'.u do 'HËLLÖ'.u.upcase end
   expect "ABC\0DËF".u do "abc\0dëF".u.upcase end
 
+  expect "I\xcc\x87".u do "i\xcc\x87".u.upcase end
+  expect 'I'.u do "i\xcc\x87".u.upcase('lt') end
+  expect "K\xcc\x87".u do "k\xcc\x87".u.upcase('lt') end
+
+  expect "A\xcc\x81Ι".u do "a\xcd\x85\xcc\x81".u.upcase end
+  expect 'I'.u do 'i'.u.upcase end
+  expect 'İ'.u do 'i'.u.upcase('tr') end
+
   expect true do 'äbc'.u.valid_encoding? end
   expect true do "äbc\0def".u.valid_encoding? end
   expect false do "\xc3bc".u.valid_encoding? end
