@@ -1019,6 +1019,11 @@ Expectations do
   expect true do "äbc\0def".u.valid_encoding? end
   expect false do "\xc3bc".u.valid_encoding? end
 
+  expect 0 do ''.u.width end
+  expect 1 do 'a'.u.width end
+  expect 2 do '豈'.u.width end
+  expect 3 do 'a豈'.u.width end
+
   expect ''.u do "\0".u.collate_key end
   expect 'äbcdëf'.u do 'äbcdëf'.u.collate_key end
   expect 'äbcdëf'.u do "äbc\0dëf".u.collate_key end

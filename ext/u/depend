@@ -132,6 +132,8 @@ rb_u_string_upcase.o: rb_u_string_upcase.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_valid_encoding.o: rb_u_string_valid_encoding.c rb_includes.h \
   extconf.h u.h private.h rb_private.h rb_u_string.h
+rb_u_string_width.o: rb_u_string_width.c rb_includes.h extconf.h u.h \
+  private.h rb_private.h rb_u_string.h
 titled.o: titled.c u.h private.h data/constants.h data/title-table.h \
   titled.h types.h
 types.o: types.c u.h private.h data/constants.h data/types.h types.h
@@ -190,6 +192,8 @@ unichar_isprint.o: unichar_isprint.c u.h private.h data/constants.h \
   types.h
 unichar_ispunct.o: unichar_ispunct.c u.h private.h data/constants.h \
   types.h
+unichar_issoftdotted.o: unichar_issoftdotted.c u.h private.h \
+  data/constants.h data/soft-dotted.h types.h
 unichar_isspace.o: unichar_isspace.c u.h private.h data/constants.h \
   types.h
 unichar_isupper.o: unichar_isupper.c u.h private.h data/constants.h \

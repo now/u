@@ -223,8 +223,8 @@ bool u_is_ascii_only_n(const char *string, size_t length);
 long u_length(const char *str);
 long u_length_n(const char *str, long len);
 
-size_t u_width(const char *str);
-size_t u_width_n(const char *str, size_t len);
+size_t u_width(const char *string);
+size_t u_width_n(const char *string, size_t length);
 
 size_t u_byte_length(const char *str);
 

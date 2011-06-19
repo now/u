@@ -7,38 +7,32 @@
 #include "private.h"
 
 
-/* {{{1
- * The real implementation of utf_width() and utf_width_n() below.
- */
 static size_t
-u_width_impl(const char *str, size_t len, bool use_len)
+u_width_impl(const char *string, size_t length, bool use_length)
 {
-	assert(str != NULL);
+	assert(string != NULL);
 
 	size_t width = 0;
 
-	for (const char *p = str; (!use_len || p < str + len) && *p != '\0'; p = u_next(p))
+        const char *p = string;
+        const char *end = p + length;
+        while (P_WITHIN_STR(p, end, use_length)) {
 		width += unichar_iswide(u_aref_char(p)) ? 2 : 1;
+
+                p = u_next(p);
+        }
 
 	return width;
 }
 
-
-/* {{{1
- * Calculate the width in cells of ‘str’.
- */
 size_t
-u_width(const char *str)
+u_width(const char *string)
 {
-	return u_width_impl(str, 0, false);
+	return u_width_impl(string, 0, false);
 }
 
-
-/* {{{1
- * Calculate the width in cells of ‘str’, which is of length ‘len’.
- */
 size_t
-u_width_n(const char *str, size_t len)
+u_width_n(const char *string, size_t length)
 {
-	return u_width_impl(str, len, true);
+	return u_width_impl(string, length, true);
 }
