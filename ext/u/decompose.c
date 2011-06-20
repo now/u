@@ -170,25 +170,27 @@ unicode_canonical_decomposition(unichar c, size_t *len)
         return r;
 }
 
-static bool
+static inline bool
 combine_hangul(unichar a, unichar b, unichar *result)
 {
         int LIndex = a - LBase;
-        int VIndex = b - VBase;
+        if (0 <= LIndex && LIndex < LCount) {
+                int VIndex = b - VBase;
+                if (0 <= VIndex && VIndex < VCount) {
+                        *result = SBase + (LIndex * VCount + VIndex) * TCount;
 
-        if (0 <= LIndex && LIndex < LCount && 0 <= VIndex && VIndex < VCount) {
-                *result = SBase + (LIndex * VCount + VIndex) * TCount;
-                return true;
+                        return true;
+                }
         }
-        
-        int SIndex = a - SBase;
-        int TIndex = b - TBase;
 
-        if (0 <= SIndex && SIndex < SCount &&
-            (SIndex % TCount) == 0 &&
-            0 < TIndex && TIndex < TCount) {
-                *result = a + TIndex;
-                return true;
+        int SIndex = a - SBase;
+        if (0 <= SIndex && SIndex < SCount && (SIndex % TCount) == 0) {
+                int TIndex = b - TBase;
+                if (0 < TIndex && TIndex < TCount) {
+                        *result = a + TIndex;
+
+                        return true;
+                }
         }
 
         return false;
