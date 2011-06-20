@@ -28,57 +28,58 @@ enum {
 };
 
 
-static void
-unicode_canonical_ordering_swap(unichar *str, size_t offset, int next, bool *swapped)
+static inline bool
+unicode_canonical_ordering_swap(unichar *string, size_t offset, int next)
 {
         size_t initial = offset + 1;
-
         size_t j = initial;
-        while (j > 0 && s_combining_class(str[j - 1]) > next) {
-                unichar c = str[j];
-                str[j] = str[j - 1];
-                str[j - 1] = c;
+
+        while (j > 0 && s_combining_class(string[j - 1]) > next) {
+                unichar c = string[j];
+                string[j] = string[j - 1];
+                string[j - 1] = c;
                 j--;
         }
 
-        *swapped = *swapped || (j != initial);
+        return j != initial;
 }
 
-static bool
-unicode_canonical_ordering_reorder(unichar *str, size_t len)
+static inline bool
+unicode_canonical_ordering_reorder(unichar *string, size_t length)
 {
         bool swapped = false;
 
-        int prev = s_combining_class(str[0]);
-        for (size_t i = 0; i < len - 1; i++) {
-                int next = s_combining_class(str[i + 1]);
+        int prev = s_combining_class(string[0]);
+        for (size_t i = 0; i < length - 1; i++) {
+                int next = s_combining_class(string[i + 1]);
 
-                if (next != 0 && prev > next)
-                        unicode_canonical_ordering_swap(str, i, next, &swapped);
-                else
+                if (next != 0 && prev > next) {
+                        if (unicode_canonical_ordering_swap(string, i, next))
+                                swapped = true;
+                } else
                         prev = next;
         }
 
         return swapped;
 }
 
-void
-unicode_canonical_ordering(unichar *str, size_t len)
+static void
+unicode_canonical_ordering(unichar *string, size_t length)
 {
-        while (unicode_canonical_ordering_reorder(str, len))
-                ; /* This loop intentionally left empty. */
+        while (unicode_canonical_ordering_reorder(string, length))
+                ;
 }
 
 /* Decompose the character ‘s’ according to the rules outlined in
  * http://www.unicode.org/unicode/reports/tr15/#Hangul. */
 static size_t
-decompose_hangul(unichar s, unichar *r)
+decompose_hangul(unichar s, unichar *result)
 {
         int SIndex = s - SBase;
 
         if (SIndex < 0 || SIndex >= SCount) {
-                if (r != NULL)
-                        r[0] = s;
+                if (result != NULL)
+                        result[0] = s;
 
                 return 1;
         }
@@ -87,25 +88,28 @@ decompose_hangul(unichar s, unichar *r)
         unichar V = VBase + (SIndex % NCount) / TCount;
         unichar T = TBase + SIndex % TCount;
 
-        if (r != NULL) {
-                r[0] = L;
-                r[1] = V;
+        if (result != NULL) {
+                result[0] = L;
+                result[1] = V;
         }
 
         if (T == TBase)
                 return 2;
 
-        if (r != NULL)
-                r[2] = T;
+        if (result != NULL)
+                result[2] = T;
 
         return 3;
 }
 
-static const char *
-get_decomposition(int index, bool compat)
+static inline const char *
+find_decomposition(unichar c, bool compat)
 {
-        int offset;
+        int index;
+        if (!unicode_table_lookup(decomp_table, c, &index))
+                return NULL;
 
+        int offset;
         if (compat) {
                 offset = decomp_table[index].compat_offset;
                 if (offset == UNICODE_NOT_PRESENT_OFFSET)
@@ -121,53 +125,15 @@ get_decomposition(int index, bool compat)
         return &decomp_expansion_string[offset];
 }
 
-static const char *
-find_decomposition(unichar c, bool compat)
-{
-        int index;
-
-        if (!unicode_table_lookup(decomp_table, c, &index))
-                return NULL;
-
-        return get_decomposition(index, compat);
-}
-
-static size_t
-decomposition_to_wc(const char *decomposition, unichar *chars)
+static inline size_t
+decomposition_to_wc(const char *decomposition, unichar *result)
 {
         size_t i = 0;
+
         for (const char *p = decomposition; *p != '\0'; p = u_next(p))
-                chars[i++] = u_aref_char(p);
+                result[i++] = u_aref_char(p);
 
         return i;
-}
-
-/* TODO: clean this up. */
-unichar *
-unicode_canonical_decomposition(unichar c, size_t *len)
-{
-        const char *decomp;
-        unichar *r;
-
-        /* Hangul syllable */
-        if (SBase <= c && c <= SLast) {
-                *len = decompose_hangul(c, NULL);
-                r = ALLOC_N(unichar, *len);
-                decompose_hangul(c, r);
-        } else if ((decomp = find_decomposition(c, false)) != NULL) {
-                *len = u_length(decomp);
-                r = ALLOC_N(unichar, *len);
-                decomposition_to_wc(decomp, r);
-        } else {
-                r = ALLOC(unichar);
-                *r = c;
-                *len = 1;
-        }
-
-        /* Supposedly following the Unicode 2.1.9 table means that the
-         * decompositions come out in canonical order.  I haven't tested this,
-         * but we rely on it here. */
-        return r;
 }
 
 static inline bool
@@ -196,7 +162,7 @@ combine_hangul(unichar a, unichar b, unichar *result)
         return false;
 }
 
-static uint16_t
+static inline uint16_t
 compose_index(unichar c)
 {
         unsigned int page = c >> 8;
@@ -204,17 +170,22 @@ compose_index(unichar c)
         if (page > COMPOSE_TABLE_LAST)
                 return 0;
 
-        return SPLIT_UNICODE_TABLE_LOOKUP_PAGE(compose_data, compose_table, page, c);
+        int16_t index = compose_table[page];
+
+        if (index >= UNICODE_MAX_TABLE_INDEX)
+                return index - UNICODE_MAX_TABLE_INDEX;
+
+        return compose_data[index][c & 0xff];
 }
 
-static bool
+static inline bool
 combine(unichar a, unichar b, unichar *result)
 {
         if (combine_hangul(a, b, result))
                 return true;
 
         uint16_t index_a = compose_index(a);
-        if (index_a >= COMPOSE_FIRST_SINGLE_START && index_a < COMPOSE_SECOND_START) {
+        if (COMPOSE_FIRST_SINGLE_START <= index_a && index_a < COMPOSE_SECOND_START) {
                 if (b != compose_first_single[index_a - COMPOSE_FIRST_SINGLE_START][0])
                         return false;
 
@@ -224,7 +195,7 @@ combine(unichar a, unichar b, unichar *result)
         }
 
         uint16_t index_b = compose_index(b);
-        if (index_b >= COMPOSE_SECOND_SINGLE_START) {
+        if (COMPOSE_SECOND_SINGLE_START <= index_b) {
                 if (a != compose_second_single[index_b - COMPOSE_SECOND_SINGLE_START][0])
                         return false;
 
@@ -233,14 +204,13 @@ combine(unichar a, unichar b, unichar *result)
                 return true;
         }
 
-        if (index_a >= COMPOSE_FIRST_START &&
-            index_a < COMPOSE_FIRST_SINGLE_START &&
-            index_b >= COMPOSE_SECOND_START &&
-            index_b < COMPOSE_SECOND_SINGLE_START) {
+        if (COMPOSE_FIRST_START <= index_a && index_a < COMPOSE_FIRST_SINGLE_START &&
+            COMPOSE_SECOND_START <= index_b && index_b < COMPOSE_SECOND_SINGLE_START) {
                 unichar r = compose_array[index_a - COMPOSE_FIRST_START][index_b - COMPOSE_SECOND_START];
 
                 if (r != 0) {
                         *result = r;
+
                         return true;
                 }
         }
@@ -249,44 +219,44 @@ combine(unichar a, unichar b, unichar *result)
 }
 
 static size_t
-normalize_wc_decompose_one(unichar c, NormalizeMode mode, unichar *buf)
+normalize_wc_decompose_one(unichar c, NormalizeMode mode, unichar *result)
 {
-        bool do_compat = (mode == NORMALIZE_NFKC || mode == NORMALIZE_NFKD);
-        const char *decomp = find_decomposition(c, do_compat);
+        const char *decomposition = find_decomposition(c,
+                                                       (mode == NORMALIZE_NFKC ||
+                                                        mode == NORMALIZE_NFKD));
 
-        if (decomp == NULL) {
-                if (buf != NULL)
-                        buf[0] = c;
+        if (decomposition == NULL) {
+                if (result != NULL)
+                        result[0] = c;
+
                 return 1;
         }
 
-        if (buf != NULL)
-                return decomposition_to_wc(decomp, buf);
+        if (result != NULL)
+                return decomposition_to_wc(decomposition, result);
 
-        return u_length(decomp);
+        return u_length(decomposition);
 }
 
-static void
-normalize_wc_decompose(const char *str, size_t len, bool use_len,
-                       NormalizeMode mode, unichar *buf, size_t *buf_len)
+static size_t
+normalize_wc_decompose(const char *string, size_t length, bool use_length,
+                       NormalizeMode mode, unichar *result)
 {
         size_t n = 0;
         size_t prev_start = 0;
 
-        const char *p = str;
-        const char *end = p + len;
-        while (P_WITHIN_STR(p, end, use_len)) {
+        const char *p = string;
+        const char *end = p + length;
+        while (P_WITHIN_STR(p, end, use_length)) {
                 unichar c = u_aref_char(p);
                 size_t prev_n = n;
 
-                unichar *base = OFFSET_IF(buf, n);
-                if (c >= SBase && c <= SLast)
-                        n += decompose_hangul(c, base);
-                else
-                        n += normalize_wc_decompose_one(c, mode, base);
+                n += (SBase <= c && c <= SLast) ?
+                        decompose_hangul(c, OFFSET_IF(result, n)) :
+                        normalize_wc_decompose_one(c, mode, OFFSET_IF(result, n));
 
-                if (buf != NULL && n > 0 && s_combining_class(buf[prev_n]) == 0) {
-                        unicode_canonical_ordering(buf + prev_start,
+                if (result != NULL && n > 0 && s_combining_class(result[prev_n]) == 0) {
+                        unicode_canonical_ordering(result + prev_start,
                                                    n - prev_start);
                         prev_start = prev_n;
                 }
@@ -294,66 +264,59 @@ normalize_wc_decompose(const char *str, size_t len, bool use_len,
                 p = u_next(p);
         }
 
-        if (buf != NULL && n > 0)
-                unicode_canonical_ordering(buf + prev_start, n - prev_start);
+        if (result != NULL && n > 0)
+                unicode_canonical_ordering(result + prev_start, n - prev_start);
 
-        if (buf != NULL)
-                buf[n] = '\0';
-
-        *buf_len = n;
+        return n;
 }
 
-static unichar *
-normalize_wc_compose(unichar *buf, size_t len, size_t *new_length)
+static size_t
+normalize_wc_compose(unichar *string, size_t length)
 {
-        int new_len = len;
+        int n = length;
         size_t prev_start = 0;
-        int prev_cc = UNICODE_LAST_CHAR + 1;
+        int prev_cc = 0;
 
-        for (size_t i = 0; i < len; i++) {
-                int cc = s_combining_class(buf[i]);
-                size_t j = i - (len - new_len);
+        for (size_t i = 0; i < length; i++) {
+                int cc = s_combining_class(string[i]);
+                size_t j = i - (length - n);
 
-                if (j > 0 && (prev_cc == UNICODE_LAST_CHAR + 1 || prev_cc < cc) &&
-                    combine(buf[prev_start], buf[i], &buf[prev_start])) {
-                        new_len--;
+                if (j > 0 &&
+                    (prev_cc == 0 || prev_cc < cc) &&
+                    combine(string[prev_start], string[i], &string[prev_start])) {
+                        n--;
                         prev_cc = (j + 1 == prev_start) ?
-                                UNICODE_LAST_CHAR + 1 :
-                                s_combining_class(buf[j - 1]);
+                                0 :
+                                s_combining_class(string[j - 1]);
                 } else {
                         if (cc == 0)
                                 prev_start = j;
 
-                        buf[j] = buf[i];
+                        string[j] = string[i];
                         prev_cc = cc;
                 }
         }
 
-        buf[new_len] = '\0';
-
-        if (new_length != NULL)
-                *new_length = new_len;
-
-        return buf;
+        return n;
 }
 
 unichar *
 _u_normalize_wc(const char *string, size_t length, bool use_length,
                 NormalizeMode mode, size_t *new_length)
 {
-        size_t n;
-        normalize_wc_decompose(string, length, use_length, mode, NULL, &n);
+        size_t n = normalize_wc_decompose(string, length, use_length, mode, NULL);
         unichar *result = ALLOC_N(unichar, n + 1);
-        normalize_wc_decompose(string, length, use_length, mode, result, &n);
+        normalize_wc_decompose(string, length, use_length, mode, result);
 
-        /* Just return if we don’t want composition. */
-        if (!(mode == NORMALIZE_NFC || mode == NORMALIZE_NFKC)) {
+        if (mode == NORMALIZE_NFC || mode == NORMALIZE_NFKC)
+                n = normalize_wc_compose(result, n);
+
+        result[n] = '\0';
+
+        if (new_length != NULL)
                 *new_length = n;
 
-                return result;
-        }
-
-        return normalize_wc_compose(result, n, new_length);
+        return result;
 }
 
 char *

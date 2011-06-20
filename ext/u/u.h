@@ -155,9 +155,6 @@ typedef enum {
 	NORMALIZE_NFKC = NORMALIZE_ALL_COMPOSE
 } NormalizeMode;
 
-void unicode_canonical_ordering(unichar *str, size_t len);
-unichar *unicode_canonical_decomposition(unichar c, size_t *result_len);
-
 char *u_normalize(const char *string, NormalizeMode mode);
 char *u_normalize_n(const char *string, size_t length, NormalizeMode mode, size_t *new_length);
 
