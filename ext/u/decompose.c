@@ -24,7 +24,7 @@ enum {
         TCount = 28,
         NCount = (VCount * TCount),
         SCount = (LCount * NCount),
-        SLast  = (SBase + SCount - 1)
+        SLast = (SBase + SCount - 1)
 };
 
 
@@ -76,10 +76,10 @@ decompose_hangul(unichar s, unichar *r)
 {
         int SIndex = s - SBase;
 
-        /* If this isn’t a Hangul symbol, then simply return it unchanged. */
         if (SIndex < 0 || SIndex >= SCount) {
                 if (r != NULL)
                         r[0] = s;
+
                 return 1;
         }
 
@@ -150,7 +150,7 @@ unicode_canonical_decomposition(unichar c, size_t *len)
         unichar *r;
 
         /* Hangul syllable */
-        if (c >= SBase && c <= SLast) {
+        if (SBase <= c && c <= SLast) {
                 *len = decompose_hangul(c, NULL);
                 r = ALLOC_N(unichar, *len);
                 decompose_hangul(c, r);
