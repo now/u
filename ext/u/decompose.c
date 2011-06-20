@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include "u.h"
+
 #include "private.h"
 
 #include "data/constants.h"
@@ -12,9 +13,7 @@
 
 #include "combining_class.h"
 
-/* {{{1
- * Hangul syllable [de]composition constants. A lot of work I'd say.
- */
+
 enum {
         SBase = 0xac00,
         LBase = 0x1100,
@@ -29,10 +28,6 @@ enum {
 };
 
 
-/* {{{1
- * Rearrange ‘str’ so that decomposed characters are arranged according to
- * their combining class.  Do this for at most ‘len’ bytes of data.
- */
 static void
 unicode_canonical_ordering_swap(unichar *str, size_t offset, int next, bool *swapped)
 {
@@ -74,13 +69,8 @@ unicode_canonical_ordering(unichar *str, size_t len)
                 ; /* This loop intentionally left empty. */
 }
 
-
-/* {{{1
- * Decompose the character ‘s’ according to the rules outlined in
- * http://www.unicode.org/unicode/reports/tr15/#Hangul.  ‘r’ should be ‹NULL›
- * or of sufficient length to store the decomposition of ‘s’.  Returns the
- * number of characters stored (or would be if it were non-NULL) in R.
- */
+/* Decompose the character ‘s’ according to the rules outlined in
+ * http://www.unicode.org/unicode/reports/tr15/#Hangul. */
 static size_t
 decompose_hangul(unichar s, unichar *r)
 {
@@ -111,12 +101,6 @@ decompose_hangul(unichar s, unichar *r)
         return 3;
 }
 
-
-/* {{{1
- * Search the Unicode decomposition table for ‘c’ and depending on the boolean
- * value of ‘compat’, return its compatibility or canonical decomposition if
- * found.
- */
 static const char *
 get_decomposition(int index, bool compat)
 {
@@ -148,11 +132,6 @@ find_decomposition(unichar c, bool compat)
         return get_decomposition(index, compat);
 }
 
-
-/* {{{1
- * Copy over the UTF-8 decomposition in ‘decomposition’ to the unichar buffer
- * ‘chars’.  Return the number of unichars in ‘chars’.
- */
 static size_t
 decomposition_to_wc(const char *decomposition, unichar *chars)
 {
@@ -163,11 +142,6 @@ decomposition_to_wc(const char *decomposition, unichar *chars)
         return i;
 }
 
-
-/* {{{1
- * Generate the canonical decomposition of ‘c’.  The length of the
- * decomposition is stored in ‘len’.
- */
 /* TODO: clean this up. */
 unichar *
 unicode_canonical_decomposition(unichar c, size_t *len)
@@ -196,12 +170,6 @@ unicode_canonical_decomposition(unichar c, size_t *len)
         return r;
 }
 
-
-/* {{{1
- * Combine Hangul characters ‘a’ and ‘b’ if possible, and store the result in
- * ‘result’.  The combinations tried are L,V => LV and LV,T => LVT in that
- * order.
- */
 static bool
 combine_hangul(unichar a, unichar b, unichar *result)
 {
@@ -226,11 +194,6 @@ combine_hangul(unichar a, unichar b, unichar *result)
         return false;
 }
 
-
-/* {{{1
- * Try to combine the Unicode characters ‘a’ and ‘b’ storing the result in
- * ‘result’.
- */
 static uint16_t
 compose_index(unichar c)
 {
@@ -283,12 +246,6 @@ combine(unichar a, unichar b, unichar *result)
         return false;
 }
 
-
-/* {{{1
- * Normalize (compose/decompose) characters in ‘str’ so that strings that
- * actually contain the same characters will be recognized as equal for
- * comparison for example.
- */
 static size_t
 normalize_wc_decompose_one(unichar c, NormalizeMode mode, unichar *buf)
 {
@@ -393,12 +350,6 @@ _utf_normalize_wc(const char *str, size_t max_len, bool use_len, size_t *new_len
         return normalize_wc_compose(buf, n, new_length);
 }
 
-
-/* {{{1
- * Normalize (compose/decompose) characters in ‘str˚ so that strings that
- * actually contain the same characters will be recognized as equal for
- * comparison for example.
- */
 char *
 utf_normalize(const char *str, NormalizeMode mode)
 {
@@ -410,11 +361,6 @@ utf_normalize(const char *str, NormalizeMode mode)
         return utf;
 }
 
-
-/* {{{1
- * This function is the same as utf_normalize() except that at most ‘len˚
- * bytes are normalized from ‘str’.
- */
 char *
 utf_normalize_n(const char *str, NormalizeMode mode, size_t len, size_t *new_length)
 {
@@ -426,6 +372,3 @@ utf_normalize_n(const char *str, NormalizeMode mode, size_t len, size_t *new_len
 
         return utf;
 }
-
-
-/* }}}1 */
