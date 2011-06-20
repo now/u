@@ -779,6 +779,8 @@ Expectations do
   expect 'あ'.u do '     あ'.u.lstrip end
   expect 'あ     '.u do 'あ     '.u.lstrip end
 
+  expect "D\xcc\x87".u do 'Ḋ'.u.normalize(:nfc) end
+
   # TODO: Add tests for Unicode digit values
   expect 255 do '0377'.u.oct end
   expect 255 do '377'.u.oct end
