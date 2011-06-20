@@ -20,6 +20,9 @@ rb_u_string_substr_impl(VALUE self, long offset, long len, bool nil_on_empty)
         if (nil_on_empty && begin == end)
                 return Qnil;
 
+        if (begin == USTRING_STR(string) && end == USTRING_END(string))
+                return self;
+
         VALUE substr = rb_u_string_new(begin, end - begin);
 
         OBJ_INFECT(substr, self);
