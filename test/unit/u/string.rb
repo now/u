@@ -74,6 +74,11 @@ Expectations do
   # TODO: Should <=>, ==, ===, eql?, and casecmp use collation or not?  When
   # should collation be used?  #collate and #collation_key?
 
+  expect true do ''.u.alnum? end
+  expect true do 'a'.u.alnum? end
+  expect true do 'ab'.u.alnum? end
+  expect false do '/'.u.alnum? end
+
   expect true do 'abc'.u.ascii_only? end
   expect false do 'äbc'.u.ascii_only? end
 

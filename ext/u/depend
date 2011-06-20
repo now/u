@@ -13,6 +13,7 @@ rb_u_buffer.o: rb_u_buffer.c u.h private.h rb_private.h rb_u_buffer.h \
   rb_u_string.h
 rb_u_re.o: rb_u_re.c u.h private.h rb_private.h rb_u_re.h
 rb_u_string.o: rb_u_string.c u.h private.h rb_private.h rb_u_string.h
+rb_u_string_alnum.o: rb_u_string_alnum.c rb_private.h
 rb_u_string_aref.o: rb_u_string_aref.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_ascii_only.o: rb_u_string_ascii_only.c rb_includes.h \

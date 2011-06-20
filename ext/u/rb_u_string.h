@@ -68,6 +68,7 @@ const char *rb_u_string_begin_from_offset(const UString *string, long offset);
 long rb_u_string_index(VALUE self, VALUE sub, long offset);
 long rb_u_string_rindex(VALUE self, VALUE rbsubstring, long offset);
 
+VALUE rb_u_string_alnum(VALUE self);
 VALUE rb_u_string_aref_m(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_ascii_only(VALUE self);
 VALUE rb_u_string_bytesize(VALUE self);

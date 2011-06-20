@@ -90,6 +90,23 @@ rb_u_validate(const char *string, long length)
                 rb_raise(rb_eArgError, "invalid byte sequence at byte %ld", end - string);
 }
 
+VALUE
+_rb_u_character_test(VALUE self, bool (*test)(unichar))
+{
+        const UString *string = RVAL2USTRING(self);
+
+        const char *p = USTRING_STR(string);
+        const char *end = USTRING_END(string);
+        while (p < end) {
+                if (!test(_rb_u_aref_char_validated(p, end)))
+                        return Qfalse;
+
+                p = u_next(p);
+        }
+
+        return Qtrue;
+}
+
 void Init_u(void);
 void
 Init_u(void)

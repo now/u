@@ -21,6 +21,8 @@ HIDDEN int rb_unichar_to_u(unichar c, char *result);
 
 HIDDEN void rb_u_validate(const char *string, long length);
 
+HIDDEN VALUE _rb_u_character_test(VALUE string, bool (*test)(unichar));
+
 HIDDEN VALUE rb_u_pattern_argument(VALUE pattern, bool quote);
 
 HIDDEN long rb_u_string_index_regexp(VALUE self, const char *begin, VALUE regex, bool reverse);
