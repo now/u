@@ -338,39 +338,44 @@ normalize_wc_compose(unichar *buf, size_t len, size_t *new_length)
 }
 
 unichar *
-_utf_normalize_wc(const char *str, size_t max_len, bool use_len, size_t *new_length, NormalizeMode mode)
+_u_normalize_wc(const char *string, size_t length, bool use_length,
+                NormalizeMode mode, size_t *new_length)
 {
         size_t n;
-        normalize_wc_decompose(str, max_len, use_len, mode, NULL, &n);
-        unichar *buf = ALLOC_N(unichar, n + 1);
-        normalize_wc_decompose(str, max_len, use_len, mode, buf, &n);
+        normalize_wc_decompose(string, length, use_length, mode, NULL, &n);
+        unichar *result = ALLOC_N(unichar, n + 1);
+        normalize_wc_decompose(string, length, use_length, mode, result, &n);
 
         /* Just return if we don’t want composition. */
-        if (!(mode == NORMALIZE_NFC || mode == NORMALIZE_NFKC))
-                return buf;
+        if (!(mode == NORMALIZE_NFC || mode == NORMALIZE_NFKC)) {
+                *new_length = n;
 
-        return normalize_wc_compose(buf, n, new_length);
+                return result;
+        }
+
+        return normalize_wc_compose(result, n, new_length);
 }
 
 char *
-utf_normalize(const char *str, NormalizeMode mode)
+u_normalize(const char *string, NormalizeMode mode)
 {
-        unichar *wcs = _utf_normalize_wc(str, 0, false, NULL, mode);
-        char *utf = ucs4_to_u(wcs, NULL, NULL);
+        unichar *wcs = _u_normalize_wc(string, 0, false, mode, NULL);
+        char *u = ucs4_to_u(wcs, NULL, NULL);
 
         free(wcs);
 
-        return utf;
+        return u;
 }
 
 char *
-utf_normalize_n(const char *str, NormalizeMode mode, size_t len, size_t *new_length)
+u_normalize_n(const char *string, size_t length, NormalizeMode mode,
+              size_t *new_length)
 {
-        size_t new_length_wcs;
-        unichar *wcs = _utf_normalize_wc(str, len, true, &new_length_wcs, mode);
-        char *utf = ucs4_to_u_n(wcs, new_length_wcs, NULL, new_length);
+        size_t length_wcs;
+        unichar *wcs = _u_normalize_wc(string, length, true, mode, &length_wcs);
+        char *u = ucs4_to_u_n(wcs, length_wcs, NULL, new_length);
 
         free(wcs);
 
-        return utf;
+        return u;
 }

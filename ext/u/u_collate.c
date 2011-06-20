@@ -20,8 +20,8 @@ u_collate(const char *a, const char *b)
 	assert(a != NULL);
 	assert(b != NULL);
 
-	unichar *a_norm = _utf_normalize_wc(a, 0, false, NULL, NORMALIZE_ALL_COMPOSE);
-	unichar *b_norm = _utf_normalize_wc(b, 0, false, NULL, NORMALIZE_ALL_COMPOSE);
+	unichar *a_norm = _u_normalize_wc(a, 0, false, NORMALIZE_ALL_COMPOSE, NULL);
+	unichar *b_norm = _u_normalize_wc(b, 0, false, NORMALIZE_ALL_COMPOSE, NULL);
 
 	int result = wcscoll((wchar_t *)a_norm, (wchar_t *)b_norm);
 
@@ -36,14 +36,14 @@ int
 u_collate_n(const char *a, size_t a_len, const char *b, size_t b_len)
 {
         size_t a_norm_length;
-	unichar * const a_norm = _utf_normalize_wc(a, a_len, true,
-                                                   &a_norm_length,
-                                                   NORMALIZE_ALL_COMPOSE);
+	unichar * const a_norm = _u_normalize_wc(a, a_len, true,
+                                                 NORMALIZE_ALL_COMPOSE,
+                                                 &a_norm_length);
 
         size_t b_norm_length;
-	unichar * const b_norm = _utf_normalize_wc(b, b_len, true,
-                                                   &b_norm_length,
-                                                   NORMALIZE_ALL_COMPOSE);
+	unichar * const b_norm = _u_normalize_wc(b, b_len, true,
+                                                 NORMALIZE_ALL_COMPOSE,
+                                                 &b_norm_length);
 
         int result = 0;
 
@@ -119,8 +119,9 @@ utf_collate_key_impl(const char *str, size_t len, bool use_len, size_t *new_leng
 	assert(str != NULL);
 
         size_t norm_length;
-	unichar *str_norm = _utf_normalize_wc(str, len, use_len, &norm_length,
-                                              NORMALIZE_ALL_COMPOSE);
+	unichar *str_norm = _u_normalize_wc(str, len, use_len,
+                                            NORMALIZE_ALL_COMPOSE,
+                                            &norm_length);
         const unichar *p = str_norm;
         const unichar *end = str_norm + norm_length;
         unichar *q = str_norm;

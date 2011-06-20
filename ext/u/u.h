@@ -158,8 +158,8 @@ typedef enum {
 void unicode_canonical_ordering(unichar *str, size_t len);
 unichar *unicode_canonical_decomposition(unichar c, size_t *result_len);
 
-char *utf_normalize(const char *str, NormalizeMode mode);
-char *utf_normalize_n(const char *str, NormalizeMode mode, size_t len, size_t *new_length);
+char *u_normalize(const char *string, NormalizeMode mode);
+char *u_normalize_n(const char *string, size_t length, NormalizeMode mode, size_t *new_length);
 
 char *u_downcase(const char *string);
 char *u_downcase_n(const char *string, size_t length, size_t *new_length);

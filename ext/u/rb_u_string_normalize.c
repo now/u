@@ -40,8 +40,10 @@ rb_u_string_normalize(int argc, VALUE *argv, VALUE self)
                 mode = symbol_to_mode(rbmode);
 
         size_t length;
-        char *normalized = utf_normalize_n(USTRING_STR(string), mode,
-                                           USTRING_LENGTH(string), &length);
+        char *normalized = u_normalize_n(USTRING_STR(string),
+                                         USTRING_LENGTH(string),
+                                         mode,
+                                         &length);
 
         return rb_u_string_new_own(normalized, length);
 }

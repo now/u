@@ -69,11 +69,11 @@ HIDDEN bool binary_search_unicode_table(const void *table,
             ? SPLIT_UNICODE_TABLE_LOOKUP_PAGE(data, part2, ((c) - UNICODE_FIRST_CHAR_PART2) >> 8, c) \
             : (fallback)))
 
+HIDDEN unichar *_u_normalize_wc(const char *string,
+                                size_t length,
+                                bool use_length,
+                                NormalizeMode mode,
+                                size_t *new_length);
 
-HIDDEN unichar *_utf_normalize_wc(const char *str,
-                                  size_t max_len,
-                                  bool use_len,
-                                  size_t *new_length,
-                                  NormalizeMode mode);
 
 #endif /* PRIVATE_H */
