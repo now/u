@@ -1028,6 +1028,7 @@ Expectations do
 
   expect 0 do ''.u.width end
   expect 1 do 'a'.u.width end
+  expect 1 do "a\xcc\x87".u.width end
   expect 2 do '豈'.u.width end
   expect 3 do 'a豈'.u.width end
 
