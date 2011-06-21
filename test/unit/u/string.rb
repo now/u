@@ -204,6 +204,15 @@ Expectations do
   expect 2 do 'abcあいう'.u.count('a-z', '^a') end
   expect ArgumentError do 'föö'.u.count end
 
+  expect true do ''.u.defined? end
+  expect true do 'a'.u.defined? end
+  expect true do 'ab'.u.defined? end
+  expect false do [0x0588].pack('U').u.defined? end
+  # TODO: This raises an error, as we’re using u_aref_char_validated_n for
+  # these functions.  Perhaps use u_aref_char_n and don’t raise errors on
+  # invalid input.
+  # expect false do [0xD800].pack('U').u.defined? end
+
   expect 'hë wrd'.u do 'hëllö wörld'.u.delete('lö') end
   expect 'hëö wörd'.u do 'hëllö wörld'.u.delete('l', 'lö') end
   expect 'hëll wrld'.u do 'hëllö wörld'.u.delete('lö', 'ö') end

@@ -45,6 +45,8 @@ rb_u_string_collate_key.o: rb_u_string_collate_key.c rb_includes.h \
  extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_count.o: rb_u_string_count.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
+rb_u_string_defined.o: rb_u_string_defined.c rb_includes.h extconf.h u.h \
+ private.h rb_private.h rb_u_string.h
 rb_u_string_delete.o: rb_u_string_delete.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
 rb_u_string_downcase.o: rb_u_string_downcase.c rb_includes.h extconf.h \
