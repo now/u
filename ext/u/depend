@@ -19,6 +19,8 @@ rb_u_string_aref.o: rb_u_string_aref.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_ascii_only.o: rb_u_string_ascii_only.c rb_includes.h \
  extconf.h u.h private.h rb_private.h rb_u_string.h
+rb_u_string_assigned.o: rb_u_string_assigned.c rb_includes.h extconf.h \
+ u.h private.h rb_private.h rb_u_string.h
 rb_u_string_bytesize.o: rb_u_string_bytesize.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_byteslice.o: rb_u_string_byteslice.c rb_includes.h extconf.h \

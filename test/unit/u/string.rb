@@ -84,6 +84,11 @@ Expectations do
   expect true do 'ab'.u.alpha? end
   expect false do 'a0'.u.alpha? end
 
+  expect true do ''.u.assigned? end
+  expect true do 'a'.u.assigned? end
+  expect true do 'ab'.u.assigned? end
+  expect false do [0x0588].pack('U').u.assigned? end
+
   expect true do 'abc'.u.ascii_only? end
   expect false do 'äbc'.u.ascii_only? end
 
