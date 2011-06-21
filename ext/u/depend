@@ -37,6 +37,8 @@ rb_u_string_chop.o: rb_u_string_chop.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_chr.o: rb_u_string_chr.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
+rb_u_string_cntrl.o: rb_u_string_cntrl.c rb_includes.h extconf.h u.h \
+ private.h rb_private.h rb_u_string.h
 rb_u_string_collate.o: rb_u_string_collate.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_collate_key.o: rb_u_string_collate_key.c rb_includes.h \

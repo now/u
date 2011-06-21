@@ -188,6 +188,11 @@ Expectations do
   expect 'ä'.u do 'ä'.u.chr end
   expect 'ä'.u do 'äbc'.u.chr end
 
+  expect true do ''.u.cntrl? end
+  expect true do "\0".u.cntrl? end
+  expect true do "\0\1".u.cntrl? end
+  expect false do "a".u.cntrl? end
+
   expect 5 do 'hëllö wörld'.u.count('lö') end
   expect 3 do 'hëllö wörld'.u.count('l', 'lö') end
   expect 2 do 'hëllö wörld'.u.count('lö', 'ö') end
