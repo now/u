@@ -189,6 +189,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "=~", rb_u_string_match, 1);
         rb_define_method(rb_cUString, "eql?", rb_u_string_eql, 1);
         rb_define_method(rb_cUString, "alnum?", rb_u_string_alnum, 0);
+        rb_define_method(rb_cUString, "alpha?", rb_u_string_alpha, 0);
         rb_define_method(rb_cUString, "ascii_only?", rb_u_string_ascii_only, 0);
         rb_define_method(rb_cUString, "bytes", rb_u_string_each_byte, 0);
         rb_define_method(rb_cUString, "bytesize", rb_u_string_bytesize, 0);

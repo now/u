@@ -79,6 +79,11 @@ Expectations do
   expect true do 'ab'.u.alnum? end
   expect false do '/'.u.alnum? end
 
+  expect true do ''.u.alpha? end
+  expect true do 'a'.u.alpha? end
+  expect true do 'ab'.u.alpha? end
+  expect false do 'a0'.u.alpha? end
+
   expect true do 'abc'.u.ascii_only? end
   expect false do 'äbc'.u.ascii_only? end
 
