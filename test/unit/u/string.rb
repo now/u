@@ -224,6 +224,16 @@ Expectations do
   expect 'あ'.u do 'abcあいう'.u.delete('^あ') end
   expect ArgumentError do 'föö'.u.delete end
 
+  expect true do ''.u.digit? end
+  expect true do '0'.u.digit? end
+  expect true do '01'.u.digit? end
+  expect false do '0a'.u.digit? end
+
+  expect true do ''.u.digits? end
+  expect true do '0'.u.digits? end
+  expect true do '01'.u.digits? end
+  expect false do '0a'.u.digits? end
+
   expect 'hëllö'.u do 'hëlLÖ'.u.downcase end
   expect 'hëllö'.u do 'hëllö'.u.downcase end
   expect 'hëllö'.u do 'HËLLÖ'.u.downcase end
