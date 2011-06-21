@@ -8,6 +8,7 @@ module U::Build::Data
   require 'u/build/data/derivedeastasianwidth'
   require 'u/build/data/linebreak'
   require 'u/build/data/proplist'
+  require 'u/build/data/scripts'
   require 'u/build/data/specialcasing'
   require 'u/build/data/unicode'
 end

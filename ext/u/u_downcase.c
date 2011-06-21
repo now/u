@@ -215,7 +215,7 @@ downcase_simple(unichar c, int type, char *result)
         return unichar_to_u(tv != '\0' ? tv : c, result);
 }
 
-static inline size_t
+static size_t
 downcase_step(const char *string, const char *p, const char *end, bool use_end,
               LocaleType locale_type, char *result)
 {

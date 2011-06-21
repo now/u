@@ -11,22 +11,34 @@ class U::Build::Header::Table::Row
   end
 
   def to_s
-    if @cells.reduce(0){ |i, cell| i + cell.length + 2 } > 65
+    if @cells.reduce(0){ |i, cell| i + cell.length + 2 } > multi_limit
       lines = [Line.new]
       @cells.each_with_index do |cell, i|
-        lines << Line.new if lines.last.length + cell.length + 2 > 62
+        lines << Line.new if lines.last.length + cell.length + 2 > multi_limit - 3
         lines.last << cell
       end
-      multi_format % lines.join(",\n\t\t")
+      multi_format % lines.join(multi_joiner)
     else
-      "\t{ %s }" % @cells.join(', ')
+      single_format % @cells.join(', ')
     end
   end
 
 private
 
+  def multi_limit
+    65
+  end
+
   def multi_format
     "\t{\n\t\t%s\n\t}"
+  end
+
+  def multi_joiner
+    ",\n\t\t"
+  end
+
+  def single_format
+    "\t{ %s }"
   end
 
   class Line

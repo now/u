@@ -116,6 +116,9 @@ end
 data_header 'ext/u/data/decompose.h' => %w[build/ext/u/data/decompose.rb
                                            build/data/UnicodeData.txt]
 
+data_header 'ext/u/data/script.h' => %w[build/ext/u/data/script.rb
+                                        build/data/Scripts.txt]
+
 data_header 'ext/u/data/soft-dotted.h' => %w[build/ext/u/data/soft-dotted.rb
                                              build/data/PropList.txt]
 
