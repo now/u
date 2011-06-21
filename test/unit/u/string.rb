@@ -141,6 +141,12 @@ Expectations do
   expect true do 'ab'.u.cased? end
   expect false do '0'.u.cased? end
 
+  expect true do ''.u.case_ignorable? end
+  expect true do "'".u.case_ignorable? end
+  expect true do "'’".u.case_ignorable? end
+  expect true do [0x0307].pack('U').u.case_ignorable? end
+  expect false do 'a'.u.case_ignorable? end
+
   expect 'hëllö'.u do 'hëllö'.u.center(4) end
   expect '   hëllö   '.u do 'hëllö'.u.center(11) end
   expect 'ababaababa'.u do ''.u.center(10, 'ab') end

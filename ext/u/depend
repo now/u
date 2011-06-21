@@ -25,6 +25,8 @@ rb_u_string_bytesize.o: rb_u_string_bytesize.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_byteslice.o: rb_u_string_byteslice.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
+rb_u_string_case_ignorable.o: rb_u_string_case_ignorable.c rb_includes.h \
+ extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_casecmp.o: rb_u_string_casecmp.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_cased.o: rb_u_string_cased.c rb_includes.h extconf.h u.h \

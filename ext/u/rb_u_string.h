@@ -78,6 +78,7 @@ VALUE rb_u_string_byteslice_m(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_center(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_casecmp(VALUE self, VALUE other);
 VALUE rb_u_string_cased(VALUE self);
+VALUE rb_u_string_case_ignorable(VALUE self);
 VALUE rb_u_string_chomp(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_chop(VALUE self);
 VALUE rb_u_string_chr(VALUE self);

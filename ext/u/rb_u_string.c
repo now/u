@@ -197,6 +197,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "byteslice", rb_u_string_byteslice_m, -1);
         rb_define_method(rb_cUString, "casecmp", rb_u_string_casecmp, 1);
         rb_define_method(rb_cUString, "cased?", rb_u_string_cased, 0);
+        rb_define_method(rb_cUString, "case_ignorable?", rb_u_string_case_ignorable, 0);
         rb_define_method(rb_cUString, "center", rb_u_string_center, -1);
         rb_define_method(rb_cUString, "chars", rb_u_string_each_char, 0);
         rb_define_method(rb_cUString, "[]", rb_u_string_aref_m, -1);
