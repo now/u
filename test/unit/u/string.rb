@@ -136,6 +136,11 @@ Expectations do
   expect 1 do 'あB'.u.casecmp('あa') end
   expect 1 do 'あB'.u.casecmp('あa'.u) end
 
+  expect true do ''.u.cased? end
+  expect true do 'a'.u.cased? end
+  expect true do 'ab'.u.cased? end
+  expect false do '0'.u.cased? end
+
   expect 'hëllö'.u do 'hëllö'.u.center(4) end
   expect '   hëllö   '.u do 'hëllö'.u.center(11) end
   expect 'ababaababa'.u do ''.u.center(10, 'ab') end
