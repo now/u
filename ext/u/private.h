@@ -57,18 +57,6 @@ HIDDEN bool binary_search_unicode_table(const void *table,
                                         unichar c,
                                         int *index);
 
-#define SPLIT_UNICODE_TABLE_LOOKUP_PAGE(data, part, page, c)  \
-        ((part[page] >= UNICODE_MAX_TABLE_INDEX) \
-         ? (part[page] - UNICODE_MAX_TABLE_INDEX) \
-         : (data[part[page]][(c) & 0xff]))
-
-#define SPLIT_UNICODE_TABLE_LOOKUP(data, part1, part2, c, fallback)    \
-        (((c) <= UNICODE_LAST_CHAR_PART1) \
-         ? SPLIT_UNICODE_TABLE_LOOKUP_PAGE(data, part1, (c) >> 8, c) \
-         : ((UNICODE_FIRST_CHAR_PART2 <= (c) && (c) <= UNICODE_LAST_CHAR) \
-            ? SPLIT_UNICODE_TABLE_LOOKUP_PAGE(data, part2, ((c) - UNICODE_FIRST_CHAR_PART2) >> 8, c) \
-            : (fallback)))
-
 HIDDEN unichar *_u_normalize_wc(const char *string,
                                 size_t length,
                                 bool use_length,
