@@ -1048,6 +1048,11 @@ Expectations do
   # TODO: Why not throw an error here?
   expect 11 do "hëllö\0agäin\303".u.size end
 
+  expect true do ''.u.soft_dotted? end
+  expect true do 'i'.u.soft_dotted? end
+  expect true do 'ij'.u.soft_dotted? end
+  expect false do 'a'.u.soft_dotted? end
+
   expect [] do ''.u.split(''.u, 1) end
   expect ['abc'.u] do 'abc'.u.split(''.u, 1) end
 

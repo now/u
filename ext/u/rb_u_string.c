@@ -254,6 +254,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "script", rb_u_string_script, 0);
         rb_define_method(rb_cUString, "size", rb_u_string_length, 0);
         rb_define_method(rb_cUString, "slice", rb_u_string_aref_m, -1);
+        rb_define_method(rb_cUString, "soft_dotted?", rb_u_string_soft_dotted, 0);
         rb_define_method(rb_cUString, "split", rb_u_string_split_m, -1);
         rb_define_method(rb_cUString, "squeeze", rb_u_string_squeeze, -1);
         rb_define_method(rb_cUString, "start_with?", rb_u_string_starts_with, -1);

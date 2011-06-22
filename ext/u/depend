@@ -134,6 +134,8 @@ rb_u_string_scan.o: rb_u_string_scan.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_script.o: rb_u_string_script.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
+rb_u_string_soft_dotted.o: rb_u_string_soft_dotted.c rb_includes.h \
+ extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_split.o: rb_u_string_split.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_squeeze.o: rb_u_string_squeeze.c rb_includes.h extconf.h u.h \
