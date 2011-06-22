@@ -8,14 +8,16 @@ HIDDEN extern const int16_t *_u_attr_table_part2;
 HIDDEN extern const char *_u_special_case_table;
 
 
+/* This function may only be called if C has been verified to be of a
+ * UnicodeType that supports attributes, as it doesn’t perform bounds checking
+ * on C. */
 static inline unichar
 s_attribute(unichar c)
 {
         unichar page = c >> 8;
-        /* 0xe00 == UNICODE_FIRST_CHAR_PART2 / 256 */
         unichar index = page <= UNICODE_LAST_PAGE_PART1 ?
                 _u_attr_table_part1[page] :
-                _u_attr_table_part2[page - 0xe00];
+                _u_attr_table_part2[(c - UNICODE_FIRST_CHAR_PART2) >> 8];
 
         if (index == UNICODE_MAX_TABLE_INDEX)
                 return 0;
