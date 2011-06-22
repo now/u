@@ -1206,6 +1206,11 @@ Expectations do
   expect true do "äbc\0def".u.valid_encoding? end
   expect false do "\xc3bc".u.valid_encoding? end
 
+  expect true do ''.u.wide? end
+  expect true do '豈'.u.wide? end
+  expect true do '豈豈'.u.wide? end
+  expect false do 'a'.u.wide? end
+
   expect 0 do ''.u.width end
   expect 1 do 'a'.u.width end
   expect 1 do "a\xcc\x87".u.width end

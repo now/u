@@ -160,6 +160,8 @@ rb_u_string_upcase.o: rb_u_string_upcase.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_valid_encoding.o: rb_u_string_valid_encoding.c rb_includes.h \
  extconf.h u.h private.h rb_private.h rb_u_string.h
+rb_u_string_wide.o: rb_u_string_wide.c rb_includes.h extconf.h u.h \
+ private.h rb_private.h rb_u_string.h
 rb_u_string_width.o: rb_u_string_width.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 titled.o: titled.c u.h private.h data/constants.h data/title-table.h \
