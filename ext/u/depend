@@ -166,6 +166,8 @@ rb_u_string_wide_cjk.o: rb_u_string_wide_cjk.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_width.o: rb_u_string_width.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
+rb_u_string_xdigit.o: rb_u_string_xdigit.c rb_includes.h extconf.h u.h \
+ private.h rb_private.h rb_u_string.h
 titled.o: titled.c u.h private.h data/constants.h data/title-table.h \
  titled.h types.h
 types.o: types.c u.h private.h data/constants.h data/types.h types.h

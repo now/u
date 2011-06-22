@@ -1223,6 +1223,16 @@ Expectations do
   expect 2 do '豈'.u.width end
   expect 3 do 'a豈'.u.width end
 
+  expect true do ''.u.xdigit? end
+  expect true do '0'.u.xdigit? end
+  expect true do '0a'.u.xdigit? end
+  expect false do 'g'.u.xdigit? end
+
+  expect true do ''.u.xdigits? end
+  expect true do '0'.u.xdigits? end
+  expect true do '0aＡ'.u.xdigits? end
+  expect false do 'g'.u.xdigits? end
+
   expect ''.u do "\0".u.collate_key end
   expect 'äbcdëf'.u do 'äbcdëf'.u.collate_key end
   expect 'äbcdëf'.u do "äbc\0dëf".u.collate_key end
