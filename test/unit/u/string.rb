@@ -829,6 +829,16 @@ Expectations do
   expect 'あ'.u do '     あ'.u.lstrip end
   expect 'あ     '.u do 'あ     '.u.lstrip end
 
+  expect true do ''.u.newline? end
+  expect true do [0x2028].pack('U').u.newline? end
+  expect true do "\r\n".u.newline? end
+  expect false do 'a'.u.newline? end
+
+  expect true do ''.u.newlines? end
+  expect true do [0x2028].pack('U').u.newlines? end
+  expect true do "\r\n".u.newlines? end
+  expect false do 'a'.u.newlines? end
+
   expect "D\xcc\x87".u do 'Ḋ'.u.normalize(:nfc) end
 
   # TODO: Add tests for Unicode digit values

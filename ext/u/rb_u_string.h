@@ -116,6 +116,7 @@ VALUE rb_u_string_ljust(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_lstrip(VALUE self);
 VALUE rb_u_string_match(VALUE self, VALUE other);
 VALUE rb_u_string_normalize(int argc, VALUE *argv, VALUE self);
+VALUE rb_u_string_newline(VALUE self);
 VALUE rb_u_string_oct(VALUE self);
 VALUE rb_u_string_ord(VALUE self);
 VALUE rb_u_string_partition(VALUE self, VALUE separator);
