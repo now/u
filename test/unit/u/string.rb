@@ -1222,6 +1222,13 @@ Expectations do
   expect 'I'.u do 'i'.u.upcase end
   expect 'İ'.u do 'i'.u.upcase('tr') end
 
+  expect false do 'i'.u.upper? end
+  expect false do 'i'.u.upper?('lt') end
+  expect false do 'i'.u.upper?('tr') end
+  expect true do 'I'.u.upper? end
+  expect true do 'I'.u.upper?('lt') end
+  expect true do 'I'.u.upper?('tr') end
+
   expect true do 'äbc'.u.valid_encoding? end
   expect true do "äbc\0def".u.valid_encoding? end
   expect false do "\xc3bc".u.valid_encoding? end

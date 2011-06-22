@@ -273,6 +273,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "tr_s", rb_u_string_tr_s, 2);
         rb_define_method(rb_cUString, "type", rb_u_string_type, 0);
         rb_define_method(rb_cUString, "upcase", rb_u_string_upcase, -1);
+        rb_define_method(rb_cUString, "upper?", rb_u_string_upper, -1);
         rb_define_method(rb_cUString, "valid_encoding?", rb_u_string_valid_encoding, 0);
         rb_define_method(rb_cUString, "wide?", rb_u_string_wide, 0);
         rb_define_method(rb_cUString, "wide_cjk?", rb_u_string_wide_cjk, 0);
