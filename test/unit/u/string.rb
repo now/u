@@ -1211,6 +1211,12 @@ Expectations do
   expect true do '豈豈'.u.wide? end
   expect false do 'a'.u.wide? end
 
+  expect true do ''.u.wide_cjk? end
+  expect true do '豈'.u.wide_cjk? end
+  expect true do '豈豈'.u.wide_cjk? end
+  expect true do '豈♣'.u.wide_cjk? end
+  expect false do 'a'.u.wide_cjk? end
+
   expect 0 do ''.u.width end
   expect 1 do 'a'.u.width end
   expect 1 do "a\xcc\x87".u.width end
