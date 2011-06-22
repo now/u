@@ -1233,6 +1233,11 @@ Expectations do
   expect true do '0aＡ'.u.xdigits? end
   expect false do 'g'.u.xdigits? end
 
+  expect true do ''.u.zero_width? end
+  expect true do [0x200b].pack('U').u.zero_width? end
+  expect true do [0x200b, 0x1160].pack('U*').u.zero_width? end
+  expect false do 'a'.u.zero_width? end
+
   expect ''.u do "\0".u.collate_key end
   expect 'äbcdëf'.u do 'äbcdëf'.u.collate_key end
   expect 'äbcdëf'.u do "äbc\0dëf".u.collate_key end

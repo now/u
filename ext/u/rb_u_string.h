@@ -150,6 +150,7 @@ VALUE rb_u_string_wide(VALUE self);
 VALUE rb_u_string_wide_cjk(VALUE self);
 VALUE rb_u_string_width(VALUE self);
 VALUE rb_u_string_xdigit(VALUE self);
+VALUE rb_u_string_zero_width(VALUE self);
 
 
 void Init_u_string(VALUE mU);

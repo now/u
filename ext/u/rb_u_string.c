@@ -274,4 +274,5 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "width", rb_u_string_width, 0);
         rb_define_method(rb_cUString, "xdigit?", rb_u_string_xdigit, 0);
         rb_define_method(rb_cUString, "xdigits?", rb_u_string_xdigit, 0);
+        rb_define_method(rb_cUString, "zero_width?", rb_u_string_zero_width, 0);
 }
