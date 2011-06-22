@@ -196,6 +196,9 @@ Expectations do
   expect true do "\0\1".u.cntrl? end
   expect false do "a".u.cntrl? end
 
+  expect 0 do 'a'.u.combining_class end
+  expect 230 do [0x0307].pack('U').u.combining_class end
+
   expect 5 do 'hëllö wörld'.u.count('lö') end
   expect 3 do 'hëllö wörld'.u.count('l', 'lö') end
   expect 2 do 'hëllö wörld'.u.count('lö', 'ö') end
