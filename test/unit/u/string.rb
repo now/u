@@ -858,7 +858,7 @@ Expectations do
   expect ')'.u do '('.u.mirror end
   expect ')('.u do '()'.u.mirror end
 
-  expect "D\xcc\x87".u do 'Ḋ'.u.normalize(:nfc) end
+  expect 'Ḋ'.u do "D\xcc\x87".u.normalize(:nfc) end
 
   # TODO: Add tests for Unicode digit values
   expect 255 do '0377'.u.oct end

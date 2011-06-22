@@ -12,7 +12,14 @@ rb_u_string_eql(VALUE self, VALUE rbother)
         const UString *string = RVAL2USTRING(self);
         const UString *other = RVAL2USTRING(rbother);
 
-        return u_collate_n(USTRING_STR(string), USTRING_LENGTH(string),
-                           USTRING_STR(other), USTRING_LENGTH(other)) == 0 ?
-                Qtrue : Qfalse;
+        const char *p = USTRING_STR(string);
+        const char *q = USTRING_STR(other);
+
+        if (p == q)
+                return Qtrue;
+
+        long p_length = USTRING_LENGTH(string);
+        long q_length = USTRING_LENGTH(other);
+
+        return p_length == q_length && memcmp(p, q, q_length) == 0 ? Qtrue : Qfalse;
 }
