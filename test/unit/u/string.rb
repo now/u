@@ -870,6 +870,11 @@ Expectations do
   expect true do 'ab'.u.print? end
   expect false do "\n".u.print? end
 
+  expect true do ''.u.punct? end
+  expect true do '.'.u.punct? end
+  expect true do '()'.u.punct? end
+  expect false do 'a'.u.punct? end
+
   expect 'ateb'.u do 'beta'.u.reverse end
   expect 'madamImadam'.u do 'madamImadam'.u.reverse end
   expect "alpha\0beta".u do "ateb\0ahpla".u.reverse end

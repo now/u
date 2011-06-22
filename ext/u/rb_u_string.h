@@ -122,6 +122,7 @@ VALUE rb_u_string_ord(VALUE self);
 VALUE rb_u_string_partition(VALUE self, VALUE separator);
 VALUE rb_u_string_plus(VALUE self, VALUE rbother);
 VALUE rb_u_string_print(VALUE self);
+VALUE rb_u_string_punct(VALUE self);
 VALUE rb_u_string_reverse(VALUE self);
 VALUE rb_u_string_rindex_m(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_rjust(int argc, VALUE *argv, VALUE self);

@@ -120,6 +120,8 @@ rb_u_string_plus.o: rb_u_string_plus.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_print.o: rb_u_string_print.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
+rb_u_string_punct.o: rb_u_string_punct.c rb_includes.h extconf.h u.h \
+ private.h rb_private.h rb_u_string.h
 rb_u_string_reverse.o: rb_u_string_reverse.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_rindex.o: rb_u_string_rindex.c rb_includes.h extconf.h u.h \
