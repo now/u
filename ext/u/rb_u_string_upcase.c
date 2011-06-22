@@ -12,14 +12,10 @@ rb_u_string_upcase(int argc, VALUE *argv, VALUE self)
         const UString *string = RVAL2USTRING(self);
 
         size_t length;
-        char *upcased = locale != NULL ?
-                u_upcase_in_locale_n(USTRING_STR(string),
-                                     USTRING_LENGTH(string),
-                                     locale,
-                                     &length) :
-                u_upcase_n(USTRING_STR(string),
-                           USTRING_LENGTH(string),
-                           &length);
+        char *upcased = u_upcase_in_locale_n(USTRING_STR(string),
+                                             USTRING_LENGTH(string),
+                                             locale,
+                                             &length);
 
         return rb_u_string_new_own(upcased, length);
 }
