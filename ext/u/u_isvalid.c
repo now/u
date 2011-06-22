@@ -11,10 +11,6 @@
 	 ((char) < 0xfdd0 || (char) > 0xfdef) &&	\
 	 ((char) & 0xfffe) != 0xfffe)
 
-/*
- * TODO: this needs optimizing.  Look at glib's new optimized implementation
- * (2.6.0) and also separate the ‘use_max’  into two cases.
- */
 #define CONTINUATION_CHAR do {						\
 	if ((*(unsigned char *)p & 0xc0) != 0x80)	/* 10xxxxxx */	\
 		goto error;						\
