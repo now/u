@@ -752,6 +752,11 @@ Expectations do
   expect 0x00c3 do 'äbc'.u.getbyte(-4) end
   expect nil do 'äbc'.u.getbyte(-5) end
 
+  expect true do ''.u.graph? end
+  expect true do '0'.u.graph? end
+  expect true do '01'.u.graph? end
+  expect false do "\0".u.graph? end
+
   expect 'bbc'.u do 'abc'.u.gsub('a', 'b') end
   expect 'h*ll*'.u do 'hello'.u.gsub(/[aeiou]/u, '*'.u) end
   expect 'h*ll*'.u do 'hëllö'.u.gsub(/[äëïöü]/u, '*'.u) end

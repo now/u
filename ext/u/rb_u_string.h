@@ -104,6 +104,7 @@ VALUE rb_u_string_foldcase(VALUE self);
 VALUE rb_u_string_format(int argc, const VALUE *argv, VALUE self);
 VALUE rb_u_string_format_m(VALUE self, VALUE argument);
 VALUE rb_u_string_getbyte(VALUE self, VALUE rbindex);
+VALUE rb_u_string_graph(VALUE self);
 VALUE rb_u_string_gsub(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_hash(VALUE self);
 VALUE rb_u_string_hex(VALUE self);
