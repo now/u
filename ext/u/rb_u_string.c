@@ -192,6 +192,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "alpha?", rb_u_string_alpha, 0);
         rb_define_method(rb_cUString, "assigned?", rb_u_string_assigned, 0);
         rb_define_method(rb_cUString, "ascii_only?", rb_u_string_ascii_only, 0);
+        rb_define_method(rb_cUString, "break_type", rb_u_string_break_type, 0);
         rb_define_method(rb_cUString, "bytes", rb_u_string_each_byte, 0);
         rb_define_method(rb_cUString, "bytesize", rb_u_string_bytesize, 0);
         rb_define_method(rb_cUString, "byteslice", rb_u_string_byteslice_m, -1);
