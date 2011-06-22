@@ -1053,6 +1053,11 @@ Expectations do
   expect true do 'ij'.u.soft_dotted? end
   expect false do 'a'.u.soft_dotted? end
 
+  expect true do ''.u.space? end
+  expect true do ' '.u.space? end
+  expect true do " \t\n".u.space? end
+  expect false do 'a'.u.space? end
+
   expect [] do ''.u.split(''.u, 1) end
   expect ['abc'.u] do 'abc'.u.split(''.u, 1) end
 

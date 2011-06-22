@@ -131,6 +131,7 @@ VALUE rb_u_string_rstrip(VALUE self);
 VALUE rb_u_string_scan(VALUE self, VALUE pattern);
 VALUE rb_u_string_script(VALUE self);
 VALUE rb_u_string_soft_dotted(VALUE self);
+VALUE rb_u_string_space(VALUE self);
 VALUE rb_u_string_split(VALUE self, const char *separator, long length);
 VALUE rb_u_string_split_m(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_squeeze(int argc, VALUE *argv, VALUE self);
