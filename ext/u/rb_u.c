@@ -107,6 +107,40 @@ _rb_u_character_test(VALUE self, bool (*test)(unichar))
         return Qtrue;
 }
 
+VALUE
+_rb_u_string_test_in_locale(int argc, VALUE *argv, VALUE self,
+                            char *(convert)(const char *, size_t,
+                                            const char *, size_t *))
+{
+        const char *locale = NULL;
+
+        VALUE rblocale;
+        if (rb_scan_args(argc, argv, "01", &rblocale) == 1)
+                locale = StringValuePtr(rblocale);
+
+        const UString *string = RVAL2USTRING(self);
+
+        size_t nfd_length;
+        char *nfd = u_normalize_n(USTRING_STR(string),
+                                  USTRING_LENGTH(string),
+                                  NORMALIZE_NFD,
+                                  &nfd_length);
+
+        size_t converted_length;
+        char *converted = convert(nfd,
+                                  nfd_length,
+                                  locale,
+                                  &converted_length);
+
+        VALUE result = converted_length == nfd_length &&
+                memcmp(converted, nfd, nfd_length) == 0 ? Qtrue : Qfalse;
+
+        free(converted);
+        free(nfd);
+
+        return result;
+}
+
 void Init_u(void);
 void
 Init_u(void)

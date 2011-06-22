@@ -830,6 +830,11 @@ Expectations do
   # TODO: Why not throw an error here?
   expect 11 do "hëllö\0agäin\303".u.length end
 
+  expect true do 'i'.u.lower? end
+  expect true do 'i'.u.lower?('lt') end
+  expect false do 'I'.u.lower? end
+  expect false do 'I'.u.lower?('lt') end
+
   # TODO: Add tests for Unicode whitespace characters
   expect 'あ'.u do 'あ'.u.lstrip end
   expect 'あ'.u do '     あ'.u.lstrip end

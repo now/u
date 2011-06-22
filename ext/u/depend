@@ -106,6 +106,8 @@ rb_u_string_justify.o: rb_u_string_justify.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_length.o: rb_u_string_length.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
+rb_u_string_lower.o: rb_u_string_lower.c rb_includes.h extconf.h u.h \
+ private.h rb_private.h rb_u_string.h
 rb_u_string_lstrip.o: rb_u_string_lstrip.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_match.o: rb_u_string_match.c rb_includes.h extconf.h u.h \
