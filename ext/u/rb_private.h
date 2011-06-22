@@ -23,6 +23,9 @@ HIDDEN void rb_u_validate(const char *string, long length);
 
 HIDDEN VALUE _rb_u_character_test(VALUE string, bool (*test)(unichar));
 
+HIDDEN VALUE _rb_u_string_test(VALUE self,
+                               char *(convert)(const char *, size_t, size_t *));
+
 HIDDEN VALUE _rb_u_string_test_in_locale(int argc, VALUE *argv, VALUE self,
                                          char *(convert)(const char *, size_t,
                                                          const char *, size_t *));

@@ -341,6 +341,10 @@ Expectations do
 
   expect "abc\0ss".u do "abc\0ß".u.foldcase end
 
+  expect true do 'ss'.u.folded? end
+  expect false do 'ß'.u.folded? end
+  expect true do 'abc\0ß'.u.foldcase.folded? end
+
   expect 'äbc'.u do 'äbc'.u % [] end
 
   expect ArgumentError.new('invalid flag ‘ ’ given to directive ‘%’') do '% %'.u % [] end

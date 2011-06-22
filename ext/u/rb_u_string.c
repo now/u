@@ -225,6 +225,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "end_with?", rb_u_string_ends_with, -1);
         rb_define_method(rb_cUString, "ends_with?", rb_u_string_ends_with, -1);
         rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, 0);
+        rb_define_method(rb_cUString, "folded?", rb_u_string_folded, 0);
         rb_define_method(rb_cUString, "format", rb_u_string_format_m, 1);
         rb_define_method(rb_cUString, "getbyte", rb_u_string_getbyte, 1);
         rb_define_method(rb_cUString, "graph?", rb_u_string_graph, 0);

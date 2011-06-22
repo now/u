@@ -77,6 +77,8 @@ rb_u_string_equal.o: rb_u_string_equal.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_foldcase.o: rb_u_string_foldcase.c rb_includes.h extconf.h \
  u.h private.h rb_private.h rb_u_string.h
+rb_u_string_folded.o: rb_u_string_folded.c rb_includes.h extconf.h u.h \
+ private.h rb_private.h rb_u_string.h
 rb_u_string_format.o: rb_u_string_format.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h rb_u_buffer.h \
  rb_u_string_internal_bignum.h
