@@ -839,6 +839,10 @@ Expectations do
   expect true do "\r\n".u.newlines? end
   expect false do 'a'.u.newlines? end
 
+  expect ''.u do ''.u.mirror end
+  expect ')'.u do '('.u.mirror end
+  expect ')('.u do '()'.u.mirror end
+
   expect "D\xcc\x87".u do 'Ḋ'.u.normalize(:nfc) end
 
   # TODO: Add tests for Unicode digit values

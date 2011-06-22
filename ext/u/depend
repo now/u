@@ -106,6 +106,8 @@ rb_u_string_lstrip.o: rb_u_string_lstrip.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_match.o: rb_u_string_match.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
+rb_u_string_mirror.o: rb_u_string_mirror.c rb_includes.h extconf.h u.h \
+ private.h rb_private.h rb_u_string.h
 rb_u_string_newline.o: rb_u_string_newline.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_normalize.o: rb_u_string_normalize.c rb_includes.h extconf.h \

@@ -237,6 +237,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "lines", rb_u_string_each_line, -1);
         rb_define_method(rb_cUString, "ljust", rb_u_string_ljust, -1);
         rb_define_method(rb_cUString, "lstrip", rb_u_string_lstrip, 0);
+        rb_define_method(rb_cUString, "mirror", rb_u_string_mirror, 0);
         rb_define_method(rb_cUString, "newline?", rb_u_string_newline, 0);
         rb_define_method(rb_cUString, "newlines?", rb_u_string_newline, 0);
         rb_define_method(rb_cUString, "normalize", rb_u_string_normalize, -1);
