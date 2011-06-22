@@ -1,10 +1,3 @@
-/*
- * contents: Unicode handling.
- *
- * Copyright (C) 2004 Nikolai Weibull <source@pcppopper.org>
- */
-
-
 #ifndef U_H
 #define U_H
 

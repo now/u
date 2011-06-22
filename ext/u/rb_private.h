@@ -1,9 +1,3 @@
-/*
- * contents: Private Ruby-related functions.
- *
- * Copyright © 2007 Nikolai Weibull <now@bitwi.se>
- */
-
 #ifndef RB_PRIVATE_H
 #define RB_PRIVATE_H
 

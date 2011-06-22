@@ -1,9 +1,3 @@
-/*
- * contents: Private Unicode related information.
- *
- * Copyright (C) 2004 Nikolai Weibull <source@pcppopper.org>
- */
-
 #ifndef PRIVATE_H
 #define PRIVATE_H
 

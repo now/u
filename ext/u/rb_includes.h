@@ -1,9 +1,3 @@
-/*
- * contents: Standard includes for method definitions.
- *
- * Copyright © 2006 Nikolai Weibull <now@bitwi.se>
- */
-
 #ifndef RB_INCLUDES_H
 #define RB_INCLUDES_H
 

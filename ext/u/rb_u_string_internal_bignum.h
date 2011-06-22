@@ -1,9 +1,3 @@
-/*
- * contents: Internal functionality for turning strings into Bignums.
- *
- * Copyright © 2006 Nikolai Weibull <now@bitwi.se>
- */
-
 #ifndef RB_U_STRING_INTERNAL_BIGNUM_H
 #define RB_U_STRING_INTERNAL_BIGNUM_H
 
