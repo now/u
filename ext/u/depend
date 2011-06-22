@@ -158,6 +158,8 @@ rb_u_string_to_sym.o: rb_u_string_to_sym.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_tr.o: rb_u_string_tr.c rb_includes.h extconf.h u.h private.h \
  rb_private.h rb_u_string.h rb_u_string_internal_tr.h
+rb_u_string_type.o: rb_u_string_type.c rb_includes.h extconf.h u.h \
+ private.h rb_private.h rb_u_string.h
 rb_u_string_upcase.o: rb_u_string_upcase.c rb_includes.h extconf.h u.h \
  private.h rb_private.h rb_u_string.h
 rb_u_string_valid_encoding.o: rb_u_string_valid_encoding.c rb_includes.h \

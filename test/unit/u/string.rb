@@ -1193,6 +1193,11 @@ Expectations do
   expect 'hal' do 'hal'.u.tr('a-z', 'a-z') end
   expect true do a = 'hal'.u; a.tr('a-z', 'a-z').object_id == a.object_id end
 
+  expect :uppercase_letter do 'A'.u.type end
+  expect :other_punctuation do '.'.u.type end
+  expect :currency_symbol do '$'.u.type end
+  expect :space_separator do ' '.u.type end
+
   expect 'HËLLÖ'.u do 'hëlLÖ'.u.upcase end
   expect 'HËLLÖ'.u do 'hëllö'.u.upcase end
   expect 'HËLLÖ'.u do 'HËLLÖ'.u.upcase end
