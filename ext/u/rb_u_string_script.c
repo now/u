@@ -107,195 +107,195 @@ script_to_symbol(UnicodeScript script)
 
         switch (script) {
         case UNICODE_SCRIPT_COMMON:
-		return ID2SYM(id_common);
+                return ID2SYM(id_common);
         case UNICODE_SCRIPT_INHERITED:
-		return ID2SYM(id_inherited);
+                return ID2SYM(id_inherited);
         case UNICODE_SCRIPT_ARABIC:
-		return ID2SYM(id_arabic);
+                return ID2SYM(id_arabic);
         case UNICODE_SCRIPT_ARMENIAN:
-		return ID2SYM(id_armenian);
+                return ID2SYM(id_armenian);
         case UNICODE_SCRIPT_BENGALI:
-		return ID2SYM(id_bengali);
+                return ID2SYM(id_bengali);
         case UNICODE_SCRIPT_BOPOMOFO:
-		return ID2SYM(id_bopomofo);
+                return ID2SYM(id_bopomofo);
         case UNICODE_SCRIPT_CHEROKEE:
-		return ID2SYM(id_cherokee);
+                return ID2SYM(id_cherokee);
         case UNICODE_SCRIPT_COPTIC:
-		return ID2SYM(id_coptic);
+                return ID2SYM(id_coptic);
         case UNICODE_SCRIPT_CYRILLIC:
-		return ID2SYM(id_cyrillic);
+                return ID2SYM(id_cyrillic);
         case UNICODE_SCRIPT_DESERET:
-		return ID2SYM(id_deseret);
+                return ID2SYM(id_deseret);
         case UNICODE_SCRIPT_DEVANAGARI:
-		return ID2SYM(id_devanagari);
+                return ID2SYM(id_devanagari);
         case UNICODE_SCRIPT_ETHIOPIC:
-		return ID2SYM(id_ethiopic);
+                return ID2SYM(id_ethiopic);
         case UNICODE_SCRIPT_GEORGIAN:
-		return ID2SYM(id_georgian);
+                return ID2SYM(id_georgian);
         case UNICODE_SCRIPT_GOTHIC:
-		return ID2SYM(id_gothic);
+                return ID2SYM(id_gothic);
         case UNICODE_SCRIPT_GREEK:
-		return ID2SYM(id_greek);
+                return ID2SYM(id_greek);
         case UNICODE_SCRIPT_GUJARATI:
-		return ID2SYM(id_gujarati);
+                return ID2SYM(id_gujarati);
         case UNICODE_SCRIPT_GURMUKHI:
-		return ID2SYM(id_gurmukhi);
+                return ID2SYM(id_gurmukhi);
         case UNICODE_SCRIPT_HAN:
-		return ID2SYM(id_han);
+                return ID2SYM(id_han);
         case UNICODE_SCRIPT_HANGUL:
-		return ID2SYM(id_hangul);
+                return ID2SYM(id_hangul);
         case UNICODE_SCRIPT_HEBREW:
-		return ID2SYM(id_hebrew);
+                return ID2SYM(id_hebrew);
         case UNICODE_SCRIPT_HIRAGANA:
-		return ID2SYM(id_hiragana);
+                return ID2SYM(id_hiragana);
         case UNICODE_SCRIPT_KANNADA:
-		return ID2SYM(id_kannada);
+                return ID2SYM(id_kannada);
         case UNICODE_SCRIPT_KATAKANA:
-		return ID2SYM(id_katakana);
+                return ID2SYM(id_katakana);
         case UNICODE_SCRIPT_KHMER:
-		return ID2SYM(id_khmer);
+                return ID2SYM(id_khmer);
         case UNICODE_SCRIPT_LAO:
-		return ID2SYM(id_lao);
+                return ID2SYM(id_lao);
         case UNICODE_SCRIPT_LATIN:
-		return ID2SYM(id_latin);
+                return ID2SYM(id_latin);
         case UNICODE_SCRIPT_MALAYALAM:
-		return ID2SYM(id_malayalam);
+                return ID2SYM(id_malayalam);
         case UNICODE_SCRIPT_MONGOLIAN:
-		return ID2SYM(id_mongolian);
+                return ID2SYM(id_mongolian);
         case UNICODE_SCRIPT_MYANMAR:
-		return ID2SYM(id_myanmar);
+                return ID2SYM(id_myanmar);
         case UNICODE_SCRIPT_OGHAM:
-		return ID2SYM(id_ogham);
+                return ID2SYM(id_ogham);
         case UNICODE_SCRIPT_OLD_ITALIC:
-		return ID2SYM(id_old_italic);
+                return ID2SYM(id_old_italic);
         case UNICODE_SCRIPT_ORIYA:
-		return ID2SYM(id_oriya);
+                return ID2SYM(id_oriya);
         case UNICODE_SCRIPT_RUNIC:
-		return ID2SYM(id_runic);
+                return ID2SYM(id_runic);
         case UNICODE_SCRIPT_SINHALA:
-		return ID2SYM(id_sinhala);
+                return ID2SYM(id_sinhala);
         case UNICODE_SCRIPT_SYRIAC:
-		return ID2SYM(id_syriac);
+                return ID2SYM(id_syriac);
         case UNICODE_SCRIPT_TAMIL:
-		return ID2SYM(id_tamil);
+                return ID2SYM(id_tamil);
         case UNICODE_SCRIPT_TELUGU:
-		return ID2SYM(id_telugu);
+                return ID2SYM(id_telugu);
         case UNICODE_SCRIPT_THAANA:
-		return ID2SYM(id_thaana);
+                return ID2SYM(id_thaana);
         case UNICODE_SCRIPT_THAI:
-		return ID2SYM(id_thai);
+                return ID2SYM(id_thai);
         case UNICODE_SCRIPT_TIBETAN:
-		return ID2SYM(id_tibetan);
+                return ID2SYM(id_tibetan);
         case UNICODE_SCRIPT_CANADIAN_ABORIGINAL:
-		return ID2SYM(id_canadian_aboriginal);
+                return ID2SYM(id_canadian_aboriginal);
         case UNICODE_SCRIPT_YI:
-		return ID2SYM(id_yi);
+                return ID2SYM(id_yi);
         case UNICODE_SCRIPT_TAGALOG:
-		return ID2SYM(id_tagalog);
+                return ID2SYM(id_tagalog);
         case UNICODE_SCRIPT_HANUNOO:
-		return ID2SYM(id_hanunoo);
+                return ID2SYM(id_hanunoo);
         case UNICODE_SCRIPT_BUHID:
-		return ID2SYM(id_buhid);
+                return ID2SYM(id_buhid);
         case UNICODE_SCRIPT_TAGBANWA:
-		return ID2SYM(id_tagbanwa);
+                return ID2SYM(id_tagbanwa);
         case UNICODE_SCRIPT_BRAILLE:
-		return ID2SYM(id_braille);
+                return ID2SYM(id_braille);
         case UNICODE_SCRIPT_CYPRIOT:
-		return ID2SYM(id_cypriot);
+                return ID2SYM(id_cypriot);
         case UNICODE_SCRIPT_LIMBU:
-		return ID2SYM(id_limbu);
+                return ID2SYM(id_limbu);
         case UNICODE_SCRIPT_OSMANYA:
-		return ID2SYM(id_osmanya);
+                return ID2SYM(id_osmanya);
         case UNICODE_SCRIPT_SHAVIAN:
-		return ID2SYM(id_shavian);
+                return ID2SYM(id_shavian);
         case UNICODE_SCRIPT_LINEAR_B:
-		return ID2SYM(id_linear_b);
+                return ID2SYM(id_linear_b);
         case UNICODE_SCRIPT_TAI_LE:
-		return ID2SYM(id_tai_le);
+                return ID2SYM(id_tai_le);
         case UNICODE_SCRIPT_UGARITIC:
-		return ID2SYM(id_ugaritic);
+                return ID2SYM(id_ugaritic);
         case UNICODE_SCRIPT_NEW_TAI_LUE:
-		return ID2SYM(id_new_tai_lue);
+                return ID2SYM(id_new_tai_lue);
         case UNICODE_SCRIPT_BUGINESE:
-		return ID2SYM(id_buginese);
+                return ID2SYM(id_buginese);
         case UNICODE_SCRIPT_GLAGOLITIC:
-		return ID2SYM(id_glagolitic);
+                return ID2SYM(id_glagolitic);
         case UNICODE_SCRIPT_TIFINAGH:
-		return ID2SYM(id_tifinagh);
+                return ID2SYM(id_tifinagh);
         case UNICODE_SCRIPT_SYLOTI_NAGRI:
-		return ID2SYM(id_syloti_nagri);
+                return ID2SYM(id_syloti_nagri);
         case UNICODE_SCRIPT_OLD_PERSIAN:
-		return ID2SYM(id_old_persian);
+                return ID2SYM(id_old_persian);
         case UNICODE_SCRIPT_KHAROSHTHI:
-		return ID2SYM(id_kharoshthi);
+                return ID2SYM(id_kharoshthi);
         case UNICODE_SCRIPT_UNKNOWN:
-		return ID2SYM(id_unknown);
+                return ID2SYM(id_unknown);
         case UNICODE_SCRIPT_BALINESE:
-		return ID2SYM(id_balinese);
+                return ID2SYM(id_balinese);
         case UNICODE_SCRIPT_CUNEIFORM:
-		return ID2SYM(id_cuneiform);
+                return ID2SYM(id_cuneiform);
         case UNICODE_SCRIPT_PHOENICIAN:
-		return ID2SYM(id_phoenician);
+                return ID2SYM(id_phoenician);
         case UNICODE_SCRIPT_PHAGS_PA:
-		return ID2SYM(id_phags_pa);
+                return ID2SYM(id_phags_pa);
         case UNICODE_SCRIPT_NKO:
-		return ID2SYM(id_nko);
+                return ID2SYM(id_nko);
         case UNICODE_SCRIPT_KAYAH_LI:
-		return ID2SYM(id_kayah_li);
+                return ID2SYM(id_kayah_li);
         case UNICODE_SCRIPT_LEPCHA:
-		return ID2SYM(id_lepcha);
+                return ID2SYM(id_lepcha);
         case UNICODE_SCRIPT_REJANG:
-		return ID2SYM(id_rejang);
+                return ID2SYM(id_rejang);
         case UNICODE_SCRIPT_SUNDANESE:
-		return ID2SYM(id_sundanese);
+                return ID2SYM(id_sundanese);
         case UNICODE_SCRIPT_SAURASHTRA:
-		return ID2SYM(id_saurashtra);
+                return ID2SYM(id_saurashtra);
         case UNICODE_SCRIPT_CHAM:
-		return ID2SYM(id_cham);
+                return ID2SYM(id_cham);
         case UNICODE_SCRIPT_OL_CHIKI:
-		return ID2SYM(id_ol_chiki);
+                return ID2SYM(id_ol_chiki);
         case UNICODE_SCRIPT_VAI:
-		return ID2SYM(id_vai);
+                return ID2SYM(id_vai);
         case UNICODE_SCRIPT_CARIAN:
-		return ID2SYM(id_carian);
+                return ID2SYM(id_carian);
         case UNICODE_SCRIPT_LYCIAN:
-		return ID2SYM(id_lycian);
+                return ID2SYM(id_lycian);
         case UNICODE_SCRIPT_LYDIAN:
-		return ID2SYM(id_lydian);
+                return ID2SYM(id_lydian);
         case UNICODE_SCRIPT_AVESTAN:
-		return ID2SYM(id_avestan);
+                return ID2SYM(id_avestan);
         case UNICODE_SCRIPT_BAMUM:
-		return ID2SYM(id_bamum);
+                return ID2SYM(id_bamum);
         case UNICODE_SCRIPT_EGYPTIAN_HIEROGLYPHS:
-		return ID2SYM(id_egyptian_hieroglyphs);
+                return ID2SYM(id_egyptian_hieroglyphs);
         case UNICODE_SCRIPT_IMPERIAL_ARAMAIC:
-		return ID2SYM(id_imperial_aramaic);
+                return ID2SYM(id_imperial_aramaic);
         case UNICODE_SCRIPT_INSCRIPTIONAL_PAHLAVI:
-		return ID2SYM(id_inscriptional_pahlavi);
+                return ID2SYM(id_inscriptional_pahlavi);
         case UNICODE_SCRIPT_INSCRIPTIONAL_PARTHIAN:
-		return ID2SYM(id_inscriptional_parthian);
+                return ID2SYM(id_inscriptional_parthian);
         case UNICODE_SCRIPT_JAVANESE:
-		return ID2SYM(id_javanese);
+                return ID2SYM(id_javanese);
         case UNICODE_SCRIPT_KAITHI:
-		return ID2SYM(id_kaithi);
+                return ID2SYM(id_kaithi);
         case UNICODE_SCRIPT_LISU:
-		return ID2SYM(id_lisu);
+                return ID2SYM(id_lisu);
         case UNICODE_SCRIPT_MEETEI_MAYEK:
-		return ID2SYM(id_meetei_mayek);
+                return ID2SYM(id_meetei_mayek);
         case UNICODE_SCRIPT_OLD_SOUTH_ARABIAN:
-		return ID2SYM(id_old_south_arabian);
+                return ID2SYM(id_old_south_arabian);
         case UNICODE_SCRIPT_OLD_TURKIC:
-		return ID2SYM(id_old_turkic);
+                return ID2SYM(id_old_turkic);
         case UNICODE_SCRIPT_SAMARITAN:
-		return ID2SYM(id_samaritan);
+                return ID2SYM(id_samaritan);
         case UNICODE_SCRIPT_TAI_THAM:
-		return ID2SYM(id_tai_tham);
+                return ID2SYM(id_tai_tham);
         case UNICODE_SCRIPT_TAI_VIET:
-		return ID2SYM(id_tai_viet);
+                return ID2SYM(id_tai_viet);
         case UNICODE_SCRIPT_BATAK:
-		return ID2SYM(id_batak);
+                return ID2SYM(id_batak);
         case UNICODE_SCRIPT_BRAHMI:
-		return ID2SYM(id_brahmi);
+                return ID2SYM(id_brahmi);
         case UNICODE_SCRIPT_MANDAIC:
                 return ID2SYM(id_mandaic);
         default:
