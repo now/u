@@ -243,6 +243,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "oct", rb_u_string_oct, 0);
         rb_define_method(rb_cUString, "ord", rb_u_string_ord, 0);
         rb_define_method(rb_cUString, "partition", rb_u_string_partition, 1);
+        rb_define_method(rb_cUString, "print?", rb_u_string_print, 0);
         rb_define_method(rb_cUString, "reverse", rb_u_string_reverse, 0);
         rb_define_method(rb_cUString, "rindex", rb_u_string_rindex_m, -1);
         rb_define_method(rb_cUString, "rjust", rb_u_string_rjust, -1);
