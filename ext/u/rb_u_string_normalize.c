@@ -11,9 +11,13 @@
 static NormalizeMode
 symbol_to_mode(VALUE symbol)
 {
-        /* TODO: not a symbol: %p. */
-        if (!SYMBOL_P(symbol))
-                rb_raise(rb_eTypeError, "not a symbol");
+        if (!SYMBOL_P(symbol)) {
+                VALUE inspected = rb_inspect(symbol);
+
+                rb_raise(rb_eTypeError,
+                         "not a symbol: %s",
+                         StringValuePtr(inspected));
+        }
 
         ID id = SYM2ID(symbol);
 
@@ -26,7 +30,9 @@ symbol_to_mode(VALUE symbol)
         SYMBOL2MODE(all_compose, NORMALIZE_ALL_COMPOSE, id);
         SYMBOL2MODE(nfkc, NORMALIZE_NFKC, id);
 
-        rb_raise(rb_eArgError, "unknown symbol");
+        rb_raise(rb_eArgError,
+                 "unknown normalization mode: :%s",
+                 rb_id2name(SYM2ID(symbol)));
 }
 
 VALUE

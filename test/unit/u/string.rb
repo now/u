@@ -858,6 +858,8 @@ Expectations do
   expect ')'.u do '('.u.mirror end
   expect ')('.u do '()'.u.mirror end
 
+  expect TypeError.new('not a symbol: 1') do ''.u.normalize(1) end
+  expect ArgumentError.new('unknown normalization mode: :ufc') do ''.u.normalize(:ufc) end
   expect 'Ḋ'.u do "D\xcc\x87".u.normalize(:nfc) end
 
   # TODO: Add tests for Unicode digit values
