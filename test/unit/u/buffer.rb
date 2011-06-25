@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 Expectations do
+  expect ArgumentError.new('wrong number of arguments (0 for at least 1)') do U::Buffer.new.append end
   expect 'abcde'.u do U::Buffer.new.append('abc', 'de').to_u end
   expect 'abcde'.u do (U::Buffer.new << 'abc' << 'de').to_u end
 

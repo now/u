@@ -12,20 +12,10 @@
 void
 need_at_least_n_arguments(int argc, int n)
 {
-        static const char *const words[] = {
-                NULL,   NULL, "two",   "three", "four",
-                "five", "six", "seven", "eight", "nine"
-        };
-
-        if (argc >= n)
-                return;
-
-        if (n == 1)
-                rb_raise(rb_eArgError, "need at least one argument");
-        else if (1 < n && n < 10)
-                rb_raise(rb_eArgError, "need at least %s arguments", words[n]);
-        else
-                rb_raise(rb_eArgError, "need at least %d arguments", n);
+        if (argc < n)
+                rb_raise(rb_eArgError,
+                         "wrong number of arguments (%d for at least %d)",
+                         argc, n);
 }
 
 void
@@ -33,7 +23,8 @@ need_m_to_n_arguments(int argc, int m, int n)
 {
         if (argc < m || argc > n)
                 rb_raise(rb_eArgError,
-                         "wrong number of arguments (%d for %d..%d)", argc, m, n);
+                         "wrong number of arguments (%d for %d..%d)",
+                         argc, m, n);
 }
 
 unichar

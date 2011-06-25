@@ -208,7 +208,7 @@ Expectations do
   expect 5 do 'abcあいう'.u.count('^a') end
   expect 5 do 'abcあいう'.u.count('^あ') end
   expect 2 do 'abcあいう'.u.count('a-z', '^a') end
-  expect ArgumentError do 'föö'.u.count end
+  expect ArgumentError.new('wrong number of arguments (0 for at least 1)') do 'föö'.u.count end
 
   expect true do ''.u.defined? end
   expect true do 'a'.u.defined? end
@@ -228,7 +228,7 @@ Expectations do
   expect 'a'.u do 'abcあいう'.u.delete('^a') end
   expect 'bcあいう'.u do 'abcあいう'.u.delete('a') end
   expect 'あ'.u do 'abcあいう'.u.delete('^あ') end
-  expect ArgumentError do 'föö'.u.delete end
+  expect ArgumentError.new('wrong number of arguments (0 for at least 1)') do 'föö'.u.delete end
 
   expect true do ''.u.digit? end
   expect true do '0'.u.digit? end
@@ -366,11 +366,11 @@ Expectations do
 
   expect ArgumentError.new('invalid flag ‘ ’ given to directive ‘c’') do '% c'.u % 0x00e4 end
   expect ArgumentError.new('directive does not allow specifying a precision: c') do '%.1c'.u % [0x00e4] end
-  expect ArgumentError.new('need at least one argument') do '%cbc'.u % [] end
+  expect ArgumentError.new('wrong number of arguments (0 for at least 1)') do '%cbc'.u % [] end
   expect 'äbc'.u do '%cbc'.u % 0x00e4 end
   expect ' äbc'.u do '%2cbc'.u % 0x00e4 end
   expect 'ä bc'.u do '%-2cbc'.u % 0x00e4 end
-  expect ArgumentError.new('need at least two arguments') do '%*cbc'.u % 0x00e4 end
+  expect ArgumentError.new('wrong number of arguments (1 for at least 2)') do '%*cbc'.u % 0x00e4 end
   expect ' äbc'.u do '%*cbc'.u % [2, 0x00e4] end
   expect ArgumentError.new('cannot use positional argument numbers after absolute argument numbers') do '%*1$cbc'.u % [2, 0x00e4] end
   expect ' äbc'.u do '%2$*1$cbc'.u % [2, 0x00e4] end
@@ -385,7 +385,7 @@ Expectations do
   expect ArgumentError.new('named argument not found: a') do '%<a>cbc'.u % { :b => 0x00e4 } end
   expect ArgumentError.new('cannot use positional argument numbers after absolute argument numbers') do '%1$c%c'.u % [0x00e4] end
   expect ArgumentError.new('cannot use positional argument numbers after named arguments') do '%<a>c%c'.u % { :a => 0x00e4 } end
-  expect ArgumentError.new('need at least one argument') do '%c'.u % [] end
+  expect ArgumentError.new('wrong number of arguments (0 for at least 1)') do '%c'.u % [] end
 
   # TODO: Add flag checks?
   expect 'äbc'.u do '%sc'.u % ['äb'.u] end
