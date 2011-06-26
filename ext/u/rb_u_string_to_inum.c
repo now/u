@@ -1,5 +1,5 @@
 #include "rb_includes.h"
-#include "rb_u_string_internal_bignum.h"
+#include "rb_u_string_to_inum.h"
 
 /* XXX: Stolen straight from bignum.c. */
 #define BDIGITS(x)      (RBIGNUM_DIGITS(x))

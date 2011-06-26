@@ -1,5 +1,5 @@
 #include "rb_includes.h"
-#include "rb_u_string_internal_bignum.h"
+#include "rb_u_string_to_inum.h"
 
 VALUE
 rb_u_string_to_i(int argc, VALUE *argv, VALUE self)

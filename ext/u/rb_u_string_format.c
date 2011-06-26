@@ -3,7 +3,7 @@
 #include <math.h>
 #include <intern.h>
 #include "rb_u_buffer.h"
-#include "rb_u_string_internal_bignum.h"
+#include "rb_u_string_to_inum.h"
 
 enum DirectiveFlags {
         DIRECTIVE_FLAGS_NONE = 0,
