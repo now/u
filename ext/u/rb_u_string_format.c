@@ -933,7 +933,7 @@ directive_float_format(unichar directive, int flags, int width, int precision, d
                 needed = width;
         needed += 1;
 
-        rb_u_buffer_printf(result, needed, format, argument);
+        rb_u_buffer_append_printf(result, needed, format, argument);
 }
 #pragma GCC diagnostic warning "-Wformat-nonliteral"
 

@@ -164,8 +164,8 @@ rb_u_buffer_append_unichar_n(VALUE self, unichar c, long n)
 }
 
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
-void
-rb_u_buffer_printf(VALUE self, size_t needed, const char *format, ...)
+VALUE
+rb_u_buffer_append_printf(VALUE self, size_t needed, const char *format, ...)
 {
         UBuffer *buffer = RVAL2UBUFFER(self);
 
@@ -178,11 +178,14 @@ rb_u_buffer_printf(VALUE self, size_t needed, const char *format, ...)
         int length = vsnprintf(buffer->c + buffer->length, needed,
                                format, arguments);
         va_end(arguments);
+
         if ((unsigned)length > needed)
                 rb_raise(rb_eRuntimeError,
                          "buffer calculation size is wrong: %d < %d",
                          needed, length);
         buffer->length += length;
+
+        return self;
 }
 #pragma GCC diagnostic warning "-Wformat-nonliteral"
 
