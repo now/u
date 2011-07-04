@@ -875,6 +875,7 @@ directive_float_inf(unichar directive, int flags, int width, double argument, VA
         directive_pad(flags, width - length, buffer, length, result);
 }
 
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
 static void
 directive_float_format(unichar directive, int flags, int width, int precision, double argument, VALUE result)
 {
@@ -934,6 +935,7 @@ directive_float_format(unichar directive, int flags, int width, int precision, d
 
         rb_u_buffer_printf(result, needed, format, argument);
 }
+#pragma GCC diagnostic warning "-Wformat-nonliteral"
 
 static void
 directive_float(unichar directive, int flags, int width, int precision, VALUE argument, VALUE result)
