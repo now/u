@@ -5,6 +5,9 @@
 VALUE rb_u_buffer_new(void);
 VALUE rb_u_buffer_new_sized(long size);
 
+HIDDEN void rb_u_buffer_printf(VALUE self, size_t needed,
+                               const char *format, ...) PRINTF(3, 4);
+
 VALUE rb_u_buffer_append(VALUE self, const char *str, long length);
 VALUE rb_u_buffer_append_format(int argc, const VALUE *argv, VALUE self, VALUE format);
 VALUE rb_u_buffer_append_format_m(int argc, const VALUE *argv, VALUE self);

@@ -1,4 +1,5 @@
 #include <ruby.h>
+#include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -161,6 +162,29 @@ rb_u_buffer_append_unichar_n(VALUE self, unichar c, long n)
 
         return self;
 }
+
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+void
+rb_u_buffer_printf(VALUE self, size_t needed, const char *format, ...)
+{
+        UBuffer *buffer = RVAL2UBUFFER(self);
+
+        u_buffer_maybe_expand(buffer, needed);
+
+        /* TODO: What happens if needed is greater than what length can return?
+         */
+        va_list arguments;
+        va_start(arguments, format);
+        int length = vsnprintf(buffer->c + buffer->length, needed,
+                               format, arguments);
+        va_end(arguments);
+        if ((unsigned)length > needed)
+                rb_raise(rb_eRuntimeError,
+                         "buffer calculation size is wrong: %d < %d",
+                         needed, length);
+        buffer->length += length;
+}
+#pragma GCC diagnostic warning "-Wformat-nonliteral"
 
 static VALUE
 rb_u_buffer_initialize(int argc, VALUE *argv, VALUE self)

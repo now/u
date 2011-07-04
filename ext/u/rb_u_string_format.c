@@ -875,7 +875,6 @@ directive_float_inf(unichar directive, int flags, int width, double argument, VA
         directive_pad(flags, width - length, buffer, length, result);
 }
 
-#pragma GCC diagnostic ignored "-Wformat-nonliteral"
 static void
 directive_float_format(unichar directive, int flags, int width, int precision, double argument, VALUE result)
 {
@@ -932,18 +931,9 @@ directive_float_format(unichar directive, int flags, int width, int precision, d
         if (needed < (unsigned)width)
                 needed = width;
         needed += 1;
-        char buffer[needed];
-        /* TODO: What happens if needed is greater than what length can return?
-         */
-        int length = snprintf(buffer, needed, format, argument);
-        if ((unsigned)length > needed)
-                rb_raise(rb_eRuntimeError,
-                         "buffer calculation size is wrong: %d < %d",
-                         needed, length);
 
-        rb_u_buffer_append(result, buffer, length);
+        rb_u_buffer_printf(result, needed, format, argument);
 }
-#pragma GCC diagnostic warning "-Wformat-nonliteral"
 
 static void
 directive_float(unichar directive, int flags, int width, int precision, VALUE argument, VALUE result)
