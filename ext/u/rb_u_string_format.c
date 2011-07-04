@@ -583,7 +583,7 @@ directive_number_output(int flags, int width, int precision,
 }
 
 #define BITS2DECIMALDIGITS(n) (((long)(n) * 146) / 485 + 1) /* lg(10)⁻¹ ≈ 146/485 */
-#define BITS2OCTALDIGITS(n) ((long)(n) * 3 + 1) /* lg(8) = 3 */
+#define BITS2OCTALDIGITS(n) (((long)(n) * 1) / 3 + 1) /* lg(8)⁻¹ = 3 */
 
 #define DIGITS_BUFFER_SIZE (BITS2OCTALDIGITS(sizeof(long) * CHAR_BIT) + 1)
 
