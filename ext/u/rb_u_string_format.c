@@ -582,8 +582,8 @@ directive_number_output(int flags, int width, int precision,
                 rb_u_buffer_append_unichar_n(result, ' ', width);
 }
 
-#define BITS2DECIMALDIGITS(n) (((long)(n) * 146) / 485 + 1) /* log2(10) ≈ 146/485 */
-#define BITS2OCTALDIGITS(n) ((long)(n) * 3 + 1) /* log2(8) = 3 */
+#define BITS2DECIMALDIGITS(n) (((long)(n) * 146) / 485 + 1) /* lg(10)⁻¹ ≈ 146/485 */
+#define BITS2OCTALDIGITS(n) ((long)(n) * 3 + 1) /* lg(8) = 3 */
 
 #define DIGITS_BUFFER_SIZE (BITS2OCTALDIGITS(sizeof(long) * CHAR_BIT) + 1)
 
@@ -879,15 +879,15 @@ directive_float_inf(unichar directive, int flags, int width, double argument, VA
 static void
 directive_float_format(unichar directive, int flags, int width, int precision, double argument, VALUE result)
 {
-        /* % + flags{0,4} + width_digits? + (. + precision_digits)? + \0 */
-        char format[1 +
-                    4 +
-                    BITS2DECIMALDIGITS(sizeof(width) * CHAR_BIT) +
-                    1 +
-                    BITS2DECIMALDIGITS(sizeof(precision) * CHAR_BIT) +
-                    1];
+        char format[1 +                                                 /* '%' */
+                    5 +                                                 /* flags{0,5} */
+                    BITS2DECIMALDIGITS(sizeof(width) * CHAR_BIT) +      /* width_digits? */
+                    1 +                                                 /* ('.' */
+                    BITS2DECIMALDIGITS(sizeof(precision) * CHAR_BIT) +  /*  precision_digits)? */
+                    1 +                                                 /* directive */
+                    1];                                                 /* '\0' */
         char *p = format;
-        const char *end = format + sizeof(format);
+        const char *end = format + lengthof(format);
 
         *p++ = '%';
         if (flags & DIRECTIVE_FLAGS_SHARP)
@@ -921,20 +921,22 @@ directive_float_format(unichar directive, int flags, int width, int precision, d
          * exponent-char?
          * exponent-±?
          */
-        int needed = 1 +
+        size_t needed = 1 +
                 2 +
                 1 +
                 abs(BITS2DECIMALDIGITS(exponent)) +
                 1 +
-                (precision >= 0 ? precision : 0) +
+                (size_t)(precision >= 0 ? precision : 0) +
                 1 +
                 1;
-        if (needed < width)
+        if (needed < (unsigned)width)
                 needed = width;
         needed += 1;
         char buffer[needed];
+        /* TODO: What happens if needed is greater than what length can return?
+         */
         int length = snprintf(buffer, needed, format, argument);
-        if (length > needed)
+        if ((unsigned)length > needed)
                 rb_raise(rb_eRuntimeError,
                          "buffer calculation size is wrong: %d < %d",
                          needed, length);
