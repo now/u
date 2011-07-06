@@ -723,7 +723,7 @@ Expectations do
   expect '       -0.'.u do '%#10.0f'.u % -0.5 end
 
   # NOTE: This needs to be fixed.
-  # expect ''.u do '%#+-0 .2147483647f'.u % 1 end
+  # expect U::String do '%#+-0 .2147483638f'.u % 1 end
 
   expect '0x2p+1'.u do '%.0a'.u % 3.875 end
   expect '-0x2.0p+1'.u do '%.1a'.u % -3.9921875 end

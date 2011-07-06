@@ -64,8 +64,7 @@ u_buffer_maybe_expand(UBuffer *buffer, long additional)
         if (buffer->length + additional < buffer->allocated)
                 return;
 
-        /* TODO: Don’t use + 1.  We don’t use \0. */
-        long allocate = nearest_power(1, buffer->length + additional + 1);
+        long allocate = nearest_power(1, buffer->length + additional);
         if (allocate < 0)
                 rb_raise(rb_eNoMemError,
                          "buffer would be too large: %ld + %ld + 1 > %ld",
@@ -171,18 +170,20 @@ rb_u_buffer_append_printf(VALUE self, size_t needed, const char *format, ...)
 
         u_buffer_maybe_expand(buffer, needed);
 
-        /* TODO: What happens if needed is greater than what length can return?
-         */
         va_list arguments;
         va_start(arguments, format);
         int length = vsnprintf(buffer->c + buffer->length, needed,
                                format, arguments);
         va_end(arguments);
 
-        if ((unsigned)length > needed)
-                rb_raise(rb_eRuntimeError,
-                         "buffer calculation size is wrong: %d < %d",
-                         needed, length);
+        if (length < 0)
+                rb_sys_fail("system vsnprintf(3) failed");
+
+        if ((unsigned)length >= needed)
+                rb_raise(rb_eNotImpError,
+                         "format string buffer calculation is wrong: %s (%d < %d)",
+                         format, needed, length);
+
         buffer->length += length;
 
         return self;
@@ -196,7 +197,7 @@ rb_u_buffer_initialize(int argc, VALUE *argv, VALUE self)
         VALUE rbsize;
 
         rb_scan_args(argc, argv, "01", &rbsize);
-        long size = NIL_P(rbsize) ? 127 : NUM2LONG(rbsize);
+        long size = NIL_P(rbsize) ? 128 : NUM2LONG(rbsize);
 
         u_buffer_maybe_expand(buffer, size);
 
