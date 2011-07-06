@@ -82,8 +82,7 @@ private
 
   private
 
-    # TODO: Move this to cclass
-    Starter = '0'.freeze
+    Starter = 0
   end
 
   class Commons
@@ -222,7 +221,6 @@ private
   class Values
     def initialize(firsts, first_singletons, seconds, second_singletons)
       @values = {}
-      @last = 0
       @total = 1
 
       @first_start = @total
@@ -232,7 +230,11 @@ private
       singletons second_singletons
     end
 
-    attr_reader :first_start, :first_single_start, :second_start, :second_single_start, :last
+    def last
+      @values.keys.max
+    end
+
+    attr_reader :first_start, :first_single_start, :second_start, :second_single_start
 
     def include?(code)
       @values.include?(code)
@@ -244,10 +246,6 @@ private
 
   protected
 
-    def last=(last)
-      @last = last if last > @last
-    end
-
     def []=(code, value)
       @values[code] = value + @total
     end
@@ -257,14 +255,12 @@ private
     def set(fs)
       fs.each do |code, value|
         self[code] = value
-        self.last = code
       end
     end
 
     def singletons(singletons)
       singletons.each_with_index do |singleton, code|
         self[singleton.first] = code
-        self.last = code
       end
     end
   end
@@ -303,5 +299,5 @@ private
   end
 end
 
-Compose.new(U::Build::Data::Unicode.new(ARGV[0]),
+Compose.new(Marshal.load(File.open(ARGV[0], 'rb'){ |f| f.read }),
             U::Build::Data::CompositionExclusions.new(ARGV[1]))

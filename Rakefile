@@ -99,7 +99,7 @@ data_header 'ext/u/data/cased.h' => %w[build/ext/u/data/cased.rb
                                        build/data/PropList.txt]
 
 data_header 'ext/u/data/compose.h' => %w[build/ext/u/data/compose.rb
-                                         build/data/UnicodeData.txt
+                                         build/data/UnicodeData.marshalled
                                          build/data/CompositionExclusions.txt]
 
 data_header 'build/data/UnicodeData.marshalled' => %w[build/ext/u/data/marshalled.rb
@@ -158,13 +158,9 @@ file 'test/unit/foldcase.rb' => %w[build/test/unit/foldcase.rb
   end
 end
 
-=begin
 file 'test/unit/normalize.rb' => %w[build/test/unit/normalize.rb
                                     build/data/NormalizationTest.txt] do |t|
-  tmp = '%s.tmp' % t.name
-  rm([t.name, tmp], :force => true)
-  ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
-  chmod 0444, tmp
-  mv tmp, t.name
+  generate_file t.name do |tmp|
+    ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
+  end
 end
-=end

@@ -47,9 +47,11 @@ private
 
   def generate1(mode, expected, value)
     @io.printf "  expect '%s'.u do '%s'.u.normalize(%p) end\n",
-      expected =~ /\A['\\]\Z/ ? "\\'" : expected,
-      value =~ /\A['\\]\Z/ ? "\\'" : value,
-      mode
+      escape(expected), escape(value), mode
+  end
+
+  def escape(string)
+    string.gsub(/['\\]/, '\\\\\0')
   end
 
   class Lines
