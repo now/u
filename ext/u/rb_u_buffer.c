@@ -184,6 +184,18 @@ rb_u_buffer_append_printf(VALUE self, size_t needed, const char *format, ...)
                          "format string buffer calculation is wrong: %s (%d < %d)",
                          format, needed, length);
 
+        /* FreeBSD’s implementation of vsnprintf(3) doesn’t check for overflow
+         * properly, which means that length may wrap when given a size close
+         * to INT_MAX.  It turns outh that the result will be NUL-terminated,
+         * so we can check whether strlen() gives us a different length and, if
+         * so, use it instead. */
+        if (length == 1) {
+                int real = strlen(buffer->c + buffer->length);
+
+                if (real != 1)
+                        length = real;
+        }
+
         buffer->length += length;
 
         return self;
