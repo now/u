@@ -929,7 +929,7 @@ directive_float_format(unichar directive, int flags, int width, int precision, d
                 (size_t)(precision >= 0 ? precision : 0) +
                 1 +
                 1;
-        if (needed < (unsigned)width)
+        if (needed < (size_t)width)
                 needed = width;
         needed += 1;
 

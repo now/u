@@ -179,7 +179,7 @@ rb_u_buffer_append_printf(VALUE self, size_t needed, const char *format, ...)
         if (length < 0)
                 rb_sys_fail("system vsnprintf(3) failed");
 
-        if ((unsigned)length >= needed)
+        if ((size_t)length >= needed)
                 rb_raise(rb_eNotImpError,
                          "format string buffer calculation is wrong: %s (%d < %d)",
                          format, needed, length);
