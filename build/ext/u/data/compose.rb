@@ -57,6 +57,7 @@ private
         next if composition_exclusions.include? code or
           entry.decomposition.length < 2 or
           not entry.decomposition.canonical? or
+          data[code].cclass != Starter or
           data[entry.decomposition.first].cclass != Starter
         raise RuntimeError,
           'decomposition of %04X contains more than 2 elements: %d' %
