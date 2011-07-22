@@ -18,7 +18,7 @@ type_to_symbol(UnicodeType type)
         TYPE2ID(UNICODE_OTHER_LETTER, other_letter);
         TYPE2ID(UNICODE_TITLECASE_LETTER, titlecase_letter);
         TYPE2ID(UNICODE_UPPERCASE_LETTER, uppercase_letter);
-        TYPE2ID(UNICODE_COMBINING_MARK, combining_mark);
+        TYPE2ID(UNICODE_SPACING_MARK, spacing_mark);
         TYPE2ID(UNICODE_ENCLOSING_MARK, enclosing_mark);
         TYPE2ID(UNICODE_NON_SPACING_MARK, non_spacing_mark);
         TYPE2ID(UNICODE_DECIMAL_NUMBER, decimal_number);
@@ -60,8 +60,8 @@ type_to_symbol(UnicodeType type)
                 return ID2SYM(id_titlecase_letter);
         case UNICODE_UPPERCASE_LETTER:
                 return ID2SYM(id_uppercase_letter);
-        case UNICODE_COMBINING_MARK:
-                return ID2SYM(id_combining_mark);
+        case UNICODE_SPACING_MARK:
+                return ID2SYM(id_spacing_mark);
         case UNICODE_ENCLOSING_MARK:
                 return ID2SYM(id_enclosing_mark);
         case UNICODE_NON_SPACING_MARK:

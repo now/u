@@ -57,7 +57,7 @@ s_ismark(int type)
 {
         return IS(type,
                   OR(UNICODE_NON_SPACING_MARK,
-                     OR(UNICODE_COMBINING_MARK,
+                     OR(UNICODE_SPACING_MARK,
                         OR(UNICODE_ENCLOSING_MARK, 0))));
 }
 

@@ -21,7 +21,7 @@ private
       'Ll' => 'UNICODE_LOWERCASE_LETTER',
       'Lt' => 'UNICODE_TITLECASE_LETTER',
       'Mn' => 'UNICODE_NON_SPACING_MARK',
-      'Mc' => 'UNICODE_COMBINING_MARK',
+      'Mc' => 'UNICODE_SPACING_MARK',
       'Me' => 'UNICODE_ENCLOSING_MARK',
       'Nd' => 'UNICODE_DECIMAL_NUMBER',
       'Nl' => 'UNICODE_LETTER_NUMBER',
