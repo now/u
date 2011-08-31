@@ -15,6 +15,8 @@ Gem::Specification.new do |s|
   s.description = IO.read(File.expand_path('../README', __FILE__))
   s.summary = s.description[/^[[:alpha:]]+.*?\./]
 
+  s.extensions = %w[ext/u/extconf.rb]
+
   s.files = Dir['ext/**/{*.{c,h,rb},depend}'] +
     Dir['{lib,test}/**/*.rb'] +
     %w[README Rakefile]
