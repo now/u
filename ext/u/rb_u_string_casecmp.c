@@ -1,5 +1,19 @@
 #include "rb_includes.h"
 
+/* @overload casecmp(other)
+ *
+ *   Compares {#foldcase} to _other_{#foldcase} using the linguistically
+ *   correct rules of the current locale.  This is, however, only an
+ *   approximation of a case-insensitive comparison.
+ *
+ *   This operation is known as “collation” and you can find more information
+ *   about the collation algorithm employed in the
+ *   Unicode Technical Standard #10, see http://unicode.org/reports/tr10/.
+ *
+ *   @param [U::String, #to_str] other String to compare this {U::String} to
+ *   @return [Fixnum] A number _n_, where _n_ < 0, _n_ = 0, or _n_ > 0, if
+ *     `self` comes before, is the same as, or comes after _other_,
+ *     respectively */
 VALUE
 rb_u_string_casecmp(VALUE self, VALUE rbother)
 {

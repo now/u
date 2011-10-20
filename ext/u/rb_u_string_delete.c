@@ -29,6 +29,25 @@ rb_u_string_delete_loop(const UString *string, struct tr_table *table,
         return count;
 }
 
+/* @overload delete(set, *sets)
+ *
+ * Removes characters in `self` that are included in the intersection of _set_
+ * and any additional _sets_ of characters.
+ *
+ * The complement of all Unicode characters and a given set of characters may
+ * be specified by prefixing a non-empty set with ‘`^`’ (U+005E CIRCUMFLEX
+ * ACCENT).
+ *
+ * Any sequence of characters _a_-_b_ inside a set will expand to also
+ * include all characters whose codepoints lay between _a_ and _b_.
+ *
+ * Any taint or untrust is inherited by the result.
+ *
+ * @param [U::String, #to_str] set Set of characters to delete
+ * @param [Array<U::String, #to_str>] sets Additional sets to intersect with
+ *   _set_
+ * @return [U::String] `self` without any of the characters included in the set
+ *   of characters to remove */
 VALUE
 rb_u_string_delete(int argc, VALUE *argv, VALUE self)
 {
@@ -50,5 +69,7 @@ rb_u_string_delete(int argc, VALUE *argv, VALUE self)
         rb_u_string_delete_loop(string, &table, remaining);
         remaining[count] = '\0';
 
-        return rb_u_string_new_own(remaining, count);
+        VALUE result = rb_u_string_new_own(remaining, count);
+        OBJ_INFECT(result, self);
+        return result;
 }

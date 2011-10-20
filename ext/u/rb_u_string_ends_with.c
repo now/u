@@ -1,5 +1,17 @@
 #include "rb_includes.h"
 
+/* @overload end_with?(*suffixes)
+ * @overload ends_with?(*suffixes)
+ *
+ * Checks if any of the strings in _suffixes_ is a suffix of `self`.
+ *
+ * Elements in _suffixes_ not responding to `#to_str` are skipped.
+ *
+ * Note that the check is done by byte comparison.
+ *
+ * @param [Array] suffixes Suffixes to check
+ * @return [Boolean] `True` if any of the strings in _suffixes_ is a suffix of
+ *   `self` */
 VALUE
 rb_u_string_ends_with(int argc, VALUE *argv, VALUE self)
 {

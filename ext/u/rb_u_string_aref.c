@@ -79,6 +79,7 @@ rb_u_string_aref(VALUE self, VALUE index)
                 if (rb_u_string_index(self, index, 0) == -1)
                         return Qnil;
 
+                /* TODO: Why not simply return index if it is a U::String? */
                 return TYPE(index) == T_STRING ?
                         rb_u_string_new(RSTRING_PTR(index), RSTRING_LEN(index)) :
                         rb_u_string_dup(index);
@@ -94,6 +95,74 @@ rb_u_string_aref(VALUE self, VALUE index)
         }
 }
 
+/* @overload [](index)
+ * @overload slice(index)
+ *
+ *   Extracts the substring [max(_i_, 0), min({#length}, _i_ + 1)], where _i_ =
+ *   _index_ if _index_ ≥ 0, _i_ = {#length} - abs(_index_) otherwise.
+ *
+ *   Any taint or untrust is inherited by the substring.
+ *
+ *   @param [Integer] index Index to begin at
+ *   @return [U::String, nil] The extracted substring, or nil if the resulting
+ *     substring is empty
+ *
+ * @overload [](index, length)
+ * @overload slice(index, length)
+ *
+ *   Extracts the substring [max(_i_, 0), min({#length}, _i_ + _length_)],
+ *   where _i_ = _index_ if _index_ ≥ 0, _i_ = {#length} - abs(_index_)
+ *   otherwise.
+ *
+ *   Any taint or untrust is inherited by the substring.
+ *
+ *   @param [Integer] index Index to begin at
+ *   @param [Integer] length Number of characters to extract
+ *   @return [U::String, nil] The extracted substring, or nil if _length_ < 0
+ *
+ * @overload [](range)
+ * @overload slice(range)
+ *
+ *   Same as `self[i, j - k]`, where _i_ = _range_`.begin` if _range_`.begin` ≥
+ *   0, _i_ = {#length} - abs(_range_`.begin`) otherwise, _j_ = _range_`.end`
+ *   if _range_`.end` ≥ 0, _j_ = {#length} - abs(_range_`.end`) otherwise, and
+ *   _k_ = 1 if _range_`.exclude_end?`, _k_ = 0 otherwise.
+ *
+ *   @param [Range] range Range to extract
+ *   @return [U::String, nil] The extracted substring, or nil if _j_ - _k_ < 0
+ *
+ * @overload [](regexp, reference = 0)
+ * @overload slice(regexp, reference)
+ *
+ *   Extracts the submatch _reference_ from the match of _regexp_ in `self`.
+ *
+ *   Any taint or untrust is inherited by the submatch.
+ *
+ *   @param [Regexp] regexp Regexp to match against `self`
+ *   @param [Integer, String, Symbol] reference Number or name of submatch to
+ *     extract
+ *   @raise [IndexError] If _reference_ doesn’t refer to a submatch
+ *   @return [U::String, nil] The extracted submatch, or nil if no match was
+ *     found or if the submatch wasn’t a part of the overall match
+ *
+ * @overload [](string)
+ * @overload slice(string)
+ *
+ *   Returns _string_ if it is a substring of `self`.
+ *
+ *   Any taint or untrust is inherited by the returned substring.
+ *
+ *   @param [U::String, String] string Substring to match against `self`
+ *   @return [U::String, nil] The substring of `self` equal to _string_, or nil
+ *     if it didn’t match
+ *
+ * @overload [](object)
+ * @overload slice(object)
+ *
+ *   Returns `nil` for any object that isn’t any of the classes already listed.
+ *
+ *   @param [Object] Any object
+ *   @return [nil] nil */
 VALUE
 rb_u_string_aref_m(int argc, VALUE *argv, VALUE self)
 {

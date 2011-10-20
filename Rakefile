@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'lookout/rake/tasks'
 require 'rake/clean'
 require 'yard'
@@ -5,7 +6,44 @@ require 'yard'
 Lookout::Rake::Tasks::Test.new
 Lookout::Rake::Tasks::Gem.new
 Lookout::Rake::Tasks::Tags.new
-YARD::Rake::YardocTask.new
+
+require 'nml'
+require 'nokogiri'
+
+module NML::YARD end
+class NML::YARD::Markup
+  Template = <<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:output method="html" encoding="utf-8"/>
+  <xsl:include href="#{File.join(NML::DataPath, 'templates/html/nml.xsl')}"/>
+
+  <xsl:template match="nml">
+    <xsl:apply-templates/>
+  </xsl:template>
+</xsl:stylesheet>
+EOT
+
+  def initialize(text)
+    @text = text
+  end
+
+  def to_html
+    return @text if @text.empty?
+    Nokogiri::XSLT(Template).transform(Nokogiri::XML(NML::Output::NML.call(@text =~ /\A   / ? NML.ast(@text) : NML::Grammar::Parsers::Block::DocumentParser.ast("\n" + @text, :root => :blocks).first))).to_xml
+  end
+end
+module YARD::Templates::Helpers::HtmlHelper
+  def html_markup_nml(text)
+    markup_class(:nml).new(text).to_html
+  end
+end
+YARD::Templates::Helpers::MarkupHelper::MARKUP_PROVIDERS[:nml] = [{:lib => :nml, :const => 'NML::YARD::Markup'}]
+
+YARD::Rake::YardocTask.new do |t|
+  t.options = %w[--markup markdown -p templates/now]
+#  t.options = %w[--markup nml]
+end
 
 task :test => :extensions
 

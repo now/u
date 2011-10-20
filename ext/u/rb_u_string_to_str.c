@@ -4,6 +4,14 @@
 #  include <ruby/encoding.h>
 #endif
 
+/* @overload to_s
+ * @overload to_str
+ *
+ * Converts this {U::String} to a String.
+ *
+ * Any taint or untrust is inherited.
+ *
+ * @return [String] `self` converted to a String */
 VALUE
 rb_u_string_to_str(VALUE self)
 {

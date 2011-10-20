@@ -48,7 +48,7 @@ rb_u_string_each_line_separator(VALUE self, const UString *separator)
 
         while (p < end) {
                 unichar c = _rb_u_aref_char_validated(p, end);
-                
+
 again:
                 if (separator_length == 0 && c == first) {
                         p = u_next(p);
@@ -88,6 +88,30 @@ again:
         return self;
 }
 
+/* @overload lines(separator = $/){ |line| … }
+ * @overload each_line(separator = $/){ |line| … }
+ *
+ *   Enumerate each line in this {U::String}.  If _separator_ is nil, yields
+ *   `self`.  If _separator_ is {#empty?}, separates each line (paragraph) by
+ *   two or more U+000A LINE FEED characters.
+ *
+ *   @param [U::String, #to_str] separator Line separator to use
+ *   @yield [line] Enumerate each line in this {U::String}
+ *   @yieldparam [Integer] line Line at current position
+ *   @return [U::String] `self`
+ *
+ * @overload lines(separator = $/)
+ * @overload each_line(separator = $/)
+ *
+ *   Creates an Enumerator over each codepoint in this {U::String}.  If
+ *   _separator_ is `nil`, `self` will be yielded.  If _separator_ is
+ *   {#empty?}, separates each line (paragraph) by two or more U+000A LINE FEED
+ *   characters.
+ *
+ *   @param [U::String, #to_str] separator Line separator to use
+ *   @yield [line] Enumerate each line in this {U::String}
+ *   @return [Enumerator] An Enumerator over each line in this {U::String}
+ */
 VALUE
 rb_u_string_each_line(int argc, VALUE *argv, VALUE self)
 {

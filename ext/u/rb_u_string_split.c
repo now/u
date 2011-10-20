@@ -174,6 +174,31 @@ rb_u_string_split_pattern(VALUE self, VALUE pattern, bool limit_given, int limit
         return rb_u_string_split_rest(self, p - begin, limit_given, limit, result);
 }
 
+/* @overload split(pattern = $;, limit = 0)
+ *
+ * Splits this {U::String} into _limit_ substrings around _pattern_.
+ *
+ * If _pattern_ = $; = `nil` or _pattern_ = `' '`, splits according to AWK
+ * rules, that is, any {#space?} prefix is skipped, then substrings are
+ * separated by non-empty {#space?} substrings.
+ *
+ * If _limit_ < 0, then no limit is imposed and trailing {#empty?} substrings
+ * aren’t removed.
+ *
+ * If _limit_ = 0, then no limit is imposed and trailing {#empty?} substrings
+ * are removed.
+ *
+ * If _limit_ = 1, then, if {#length} = 0, the result will be empty, otherwise
+ * it will consist of `self`.
+ *
+ * If _limit_ > 1, then `self` is split into at most _limit_ substrings.
+ *
+ * Any taint or untrust is inherited.
+ *
+ * @param [Regexp, #to_str] pattern Pattern to split around
+ * @param [Integer] limit Maximum number of substrings to split into
+ * @return [Array<U::String>] `self` split into _limit_ substrings around
+     _pattern_ */
 VALUE
 rb_u_string_split_m(int argc, VALUE *argv, VALUE self)
 {

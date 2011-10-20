@@ -33,6 +33,25 @@ rb_u_string_squeeze_loop(const UString *string, struct tr_table *table,
         return count;
 }
 
+/* @overload squeeze(*sets)
+ *
+ * Replaces substrings of `self` of {#length} > 1 consisting of the same
+ * character _c_ with _c_ itself, where _c_ is a member of the intersection of
+ * the character sets in _sets_.
+ *
+ * If _sets_ is empty, then the set of all Unicode characters is used.
+ *
+ * The complement of all Unicode characters and a given set of characters may
+ * be specified by prefixing a non-empty set with ‘`^`’ (U+005E CIRCUMFLEX
+ * ACCENT).
+ *
+ * Any sequence of characters _a_-_b_ inside a set will expand to also
+ * include all characters whose codepoints lay between _a_ and _b_.
+ *
+ * Any taint or untrust is inherited by the result.
+ *
+ * @param [Array<U::String, #to_str>] sets Set of characters to squeeze to intersect
+ * @return [U::String] `self` with any substring of {#length} > 1 squeezed */
 VALUE
 rb_u_string_squeeze(int argc, VALUE *argv, VALUE self)
 {

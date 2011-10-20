@@ -1,5 +1,8 @@
 #include "rb_includes.h"
 
+/* Extracts the codepoint of the first character in this {U::String}.
+ *
+ * @return [Integer] Codepoint of first character in this {U::String} */
 VALUE
 rb_u_string_ord(VALUE self)
 {

@@ -126,6 +126,53 @@ break_type_to_symbol(UnicodeBreakType type)
         }
 }
 
+/* Determines the break type of the characters of this {U::String}.
+ *
+ * The possible break types are
+ *
+ * * :mandatory
+ * * :carriage_return
+ * * :line_feed
+ * * :combining_mark
+ * * :surrogate
+ * * :zero_width_space
+ * * :inseparable
+ * * :non_breaking_glue
+ * * :contingent
+ * * :space
+ * * :after
+ * * :before
+ * * :before_and_after
+ * * :hyphen
+ * * :non_starter
+ * * :open_punctuation
+ * * :close_punctuation
+ * * :quotation
+ * * :exclamation
+ * * :ideographic
+ * * :numeric
+ * * :infix_separator
+ * * :symbol
+ * * :alphabetic
+ * * :prefix
+ * * :postfix
+ * * :complex_context
+ * * :ambiguous
+ * * :unknown
+ * * :next_line
+ * * :word_joiner
+ * * :hangul_l_jamo
+ * * :hangul_v_jamo
+ * * :hangul_t_jamo
+ * * :hangul_lv_syllable
+ * * :hangul_lvt_syllable
+ * * :close_parenthesis
+ *
+ * For more information on the Unicode line-breaking algorithm, see Unicode
+ * Standard Annex #14, http://unicode.org/reports/tr14/.
+ *
+ * @raise [ArgumentError] The string consists of more than one break type
+ * @return [Symbol] The break type */
 VALUE
 rb_u_string_break_type(VALUE self)
 {

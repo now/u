@@ -1,38 +1,39 @@
-# U #
+                                       U
 
-U extends Ruby’s support for Unicode.  It provides an interface that can be
-used from both Ruby 1.8 and 1.9 and implements its methods completely
-separately from those in Ruby 1.9.
+  U extends Ruby’s support for Unicode.  It provides an interface that can be
+  used from both Ruby 1.8 and 1.9 and implements its methods completely
+  separately from those in Ruby 1.9.
 
-## Installation ##
+§ Installation
 
-Install u with
+    Install u with
 
-    % gem install u
+      % gem install u
 
-## Usage ##
+§ Usage
 
-For now, take a look at the tests to see some examples of how to load the
-library and use the methods.
+    For now, take a look at the tests to see some examples of how to load the
+    library and use the methods.
 
-It’s basically the following:
+    It’s basically the following:
 
-    require 'u'
+      require 'u'
 
-    a = 'äbc'
-    a.u.upcase # ⇒ 'ÄBC'
-    a.upcase # ⇒ 'äBC'
-    a # ⇒ 'äbc'
-    a.u!.upcase # ⇒ 'ÄBC'
-    a.upcase # ⇒ 'ÄBC'
+      a = 'äbc'
+      a.u.upcase # ⇒ 'ÄBC'
+      a.upcase # ⇒ 'äBC'
+      a # ⇒ 'äbc'
+      a.u!.upcase # ⇒ 'ÄBC'
+      a.upcase # ⇒ 'ÄBC'
 
-## Future ##
+§ Future
 
-Currently, most of my time is spent at my day job and in my (again flourishing)
-private life. Please motivate me to spend time on this library by donating some
-of your money to this project. Yeah, I realize that requesting money to develop
-software is a bit, well, capitalistic of me. But please realize that I live in
-a capitalistic society and I need money to have other people give me the things
-that I need to continue living under the rules of said society. So, if you feel
-that this library has helped you out enough to warrant a reward, please PayPal
-a donation to now@bitwi.se.  Thanks!  Your support won’t go unnoticed!
+    Currently, most of my time is spent at my day job and in my (again
+    flourishing) private life. Please motivate me to spend time on this library
+    by donating some of your money to this project. Yeah, I realize that
+    requesting money to develop software is a bit, well, capitalistic of me.
+    But please realize that I live in a capitalistic society and I need money
+    to have other people give me the things that I need to continue living
+    under the rules of said society. So, if you feel that this library has
+    helped you out enough to warrant a reward, please PayPal a donation to
+    now@bitwi.se.  Thanks!  Your support won’t go unnoticed!

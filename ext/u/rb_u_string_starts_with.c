@@ -1,5 +1,17 @@
 #include "rb_includes.h"
 
+/* @overload start_with?(*prefixes)
+ * @overload starts_with?(*prefixes)
+ *
+ * Checks if any of the strings in _prefixes_ is a prefix of `self`.
+ *
+ * Elements in _prefixes_ not responding to `#to_str` are skipped.
+ *
+ * Note that the check is done by byte comparison.
+ *
+ * @param [Array] prefixes Prefixes to check
+ * @return [Boolean] `True` if any of the strings in _prefixes_ is a prefix of
+ *   `self` */
 VALUE
 rb_u_string_starts_with(int argc, VALUE *argv, VALUE self)
 {

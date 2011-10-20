@@ -105,6 +105,57 @@ type_to_symbol(UnicodeType type)
         }
 }
 
+/* Determines the Unicode character category of the characters of this {U::String}.
+ *
+ * The Unicode character category identifies what kind of symbol the character is.
+ *
+ * <table>
+ *   <thead>
+ *     <th>Category Major, minor</th>
+ *     <th>Unicode Value</th>
+ *     <th>Ruby Value</th>
+ *   </thead>
+ *   <tbody>
+ *     <tr><td>Letter, uppercase</td><td>Lu</td><td>:uppercase_letter</td></tr>
+ *     <tr><td>Letter, lowercase</td><td>Ll</td><td>:lowercase_letter</td></tr>
+ *     <tr><td>Letter, titlecase</td><td>Lt</td><td>:titlecase_letter</td></tr>
+ *     <tr><td>Letter, modifier</td><td>Lm</td><td>:modifier_letter</td></tr>
+ *     <tr><td>Letter, other</td><td>Lo</td><td>:other_letter</td></tr>
+ *     <tr><td>Mark, nonspacing</td><td>Mn</td><td>:non_spacing_mark</td></tr>
+ *     <tr><td>Mark, spacing combining</td><td>Mc</td><td>:spacing_mark</td></tr>
+ *     <tr><td>Mark, enclosing</td><td>Me</td><td>:enclosing_mark</td></tr>
+ *     <tr><td>Number, decimal digit</td><td>Nd</td><td>:decimal_number</td></tr>
+ *     <tr><td>Number, letter</td><td>Nl</td><td>:letter_number</td></tr>
+ *     <tr><td>Number, other</td><td>No</td><td>:other_number</td></tr>
+ *     <tr><td>Punctuation, connector</td><td>Pc</td><td>:connect_punctuation</td></tr>
+ *     <tr><td>Punctuation, dash</td><td>Pd</td><td>:dash_punctuation</td></tr>
+ *     <tr><td>Punctuation, open</td><td>Ps</td><td>:open_punctuation</td></tr>
+ *     <tr><td>Punctuation, close</td><td>Pe</td><td>:close_punctuation</td></tr>
+ *     <tr><td>Punctuation, initial quote</td><td>Pi</td><td>:initial_punctuation</td></tr>
+ *     <tr><td>Punctuation, final quote</td><td>Pf</td><td>:final_punctuation</td></tr>
+ *     <tr><td>Punctuation, other</td><td>Po</td><td>:other_punctuation</td></tr>
+ *     <tr><td>Symbol, math</td><td>Sm</td><td>:math_symbol</td></tr>
+ *     <tr><td>Symbol, currency</td><td>Sc</td><td>:currency_symbol</td></tr>
+ *     <tr><td>Symbol, modifier</td><td>Sk</td><td>:modifier_symbol</td></tr>
+ *     <tr><td>Symbol, other</td><td>So</td><td>:other_symbol</td></tr>
+ *     <tr><td>Separator, space</td><td>Zs</td><td>:space_separator</td></tr>
+ *     <tr><td>Separator, line</td><td>Zl</td><td>:line_separator</td></tr>
+ *     <tr><td>Separator, paragraph</td><td>Zp</td><td>:paragraph_separator</td></tr>
+ *     <tr><td>Other, control</td><td>Cc</td><td>:control</td></tr>
+ *     <tr><td>Other, format</td><td>Cc</td><td>:format</td></tr>
+ *     <tr><td>Other, surrogate</td><td>Cc</td><td>:surrogate</td></tr>
+ *     <tr><td>Other, private use</td><td>Cc</td><td>:private_use</td></tr>
+ *     <tr><td>Other, not assigned</td><td>Cc</td><td>:unassigned</td></tr>
+ *   </tbody>
+ * <table>
+ *
+ * @see http://www.unicode.org/notes/tn36/
+ *
+ * @raise [ArgumentError] If `self` contains two characters belonging to
+ *   different categories
+ * @raise [ArgumentError] If `self` contains an incomplete UTF-8 sequence
+ * @raise [ArgumentError] If `self` contains an invalid UTF-8 sequence
+ * @return [Symbol] The category of the characters of this {U::String} */
 VALUE
 rb_u_string_type(VALUE self)
 {

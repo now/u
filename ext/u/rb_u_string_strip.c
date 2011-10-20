@@ -1,5 +1,10 @@
 #include "rb_includes.h"
 
+/* Removes the maximum {#space?} prefix and suffix from this {U::String}.
+ *
+ * @see #lstrip
+ * @see #rstrip
+ * @return [U::String] `self` with the maximum {#space?} prefix and suffix removed */
 VALUE
 rb_u_string_strip(VALUE self)
 {

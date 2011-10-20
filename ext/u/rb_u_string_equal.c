@@ -1,5 +1,18 @@
 #include "rb_includes.h"
 
+/* @overload ==(other)
+ * @overload ===(other)
+ *
+ *   Compares `self` to _other_ without considering the linguistically correct
+ *   rules of the current locale.
+ *
+ *   This comparison only takes into account the actual byte representation of
+ *   the two strings.  You may want to use {#<=>} for a more appropriate
+ *   comparison method.
+ *
+ *   @param [U::String, #to_str] other The string to compare this {U::String}
+ *     to
+ *   @return [Boolean] `True` if `self` is equal to _other_ */
 VALUE
 rb_u_string_equal(VALUE self, VALUE rbother)
 {

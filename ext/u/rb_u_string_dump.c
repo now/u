@@ -16,9 +16,9 @@ rb_u_string_dump_escape(VALUE buffer, unsigned char c)
         case '\t':      escape = "\\t";  break;
         case '\f':      escape = "\\f";  break;
         case '\013':    escape = "\\v";  break;
-        case '\010':    escape = "\\v";  break;
-        case '\007':    escape = "\\v";  break;
-        case '\033':    escape = "\\v";  break;
+        case '\010':    escape = "\\b";  break;
+        case '\007':    escape = "\\a";  break;
+        case '\033':    escape = "\\e";  break;
         default:
                         return false;
         }
@@ -33,7 +33,7 @@ rb_u_string_dump_escape(VALUE buffer, unsigned char c)
 static inline bool
 rb_u_string_dump_hash(VALUE buffer, unsigned char c, const char *p, const char *end)
 {
-        if (c != '#' || !IS_EVSTR(p, end))
+        if (c != '#' || !IS_EVSTR(p + 1, end))
                 return false;
 
         rb_u_buffer_append(buffer, "\\#", 2);
@@ -44,9 +44,7 @@ rb_u_string_dump_hash(VALUE buffer, unsigned char c, const char *p, const char *
 static inline bool
 rb_u_string_dump_ascii_printable(VALUE buffer, unsigned char c)
 {
-        /* NOTE: This isn’t exactly like Ruby’s definition, since Ruby 1.8
-         * doesn’t define isascii correctly. */
-        if (!isprint(c))
+        if (c > 0x7f || !unichar_isprint(c))
                 return false;
 
         rb_u_buffer_append_unichar(buffer, c);
@@ -81,6 +79,46 @@ rb_u_string_dump_hex(VALUE buffer, unsigned char c)
         rb_u_buffer_append(buffer, escaped, length);
 }
 
+/* Dumps this {U::String} into a reader-friendly format.
+ *
+ * The first character is `"`.  Then, the following conversions are performed
+ * for the bytes in the string.
+ *
+ * <table>
+ *   <tr><td>Character</td><td>Dumped Sequence</td></tr>
+ *   <tr><td>U+0022 QUOTATION MARK</td><td><code>\"</code></td></tr>
+ *   <tr><td>U+005C REVERSE SOLIDUS</td><td><code>\\</code></td></tr>
+ *   <tr><td>U+000A LINE FEED (LF)</td><td><code>\n</code></td></tr>
+ *   <tr><td>U+000D CARRIAGE RETURN (CR)</td><td><code>\r</code></td></tr>
+ *   <tr><td>U+0009 CHARACTER TABULATION</td><td><code>\t</code></td></tr>
+ *   <tr><td>U+000C FORM FEED (FF)</td><td><code>\f</code></td></tr>
+ *   <tr><td>U+000B LINE TABULATION</td><td><code>\v</code></td></tr>
+ *   <tr><td>U+0008 BACKSPACE</td><td><code>\b</code></td></tr>
+ *   <tr><td>U+0007 BELL</td><td><code>\a</code></td></tr>
+ *   <tr><td>U+001B ESCAPE</td><td><code>\e</code></td></tr>
+ * </table>
+ *
+ * <table>
+ *   <tr><td>Sequence</td><td>Dumped Sequence</td></tr>
+ *   <tr><td><code>#$</code></td><td><code>\#$</code></td></tr>
+ *   <tr><td><code>#@</code></td><td><code>\#@</code></td></tr>
+ *   <tr><td><code>#{</code></td><td><code>\#{</code></td></tr>
+ * </table>
+ *
+ * {#printable?} bytes in the ASCII range are output as-is.
+ *
+ * Valid UTF-8 byte sequences are output as `\u{`_n_`}`, where _n_ is the
+ * lowercase hexadecimal representation of the codepoint encoded by the UTF-8
+ * sequence.
+ *
+ * Any other byte is output as `\x`_n_, where _n_ is the two-digit uppercase
+ * hexadecimal representation of the byte’s value.
+ *
+ * The result is terminated with `".u`.
+ *
+ * Any untrust or taint is inherited by the result.
+ *
+ * @return [U::String] A reader-friendly version of this {U::String} */
 VALUE
 rb_u_string_dump(VALUE self)
 {
@@ -103,7 +141,7 @@ rb_u_string_dump(VALUE self)
                 p++;
         }
         rb_u_buffer_append(buffer, "\".u", 3);
-        
+
         VALUE result = rb_u_buffer_to_u_bang(buffer);
 
         OBJ_INFECT(result, self);

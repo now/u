@@ -261,12 +261,54 @@ tr_trans(VALUE self, VALUE rbfrom, VALUE rbto, bool squeeze)
                            &trans_closure, squeeze);
 }
 
+/* @overload tr(from, to)
+ *
+ * Translates characters in _from_ in `self` to their equivalent character, by
+ * index, in _to_.  If _to_{#length} < _from_{#length}, _to_[-1] will be
+ * used for any index _i_ > _to_{#length}.
+ *
+ * The complement of all Unicode characters and a given set of characters may
+ * be specified by prefixing a non-empty set with ‘`^`’ (U+005E CIRCUMFLEX
+ * ACCENT).
+ *
+ * Any sequence of characters _a_-_b_ inside a set will expand to also
+ * include all characters whose codepoints lay between _a_ and _b_.
+ *
+ * Any taint or untrust is inherited by the result.
+ *
+ * @param [#to_str] from Characters to translate
+ * @param [#to_str] to Character to translate to
+ * @return [U::String] `self` with characters in _from_ translated into those
+ *   in _to_ */
 VALUE
 rb_u_string_tr(VALUE self, VALUE from, VALUE to)
 {
         return tr_trans(self, from, to, false);
 }
 
+/* @overload tr_s(from, to)
+ *
+ * Translates and squeezes characters in _from_ in `self` to their equivalent
+ * character, by index, in _to_.  If _to_{#length} < _from_{#length}, _to_[-1]
+ * will be used for any index _i_ > _to_{#length}.
+ *
+ * Squeezing is done after translation, so any substrings translated that now
+ * contain substrings of {#length} > 1 consisting of the same character _c_ are
+ * replaced by _c_ itself.
+ *
+ * The complement of all Unicode characters and a given set of characters may
+ * be specified by prefixing a non-empty set with ‘`^`’ (U+005E CIRCUMFLEX
+ * ACCENT).
+ *
+ * Any sequence of characters _a_-_b_ inside a set will expand to also
+ * include all characters whose codepoints lay between _a_ and _b_.
+ *
+ * Any taint or untrust is inherited by the result.
+ *
+ * @param [#to_str] from Characters to translate
+ * @param [#to_str] to Character to translate to
+ * @return [U::String] `self` with characters in _from_ translated into those
+ *   in _to_ with any translated substrings squeezed */
 VALUE
 rb_u_string_tr_s(VALUE self, VALUE from, VALUE to)
 {

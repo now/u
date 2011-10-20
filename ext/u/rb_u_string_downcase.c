@@ -1,5 +1,12 @@
 #include "rb_includes.h"
 
+/* @overload downcase(locale = ENV['LC_CTYPE'])
+ *
+ * Downcases this {U::String} according to the rules of _locale_.
+ *
+ * @param [#to_str] locale Locale whose casing rules to use
+ * @return [U::String] Downcased version of `self` according to the rules of
+ *   _locale_ */
 VALUE
 rb_u_string_downcase(int argc, VALUE *argv, VALUE self)
 {

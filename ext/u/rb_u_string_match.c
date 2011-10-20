@@ -1,5 +1,14 @@
 #include "rb_includes.h"
 
+/* @overload =~(other)
+ *
+ *   Match _other_ against `self` by sending `#=~` to _other_ with `self` as an
+ *   argument.
+ *
+ *   @param [Regexp, #=~] other Object to match against `self`
+ *   @raise [TypeError] If _other_ is a {U::String} or `String`
+ *   @return [Numeric, nil] The index of the first match of _other_, or `nil`
+ *     if no match was found */
 VALUE
 rb_u_string_match(VALUE self, VALUE other)
 {

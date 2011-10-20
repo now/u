@@ -1,5 +1,25 @@
 #include "rb_includes.h"
 
+/* @overload chars{ |char| … }
+ * @overload each_char{ |char| … }
+ *
+ *   Enumerate each character in this {U::String}.
+ *
+ *   Any taint or untrust is inherited.
+ *
+ *   @yield [char] Enumerate each character in this {U::String}
+ *   @yieldparam [U::String] char Character at current position
+ *   @return [U::String] `self`
+ *
+ * @overload chars
+ * @overload each_char
+ *
+ *   Creates an Enumerator over each character in this {U::String}.
+ *
+ *   Any taint or untrust is inherited.
+ *
+ *   @return [Enumerator] An Enumerator over each character in this {U::String}
+ */
 VALUE
 rb_u_string_each_char(VALUE self)
 {
@@ -10,10 +30,11 @@ rb_u_string_each_char(VALUE self)
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                char buffer[MAX_UNICHAR_BYTE_LENGTH];
-                int len = unichar_to_u(_rb_u_aref_char_validated(p, end), buffer);
+                const char *q = rb_u_next_validated(p, end);
+                VALUE c = rb_u_string_new(p, q - p);
 
-                rb_yield(rb_u_string_new(buffer, len));
+                OBJ_INFECT(c, self);
+                yield(c);
 
                 p = u_next(p);
         }

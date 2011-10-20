@@ -43,6 +43,13 @@ u_mirror_n(const char *string, size_t length, size_t *new_length)
         return u_mirror_impl(string, length, true, new_length);
 }
 
+/* Mirrors this {U::String}.
+ *
+ * Mirroring is done by replacing characters in the string with their
+ * horizontal mirror image, if any, in text that is laid out from right to
+ * left.  For example, ‘(’ becomes ‘)’ and ‘)’ becomes ‘(’.
+ *
+ * @return [U::String] The mirrored version of `self` */
 VALUE
 rb_u_string_mirror(VALUE self)
 {

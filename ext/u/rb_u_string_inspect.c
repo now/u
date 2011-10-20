@@ -77,6 +77,50 @@ rb_u_string_inspect_default(unichar c, VALUE result)
         rb_str_buf_cat(result, str, unichar_to_u(c, str));
 }
 
+/* Inspects the contents of this {U::String} in a reader-friendly format.
+ *
+ * The first character is `"`.  Then, the following conversions are performed
+ * for the bytes in the string.
+ *
+ * <table>
+ *   <tr><td>Character</td><td>Dumped Sequence</td></tr>
+ *   <tr><td>U+0022 QUOTATION MARK</td><td><code>\"</code></td></tr>
+ *   <tr><td>U+005C REVERSE SOLIDUS</td><td><code>\\</code></td></tr>
+ *   <tr><td>U+000A LINE FEED (LF)</td><td><code>\n</code></td></tr>
+ *   <tr><td>U+000D CARRIAGE RETURN (CR)</td><td><code>\r</code></td></tr>
+ *   <tr><td>U+0009 CHARACTER TABULATION</td><td><code>\t</code></td></tr>
+ *   <tr><td>U+000C FORM FEED (FF)</td><td><code>\f</code></td></tr>
+ *   <tr><td>U+000B LINE TABULATION</td><td><code>\v</code></td></tr>
+ *   <tr><td>U+0008 BACKSPACE</td><td><code>\b</code></td></tr>
+ *   <tr><td>U+0007 BELL</td><td><code>\a</code></td></tr>
+ *   <tr><td>U+001B ESCAPE</td><td><code>\e</code></td></tr>
+ * </table>
+ *
+ * <table>
+ *   <tr><td>Sequence</td><td>Dumped Sequence</td></tr>
+ *   <tr><td><code>#$</code></td><td><code>\#$</code></td></tr>
+ *   <tr><td><code>#@</code></td><td><code>\#@</code></td></tr>
+ *   <tr><td><code>#{</code></td><td><code>\#{</code></td></tr>
+ * </table>
+ *
+ * {#printable?} bytes in the ASCII range are output as-is.
+ *
+ * Valid UTF-8 byte sequences representing codepoints < 0x10000 are output as
+ * `\u`_n_, where _n_ is the four-digit uppercase hexadecimal representation
+ * of the codepoint.
+ *
+ * Valid UTF-8 byte sequences representing codepoints ≥ 0x10000 are output as
+ * `\u{`_n_`}`, where _n_ is the uppercase hexadecimal representation of the
+ * codepoint.
+ *
+ * Any other byte is output as `\x`_n_, where _n_ is the two-digit uppercase
+ * hexadecimal representation of the byte’s value.
+ *
+ * The result is terminated with `".u`.
+ *
+ * Any untrust or taint is inherited by the result.
+ *
+ * @return [U::String] A reader-friendly version of this {U::String} */
 VALUE
 rb_u_string_inspect(VALUE self)
 {

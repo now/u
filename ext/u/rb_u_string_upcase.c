@@ -1,5 +1,12 @@
 #include "rb_includes.h"
 
+/* @overload upcase(locale = ENV['LC_CTYPE'])
+ *
+ * Upcases this {U::String} according to the rules of _locale_.
+ *
+ * @param [#to_str] locale Locale whose casing rules to use
+ * @return [U::String] Upcased version of `self` according to the rules of
+ *   _locale_ */
 VALUE
 rb_u_string_upcase(int argc, VALUE *argv, VALUE self)
 {

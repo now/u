@@ -1,6 +1,86 @@
 #include "rb_includes.h"
 #include "rb_u_re.h"
 
+/* @overload gsub(pattern, replacement)
+ *
+ *   Replaces all instances of _pattern_ in `self` with _replacement_.
+ *
+ *   _Pattern_ may be either a Regexp or anything that responds to #to_str.
+ *
+ *   _Replacement_ is used as a specification for what to replace matches with.
+ *
+ *   <table>
+ *     <thead>
+ *       <tr><th>Specification</th><th>Replacement</th></tr>
+ *     </thead>
+ *     <tbody>
+ *       <tr>
+ *         <td><code>\1</code>, <code>\2</code>, …, <code>\</code><em>n</em></td>
+ *         <td>Numbered sub-match <em>n</em></td>
+ *       </tr>
+ *       <tr>
+ *         <td><code>\k<</code><em>name</em><code>></code></td>
+ *         <td>Named sub-match <em>name</em></td>
+ *       </tr>
+ *     </tbody>
+ *   </table>
+ *
+ *   Any taint or untrust on <code>self</code> or _replacement_ is inherited.
+ *
+ *   The Regexp special variables `$&`, `$'`, <code>$\`</code>, `$1`, `$2`, …,
+ *   `$`_n_ are updated accordingly.
+ *
+ *   @param [Regexp, #to_str] pattern Search pattern
+ *   @param [#to_str] replacement Match replacement specification
+ *   @return [U::String] `self` with any matches to _pattern_ replaced
+ *     according to _replacement_
+ *
+ * @overload gsub(pattern, replacements)
+ *
+ *   Replaces all instances of _pattern_ in `self` with
+ *   _replacements_`[`_match_`]`, where _match_ is the matched {U::String}.
+ *
+ *   _Pattern_ may be either a Regexp or anything that responds to #to_str.
+ *
+ *   The Regexp special variables `$&`, `$'`, <code>$\`</code>, `$1`, `$2`, …,
+ *   `$`_n_ are updated accordingly.
+ *
+ *   @param [Regexp, #to_str] pattern Search pattern
+ *   @param [#to_hash] replacements Mapping of matches to their replacements
+ *   @raise [RuntimeError] If any replacement is the result being constructed
+ *   @raise Any error raised by _replacements_`#default`, if it gets called
+ *   @return [U::String] `self` with any matches to _pattern_ replaced
+ *     according to the mapping of matches to their _replacements_
+ *
+ * @overload gsub(pattern){ |match| … }
+ *
+ *   Replaces all instances of _pattern_ in `self` with the results of the
+ *   given block.
+ *
+ *   _Pattern_ may be either a Regexp or anything that responds to #to_str.
+ *
+ *   The Regexp special variables `$&`, `$'`, <code>$\`</code>, `$1`, `$2`, …,
+ *   `$`_n_ are updated accordingly.
+ *
+ *   @param [Regexp, #to_str] pattern Search pattern
+ *   @yield [match] Block to evaluate for replacements
+ *   @yieldparam [U::String] match Current match
+ *   @yieldreturn [#to_str] Replacement for current match
+ *   @return [U::String] `self` with any matches to _pattern_ replaced
+ *     according to the results of the given block
+ *
+ * @overload gsub(pattern)
+ *
+ *   Creates an Enumerator over each match of _pattern_ in `self`.
+ *
+ *   _Pattern_ may be either a Regexp or anything that responds to #to_str.
+ *
+ *   The Regexp special variables `$&`, `$'`, <code>$\`</code>, `$1`, `$2`, …,
+ *   `$`_n_ will be updated accordingly.
+ *
+ *   @param [Regexp, #to_str] pattern Search pattern
+ *   @return [Enumerator] An Enumerator over each line in this {U::String}
+ */
 VALUE
 rb_u_string_gsub(int argc, VALUE *argv, VALUE self)
 {
@@ -39,6 +119,7 @@ rb_u_string_gsub(int argc, VALUE *argv, VALUE self)
                 struct re_registers *registers = RMATCH_REGS(match);
                 VALUE result;
 
+                /* TODO: Refactor this. */
                 if (use_block || !NIL_P(replacements)) {
                         if (use_block) {
                                 VALUE ustr = rb_u_string_new_rb(rb_reg_nth_match(0, match));
@@ -49,7 +130,7 @@ rb_u_string_gsub(int argc, VALUE *argv, VALUE self)
                                 OBJ_INFECT(ustr, self);
                                 result = rb_u_string_object_as_string(rb_hash_aref(replacements, ustr));
                         }
-                        
+
                         if (result == substituted)
                                 rb_raise(rb_eRuntimeError,
                                          "result of block is string being built; please try not to cheat");

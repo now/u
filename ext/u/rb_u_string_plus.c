@@ -1,5 +1,13 @@
 #include "rb_includes.h"
 
+/* @overload +(other)
+ *   Concatenates _other_ to this {U::String}.
+ *
+ *   Any taint on `self` or _other_ will be inherited by the result.
+ *   @param [U::String, #to_str] other The string to concatenate to this
+ *     {U::String}
+ *   @raise [ArgumentError] If {#bytesize} + _other_{#bytesize} > LONG_MAX
+ *   @return [U::String] The concatenation of _other_ to this {U::String} */
 VALUE
 rb_u_string_plus(VALUE self, VALUE rbother)
 {
@@ -14,7 +22,12 @@ rb_u_string_plus(VALUE self, VALUE rbother)
         if (other_length == 0)
                 return self;
 
+        /* TODO: Isn’t this off by one, as we add one to length for the
+         * ALLOC_N() call? */
+        if (string_length > LONG_MAX - other_length)
+                rb_raise(rb_eArgError, "length of resulting string would be too big");
         long length = string_length + other_length;
+
         char *sum = ALLOC_N(char, length + 1);
         memcpy(sum, USTRING_STR(string), string_length);
         memcpy(sum + string_length, USTRING_STR(other), other_length);

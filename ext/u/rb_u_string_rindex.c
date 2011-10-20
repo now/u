@@ -28,6 +28,23 @@ rb_u_string_rindex(VALUE self, VALUE rbsubstring, long offset)
         return -1;
 }
 
+/* @overload rindex(pattern, offset = -1)
+ *
+ *   Finds the maximal index into `self` where _pattern_ matches, equal to or
+ *   less than _i_, where _i_ = _offset_ if _offset_ ≥ 0, _i_ = {#length} -
+ *   abs(_offset_) otherwise.
+ *
+ *   If _pattern_ is a Regexp, the Regexp special variables `$&`, `$'`,
+ *   <code>$\`</code>, `$1`, `$2`, …, `$`_n_ are updated accordingly.
+ *
+ *   If _pattern_ responds to `#to_str`, the matching is performed by a byte
+ *   comparison.
+ *
+ *   @param [Regexp, #to_str] pattern Pattern to search for
+ *   @param [Integer] offset Index to end search at
+ *   @return [Integer, nil] Index of last match of _pattern_ before _offset_,
+ *     or `nil` if there is no match
+ *   @see #index */
 VALUE
 rb_u_string_rindex_m(int argc, VALUE *argv, VALUE self)
 {
@@ -38,6 +55,7 @@ rb_u_string_rindex_m(int argc, VALUE *argv, VALUE self)
         if (rb_scan_args(argc, argv, "11", &sub, &rboffset) == 2)
                 offset = NUM2LONG(rboffset);
         else
+                /* TODO: Why not simply use -1?  Benchmark which is faster. */
                 offset = u_length_n(USTRING_STR(string), USTRING_LENGTH(string));
 
         const char *begin = rb_u_string_begin_from_offset(string, offset);

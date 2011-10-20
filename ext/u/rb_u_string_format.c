@@ -493,14 +493,14 @@ directive_string(UNUSED(unichar directive), int flags, int width, int precision,
 
         if (precision > 0) {
                 /* TODO: Should really wrap this in a rb_u_offset_to_pointer_n
-                 * so that we can validate that the region walked is valid.
-                 */
+                 * so that we can validate that the region walked is valid. */
                 const char *q = u_offset_to_pointer_n(p, precision, length);
                 if (q != NULL)
                         length = q - p;
         }
 
         long n_chars;
+        /* TODO: Use u_width_n() instead.  This affects the precision calculation as well. */
         if (width == 0 || width < (n_chars = u_length_n(p, length))) {
                 rb_u_buffer_append(result, p, length);
                 return;
@@ -1090,6 +1090,440 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
                                                                self));
 }
 
+/* @overload %(value)
+ * @overload format(value)
+ *
+ * Formats `Array(`_value_`)` according to the specification of `self`.
+ *
+ * A format specification is a string consisting of sequences of normal
+ * characters that are copied verbatim and field specifiers.  A field directive
+ * consists of a `%`, followed by any optional flags, an optional width, an
+ * optional precision, and a type:
+ *
+ *     %[flags][width][.[precision]]type
+ *
+ * Please note that this means that a lone `%` at the end of the string is
+ * simply copied verbatim as it, by this definition, isn’t a field directive.
+ *
+ * The type determines how this field’s value should be interpreted.  The
+ * flags, width, and precision modifies this interpretation.
+ *
+ * The field’s value is either determined by ...
+ *
+ * A field’s width only limits the minimum width of the field, that is, at
+ * least _width_ cells will be filled by the field.
+ *
+ * There are a couple of special directives.
+ *
+ * <table>
+ *   <tbody>
+ *     <tr>
+ *       <td>%</td>
+ *       <td>Outputs ‘%’.</td>
+ *     </tr>
+ *     <tr>
+ *       <td>\n</td>
+ *       <td>Outputs “%\n”.</td>
+ *     </tr>
+ *     <tr>
+ *       <td>\0</td>
+ *       <td>Outputs “%\0”.</td>
+ *     </tr>
+ *   </tbody>
+ * </table>
+ *
+ * All of the following directives allow you to specify a width. TODO: Discuss this.
+ *
+ * <table>
+ *   <thead>
+ *     <tr><th>Directive</th><th>Description</th></tr>
+ *   </thead>
+ *   <tbody>
+ *     <tr>
+ *       <td>c</td>
+ *       <td>
+ *         <p>Outputs argument as a character.  A precision isn’t allowed.
+ *           Characters that are {#wide?} will count for two in any width
+ *           calculation.</p>
+ *
+ *         <table>
+ *           <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+ *           <tbody>
+ *             <tr>
+ *               <td>-</td>
+ *               <td>Left justify the output</td>
+ *             </tr>
+ *           </tbody>
+ *         </table>
+ *       </td>
+ *     </tr>
+ *     <tr>
+ *       <td>s</td>
+ *       <td>
+ *         <p>Outputs the result of <code>#to_s</code> on the argument.  A precision will
+ *           limit the number of characters output.</p>
+ *
+ *         <table>
+ *           <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+ *           <tbody>
+ *             <tr>
+ *               <td>-</td>
+ *               <td>Left justify the output</td>
+ *             </tr>
+ *           </tbody>
+ *         </table>
+ *     </tr>
+ *     <tr>
+ *       <td>p</td>
+ *       <td>
+ *         <p>Outputs the result of <code>#inspect</code> on the argument.  A precision
+ *           will limit the number of characters output.</p>
+ *
+ *         <table>
+ *           <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+ *           <tbody>
+ *             <tr>
+ *               <td>-</td>
+ *               <td>Left justify the output</td>
+ *             </tr>
+ *           </tbody>
+ *         </table>
+ *       </td>
+ *     </tr>
+ *     <tr>
+ *       <td>d</td>
+ *       <td>
+ *         <p>Outputs the result of <code>Integer</code> on the argument in
+ *         base 10 (decimal). The output consists of</p>
+ *
+ *         <pre><code>[left-padding][prefix/sign][zeroes][precision-filler]digits[right-padding]</code></pre>
+ *
+ *         <p>If a width <em>w</em> has been specified and neither the ‘-’ nor
+ *         the ‘0’ flag has been given, <code>left-padding</code> consists of
+ *         enough spaces to make the whole field at least <em>w</em> characters
+ *         wide, otherwise it’s empty.</p>
+ *
+ *         <p><code>Prefix/sign</code> is “-” if the argument is negative, “+”
+ *         if the ‘+’ flag was given, and “ ” if the ‘ ’ flag was given,
+ *         otherwise it is empty.</p>
+ *
+ *         <p>If a width <em>w</em> has been specified and the ‘0’ flag has
+ *         been given and neither the ‘-’ flag has been given nor a precision
+ *         has been specified, <code>zeroes</code> consists of enough zeroes to
+ *         make the whole field <em>w</em> characters wide, otherwise it’s
+ *         empty.</p>
+ *
+ *         <p>If a precision <em>p</em> has been specified,
+ *         <code>precision-filler</code> consists of enough zeroes to make for
+ *         <em>p</em> digits of output, otherwise it’s empty.</p>
+ *
+ *         <p><code>Digits</code> consists of the actual base 10 digits.</p>
+ *
+ *         <p>If a width <em>w</em> has been specified and the ‘-’ flag has
+ *         been given, <code>right-padding</code> consists of enough spaces to
+ *         make the whole field <em>w</em> characters wide, otherwise it’s
+ *         empty.</p>
+ *
+ *         <table>
+ *           <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+ *           <tbody>
+ *             <tr>
+ *               <td>(Space)</td>
+ *               <td>Add a “ ” prefix to non-negative numbers</td>
+ *             </tr>
+ *             <tr>
+ *               <td>+</td>
+ *               <td>Add a “+” prefix to non-negative numbers; overrides the
+ *               ‘ ’ flag</td>
+ *             </tr>
+ *             <tr>
+ *               <td>0</td>
+ *               <td>Use ‘0’ for any width padding; ignored when a precision
+ *               has been specified</td>
+ *             </tr>
+ *             <tr>
+ *               <td>-</td>
+ *               <td>Left justify the output with ‘ ’ as padding; overrides the
+ *               ‘0’ flag</td>
+ *             </tr>
+ *           </tbody>
+ *         </table>
+ *       </td>
+ *     </tr>
+ *     <tr><td>i</td><td>Same as ‘d’</td></td></tr>
+ *     <tr><td>u</td><td>Same as ‘d’</td></td></tr>
+ *     <tr>
+ *       <td>o</td>
+ *       <td>
+ *         <p>Outputs the result of <code>#to_int</code> on the argument in
+ *         base 8 (octal).  A negative value will be output as a two’s
+ *         complement value prefixed by “..7”.  A precision specifies the
+ *         minimum number of digits to output.</p>
+ *         <table>
+ *           <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+ *           <tbody>
+ *             <tr>
+ *               <td>(Space)</td>
+ *               <td>Add a <code>' '</code> prefix to non-negative numbers; ignored if argument is negative</td>
+ *             </tr>
+ *             <tr>
+ *               <td>+</td>
+ *               <td>Add a <code>'+'</code> prefix to non-negative numbers; ignored if argument is negative</td>
+ *             </tr>
+ *             <tr>
+ *               <td>0</td>
+ *               <td>Use <code>'0'</code> for any width padding</td>
+ *             </tr>
+ *             <tr>
+ *               <td>-</td>
+ *               <td>Left justify the output</td>
+ *             </tr>
+ *             <tr>
+ *               <td>#</td>
+ *               <td>Increase precision to include as many digits as necessary
+ *                   to make the first digit ‘0’, but don’t include the ‘0’
+ *                   itself</td>
+ *             </tr>
+ *           </tbody>
+ *         </table>
+ *       </td>
+ *     </tr>
+ *     <tr>
+ *       <td>x</td>
+ *       <td>
+ *         <p>Outputs the result of <code>#to_int</code> on the argument in
+ *         base 16 (hexadecimal).  A negative value will be output as a two’s
+ *         complement value prefixed by “..f”.  A precision specifies the
+ *         minimum number of digits to output.</p>
+ *         <table>
+ *           <thead>
+ *             <tr><th>Flag</th><th>Description</th></tr>
+ *           </thead>
+ *           <tbody>
+ *             <tr>
+ *               <td>(Space)</td>
+ *               <td>Add a <code>' '</code> prefix to non-negative numbers.
+ *                   Output negative numbers as such.</td>
+ *             </tr>
+ *             <tr>
+ *               <td>+</td>
+ *               <td>Add a <code>'+'</code> prefix to non-negative numbers.
+ *                   Output negative numbers as such.</td>
+ *             </tr>
+ *             <tr>
+ *               <td>0</td>
+ *               <td>Use <code>'0'</code> for any width padding</td>
+ *             </tr>
+ *             <tr>
+ *               <td>-</td>
+ *               <td>Left justify the output</td>
+ *             </tr>
+ *             <tr>
+ *               <td>#</td>
+ *               <td>Prefix non-zero values with “0x”</td>
+ *             </tr>
+ *           </tbody>
+ *         </table>
+ *       </td>
+ *     </tr>
+ *     <tr><td>X</td><td>Same as ‘x’, but use uppercase letters</td></tr>
+ *     <tr>
+ *       <td>b</td>
+ *       <td>
+ *         <p>Outputs the result of <code>#to_int</code> on the argument in
+ *         base 2 (binary).  A negative value will be output as a two’s
+ *         complement value prefixed by “..1”.  A precision specifies the
+ *         minimum number of digits to output.</p>
+ *         <table>
+ *           <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+ *           <tbody>
+ *             <tr>
+ *               <td>(Space)</td>
+ *               <td>Add a <code>' '</code> prefix to non-negative numbers.
+ *                   Output negative numbers as such.</td>
+ *             </tr>
+ *             <tr>
+ *               <td>+</td>
+ *               <td>Add a <code>'+'</code> prefix to non-negative numbers.
+ *                   Output negative numbers as such.</td>
+ *             </tr>
+ *             <tr>
+ *               <td>0</td>
+ *               <td>Use <code>'0'</code> for any width padding</td>
+ *             </tr>
+ *             <tr>
+ *               <td>-</td>
+ *               <td>Left justify the output</td>
+ *             </tr>
+ *             <tr>
+ *               <td>#</td>
+ *               <td>Prefix non-zero values with “0b”</td>
+ *             </tr>
+ *           </tbody>
+ *         </table>
+ *       </td>
+ *     </tr>
+ *     <tr><td>B</td><td>Same as ‘b’, but use uppercase letters</td></tr>
+ *     <tr>
+ *       <td>f</td>
+ *       <td>
+ *         <p>Outputs the result of <code>Float</code> on the argument in
+ *         base 10 (decimal) as decimal fraction.  A precision specifies the
+ *         number of decimals to output, defaulting to 6.</p>
+ *         <table>
+ *           <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+ *           <tbody>
+ *             <tr>
+ *               <td>(Space)</td>
+ *               <td>Add a <code>' '</code> prefix to non-negative
+ *                   numbers.</td>
+ *             </tr>
+ *             <tr>
+ *               <td>+</td>
+ *               <td>Add a <code>'+'</code> prefix to non-negative
+ *                   numbers.</td>
+ *             </tr>
+ *             <tr>
+ *               <td>0</td>
+ *               <td>Use <code>'0'</code> for any width padding</td>
+ *             </tr>
+ *             <tr>
+ *               <td>-</td>
+ *               <td>Left justify the output</td>
+ *             </tr>
+ *             <tr>
+ *               <td>#</td>
+ *               <td>Output a decimal point, even if no decimals follow</td>
+ *             </tr>
+ *           </tbody>
+ *         </table>
+ *       </td>
+ *     </tr>
+ *     <tr>
+ *       <td>e</td>
+ *       <td>
+ *         <p>Outputs the result of <code>Float</code> on the argument in
+ *         base 10 (decimal) in exponential notation, that is,
+ *         <em>a</em>e<em>b</em>, where 0 &lt; <em>a</em> &lt; 10 is the
+ *         coefficient and <em>b</em> is the exponent.  A precision specifies
+ *         the number of decimals of <em>a</em> to output, defaulting to 6.
+ *         If <em>b</em> < 10 it is prefixed with a ‘0’.</p>
+ *         <table>
+ *           <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+ *           <tbody>
+ *             <tr>
+ *               <td>(Space)</td>
+ *               <td>Add a <code>' '</code> prefix to non-negative
+ *                   numbers.</td>
+ *             </tr>
+ *             <tr>
+ *               <td>+</td>
+ *               <td>Add a <code>'+'</code> prefix to non-negative
+ *                   numbers.</td>
+ *             </tr>
+ *             <tr>
+ *               <td>0</td>
+ *               <td>Use <code>'0'</code> for any width padding</td>
+ *             </tr>
+ *             <tr>
+ *               <td>-</td>
+ *               <td>Left justify the output</td>
+ *             </tr>
+ *             <tr>
+ *               <td>#</td>
+ *               <td>Output a decimal point, even if no decimals follow</td>
+ *             </tr>
+ *           </tbody>
+ *         </table>
+ *       </td>
+ *     </tr>
+ *     <tr>
+ *       <td>E</td>
+ *       <td>Same as ‘e’, but use an uppercase ‘E’ for the exponent
+ *       separator</td>
+ *     </tr>
+ *     <tr>
+ *       <td>g</td>
+ *       <td>
+ *         <p>Outputs the result of <code>Float</code> on the argument in
+ *         base 10 (decimal) as a decimal fraction or in exponential notation.
+ *         Exponential notation is used if the exponent _e_ < -4 or _e_ ≥ _p_,
+ *         where _p_ is the precision, which defaults to 6.  If _p_ = 0, then
+ *         _p_ = 1.  Trailing zeroes are removed from the fractional part.  A
+ *         decimal point appears only if it is followed by at least one
+ *         digit.</p>
+ *         <table>
+ *           <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+ *           <tbody>
+ *             <tr>
+ *               <td>(Space)</td>
+ *               <td>Add a <code>' '</code> prefix to non-negative
+ *                   numbers.</td>
+ *             </tr>
+ *             <tr>
+ *               <td>+</td>
+ *               <td>Add a <code>'+'</code> prefix to non-negative
+ *                   numbers.</td>
+ *             </tr>
+ *             <tr>
+ *               <td>0</td>
+ *               <td>Use <code>'0'</code> for any width padding</td>
+ *             </tr>
+ *             <tr>
+ *               <td>-</td>
+ *               <td>Left justify the output</td>
+ *             </tr>
+ *             <tr>
+ *               <td>#</td>
+ *               <td>Output a decimal point, even if no decimals follow</td>
+ *             </tr>
+ *           </tbody>
+ *         </table>
+ *       </td>
+ *     </tr>
+ *     <tr>
+ *       <td>G</td>
+ *       <td>Same as ‘g’, but use an uppercase ‘E’ for the exponent
+ *       separator</td>
+ *     </tr>
+ *   </tbody>
+ * </table>
+ *
+ * A warning is issued if the ‘0’ flag is given when the ‘-’ flag has also been
+ * given to the ‘d’, ‘i’, ‘u’, ‘o’, ‘O’, ‘x’, ‘X’, ‘b’, or ‘B’ directives.
+ *
+ * A warning is issued if the ‘0’ flag is given when a precision has been
+ * specified for the ‘d’, ‘i’, ‘u’, ‘o’, ‘O’, ‘x’, ‘X’, ‘b’, or ‘B’ directives.
+ *
+ * A warning is issued if the ‘ ’ flag is given when the ‘+’ flag has also been
+ * given to the ‘d’, ‘i’, ‘u’, ‘o’, ‘O’, ‘x’, ‘X’, ‘b’, or ‘B’ directives.
+ *
+ * A warning is issued if the ‘0’ flag is given when the ‘o’, ‘O’, ‘x’, ‘X’,
+ * ‘b’, or ‘B’ directives has been given a negative argument.
+ *
+ * A warning is issued if the ‘#’ flag is given when the ‘o’ or ‘O’ directives
+ * has been given a negative argument.
+ *
+ * TODO: Mention what happens when both of the flags are given and why
+ * precision wins over 0.
+ *
+ * @raise [ArgumentError] If `self` isn’t a valid format specification
+ * @raise [ArgumentError] If any flags are given to the ‘%’, ‘\n’, or ‘\0’
+ *   directives
+ * @raise [ArgumentError] If an argument is given to the ‘%’, ‘\n’, or ‘\0’
+ *   directives
+ * @raise [ArgumentError] If a width is specified for the ‘%’, ‘\n’, or ‘\0’
+ *   directives
+ * @raise [ArgumentError] If a precision is specified for the ‘%’, ‘\n’, ‘\0’,
+ *   or ‘c’ directives
+ * @raise [ArgumentError] If any of the flags ‘ ’, ‘+’, ’0’, or ‘#’ are given
+ *   to the ‘c’, ‘s’, or ‘p’ directives
+ * @raise [ArgumentError] If the ‘#’ flag is given to the ‘d’, ‘i’, or ‘u’
+ *   directives
+ * @raise [ArgumentError] If the argument to the ‘c’ directive doesn’t respond
+ *   to #to_str or #to_int
+ *
+ * @return [U::String] The formatted result of _value_ according to `self` */
 VALUE
 rb_u_string_format_m(VALUE self, VALUE argument)
 {

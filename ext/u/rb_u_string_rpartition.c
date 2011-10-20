@@ -62,6 +62,16 @@ rb_u_string_rpartition_string(VALUE self, VALUE rbseparator)
         return rb_u_string_rpartition_success(self, validated, byte_offset);
 }
 
+/* @overload rpartition(separator)
+ *
+ * Splits this {U::String} into {#slice}(0, _i_), {#slice}(_i_, _n_),
+ * {#slice}(_i_ + _n_, -1), where _i_ = _j_ if _j_ ≠ `nil`, _i_ = 0
+ * otherwise, _j_ = {#rindex}(_separator_), _n_ =
+ * _separator_{#length}.
+ *
+ * @param [Regexp, #to_str] separator Separator to use for splitting
+ * @return [Array<U::String>] `self` split around the last match of _separator_
+ * @see #partition */
 VALUE
 rb_u_string_rpartition(VALUE self, VALUE separator)
 {

@@ -63,6 +63,35 @@ rb_u_string_scan_array(VALUE string, VALUE pattern)
         return array;
 }
 
+/* @overload scan(pattern)
+ *
+ *   Scans this {U::String} for matches to _pattern_.
+ *
+ *   If _pattern_ is a Regexp that contains groups, this {U::String} is instead
+ *   scanned for sub-matches of matches to _pattern_.
+ *
+ *   If _pattern_ is a Regexp, the Regexp special variables `$&`, `$'`,
+ *   <code>$\`</code>, `$1`, `$2`, …, `$`_n_ are updated accordingly.
+ *
+ *   @param [Regexp, #to_str] pattern Pattern to search for
+ *   @return [Array<U::String>, Array<Array<U::String>>] Matches to _pattern_
+ *     in `self`, or sub-matches of matches to _pattern_ in `self`
+ *
+ * @overload scan(pattern){ |match| … }
+ *
+ *   Iterates matches to _pattern_ in this {U::String}.
+ *
+ *   If _pattern_ is a Regexp that contains groups, sub-matches of matches to
+ *   _pattern_ in this {U::String} are iterated instead.
+ *
+ *   If _pattern_ is a Regexp, the Regexp special variables `$&`, `$'`,
+ *   <code>$\`</code>, `$1`, `$2`, …, `$`_n_ are updated accordingly.
+ *
+ *   @param [Regexp, #to_str] pattern Pattern to search for
+ *   @yield [match] Iterate over matches to _pattern_ in this {U::String}
+ *   @yieldparam [U::String, Array<U::String>] match Match to _pattern_ or
+ *     sub-matches of match to _pattern_
+ *   @return [U::String] `self` */
 VALUE
 rb_u_string_scan(VALUE self, VALUE pattern)
 {

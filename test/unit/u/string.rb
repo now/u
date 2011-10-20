@@ -894,6 +894,11 @@ Expectations do
   expect true do 'ab'.u.print? end
   expect false do "\n".u.print? end
 
+  expect true do ''.u.printable? end
+  expect true do 'a'.u.printable? end
+  expect true do 'ab'.u.printable? end
+  expect false do "\n".u.printable? end
+
   expect true do ''.u.punct? end
   expect true do '.'.u.punct? end
   expect true do '()'.u.punct? end

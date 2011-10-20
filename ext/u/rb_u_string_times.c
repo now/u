@@ -1,5 +1,14 @@
 #include "rb_includes.h"
 
+/* @overload *(n)
+ *   Concatenates _n_ copies of this {U::String}.
+ *
+ *   Any taint or untrust is inherited by the result.
+ *
+ *   @param [Integer] n Number of times to concatenate this {U::String}
+ *   @raise [ArgumentError] If _n_ < 0
+ *   @raise [ArgumentError] If _n_ > 0 and _n_ × {#bytesize} > LONG_MAX
+ *   @return [U::String] The concatenation of _n_ copies of this {U::String} */
 VALUE
 rb_u_string_times(VALUE self, VALUE rbtimes)
 {
@@ -9,6 +18,8 @@ rb_u_string_times(VALUE self, VALUE rbtimes)
         if (times < 0)
                 rb_raise(rb_eArgError, "negative argument: %d", times);
 
+        /* TODO: Isn’t this off by one, as we add one to length for the
+         * ALLOC_N() call? */
         if (times > 0 && LONG_MAX / times < USTRING_LENGTH(string))
                 rb_raise(rb_eArgError, "argument too big: %d", times);
         long length = times * USTRING_LENGTH(string);

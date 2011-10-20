@@ -1,5 +1,11 @@
 #include "rb_includes.h"
 
+/* @overload length
+ * @overload size
+ *
+ * Counts the number of characters in this {U::String}
+ *
+ * @return [Integer] Number of characters in this {U::String} */
 VALUE
 rb_u_string_length(VALUE self)
 {
