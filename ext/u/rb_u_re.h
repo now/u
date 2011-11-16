@@ -2,7 +2,11 @@
 #define RB_U_RE_H
 
 
-#include <re.h>
+#ifdef HAVE_RUBY_RE_H
+#  include <ruby/re.h>
+#else
+#  include <re.h>
+#endif
 
 
 #ifdef HAVE_BROKEN_RMATCH_REGS

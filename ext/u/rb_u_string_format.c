@@ -1,7 +1,14 @@
 #include "rb_includes.h"
 #include <limits.h>
 #include <math.h>
-#include <intern.h>
+#ifdef HAVE_RUBY_INTERN_H
+#  include <ruby/intern.h>
+#else
+#  include <intern.h>
+#endif
+#ifdef HAVE_RUBY_ENCODING_H
+#  include <ruby/encoding.h>
+#endif
 #include "rb_u_buffer.h"
 #include "rb_u_string_to_inum.h"
 
@@ -31,6 +38,7 @@ struct format_arguments {
 };
 
 #ifndef HAVE_RB_LONG2INT
+#  if SIZEOF_INT < SIZEOF_LONG
 static void
 rb_out_of_int(long l)
 {
@@ -40,15 +48,15 @@ rb_out_of_int(long l)
                         "integer %ld too big to convert to C type int",
                  l);
 }
-#  if defined(__GNUC__) && __GNUC__ > 2
-#    define rb_long2int(l) __extension__({ \
+#    if defined(__GNUC__) && __GNUC__ > 2
+#      define rb_long2int(l) __extension__({ \
         long _rb_long2int_l = (l); \
         int _rb_long2int_i = (int)_rb_long2int_l; \
         if ((long)_rb_long2int_i != _rb_long2int_l) \
                 rb_out_of_int(_rb_long2int_l); \
         _rb_long2int_i; \
 })
-#  else
+#    else
 static inline int
 rb_long2int(long l)
 {
@@ -59,9 +67,10 @@ rb_long2int(long l)
 
         return i;
 }
-#endif
-#else
-#  define rb_long2int(l) ((int)(l))
+#    endif
+#  else
+#    define rb_long2int(l) ((int)(l))
+#  endif
 #endif
 
 #ifndef HAVE_RB_HASH_LOOKUP2
@@ -107,7 +116,7 @@ directive_parse_int(const char **p, const char *end, const char *type)
                         /* TODO: Test this. */
                         rb_raise(rb_eArgError,
                                  "%s too large: %*s > %d",
-                                 type, q - *p, *p, INT_MAX);
+                                 type, (int)(q - *p), *p, INT_MAX);
                 }
 
                 n = m;
@@ -153,11 +162,11 @@ directive_argument_name(const char **p, const char *end, char right,
         if (q == end)
                 rb_raise(rb_eArgError,
                          "missing argument name end delimiter ‘%c’: %s",
-                         right, p);
+                         right, *p);
 
         const char *base = u_next(*p);
         long length = q - base;
-#if defined(HAVE_RB_INTERN3) && defined(HAVE_RB_UTF8_ENCODING)
+#ifdef HAVE_RUBY_ENCODING_H
         *argument_id = rb_intern3(base, length, rb_utf8_encoding());
 #else
         char name[length + 1];

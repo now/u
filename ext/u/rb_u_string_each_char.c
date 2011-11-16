@@ -34,7 +34,7 @@ rb_u_string_each_char(VALUE self)
                 VALUE c = rb_u_string_new(p, q - p);
 
                 OBJ_INFECT(c, self);
-                yield(c);
+                rb_yield(c);
 
                 p = u_next(p);
         }

@@ -42,9 +42,9 @@ rb_u_string_index(VALUE self, VALUE rbsubstring, long offset)
 
         /* TODO: Should we really be using rb_memsearch?  Why not something
          * more Unicodey? */
-        long index = rb_memsearch(USTRING_STR(substring), substring_length,
-                                  begin,
-                                  end - begin);
+        long index = rb_u_memsearch(USTRING_STR(substring), substring_length,
+                                    begin,
+                                    end - begin);
         if (index < 0)
                 return -1;
 

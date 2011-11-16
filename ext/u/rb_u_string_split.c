@@ -92,7 +92,7 @@ rb_u_string_split_string(VALUE self, VALUE rbseparator, bool limit_given, int li
         /* TODO: Better variable name. */
         long offset;
         for (int i = 1; (!limit_given || i < limit) && p < end; i++) {
-                if ((offset = rb_memsearch(s_p, s_len, p, end - p)) < 0)
+                if ((offset = rb_u_memsearch(s_p, s_len, p, end - p)) < 0)
                         break;
                 rb_ary_push(result, rb_u_string_new_subsequence(self, p - begin, offset));
                 p += offset + s_len;

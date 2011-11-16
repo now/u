@@ -228,7 +228,7 @@ rb_u_string_to_inum_as_fix(const char *str, const char *s, int sign, int base,
         }
 
         VALUE big = rb_uint2big(value);
-        RBIGNUM(big)->sign = sign;
+        RBIGNUM_SET_SIGN(big, sign);
         return rb_big_norm(big);
 }
 

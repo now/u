@@ -209,7 +209,6 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "chop", rb_u_string_chop, 0); /* in ext/u/rb_u_string_chop.c */
         rb_define_method(rb_cUString, "chr", rb_u_string_chr, 0); /* in ext/u/rb_u_string_chr.c */
         rb_define_method(rb_cUString, "cntrl?", rb_u_string_cntrl, 0); /* in ext/u/rb_u_string_cntrl.c */
-        rb_define_method(rb_cUString, "codepoints", rb_u_string_each_codepoint, 0); /* in ext/u/rb_u_string_each_codepoint.c */
         /* TODO: Rename this to #collation_key? */
         rb_define_method(rb_cUString, "collate_key", rb_u_string_collate_key, 0); /* in ext/u/rb_u_string_collate_key.c */
         rb_define_method(rb_cUString, "combining_class", rb_u_string_combining_class, 0); /* in ext/u/rb_u_string_combining_class.c */
@@ -232,7 +231,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "eql?", rb_u_string_eql, 1); /* in ext/u/rb_u_string_eql.c */
         rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, 0); /* in ext/u/rb_u_string_foldcase.c */
         rb_define_method(rb_cUString, "folded?", rb_u_string_folded, 0); /* in ext/u/rb_u_string_folded.c */
-        rb_define_method(rb_cUString, "format", rb_u_string_format_m, 1); /* in ext/u/rb_u_string_format.c */
+        rb_define_alias(rb_cUString, "format", "%");
         rb_define_method(rb_cUString, "getbyte", rb_u_string_getbyte, 1); /* in ext/u/rb_u_string_getbyte.c */
         rb_define_method(rb_cUString, "graph?", rb_u_string_graph, 0); /* in ext/u/rb_u_string_graph.c */
         rb_define_method(rb_cUString, "gsub", rb_u_string_gsub, -1); /* in ext/u/rb_u_string_gsub.c */

@@ -32,4 +32,6 @@ HIDDEN long rb_u_string_index_regexp(VALUE self, const char *begin, VALUE regex,
 HIDDEN int rb_memhash(const char *string, long length);
 #endif
 
+HIDDEN long rb_u_memsearch(const void *a, long a_n, const void *b, long b_n);
+
 #endif /* RB_PRIVATE_H */

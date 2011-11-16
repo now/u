@@ -1,5 +1,8 @@
 require 'mkmf'
 
+$CFLAGS = $CFLAGS.sub('$(cflags) ', '')
+$CFLAGS += ' ' + ENV['CFLAGS'] if ENV['CFLAGS']
+
 def try_compiler_option(opt, &block)
   checking_for "#{opt} option to compiler" do
     $CFLAGS += " #{opt}" if try_compile '', opt, &block
@@ -67,28 +70,36 @@ have_header 'wchar.h'
 checking_for 'broken RMATCH_REGS' do
   $defs.push '-DHAVE_BROKEN_RMATCH_REGS' unless try_compile <<EOC
 #include <ruby.h>
-#include <re.h>
+#ifdef HAVE_RUBY_RE_H
+#  include <ruby/re.h>
+#else
+#  include <re.h>
+#endif
 int
 main(void)
 {
         struct re_registers *registers = RMATCH_REGS(Qnil);
+        registers = registers;
         return 0;
 }
 EOC
 end
 
-have_func 'rb_long2int', 'ruby.h'
+#have_func 'rb_long2int', 'ruby.h'
+if have_macro('rb_long2int', 'ruby.h')
+  $defs.push(format("-DHAVE_%s", 'rb_long2int'.tr_cpp))
+end
 have_func 'rb_hash_lookup2', 'ruby.h'
-# TODO: Do we need to include encoding.h?
-have_func 'rb_intern3', 'ruby.h'
 have_func 'rb_reg_backref_number', 'ruby.h'
 have_func 'rb_memhash', 'ruby.h'
-# TODO: Do we need to include encoding.h?
-have_func 'rb_utf8_encoding', 'ruby.h'
 checking_for 'number of arguments to rb_reg_regsub' do
   $defs.push '-DHAVE_RB_REG_REGSUB4' if try_compile <<EOC
 #include <ruby.h>
-#include <re.h>
+#ifdef HAVE_RUBY_RE_H
+#  include <ruby/re.h>
+#else
+#  include <re.h>
+#endif
 int
 main(void)
 {

@@ -181,8 +181,8 @@ rb_u_buffer_append_printf(VALUE self, size_t needed, const char *format, ...)
 
         if ((size_t)length >= needed)
                 rb_raise(rb_eNotImpError,
-                         "format string buffer calculation is wrong: %s (%d < %d)",
-                         format, needed, length);
+                         "format string buffer calculation is wrong: %s (%zu < %zu)",
+                         format, needed, (size_t)length);
 
         buffer->length += length;
 

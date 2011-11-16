@@ -67,7 +67,7 @@ int
 rb_unichar_to_u(unichar c, char *result)
 {
         if (!unichar_isvalid(c))
-                rb_raise(rb_eArgError, "not a Unicode character: %ld", c);
+                rb_raise(rb_eArgError, "not a Unicode character: %d", c);
 
         return unichar_to_u(c, result);
 }
