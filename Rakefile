@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 require 'lookout/rake/tasks'
 require 'rake/clean'
 require 'yard'
@@ -41,8 +42,7 @@ end
 YARD::Templates::Helpers::MarkupHelper::MARKUP_PROVIDERS[:nml] = [{:lib => :nml, :const => 'NML::YARD::Markup'}]
 
 YARD::Rake::YardocTask.new do |t|
-  t.options = %w[--markup markdown -p templates/now]
-#  t.options = %w[--markup nml]
+  t.options = %w[--markup markdown]
 end
 
 task :test => :extensions
@@ -53,7 +53,7 @@ task :extensions
   'u'
 ].map{ |e| File.join('ext', e) }.each do |extension|
   makefile = File.join(extension, 'Makefile')
-  so = File.join(extension, File.basename(extension).delete('-') + '.' + Config::CONFIG['DLEXT'])
+  so = File.join(extension, File.basename(extension).delete('-') + '.' + RbConfig::CONFIG['DLEXT'])
   tags = File.join(extension, 'TAGS')
 
   task :extensions => [makefile, so]
@@ -176,7 +176,7 @@ data_header 'ext/u/data/wide-cjk.h' => %w[build/ext/u/data/wide.rb
   generate_data_header t, 'A'
 end
 
-CLEAN.include ["ext/**/{*.{o,so,#{Config::CONFIG['DLEXT']}},TAGS}"]
+CLEAN.include ["ext/**/{*.{o,so,#{RbConfig::CONFIG['DLEXT']}},TAGS}"]
 CLOBBER.include ['ext/**/Makefile']
 
 task :test => %w[test/unit/case.rb test/unit/foldcase.rb] # test/unit/normalize.rb]

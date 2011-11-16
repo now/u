@@ -19,7 +19,7 @@
  *         <td>Numbered sub-match <em>n</em></td>
  *       </tr>
  *       <tr>
- *         <td><code>\k<</code><em>name</em><code>></code></td>
+ *         <td><code>\k&lt;</code><em>name</em><code>></code></td>
  *         <td>Named sub-match <em>name</em></td>
  *       </tr>
  *     </tbody>

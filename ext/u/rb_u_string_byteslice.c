@@ -73,7 +73,7 @@ rb_u_string_byteslice(VALUE self, VALUE index)
  *
  *   @param [Integer] index Index to begin at
  *   @return [U::String, nil] The extracted substring, or nil if the resulting
- *   substring is empty
+ *     substring is empty
  *
  * @overload byteslice(index, length)
  *

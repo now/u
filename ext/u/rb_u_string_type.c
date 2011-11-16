@@ -111,9 +111,11 @@ type_to_symbol(UnicodeType type)
  *
  * <table>
  *   <thead>
- *     <th>Category Major, minor</th>
- *     <th>Unicode Value</th>
- *     <th>Ruby Value</th>
+ *     <tr>
+ *       <th>Category Major, minor</th>
+ *       <th>Unicode Value</th>
+ *       <th>Ruby Value</th>
+ *     </tr>
  *   </thead>
  *   <tbody>
  *     <tr><td>Letter, uppercase</td><td>Lu</td><td>:uppercase_letter</td></tr>
@@ -147,7 +149,7 @@ type_to_symbol(UnicodeType type)
  *     <tr><td>Other, private use</td><td>Cc</td><td>:private_use</td></tr>
  *     <tr><td>Other, not assigned</td><td>Cc</td><td>:unassigned</td></tr>
  *   </tbody>
- * <table>
+ * </table>
  *
  * @see http://www.unicode.org/notes/tn36/
  *

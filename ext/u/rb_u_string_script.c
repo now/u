@@ -309,7 +309,7 @@ script_to_symbol(UnicodeScript script)
  * the character.
  *
  * <table>
- *   <thead><tr><th>Script</th><th>Description</th></thead>
+ *   <thead><tr><th>Script</th><th>Description</th></tr></thead>
  *   <tbody>
  *     <tr><td>:arabic</td><td>Arabic</td></tr>
  *     <tr><td>:armenian</td><td>Armenian</td></tr>

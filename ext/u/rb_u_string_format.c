@@ -1172,6 +1172,7 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *             </tr>
  *           </tbody>
  *         </table>
+ *       </td>
  *     </tr>
  *     <tr>
  *       <td>p</td>
@@ -1250,8 +1251,8 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *         </table>
  *       </td>
  *     </tr>
- *     <tr><td>i</td><td>Same as ‘d’</td></td></tr>
- *     <tr><td>u</td><td>Same as ‘d’</td></td></tr>
+ *     <tr><td>i</td><td>Same as ‘d’</td></tr>
+ *     <tr><td>u</td><td>Same as ‘d’</td></tr>
  *     <tr>
  *       <td>o</td>
  *       <td>
@@ -1407,7 +1408,7 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *         <em>a</em>e<em>b</em>, where 0 &lt; <em>a</em> &lt; 10 is the
  *         coefficient and <em>b</em> is the exponent.  A precision specifies
  *         the number of decimals of <em>a</em> to output, defaulting to 6.
- *         If <em>b</em> < 10 it is prefixed with a ‘0’.</p>
+ *         If <em>b</em> &lt; 10 it is prefixed with a ‘0’.</p>
  *         <table>
  *           <thead><tr><th>Flag</th><th>Description</th></tr></thead>
  *           <tbody>
@@ -1447,10 +1448,10 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <td>
  *         <p>Outputs the result of <code>Float</code> on the argument in
  *         base 10 (decimal) as a decimal fraction or in exponential notation.
- *         Exponential notation is used if the exponent _e_ < -4 or _e_ ≥ _p_,
- *         where _p_ is the precision, which defaults to 6.  If _p_ = 0, then
- *         _p_ = 1.  Trailing zeroes are removed from the fractional part.  A
- *         decimal point appears only if it is followed by at least one
+ *         Exponential notation is used if the exponent _e_ &lt; -4 or _e_ ≥
+ *         _p_, where _p_ is the precision, which defaults to 6.  If _p_ = 0,
+ *         then _p_ = 1.  Trailing zeroes are removed from the fractional part.
+ *         A decimal point appears only if it is followed by at least one
  *         digit.</p>
  *         <table>
  *           <thead><tr><th>Flag</th><th>Description</th></tr></thead>

@@ -11,3 +11,10 @@ extconf.h
 mkmf.log
 /tests/data
 /packages
+.emacs.desktop
+.emacs.desktop.lock
+/.yardoc/
+/doc/
+#*#
+.#*
+!/templates/now/default/tags

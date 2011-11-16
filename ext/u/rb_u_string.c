@@ -171,6 +171,9 @@ rb_u_string_dup(VALUE self)
         return rb_u_string_create(string->rb, string->c, string->length);
 }
 
+/* Document-class: U::String
+ *
+ * This is a docstring for u::String. */
 void
 Init_u_string(VALUE mU)
 {
