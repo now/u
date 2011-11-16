@@ -1,6 +1,8 @@
 #include "rb_includes.h"
 
-/* @overload upper?
+/* Checks if this {U::String} has been uppercased.
+ *
+ * @overload upper?
  *
  *   Checks if this {U::String} has been uppercased according to the rules of
  *   the locale specified by the environment variable `LC_CTYPE`.

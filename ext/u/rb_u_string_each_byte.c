@@ -1,10 +1,11 @@
 #include "rb_includes.h"
 
-/* @overload each_byte{ |byte| … }
+/* Enumerates each byte in this {U::String}.
  *
- *   Enumerate each byte in this {U::String}.
+ * @overload each_byte{ |byte| … }
  *
- *   @yield [byte] Enumerate each byte in this {U::String}
+ *   Enumerates each byte in this {U::String}.
+ *
  *   @yieldparam [Fixnum] byte Byte at current position
  *   @return [U::String] `self`
  *

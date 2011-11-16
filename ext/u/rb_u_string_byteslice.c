@@ -63,7 +63,9 @@ rb_u_string_byteslice(VALUE self, VALUE index)
         }
 }
 
-/* @overload byteslice(index)
+/* Extracts a substring of this {U::String} based on byte indexes.
+ *
+ * @overload byteslice(index)
  *
  *   Extracts the substring [max(_i_, 0), min({#length}, _i_ + 1)], where _i_ =
  *   _index_ if _index_ ≥ 0, _i_ = {#length} - abs(_index_) otherwise.  Note

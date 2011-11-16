@@ -1,10 +1,11 @@
 #include "rb_includes.h"
 
-/* @overload each_codepoint{ |codepoint| … }
+/* Enumerates each codepoint in this {U::String}.
  *
- *   Enumerate each codepoint in this {U::String}.
+ * @overload each_codepoint{ |codepoint| … }
  *
- *   @yield [codepoint] Enumerate each codepoint in this {U::String}
+ *   Enumerates each codepoint in this {U::String}.
+ *
  *   @yieldparam [Integer] codepoint Codepoint at current position
  *   @return [U::String] `self`
  *

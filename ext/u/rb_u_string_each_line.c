@@ -88,14 +88,15 @@ again:
         return self;
 }
 
-/* @overload each_line(separator = $/){ |line| … }
+/* Enumerates each line in this {U::String}.
+ *
+ * @overload each_line(separator = $/){ |line| … }
  *
  *   Enumerate each line in this {U::String}.  If _separator_ is nil, yields
  *   `self`.  If _separator_ is {#empty?}, separates each line (paragraph) by
  *   two or more U+000A LINE FEED characters.
  *
  *   @param [U::String, #to_str] separator Line separator to use
- *   @yield [line] Enumerate each line in this {U::String}
  *   @yieldparam [Integer] line Line at current position
  *   @return [U::String] `self`
  *
@@ -107,7 +108,6 @@ again:
  *   characters.
  *
  *   @param [U::String, #to_str] separator Line separator to use
- *   @yield [line] Enumerate each line in this {U::String}
  *   @return [Enumerator] An Enumerator over each line in this {U::String}
  */
 VALUE

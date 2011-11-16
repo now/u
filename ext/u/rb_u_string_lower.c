@@ -1,6 +1,8 @@
 #include "rb_includes.h"
 
-/* @overload lower?
+/* Checks if this {U::String} has been downcased.
+ *
+ * @overload lower?
  *
  *   Checks if this {U::String} has been downcased according to the rules of the
  *   locale specified by the environment variable `LC_CTYPE`.

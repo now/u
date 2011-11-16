@@ -1,12 +1,13 @@
 #include "rb_includes.h"
 
-/* @overload each_char{ |char| … }
+/* Enumerates each character in this {U::String}.
+ *
+ * @overload each_char{ |char| … }
  *
  *   Enumerate each character in this {U::String}.
  *
  *   Any taint or untrust is inherited.
  *
- *   @yield [char] Enumerate each character in this {U::String}
  *   @yieldparam [U::String] char Character at current position
  *   @return [U::String] `self`
  *

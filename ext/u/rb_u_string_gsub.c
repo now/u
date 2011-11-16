@@ -1,7 +1,9 @@
 #include "rb_includes.h"
 #include "rb_u_re.h"
 
-/* @overload gsub(pattern, replacement)
+/* Replaces all instances of a pattern in `self` with a suitable replacement.
+ *
+ * @overload gsub(pattern, replacement)
  *
  *   Replaces all instances of _pattern_ in `self` with _replacement_.
  *

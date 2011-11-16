@@ -63,7 +63,9 @@ rb_u_string_scan_array(VALUE string, VALUE pattern)
         return array;
 }
 
-/* @overload scan(pattern)
+/* Scans this {U::String} for matches to a pattern.
+ *
+ * @overload scan(pattern)
  *
  *   Scans this {U::String} for matches to _pattern_.
  *
