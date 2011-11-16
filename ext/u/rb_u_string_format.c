@@ -265,7 +265,7 @@ directive_flags(const char **p, const char *end,
 
         while (*p < end) {
                 unichar c = _rb_u_aref_char_validated(*p, end);
-                
+
                 int flag;
 
                 switch (c) {
@@ -1100,7 +1100,6 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
 }
 
 /* @overload %(value)
- * @overload format(value)
  *
  * Formats `Array(`_value_`)` according to the specification of `self`.
  *

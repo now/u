@@ -1,7 +1,6 @@
 #include "rb_includes.h"
 
-/* @overload chars{ |char| … }
- * @overload each_char{ |char| … }
+/* @overload each_char{ |char| … }
  *
  *   Enumerate each character in this {U::String}.
  *
@@ -11,7 +10,6 @@
  *   @yieldparam [U::String] char Character at current position
  *   @return [U::String] `self`
  *
- * @overload chars
  * @overload each_char
  *
  *   Creates an Enumerator over each character in this {U::String}.

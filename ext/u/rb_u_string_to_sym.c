@@ -1,7 +1,6 @@
 #include "rb_includes.h"
 
-/* @overload intern
- * @overload to_sym
+/* @overload to_sym
  *
  * Creates a Symbol of this {U::String}.
  *

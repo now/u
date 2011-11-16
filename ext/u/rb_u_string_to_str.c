@@ -4,8 +4,7 @@
 #  include <ruby/encoding.h>
 #endif
 
-/* @overload to_s
- * @overload to_str
+/* @overload to_str
  *
  * Converts this {U::String} to a String.
  *

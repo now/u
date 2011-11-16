@@ -88,8 +88,7 @@ again:
         return self;
 }
 
-/* @overload lines(separator = $/){ |line| … }
- * @overload each_line(separator = $/){ |line| … }
+/* @overload each_line(separator = $/){ |line| … }
  *
  *   Enumerate each line in this {U::String}.  If _separator_ is nil, yields
  *   `self`.  If _separator_ is {#empty?}, separates each line (paragraph) by
@@ -100,7 +99,6 @@ again:
  *   @yieldparam [Integer] line Line at current position
  *   @return [U::String] `self`
  *
- * @overload lines(separator = $/)
  * @overload each_line(separator = $/)
  *
  *   Creates an Enumerator over each codepoint in this {U::String}.  If

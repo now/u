@@ -96,7 +96,6 @@ rb_u_string_aref(VALUE self, VALUE index)
 }
 
 /* @overload [](index)
- * @overload slice(index)
  *
  *   Extracts the substring [max(_i_, 0), min({#length}, _i_ + 1)], where _i_ =
  *   _index_ if _index_ ≥ 0, _i_ = {#length} - abs(_index_) otherwise.
@@ -108,7 +107,6 @@ rb_u_string_aref(VALUE self, VALUE index)
  *     substring is empty
  *
  * @overload [](index, length)
- * @overload slice(index, length)
  *
  *   Extracts the substring [max(_i_, 0), min({#length}, _i_ + _length_)],
  *   where _i_ = _index_ if _index_ ≥ 0, _i_ = {#length} - abs(_index_)
@@ -121,7 +119,6 @@ rb_u_string_aref(VALUE self, VALUE index)
  *   @return [U::String, nil] The extracted substring, or nil if _length_ < 0
  *
  * @overload [](range)
- * @overload slice(range)
  *
  *   Same as `self[i, j - k]`, where _i_ = _range_`.begin` if _range_`.begin` ≥
  *   0, _i_ = {#length} - abs(_range_`.begin`) otherwise, _j_ = _range_`.end`
@@ -132,7 +129,6 @@ rb_u_string_aref(VALUE self, VALUE index)
  *   @return [U::String, nil] The extracted substring, or nil if _j_ - _k_ < 0
  *
  * @overload [](regexp, reference = 0)
- * @overload slice(regexp, reference)
  *
  *   Extracts the submatch _reference_ from the match of _regexp_ in `self`.
  *
@@ -146,7 +142,6 @@ rb_u_string_aref(VALUE self, VALUE index)
  *     found or if the submatch wasn’t a part of the overall match
  *
  * @overload [](string)
- * @overload slice(string)
  *
  *   Returns _string_ if it is a substring of `self`.
  *
@@ -157,7 +152,6 @@ rb_u_string_aref(VALUE self, VALUE index)
  *     if it didn’t match
  *
  * @overload [](object)
- * @overload slice(object)
  *
  *   Returns `nil` for any object that isn’t any of the classes already listed.
  *

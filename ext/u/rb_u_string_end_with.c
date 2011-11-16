@@ -1,22 +1,21 @@
 #include "rb_includes.h"
 
-/* @overload start_with?(*prefixes)
- * @overload starts_with?(*prefixes)
+/* @overload end_with?(*suffixes)
  *
- * Checks if any of the strings in _prefixes_ is a prefix of `self`.
+ * Checks if any of the strings in _suffixes_ is a suffix of `self`.
  *
- * Elements in _prefixes_ not responding to `#to_str` are skipped.
+ * Elements in _suffixes_ not responding to `#to_str` are skipped.
  *
  * Note that the check is done by byte comparison.
  *
- * @param [Array] prefixes Prefixes to check
- * @return [Boolean] `True` if any of the strings in _prefixes_ is a prefix of
+ * @param [Array] suffixes Suffixes to check
+ * @return [Boolean] `True` if any of the strings in _suffixes_ is a suffix of
  *   `self` */
 VALUE
-rb_u_string_starts_with(int argc, VALUE *argv, VALUE self)
+rb_u_string_end_with(int argc, VALUE *argv, VALUE self)
 {
         const UString *string = RVAL2USTRING(self);
-        const char *p = USTRING_STR(string);
+        const char *end = USTRING_END(string);
         long p_length = USTRING_LENGTH(string);
 
         for (int i = 0; i < argc; i++) {
@@ -31,7 +30,7 @@ rb_u_string_starts_with(int argc, VALUE *argv, VALUE self)
                 if (p_length < q_length)
                         continue;
 
-                if (memcmp(p, q, q_length) == 0)
+                if (memcmp(end - q_length, q, q_length) == 0)
                         return Qtrue;
         }
 

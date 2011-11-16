@@ -1,7 +1,6 @@
 #include "rb_includes.h"
 
 /* @overload length
- * @overload size
  *
  * Counts the number of characters in this {U::String}
  *
