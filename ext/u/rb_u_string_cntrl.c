@@ -1,10 +1,10 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains characters in the Other, control
- * (Cc) category, such as U+000A LINE FEED (LF) and U+001B ESCAPE.
+/* Tests if this {U::String} only contains control characters.  Control
+ * characters are those beloning to the Other, control (Cc) category, such as
+ * U+000A LINE FEED (LF) and U+001B ESCAPE.
  *
- * @return [Boolean] `True` if this {U::String} only contains characters in the
- *   Other, control (Cc) category */
+ * @return [Boolean] `True` if this {U::String} only contains control characters */
 VALUE
 rb_u_string_cntrl(VALUE self)
 {

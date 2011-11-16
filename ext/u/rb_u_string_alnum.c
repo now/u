@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 /* Tests if this {U::String} only contains characters in the Letter or Number
- * Unicode categories, that is, characters that belong to any of the categories
+ * Unicode categories.  That is, characters that belong to any of the categories
  *
  * * Letter, lowercase (Ll)
  * * Letter, uppercase (Lu)
@@ -12,7 +12,7 @@
  * * Number, letter (Nl)
  * * Number, other (No)
  *
- * such as ‘A’, ‘1’, and ‘½’.
+ * such as ‘A’, ‘1’, and ‘½’, will pass.
  *
  * @return [Boolean] `True` if this {U::String} only contains characters in the
  *   Letter or Number Unicode categories. */

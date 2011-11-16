@@ -1,7 +1,8 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains characters in the Separator Unicode
- * category, that is, characters that belong to any of the categories
+/* Tests if this {U::String} only contains space characters.  Space characters
+ * are those in the Separator Unicode category, that is, characters that belong
+ * to any of the categories
  *
  * * Separator, space (Zs)
  * * Separator, line (Zl)
@@ -14,9 +15,8 @@
  * * U+000C (FORM FEED (FF))
  * * U+000D (CARRIAGE RETURN (CR))
  *
- * @return [Boolean] `True` if this {U::String} only contains characters in the
- *   Separator Unicode category and/or control characters acting as
- *   separators. */
+ * @return [Boolean] `True` if this {U::String} only contains space
+ *   characters */
 VALUE
 rb_u_string_space(VALUE self)
 {

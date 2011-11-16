@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains characters with their East_Asian_Width
- * property set to Wide or Fullwidth.
+/* Tests if this {U::String} only contains wide characters.  Wide character are
+ * those that have their East_Asian_Width property set to Wide or Fullwidth.
  *
  * This is mostly useful on a terminal or similar cell-based display.
  *
@@ -9,8 +9,8 @@
  *
  * @see #width
  *
- * @return [Boolean] `True` if this {U::String} only contains characters with
- *   their East_Asian_Width property set to Wide or Fullwidth. */
+ * @return [Boolean] `True` if this {U::String} only contains wide
+ *   characters */
 VALUE
 rb_u_string_wide(VALUE self)
 {

@@ -1,8 +1,8 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains characters in the Punctuation or
- * Symbol Unicode categories, that is, characters that belong to any of the
- * categories
+/* Tests if this {U::String} only contains punctuation and symbol characters.
+ * Punctuation characters are those in the Punctuation or Symbol Unicode
+ * categories, that is, characters that belong to any of the categories
  *
  * * Punctuation, connector (Pc)
  * * Punctuation, dash (Pd)

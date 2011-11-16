@@ -1,8 +1,9 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains characters not in the Other Unicode
- * category or the Space, separator (Zs) category, that is, one of the
- * following categories:
+/* Tests if this {U::String} only contains non-space “printable” characters. A
+ * non-space “printable” character are those not in the Other Unicode category
+ * or the Space, separator (Zs) category, that is, one of the following
+ * categories:
  *
  * * Other, control (Cc)
  * * Other, format (Cf)

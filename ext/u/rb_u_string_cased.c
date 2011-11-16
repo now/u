@@ -1,8 +1,13 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains characters in the Letter, uppercase
- * (Lu), Letter, lowercase (Ll), or Letter, titlecase (Lt) categories or has
- * the derived properties Other_Uppercase or Other_Lowercase.
+/* Tests if this {U::String} only contains “cased” characters.  A cased
+ * character is either in one of the categories
+ *
+ * * Letter, uppercase (Lu)
+ * * Letter, lowercase (Ll)
+ * * Letter, titlecase (Lt) categories
+ *
+ * or has the derived properties Other_Uppercase or Other_Lowercase.
  *
  * @return [Boolean] `True` if this {U::String} only contains “cased”
  * characters. */
