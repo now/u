@@ -12,7 +12,7 @@
 bool
 unichar_mirror(unichar c, unichar *mirrored)
 {
-        int index;
+        size_t index;
 
         if (!unicode_table_lookup(bidi_mirroring_table, c, &index))
                 return false;

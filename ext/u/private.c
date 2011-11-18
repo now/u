@@ -14,13 +14,13 @@
  * index is stored in INDEX and true is returned.  Otherwise, false is returned
  * and INDEX is left untouched. */
 bool
-binary_search_unicode_table(const void *table, size_t n, size_t sizeof_entry, size_t sizeof_char, unichar c, int *index)
+binary_search_unicode_table(const void *table, size_t n, size_t sizeof_entry, size_t sizeof_char, unichar c, size_t *index)
 {
 #define ENTRY(index) (*(unichar *)((const char *)table + ((index) * sizeof_entry)) & char_mask)
 
-	int begin = 0;
-        int end = n - 1;
-        int middle;
+	size_t begin = 0;
+        size_t end = n - 1;
+        size_t middle;
 
         /* This is ugly, but not all tables use unichars as their lookup
          * character.  The casefold table, for example, uses uint16_t-sized

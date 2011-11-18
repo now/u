@@ -19,7 +19,7 @@
 bool
 unichar_istitle(unichar c)
 {
-        int index;
+        size_t index;
 
         return unicode_table_lookup(title_table, c, &index);
 }
@@ -47,7 +47,7 @@ unichar_totitle(unichar c)
 unichar
 _u_titlecase_table_lookup(unichar c, bool want_upper)
 {
-        int index;
+        size_t index;
 
         if (!unicode_table_lookup(title_table, c, &index))
                 return c;

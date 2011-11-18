@@ -10,7 +10,7 @@
  * Retrieve the offset/index of ‘needle’ in ‘haystack’ which is of size
  * ‘haystack_len’.
  */
-static int
+static size_t
 str_index_n(const char *haystack, const char *needle, size_t haystack_len)
 {
 	assert(haystack != NULL);
@@ -45,7 +45,7 @@ str_index_n(const char *haystack, const char *needle, size_t haystack_len)
  * Retrieve the index of the left-most occurence of ‘c’ in ‘str’, or -1 if it
  * doesn't exist.
  */
-int
+size_t
 u_char_index(const char *str, unichar c)
 {
 	char ch[7];
@@ -60,7 +60,7 @@ u_char_index(const char *str, unichar c)
  * Retrieve the index of the left-most occurence of ‘c’ in ‘str’, or -1 if it
  * doesn't exist, going over at most ‘len’ bytes in ‘str’.
  */
-int
+size_t
 u_char_index_n(const char *str, unichar c, size_t len)
 {
 	char ch[7];
@@ -75,7 +75,7 @@ u_char_index_n(const char *str, unichar c, size_t len)
  * Retrieve the index of the left-most occurence of ‘needle’ in ‘haystack’, or
  * -1 if it doesn't exist.
  */
-int
+size_t
 u_index(const char *haystack, const char *needle)
 {
 	return strstr(haystack, needle) - haystack;
@@ -86,7 +86,7 @@ u_index(const char *haystack, const char *needle)
  * Retrieve the index of the left-most occurence of ‘needle’ in ‘haystack’, or
  * -1 if it doesn't exist, going over at most ‘len’ bytes in ‘haystack’.
  */
-int
+size_t
 u_index_n(const char *haystack, const char *needle, size_t len)
 {
 	return str_index_n(haystack, needle, len);

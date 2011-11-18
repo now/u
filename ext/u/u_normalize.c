@@ -63,7 +63,7 @@ decompose_hangul(unichar s, unichar *result)
 static inline const char *
 find_decomposition(unichar c, bool compat)
 {
-        int index;
+        size_t index;
         if (!unicode_table_lookup(decomp_table, c, &index))
                 return NULL;
 
@@ -278,7 +278,7 @@ combine(unichar a, unichar b, unichar *result)
 static inline size_t
 compose_loop(unichar *string, size_t length)
 {
-        int n = length;
+        size_t n = length;
         size_t prev_start = 0;
         int prev_cc = 0;
 

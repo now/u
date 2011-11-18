@@ -11,7 +11,7 @@
  * Retrieve the index/offset of the right-most occurence of NEEDLE in
  * HAYSTACK, or -1 if it doesn’t exist.
  */
-static int
+static size_t
 str_rindex(const char *haystack, const char *needle)
 {
 	assert(haystack != NULL);
@@ -46,7 +46,7 @@ str_rindex(const char *haystack, const char *needle)
  * Retrieve the index/offset of the right-most occurence of NEEDLE in
  * HAYSTACK, or -1 if it doesn’t exist.
  */
-static int
+static size_t
 str_rindex_n(const char *haystack, const char *needle, size_t haystack_len)
 {
 	assert(haystack != NULL);
@@ -84,7 +84,7 @@ str_rindex_n(const char *haystack, const char *needle, size_t haystack_len)
  * Retrieve the index of the right-most occurence of ‘c’ in ‘str’, or -1 if it
  * doesn't exist.
  */
-int
+size_t
 u_char_rindex(const char *str, unichar c)
 {
 	char ch[7];
@@ -99,7 +99,7 @@ u_char_rindex(const char *str, unichar c)
  * Retrieve the index of the right-most occurence of ‘c’ in ‘str’, or -1 if it
  * doesn't exist, going over at most ‘len’ bytes in ‘str’.
  */
-int
+size_t
 u_char_rindex_n(const char *str, unichar c, size_t len)
 {
 	char ch[7];
@@ -114,7 +114,7 @@ u_char_rindex_n(const char *str, unichar c, size_t len)
  * Retrieve the index of the right-most occurence of ‘needle’ in ‘haystack’, or
  * -1 if it doesn't exist.
  */
-int
+size_t
 u_rindex(const char *haystack, const char *needle)
 {
 	return str_rindex(haystack, needle);
@@ -125,7 +125,7 @@ u_rindex(const char *haystack, const char *needle)
  * Retrieve the index of the right-most occurence of ‘needle’ in ‘haystack’, or
  * -1 if it doesn't exist, going over at most ‘len’ bytes in ‘haystack’.
  */
-int
+size_t
 u_rindex_n(const char *haystack, const char *needle, size_t len)
 {
 	return str_rindex_n(haystack, needle, len);

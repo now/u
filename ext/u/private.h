@@ -53,7 +53,7 @@ HIDDEN bool binary_search_unicode_table(const void *table,
                                         size_t sizeof_entry,
                                         size_t sizeof_char,
                                         unichar c,
-                                        int *index);
+                                        size_t *index);
 
 HIDDEN unichar *_u_normalize_wc(const char *string,
                                 size_t length,

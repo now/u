@@ -39,6 +39,7 @@ try_compiler_option '-Wswitch-enum'
 try_compiler_option '-Wundef'
 try_compiler_option '-Wunsafe-loop-optimizations'
 try_compiler_option '-Wwrite-strings'
+try_compiler_option '-Wshorten-64-to-32'
 
 checking_for 'GNUC visibility attribute' do
   $defs.push('-DHAVE_GNUC_VISIBILITY') if try_compile <<EOC, '-Werror'

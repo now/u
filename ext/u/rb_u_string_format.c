@@ -73,6 +73,10 @@ rb_long2int(long l)
 #  endif
 #endif
 
+#ifndef RARRAY_LENINT
+#  define RARRAY_LENINT(ary) rb_long2int(RARRAY_LEN(ary)
+#endif
+
 #ifndef HAVE_RB_HASH_LOOKUP2
 #  include <st.h>
 
@@ -471,7 +475,7 @@ directive_character(UNUSED(unichar directive), int flags, int width, UNUSED(int 
                 const UString *string = RVAL2USTRING_ANY(tmp);
                 p = USTRING_STR(string);
                 c = _rb_u_aref_char_validated(p, USTRING_END(string));
-                length = u_next(p) - p;
+                length = (int)(u_next(p) - p);
         } else {
                 char buf[MAX_UNICHAR_BYTE_LENGTH];
                 p = buf;
@@ -565,7 +569,7 @@ directive_number_output(int flags, int width, int precision,
                         const char *prefix, unichar precision_filler, const char *digits, int length,
                         VALUE result)
 {
-        int prefix_length = strlen(prefix);
+        int prefix_length = (int)strlen(prefix);
         width -= prefix_length;
 
         if (precision >= 0)
@@ -699,7 +703,7 @@ directive_number_long_unsigned(long argument,
 
         if (argument < 0) {
                 *digits = directive_number_skip_bits(buffer, base);
-                length -= *digits - buffer;
+                length -= (int)(*digits - buffer);
                 strcat(prefix, "..");
         }
 
@@ -933,7 +937,7 @@ directive_float_format(unichar directive, int flags, int width, int precision, d
         size_t needed = 1 +
                 2 +
                 1 +
-                abs(BITS2DECIMALDIGITS(exponent)) +
+                abs((int)BITS2DECIMALDIGITS(exponent)) +
                 1 +
                 (size_t)(precision >= 0 ? precision : 0) +
                 1 +
@@ -1540,8 +1544,7 @@ rb_u_string_format_m(VALUE self, VALUE argument)
         volatile VALUE tmp = rb_check_array_type(argument);
 
         if (!NIL_P(tmp))
-                /* TODO: USE RARRAY_LENINT */
-                return rb_u_string_format(RARRAY_LEN(tmp), RARRAY_PTR(tmp), self);
+                return rb_u_string_format(RARRAY_LENINT(tmp), RARRAY_PTR(tmp), self);
 
         return rb_u_string_format(1, &argument, self);
 }

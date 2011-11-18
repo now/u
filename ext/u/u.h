@@ -296,15 +296,15 @@ int u_collate_n(const char *a, size_t a_len, const char *b, size_t b_len);
 char *u_collate_key(const char *str);
 char *u_collate_key_n(const char *str, size_t len, size_t *new_length);
 
-int u_char_index(const char *str, unichar c);
-int u_char_index_n(const char *str, unichar c, size_t len);
-int u_index(const char *haystack, const char *needle);
-int u_index_n(const char *haystack, const char *needle, size_t len);
+size_t u_char_index(const char *str, unichar c);
+size_t u_char_index_n(const char *str, unichar c, size_t len);
+size_t u_index(const char *haystack, const char *needle);
+size_t u_index_n(const char *haystack, const char *needle, size_t len);
 
-int u_char_rindex(const char *str, unichar c);
-int u_char_rindex_n(const char *str, unichar c, size_t len);
-int u_rindex(const char *haystack, const char *needle);
-int u_rindex_n(const char *haystack, const char *needle, size_t len);
+size_t u_char_rindex(const char *str, unichar c);
+size_t u_char_rindex_n(const char *str, unichar c, size_t len);
+size_t u_rindex(const char *haystack, const char *needle);
+size_t u_rindex_n(const char *haystack, const char *needle, size_t len);
 
 bool utf_has_prefix(const char *str, const char *prefix);
 

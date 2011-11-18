@@ -14,7 +14,7 @@
 static inline bool
 casefold_table_lookup(unichar c, char *result, size_t *length)
 {
-        int index;
+        size_t index;
         if (!unicode_table_lookup(casefold_table, c, &index))
                 return false;
 
