@@ -37,7 +37,6 @@ _utf_compute(unsigned char c, int *mask, int *len)
 	}
 }
 
-
 /* {{{1
  * Private function used to retrieve a UTF-32 character from an UTF-8 character
  * sequence given a mask and length previously retrieved with _utf_compute().

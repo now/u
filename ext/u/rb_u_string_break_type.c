@@ -122,7 +122,7 @@ break_type_to_symbol(UnicodeBreakType type)
         case UNICODE_BREAK_CLOSE_PARENTHESIS:
 		return ID2SYM(id_close_parenthesis);
         default:
-                rb_raise(rb_eNotImpError, "unknown break type: %d", type);
+                rb_u_raise(rb_eNotImpError, "unknown break type: %d", type);
         }
 }
 
@@ -188,10 +188,10 @@ rb_u_string_break_type(VALUE self)
                 if (current == UNICODE_BREAK_UNKNOWN)
                         current = type;
                 else if (type != current)
-                        rb_raise(rb_eArgError,
-                                 "string consists of more than one break type: :%s+, :%s",
-                                 rb_id2name(SYM2ID(break_type_to_symbol(current))),
-                                 rb_id2name(SYM2ID(break_type_to_symbol(type))));
+                        rb_u_raise(rb_eArgError,
+                                   "string consists of more than one break type: :%s+, :%s",
+                                   rb_id2name(SYM2ID(break_type_to_symbol(current))),
+                                   rb_id2name(SYM2ID(break_type_to_symbol(type))));
 
                 p = u_next(p);
         }

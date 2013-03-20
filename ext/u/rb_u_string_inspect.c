@@ -126,7 +126,7 @@ rb_u_string_inspect(VALUE self)
 {
         const UString *string = RVAL2USTRING(self);
 
-        VALUE result = rb_str_buf_new(0);
+        VALUE result = rb_u_str_buf_new(0);
         rb_str_buf_cat2(result, "\"");
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);

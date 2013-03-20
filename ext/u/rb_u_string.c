@@ -102,9 +102,9 @@ rb_u_string_validate_type(VALUE str)
         VALUE converted = rb_u_string_check_type(str);
 
         if (NIL_P(converted))
-                rb_raise(rb_eTypeError,
-                         "type mismatch: %s given",
-                         rb_obj_classname(str));
+                rb_u_raise(rb_eTypeError,
+                           "type mismatch: %s given",
+                           rb_obj_classname(str));
 
         return converted;
 }

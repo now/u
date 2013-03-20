@@ -35,7 +35,7 @@ rb_u_string_justified_size(long string_size,
         if ((size = left_n / padding_length + right_n / padding_length) >= LONG_MAX / USTRING_LENGTH(padding) ||
             (size *= USTRING_LENGTH(padding)) >= LONG_MAX - left_n_2 - right_n_2 ||
             (size += left_n_2 + right_n_2) >= LONG_MAX - string_size)
-                rb_raise(rb_eArgError, "argument too big");
+                rb_u_raise(rb_eArgError, "argument too big");
         size += string_size;
 
         return size;
@@ -77,7 +77,7 @@ rb_u_string_justify(int argc, VALUE *argv, VALUE self, char jflag)
                 padding = RVAL2USTRING_ANY(rbpadding);
                 padding_length = u_length_n(USTRING_STR(padding), USTRING_LENGTH(padding));
                 if (padding_length == 0)
-                        rb_raise(rb_eArgError, "zero width padding");
+                        rb_u_raise(rb_eArgError, "zero width padding");
         }
 
         long string_length = u_length_n(USTRING_STR(string), USTRING_LENGTH(string));

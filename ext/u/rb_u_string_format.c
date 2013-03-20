@@ -37,16 +37,16 @@ struct format_arguments {
         VALUE names;
 };
 
-#ifndef HAVE_RB_LONG2INT
+#if !(defined(HAVE_RB_LONG2INT) || defined(rb_long2int))
 #  if SIZEOF_INT < SIZEOF_LONG
 static void
 rb_out_of_int(long l)
 {
-        rb_raise(rb_eRangeError,
-                 l < 0 ?
+        rb_u_raise(rb_eRangeError,
+                   l < 0 ?
                         "integer %ld too small to convert to C type int" :
                         "integer %ld too big to convert to C type int",
-                 l);
+                   l);
 }
 #    if defined(__GNUC__) && __GNUC__ > 2
 #      define rb_long2int(l) __extension__({ \
@@ -118,15 +118,15 @@ directive_parse_int(const char **p, const char *end, const char *type)
                         while (q < end && unichar_isdigit(u_aref_char_validated_n(q, end - q)))
                                 q = u_next(q);
                         /* TODO: Test this. */
-                        rb_raise(rb_eArgError,
-                                 "%s too large: %*s > %d",
-                                 type, (int)(q - *p), *p, INT_MAX);
+                        rb_u_raise(rb_eArgError,
+                                   "%s too large: %*s > %d",
+                                   type, (int)(q - *p), *p, INT_MAX);
                 }
 
                 n = m;
         }
 
-        rb_raise(rb_eArgError, "directive missing after %s", type);
+        rb_u_raise(rb_eArgError, "directive missing after %s", type);
 }
 
 static bool
@@ -134,8 +134,7 @@ directive_argument_number(const char **p, const char *end, const char *type,
                           int *argument_number)
 {
         if (*argument_number != 0)
-                rb_raise(rb_eArgError,
-                         "%s already given", type);
+                rb_u_raise(rb_eArgError, "%s already given", type);
 
         const char *q = *p;
         int n = directive_parse_int(&q, end, type);
@@ -145,7 +144,7 @@ directive_argument_number(const char **p, const char *end, const char *type,
         *argument_number = n;
 
         if (*p == end)
-                rb_raise(rb_eArgError, "directive missing after %s", type);
+                rb_u_raise(rb_eArgError, "directive missing after %s", type);
 
         return true;
 }
@@ -155,8 +154,7 @@ directive_argument_name(const char **p, const char *end, char right,
                         ID *argument_id)
 {
         if (*argument_id != 0)
-                rb_raise(rb_eArgError,
-                         "argument name already given");
+                rb_u_raise(rb_eArgError, "argument name already given");
 
         const char *q = *p;
 
@@ -164,9 +162,9 @@ directive_argument_name(const char **p, const char *end, char right,
                 q = rb_u_next_validated(q, end);
 
         if (q == end)
-                rb_raise(rb_eArgError,
-                         "missing argument name end delimiter ‘%c’: %s",
-                         right, *p);
+                rb_u_raise(rb_eArgError,
+                           "missing argument name end delimiter ‘%c’: %s",
+                           right, *p);
 
         const char *base = u_next(*p);
         long length = q - base;
@@ -182,28 +180,28 @@ directive_argument_name(const char **p, const char *end, char right,
         *p = rb_u_next_validated(q, end);
 
         if (*p == end)
-                rb_raise(rb_eArgError, "directive missing after argument name");
+                rb_u_raise(rb_eArgError, "directive missing after argument name");
 }
 
 static VALUE
 format_arguments_absolute(struct format_arguments *arguments, int absolute)
 {
         if (arguments->i > 0)
-                rb_raise(rb_eArgError,
-                         "cannot use absolute argument number %d: relative argument number already used",
-                         absolute);
+                rb_u_raise(rb_eArgError,
+                           "cannot use absolute argument number %d: relative argument number already used",
+                           absolute);
 
         if (arguments->names != Qundef)
-                rb_raise(rb_eArgError,
-                         "cannot use absolute argument number %d: named argument already used",
-                         absolute);
+                rb_u_raise(rb_eArgError,
+                           "cannot use absolute argument number %d: named argument already used",
+                           absolute);
 
         arguments->absolute = true;
 
         if (absolute > arguments->argc)
-                rb_raise(rb_eArgError,
-                         "absolute argument number beyond end of argument list: %d > %d",
-                         absolute, arguments->argc);
+                rb_u_raise(rb_eArgError,
+                           "absolute argument number beyond end of argument list: %d > %d",
+                           absolute, arguments->argc);
 
         return arguments->argv[absolute - 1];
 }
@@ -212,29 +210,29 @@ static VALUE
 format_arguments_id(struct format_arguments *arguments, ID id)
 {
         if (arguments->i > 0)
-                rb_raise(rb_eArgError,
-                         "cannot use named argument “%s”: relative argument number already used",
-                         rb_id2name(id));
+                rb_u_raise(rb_eArgError,
+                           "cannot use named argument “%s”: relative argument number already used",
+                           rb_id2name(id));
 
         if (arguments->absolute)
-                rb_raise(rb_eArgError,
-                         "cannot use named argument “%s”: absolute argument number already used",
-                         rb_id2name(id));
+                rb_u_raise(rb_eArgError,
+                           "cannot use named argument “%s”: absolute argument number already used",
+                           rb_id2name(id));
 
         if (arguments->names == Qundef) {
                 VALUE tmp;
 
                 if (arguments->argc != 1 ||
                     NIL_P(tmp = rb_check_convert_type(arguments->argv[0], T_HASH, "Hash", "to_hash")))
-                        rb_raise(rb_eArgError,
-                                 "one Hash argument required when using named arguments in format");
+                        rb_u_raise(rb_eArgError,
+                                   "one Hash argument required when using named arguments in format");
 
                 arguments->names = tmp;
         }
 
         VALUE argument = rb_hash_lookup2(arguments->names, ID2SYM(id), Qundef);
         if (argument == Qundef)
-                rb_raise(rb_eKeyError, "named argument not found: %s", rb_id2name(id));
+                rb_u_raise(rb_eKeyError, "named argument not found: %s", rb_id2name(id));
 
         return argument;
 }
@@ -243,12 +241,12 @@ static VALUE
 format_arguments_next(struct format_arguments *arguments)
 {
         if (arguments->absolute)
-                rb_raise(rb_eArgError,
-                         "cannot use positional argument numbers after absolute argument numbers");
+                rb_u_raise(rb_eArgError,
+                           "cannot use positional argument numbers after absolute argument numbers");
 
         if (arguments->names != Qundef)
-                rb_raise(rb_eArgError,
-                         "cannot use positional argument numbers after named arguments");
+                rb_u_raise(rb_eArgError,
+                           "cannot use positional argument numbers after named arguments");
 
         arguments->i++;
 
@@ -300,20 +298,20 @@ directive_flags(const char **p, const char *end,
                         if (!directive_argument_number(p, end, "absolute argument number", &argument_number))
                                 goto setup_argument;
                         if (argument_id != 0)
-                                rb_raise(rb_eArgError,
-                                         "cannot use absolute argument number: argument name already given");
+                                rb_u_raise(rb_eArgError,
+                                           "cannot use absolute argument number: argument name already given");
                         continue;
                 case '<':
                         if (argument_number != 0)
-                                rb_raise(rb_eArgError,
-                                         "cannot use argument name: absolute argument number already given");
+                                rb_u_raise(rb_eArgError,
+                                           "cannot use argument name: absolute argument number already given");
                         directive_argument_name(p, end, '>', &argument_id);
                         *argument_to_s = false;
                         continue;
                 case '{':
                         if (argument_number != 0)
-                                rb_raise(rb_eArgError,
-                                         "cannot use argument name: absolute argument number already given");
+                                rb_u_raise(rb_eArgError,
+                                           "cannot use argument name: absolute argument number already given");
                         directive_argument_name(p, end, '}', &argument_id);
                         *argument_to_s = true;
                         goto setup_argument;
@@ -329,7 +327,7 @@ directive_flags(const char **p, const char *end,
         }
 
         if (flags != DIRECTIVE_FLAGS_NONE && *p == end)
-                rb_raise(rb_eArgError, "directive missing after flags");
+                rb_u_raise(rb_eArgError, "directive missing after flags");
 
 setup_argument:
         if (argument_number != 0)
@@ -408,40 +406,40 @@ directive_validate_flags(unichar c, int flags, int valid)
         invalid[n] = '\0';
 
         if (n == 1)
-                rb_raise(rb_eArgError,
-                         "invalid flag ‘%s’ given to directive ‘%lc’",
-                         invalid, c);
+                rb_u_raise(rb_eArgError,
+                           "invalid flag ‘%s’ given to directive ‘%lc’",
+                           invalid, c);
 
-        rb_raise(rb_eArgError,
-                 "invalid flags “%s” given to directive ‘%lc’",
-                 invalid, c);
+        rb_u_raise(rb_eArgError,
+                   "invalid flags “%s” given to directive ‘%lc’",
+                   invalid, c);
 }
 
 static void
 directive_validate_argument_not_given(unichar c, VALUE argument)
 {
         if (argument != Qundef)
-                rb_raise(rb_eArgError,
-                         "directive does not take an argument: %lc",
-                         c);
+                rb_u_raise(rb_eArgError,
+                           "directive does not take an argument: %lc",
+                           c);
 }
 
 static void
 directive_validate_width_not_given(unichar c, int width)
 {
         if (width != 0)
-                rb_raise(rb_eArgError,
-                         "directive does not allow specifying a width: %lc",
-                         c);
+                rb_u_raise(rb_eArgError,
+                           "directive does not allow specifying a width: %lc",
+                           c);
 }
 
 static void
 directive_validate_precision_not_given(unichar c, int precision)
 {
         if (precision >= 0)
-                rb_raise(rb_eArgError,
-                         "directive does not allow specifying a precision: %lc",
-                         c);
+                rb_u_raise(rb_eArgError,
+                           "directive does not allow specifying a precision: %lc",
+                           c);
 }
 
 static void
@@ -1048,7 +1046,7 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
                 }
 
 
-        rb_raise(rb_eArgError, "unknown directive: %lc", c);
+        rb_u_raise(rb_eArgError, "unknown directive: %lc", c);
 }
 
 VALUE

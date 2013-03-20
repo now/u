@@ -299,7 +299,7 @@ script_to_symbol(UnicodeScript script)
         case UNICODE_SCRIPT_MANDAIC:
                 return ID2SYM(id_mandaic);
         default:
-                rb_raise(rb_eNotImpError, "unknown script: %d", script);
+                rb_u_raise(rb_eNotImpError, "unknown script: %d", script);
         }
 }
 
@@ -435,10 +435,10 @@ rb_u_string_script(VALUE self)
                 if (current == UNICODE_SCRIPT_UNKNOWN)
                         current = script;
                 else if (script != current)
-                        rb_raise(rb_eArgError,
-                                 "string consists of more than one script: :%s+, :%s",
-                                 rb_id2name(SYM2ID(script_to_symbol(current))),
-                                 rb_id2name(SYM2ID(script_to_symbol(script))));
+                        rb_u_raise(rb_eArgError,
+                                   "string consists of more than one script: :%s+, :%s",
+                                   rb_id2name(SYM2ID(script_to_symbol(current))),
+                                   rb_id2name(SYM2ID(script_to_symbol(script))));
 
                 p = u_next(p);
         }

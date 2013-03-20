@@ -38,7 +38,7 @@ rb_u_string_to_i(int argc, VALUE *argv, VALUE self)
                 base = NUM2INT(rbbase);
 
         if (base < 0)
-                rb_raise(rb_eArgError, "illegal radix %d", base);
+                rb_u_raise(rb_eArgError, "illegal radix %d", base);
 
         return rb_u_string_to_inum(self, base, false);
 }

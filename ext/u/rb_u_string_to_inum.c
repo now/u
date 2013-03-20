@@ -91,7 +91,7 @@ static size_t
 rb_u_string_to_inum_base_bit_length(const char *s, int base)
 {
         if (base < 2 || base > 36)
-                rb_raise(rb_eArgError, "illegal radix %d", base);
+                rb_u_raise(rb_eArgError, "illegal radix %d", base);
 
         size_t bit_length;
         switch (base) {
@@ -125,9 +125,9 @@ rb_u_string_to_inum_num_separator(const char *str, const char *s, bool verify,
 
         if (*previous_was_separator) {
                 if (verify)
-                        rb_raise(rb_eArgError,
-                                 "unexpected ‘%lc’ found at position %ld",
-                                 c, u_pointer_to_offset(str, s));
+                        rb_u_raise(rb_eArgError,
+                                   "unexpected ‘%lc’ found at position %ld",
+                                   c, u_pointer_to_offset(str, s));
                 else
                         return false;
         }
@@ -171,18 +171,18 @@ rb_u_string_to_inum_digit_value(const char *str, const char *s, unichar c,
         if (value == -1) {
                 if (!verify)
                         return false;
-                rb_raise(rb_eArgError,
-                         "non-digit character ‘%lc’ found at position %ld",
-                         c, u_pointer_to_offset(str, s));
+                rb_u_raise(rb_eArgError,
+                           "non-digit character ‘%lc’ found at position %ld",
+                           c, u_pointer_to_offset(str, s));
         }
 
         if (value >= base) {
                 if (!verify)
                         return false;
 
-                rb_raise(rb_eArgError,
-                         "value (%d) greater than base (%d) at position %ld",
-                         value, base, u_pointer_to_offset(str, s));
+                rb_u_raise(rb_eArgError,
+                           "value (%d) greater than base (%d) at position %ld",
+                           value, base, u_pointer_to_offset(str, s));
         }
 
         *digit_value = value;
@@ -215,17 +215,13 @@ rb_u_string_to_inum_as_fix(const char *str, const char *s, int sign, int base,
                 while (*s != '\0' && unichar_isspace(u_aref_char(s)))
                         s = u_next(s);
                 if (*s != '\0')
-                        rb_raise(rb_eArgError,
-                                 "trailing garbage found at position %ld",
-                                 u_pointer_to_offset(str, s));
+                        rb_u_raise(rb_eArgError,
+                                   "trailing garbage found at position %ld",
+                                   u_pointer_to_offset(str, s));
         }
 
-        if (POSFIXABLE(value)) {
-                if (sign)
-                        return LONG2FIX(value);
-                else
-                        return LONG2FIX(-(long)value);
-        }
+        if (POSFIXABLE(value))
+                return sign ? LONG2FIX(value) : LONG2FIX(-(long)value);
 
         VALUE big = rb_uint2big(value);
         RBIGNUM_SET_SIGN(big, sign);
@@ -255,9 +251,9 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
         /* Do we have another sign?  If so, that’s not correct. */
         if (*s == '+' || *s == '-') {
                 if (verify)
-                        rb_raise(rb_eArgError,
-                                 "extra sign ‘%c’ found at position %ld",
-                                 *s, u_pointer_to_offset(str, s));
+                        rb_u_raise(rb_eArgError,
+                                   "extra sign ‘%c’ found at position %ld",
+                                   *s, u_pointer_to_offset(str, s));
                 return INT2FIX(0);
         }
 
@@ -279,9 +275,9 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
                 return rb_u_string_to_inum_as_fix(str, s, sign, base, verify);
 
         if (verify && *str == '_')
-                rb_raise(rb_eArgError,
-                         "leading digit-separator ‘_’ found at position %ld",
-                         u_pointer_to_offset(str, s));
+                rb_u_raise(rb_eArgError,
+                           "leading digit-separator ‘_’ found at position %ld",
+                           u_pointer_to_offset(str, s));
 
         bit_length = bit_length / BITSPERDIG + 1;
 
@@ -324,14 +320,14 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
 
         s--;
         if (str + 1 < s && s[-1] == '_')
-                rb_raise(rb_eArgError,
-                         "trailing digit-separator ‘_’ found at position %ld",
-                         u_pointer_to_offset(str, s));
+                rb_u_raise(rb_eArgError,
+                           "trailing digit-separator ‘_’ found at position %ld",
+                           u_pointer_to_offset(str, s));
 
         if (*s != '\0')
-                rb_raise(rb_eArgError,
-                         "trailing garbage found at position %ld",
-                         u_pointer_to_offset(str, s));
+                rb_u_raise(rb_eArgError,
+                           "trailing garbage found at position %ld",
+                           u_pointer_to_offset(str, s));
 
         return rb_big_norm(z);
 }
@@ -343,7 +339,7 @@ rb_u_string_to_inum(VALUE self, int base, bool verify)
 
         const char *s = USTRING_STR(string);
         if (verify && (s == NULL || memchr(s, '\0', USTRING_LENGTH(string))))
-                rb_raise(rb_eArgError, "string contains null byte");
+                rb_u_raise(rb_eArgError, "string contains null byte");
 
         if (s != NULL) {
                 long len = USTRING_LENGTH(string);

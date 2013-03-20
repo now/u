@@ -13,16 +13,17 @@ VALUE
 rb_u_string_match(VALUE self, VALUE other)
 {
         if (rb_obj_is_kind_of(other, rb_cUString))
-                rb_raise(rb_eTypeError, "type mismatch: U::String given");
+                rb_u_raise(rb_eTypeError, "type mismatch: U::String given");
 
         switch (TYPE(other)) {
         case T_STRING:
-                rb_raise(rb_eTypeError, "type mismatch: String given");
+                rb_u_raise(rb_eTypeError, "type mismatch: String given");
                 break;
         case T_REGEXP: {
                 const UString *string = RVAL2USTRING(self);
 
                 /* TODO: This needs to be made more efficient. */
+                /* TODO: Use rb_reg_match_pos here and everywhere, instead. */
                 VALUE index = rb_reg_match(other, rb_str_to_str(self));
                 if (NIL_P(index))
                         return Qnil;

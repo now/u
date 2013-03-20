@@ -115,7 +115,7 @@ rb_u_string_gsub(int argc, VALUE *argv, VALUE self)
         const char *base = RSTRING_PTR(str);
         const char *p = base;
         const char *end = RSTRING_END(str);
-        VALUE substituted = rb_str_buf_new(RSTRING_LEN(str) + 30);
+        VALUE substituted = rb_u_str_buf_new(RSTRING_LEN(str) + 30);
         do {
                 VALUE match = rb_backref_get();
                 struct re_registers *registers = RMATCH_REGS(match);
@@ -134,8 +134,8 @@ rb_u_string_gsub(int argc, VALUE *argv, VALUE self)
                         }
 
                         if (result == substituted)
-                                rb_raise(rb_eRuntimeError,
-                                         "result of block is string being built; please try not to cheat");
+                                rb_u_raise(rb_eRuntimeError,
+                                           "result of block is string being built; please try not to cheat");
                 } else
                         result =
 #ifdef HAVE_RB_REG_REGSUB4

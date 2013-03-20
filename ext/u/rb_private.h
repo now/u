@@ -34,4 +34,9 @@ HIDDEN int rb_memhash(const char *string, long length);
 
 HIDDEN long rb_u_memsearch(const void *a, long a_n, const void *b, long b_n);
 
+HIDDEN NORETURN(void rb_u_raise(VALUE exception, const char *format, ...)) PRINTF(2, 3);
+
+HIDDEN VALUE rb_u_str_new(const char *string, long length);
+HIDDEN VALUE rb_u_str_buf_new(long length);
+
 #endif /* RB_PRIVATE_H */

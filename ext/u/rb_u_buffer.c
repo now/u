@@ -66,9 +66,9 @@ u_buffer_maybe_expand(UBuffer *buffer, long additional)
 
         long allocate = nearest_power(1, buffer->length + additional);
         if (allocate < 0)
-                rb_raise(rb_eNoMemError,
-                         "buffer would be too large: %ld + %ld + 1 > %ld",
-                         buffer->length, additional, LONG_MAX);
+                rb_u_raise(rb_eNoMemError,
+                           "buffer would be too large: %ld + %ld + 1 > %ld",
+                           buffer->length, additional, LONG_MAX);
         REALLOC_N(buffer->c, char, allocate);
         buffer->allocated = allocate;
 }
@@ -180,9 +180,9 @@ rb_u_buffer_append_printf(VALUE self, size_t needed, const char *format, ...)
                 rb_sys_fail("system vsnprintf(3) failed");
 
         if ((size_t)length >= needed)
-                rb_raise(rb_eNotImpError,
-                         "format string buffer calculation is wrong: %s (%zu < %zu)",
-                         format, needed, (size_t)length);
+                rb_u_raise(rb_eNotImpError,
+                           "format string buffer calculation is wrong: %s (%zu < %zu)",
+                           format, needed, (size_t)length);
 
         buffer->length += length;
 
@@ -241,19 +241,19 @@ rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
 #if 0
                         if (rb_num_to_uint(argv[i], &c) != 0) {
                                 if (FIXNUM_P(argv[i]))
-                                        rb_raise(rb_eRangeError,
-                                                 "%ld out of char range",
-                                                 FIX2LONG(argv[i]));
+                                        rb_u_raise(rb_eRangeError,
+                                                   "%ld out of char range",
+                                                   FIX2LONG(argv[i]));
                                 else
-                                        rb_raise(rb_eRangeError,
-                                                 "Bignum out of char range");
+                                        rb_u_raise(rb_eRangeError,
+                                                   "Bignum out of char range");
                         }
 #endif
 
                         if (!unichar_isvalid(c))
-                                rb_raise(rb_eRangeError,
-                                         "invalid Unicode character: %u",
-                                         c);
+                                rb_u_raise(rb_eRangeError,
+                                           "invalid Unicode character: %u",
+                                           c);
 
                         rb_u_buffer_append_unichar(self, c);
                 } else {
@@ -297,7 +297,7 @@ rb_u_buffer_to_s(VALUE self)
 {
         const UBuffer *buffer = RVAL2UBUFFER(self);
 
-        return rb_str_new(buffer->c, buffer->length);
+        return rb_u_str_new(buffer->c, buffer->length);
 }
 
 VALUE

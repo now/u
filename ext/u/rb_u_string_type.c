@@ -101,7 +101,7 @@ type_to_symbol(UnicodeType type)
         case UNICODE_SPACE_SEPARATOR:
                 return ID2SYM(id_space_separator);
         default:
-                rb_raise(rb_eNotImpError, "unknown type: %d", type);
+                rb_u_raise(rb_eNotImpError, "unknown type: %d", type);
         }
 }
 
@@ -173,10 +173,10 @@ rb_u_string_type(VALUE self)
                 if (current == (UnicodeType)-1)
                         current = type;
                 else if (type != current)
-                        rb_raise(rb_eArgError,
-                                 "string consists of more than one type: :%s+, :%s",
-                                 rb_id2name(SYM2ID(type_to_symbol(current))),
-                                 rb_id2name(SYM2ID(type_to_symbol(type))));
+                        rb_u_raise(rb_eArgError,
+                                   "string consists of more than one type: :%s+, :%s",
+                                   rb_id2name(SYM2ID(type_to_symbol(current))),
+                                   rb_id2name(SYM2ID(type_to_symbol(type))));
 
                 p = u_next(p);
         }

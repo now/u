@@ -16,12 +16,12 @@ rb_u_string_times(VALUE self, VALUE rbtimes)
 
         long times = NUM2LONG(rbtimes);
         if (times < 0)
-                rb_raise(rb_eArgError, "negative argument: %ld", times);
+                rb_u_raise(rb_eArgError, "negative argument: %ld", times);
 
         /* TODO: Isn’t this off by one, as we add one to length for the
          * ALLOC_N() call? */
         if (times > 0 && LONG_MAX / times < USTRING_LENGTH(string))
-                rb_raise(rb_eArgError, "argument too big: %ld", times);
+                rb_u_raise(rb_eArgError, "argument too big: %ld", times);
         long length = times * USTRING_LENGTH(string);
 
         char *product = ALLOC_N(char, length + 1);

@@ -25,7 +25,7 @@ rb_u_string_plus(VALUE self, VALUE rbother)
         /* TODO: Isn’t this off by one, as we add one to length for the
          * ALLOC_N() call? */
         if (string_length > LONG_MAX - other_length)
-                rb_raise(rb_eArgError, "length of resulting string would be too big");
+                rb_u_raise(rb_eArgError, "length of resulting string would be too big");
         long length = string_length + other_length;
 
         char *sum = ALLOC_N(char, length + 1);

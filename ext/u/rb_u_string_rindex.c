@@ -89,8 +89,8 @@ rb_u_string_rindex_m(int argc, VALUE *argv, VALUE self)
         default: {
                 VALUE tmp = rb_check_string_type(sub);
                 if (NIL_P(tmp))
-                        rb_raise(rb_eTypeError, "type mismatch: %s given",
-                                 rb_obj_classname(sub));
+                        rb_u_raise(rb_eTypeError, "type mismatch: %s given",
+                                   rb_obj_classname(sub));
 
                 sub = tmp;
         }

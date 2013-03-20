@@ -26,10 +26,10 @@ rb_u_string_combining_class(VALUE self)
                 if (current == -1)
                         current = combining_class;
                 else if (combining_class != current)
-                        rb_raise(rb_eArgError,
-                                 "string consists of more than one combining class: %d+, %d",
-                                 current,
-                                 combining_class);
+                        rb_u_raise(rb_eArgError,
+                                   "string consists of more than one combining class: %d+, %d",
+                                   current,
+                                   combining_class);
 
                 p = u_next(p);
         }
