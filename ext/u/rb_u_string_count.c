@@ -11,7 +11,7 @@
  * ACCENT).
  *
  * Any sequence of characters _a_-_b_ inside a set will expand to also
- * include all characters whose codepoints lay between _a_ and _b_.
+ * include all characters whose codepoints lay between those of _a_ and _b_.
  *
  * @param [U::String, #to_str] set Set of characters to count
  * @param [Array<U::String, #to_str>] sets Additional sets to intersect with

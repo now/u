@@ -272,7 +272,7 @@ tr_trans(VALUE self, VALUE rbfrom, VALUE rbto, bool squeeze)
  * ACCENT).
  *
  * Any sequence of characters _a_-_b_ inside a set will expand to also
- * include all characters whose codepoints lay between _a_ and _b_.
+ * include all characters whose codepoints lay between those of _a_ and _b_.
  *
  * Any taint or untrust is inherited by the result.
  *
@@ -301,7 +301,7 @@ rb_u_string_tr(VALUE self, VALUE from, VALUE to)
  * ACCENT).
  *
  * Any sequence of characters _a_-_b_ inside a set will expand to also
- * include all characters whose codepoints lay between _a_ and _b_.
+ * include all characters whose codepoints lay between those of _a_ and _b_.
  *
  * Any taint or untrust is inherited by the result.
  *

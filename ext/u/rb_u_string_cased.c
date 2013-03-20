@@ -10,7 +10,7 @@
  * or has the derived properties Other_Uppercase or Other_Lowercase.
  *
  * @return [Boolean] `True` if this {U::String} only contains “cased”
- * characters. */
+ *   characters. */
 VALUE
 rb_u_string_cased(VALUE self)
 {

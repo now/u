@@ -81,8 +81,9 @@ rb_u_string_dump_hex(VALUE buffer, unsigned char c)
 
 /* Dumps this {U::String} into a reader-friendly format.
  *
- * The first character is `"`.  Then, the following conversions are performed
- * for the bytes in the string.
+ * The first character is `"`.  Then, any {#printable?} characters in the ASCII
+ * range are output as-is.  The following special characters are escaped in the
+ * output:
  *
  * <table>
  *   <tr><td>Character</td><td>Dumped Sequence</td></tr>
@@ -98,14 +99,14 @@ rb_u_string_dump_hex(VALUE buffer, unsigned char c)
  *   <tr><td>U+001B ESCAPE</td><td><code>\e</code></td></tr>
  * </table>
  *
+ * The following special sequences are also escaped:
+ *
  * <table>
  *   <tr><td>Sequence</td><td>Dumped Sequence</td></tr>
  *   <tr><td><code>#$</code></td><td><code>\#$</code></td></tr>
  *   <tr><td><code>#@</code></td><td><code>\#@</code></td></tr>
  *   <tr><td><code>#{</code></td><td><code>\#{</code></td></tr>
  * </table>
- *
- * {#printable?} bytes in the ASCII range are output as-is.
  *
  * Valid UTF-8 byte sequences are output as `\u{`_n_`}`, where _n_ is the
  * lowercase hexadecimal representation of the codepoint encoded by the UTF-8

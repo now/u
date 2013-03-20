@@ -46,7 +46,7 @@ rb_u_string_squeeze_loop(const UString *string, struct tr_table *table,
  * ACCENT).
  *
  * Any sequence of characters _a_-_b_ inside a set will expand to also
- * include all characters whose codepoints lay between _a_ and _b_.
+ * include all characters whose codepoints lay between those of _a_ and _b_.
  *
  * Any taint or untrust is inherited by the result.
  *
