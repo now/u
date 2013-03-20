@@ -938,12 +938,12 @@ Expectations do
   expect '     あ'.u do '     あ'.u.rstrip end
   expect 'あ'.u do 'あ     '.u.rstrip end
 
-  expect ['crüel'.u, 'wörld'.u] do 'crüel wörld'.u.scan(/\w+/u) end
+  expect ['crüel'.u, 'wörld'.u] do 'crüel wörld'.u.scan(/[[:word:]]+/u) end
   expect ['crü'.u, 'el '.u, 'wör'.u] do 'crüel wörld'.u.scan(/.../u) end
   expect [['crü'.u], ['el '.u], ['wör'.u]] do 'crüel wörld'.u.scan(/(...)/u) end
   expect ['crüel'.u, 'wörld'.u] do
     [].tap{ |result|
-      'crüel wörld'.u.scan(/\w+/u) do |word|
+      'crüel wörld'.u.scan(/[[:word:]]+/u) do |word|
         result << word
       end
     }
