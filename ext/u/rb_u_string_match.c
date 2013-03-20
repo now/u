@@ -1,4 +1,5 @@
 #include "rb_includes.h"
+#include "rb_u_re.h"
 
 /* @overload =~(other)
  *
@@ -23,14 +24,12 @@ rb_u_string_match(VALUE self, VALUE other)
                 const UString *string = RVAL2USTRING(self);
 
                 /* TODO: This needs to be made more efficient. */
-                /* TODO: Use rb_reg_match_pos here and everywhere, instead. */
-                VALUE index = rb_reg_match(other, rb_str_to_str(self));
-                if (NIL_P(index))
+                long index = rb_reg_search(other, rb_str_to_str(self), 0, 0);
+                if (index < 0)
                         return Qnil;
 
                 return LONG2NUM(u_pointer_to_offset(USTRING_STR(string),
-                                                    USTRING_STR(string) +
-                                                        NUM2LONG(index)));
+                                                    USTRING_STR(string) + index));
         }
         default:
                 return rb_funcall(other, rb_intern("=~"), 1, self);
