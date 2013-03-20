@@ -404,7 +404,7 @@ Expectations do
   expect '123'.u do '%d'.u % 123.to_f end
   expect '123'.u do '%d'.u % '123' end
   expect '123'.u do '%d'.u % '123'.u end
-  expect '123'.u do '%d'.u % stub(:to_int => 123) end
+  expect '123'.u do '%d'.u % [stub(:to_int => 123)] end
   expect ArgumentError do '%d'.u % '123.0' end
   expect ArgumentError do '%d'.u % '123.0'.u end
 
@@ -725,8 +725,9 @@ Expectations do
   # NOTE: This needs to be fixed.
   # expect U::String do '%#+-0 .2147483638f'.u % 1 end
 
-  expect '0x2p+1'.u do '%.0a'.u % 3.875 end
-  expect '-0x2.0p+1'.u do '%.1a'.u % -3.9921875 end
+  # TODO: These two give different results in Ruby 1.8 and Ruby 1.9.
+  # expect '0x2p+1'.u do '%.0a'.u % 3.875 end
+  # expect '-0x2.0p+1'.u do '%.1a'.u % -3.9921875 end
   expect '0x0p+0'.u do '%a'.u % 0.0 end
   expect '-0x0p+0'.u do '%a'.u % -0.0 end
   expect '0x1p+1'.u do '%a'.u % 2.0 end

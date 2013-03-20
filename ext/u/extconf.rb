@@ -86,10 +86,7 @@ main(void)
 EOC
 end
 
-#have_func 'rb_long2int', 'ruby.h'
-if have_macro('rb_long2int', 'ruby.h')
-  $defs.push(format("-DHAVE_%s", 'rb_long2int'.tr_cpp))
-end
+have_func 'rb_long2int', 'ruby.h'
 have_func 'rb_hash_lookup2', 'ruby.h'
 have_func 'rb_reg_backref_number', 'ruby.h'
 have_func 'rb_memhash', 'ruby.h'
@@ -128,5 +125,7 @@ TAGS: $(SRCS)
 tags: TAGS
 
 .PHONY: tags
+
+DISTCLEANFILES += TAGS
 EOF
 end

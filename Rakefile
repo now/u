@@ -1,89 +1,85 @@
 # -*- coding: utf-8 -*-
 
-require 'lookout/rake/tasks'
-require 'rake/clean'
-require 'yard'
+require 'inventory/rake-1.0'
 
-Lookout::Rake::Tasks::Test.new
-Lookout::Rake::Tasks::Gem.new
-Lookout::Rake::Tasks::Tags.new
+load File.expand_path('../lib/u/version.rb', __FILE__)
 
-require 'nml'
-require 'nokogiri'
+Inventory::Rake::Tasks.define U::Version, :gem => proc{ |_, s|
+  s.author = 'Nikolai Weibull'
+  s.email = 'now@bitwi.se'
+  s.homepage = 'https://github.com/now/u'
+  # TODO Move to Inventory::Rake::Tasks::Gem.
+  s.extensions = U::Version.extensions.map{ |e| e.extconf }
+}
 
-module NML::YARD end
-class NML::YARD::Markup
-  Template = <<EOT
-<?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:output method="html" encoding="utf-8"/>
-  <xsl:include href="#{File.join(NML::DataPath, 'templates/html/nml.xsl')}"/>
+Inventory::Rake::Tasks.unless_installing_dependencies do
+  require 'lookout/rake-3.0'
+  Lookout::Rake::Tasks::Test.new
 
-  <xsl:template match="nml">
-    <xsl:apply-templates/>
-  </xsl:template>
-</xsl:stylesheet>
-EOT
-
-  def initialize(text)
-    @text = text
+  require 'inventory/rake/tasks/yard-1.0'
+  Inventory::Rake::Tasks::YARD.new do |t|
+    t.options += %w'--plugin yard-heuristics-1.0 --plugin yard-value-1.0'
+    t.globals[:source_code_url] = 'https://github.com/now/%s/blob/v%s/%%s#L%%d' % [t.inventory.package, t.inventory]
   end
 
-  def to_html
-    return @text if @text.empty?
-    Nokogiri::XSLT(Template).transform(Nokogiri::XML(NML::Output::NML.call(@text =~ /\A   / ? NML.ast(@text) : NML::Grammar::Parsers::Block::DocumentParser.ast("\n" + @text, :root => :blocks).first))).to_xml
-  end
-end
-module YARD::Templates::Helpers::HtmlHelper
-  def html_markup_nml(text)
-    markup_class(:nml).new(text).to_html
-  end
-end
-YARD::Templates::Helpers::MarkupHelper::MARKUP_PROVIDERS[:nml] = [{:lib => :nml, :const => 'NML::YARD::Markup'}]
+  # TODO Move to inventory-rake.
+  class Inventory::Rake::Tasks::Compile
+    include Rake::DSL
 
-YARD::Rake::YardocTask.new do |t|
-  t.options = %w[--markup markdown]
-end
-
-task :test => :extensions
-
-desc 'Build all C-based extensions'
-task :extensions
-[
-  'u'
-].map{ |e| File.join('ext', e) }.each do |extension|
-  makefile = File.join(extension, 'Makefile')
-  so = File.join(extension, File.basename(extension).delete('-') + '.' + RbConfig::CONFIG['DLEXT'])
-  tags = File.join(extension, 'TAGS')
-
-  task :extensions => [makefile, so]
-
-  begin
-    sources = IO.read(makefile).grep(/^\s*SRCS/).first.sub(/^\s*SRCS\s*=\s*/, "").split(' ')
-  rescue
-    Dir.chdir(extension) do
-      sources = FileList['*.c'].to_a
+    def initialize(options = {})
+      self.inventory = options.fetch(:inventory, Inventory::Rake::Tasks.inventory)
+      yield self if block_given?
+      define
     end
-  end
 
-  file makefile => ['extconf.rb', 'depend'].map{ |tail| File.join(extension, tail) } do
-    Dir.chdir(extension) do
-      ruby 'extconf.rb'
-      sh 'make'
+    def define
+      desc 'Compile extensions' unless Rake::Task.task_defined? :compile
+      task :compile
+
+      @inventory.extensions.each do |extension|
+        name = :"compile:#{extension}"
+        makefile = '%s/Makefile' % extension.path
+        ext_so = '%s/%s.%s' % [extension.path,
+                               extension.name.delete('-'),
+                               RbConfig::CONFIG['DLEXT']]
+        lib_so = 'lib/%s/%s' % [@inventory.package_path, File.basename(ext_so)]
+        task :compile => name
+        task name => [makefile, lib_so]
+        file makefile => [extension.extconf, extension.depend] do
+          Dir.chdir extension.path do
+            ENV['CFLAGS'] = '-Werror' unless ENV['CFLAGS']
+            ruby File.basename(extension.extconf)
+            sh 'make'
+          end
+        end
+        file ext_so => extension.source_files do
+          sh 'make -C %s' % extension.path
+        end
+        file lib_so => ext_so do
+          install ext_so, lib_so
+        end
+        tags = '%s/TAGS' % extension.path
+        file tags => extension.source_files do
+          sh 'make -C %s tags' % extension.path
+        end
+        %w'clean distclean'.each do |rule|
+          clean_name = :"#{rule}:#{extension}"
+          task :clean => clean_name
+          desc 'Clean files build for %s extension' % extension
+          task clean_name do
+            sh 'make -C %s' % rule
+          end
+        end
+      end
+
+      # TODO :check instead?  Argh, this is a bit complicated
+      task :test => :compile if Rake::Task.task_defined? :test
     end
+
+    attr_writer :inventory
   end
 
-  extension_sources = sources.map{ |source| File.join(extension, source) }
-
-  file so => extension_sources do
-    sh 'make -C %s' % extension
-    # TODO: Perhaps copying the ‘so’ to “lib” could save us some trouble with
-    # how libraries are loaded.
-  end
-
-  file tags => extension_sources do
-    sh 'make -C %s tags' % extension
-  end
+  Inventory::Rake::Tasks::Compile.new
 end
 
 # TODO: Move to U::Version::Unicode
@@ -112,7 +108,7 @@ end
 def data_header(headers, &block)
   block ||= proc{ |t| generate_data_header t }
   headers.each do |path, prerequisites|
-    task :extensions => path
+    task :'compile:u' => path
     file path => prerequisites, &block
   end
 end
@@ -175,9 +171,6 @@ data_header 'ext/u/data/wide-cjk.h' => %w[build/ext/u/data/wide.rb
                                           build/data/DerivedEastAsianWidth.txt] do |t|
   generate_data_header t, 'A'
 end
-
-CLEAN.include ["ext/**/{*.{o,so,#{RbConfig::CONFIG['DLEXT']}},TAGS}"]
-CLOBBER.include ['ext/**/Makefile']
 
 task :test => %w[test/unit/case.rb test/unit/foldcase.rb] # test/unit/normalize.rb]
 
