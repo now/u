@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 
 Expectations do
-  expect ''.u[0, -2].to.be.nil?
-  expect ''.u[0, -1].to.be.nil?
+  expect nil do ''.u[0, -2] end
+  expect nil do ''.u[0, -1] end
 
   expect ''.u do ''.u[0, 0] end
   expect ''.u do ''.u[0, 1] end
   expect ''.u do ''.u[0, 2] end
 
-  expect ''.u[-1, -2].to.be.nil?
-  expect ''.u[-1, -1].to.be.nil?
-  expect ''.u[-1, 0].to.be.nil?
-  expect ''.u[-1, 1].to.be.nil?
-  expect ''.u[-1, 2].to.be.nil?
-  expect ''.u[1, -2].to.be.nil?
-  expect ''.u[1, -1].to.be.nil?
-  expect ''.u[1, 0].to.be.nil?
-  expect ''.u[1, 1].to.be.nil?
-  expect ''.u[1, 2].to.be.nil?
+  expect nil do ''.u[-1, -2] end
+  expect nil do ''.u[-1, -1] end
+  expect nil do ''.u[-1, 0] end
+  expect nil do ''.u[-1, 1] end
+  expect nil do ''.u[-1, 2] end
+  expect nil do ''.u[1, -2] end
+  expect nil do ''.u[1, -1] end
+  expect nil do ''.u[1, 0] end
+  expect nil do ''.u[1, 1] end
+  expect nil do ''.u[1, 2] end
 
   expect nil do ''.u[0] end
 
@@ -98,23 +98,23 @@ Expectations do
   expect 4 do 'äbc'.u.bytesize end
   expect 9 do "äbc\0dëf".u.bytesize end
 
-  expect ''.u.byteslice(0, -2).to.be.nil?
-  expect ''.u.byteslice(0, -1).to.be.nil?
+  expect nil do ''.u.byteslice(0, -2) end
+  expect nil do ''.u.byteslice(0, -1) end
 
   expect ''.u do ''.u.byteslice(0, 0) end
   expect ''.u do ''.u.byteslice(0, 1) end
   expect ''.u do ''.u.byteslice(0, 2) end
 
-  expect ''.u.byteslice(-1, -2).to.be.nil?
-  expect ''.u.byteslice(-1, -1).to.be.nil?
-  expect ''.u.byteslice(-1, 0).to.be.nil?
-  expect ''.u.byteslice(-1, 1).to.be.nil?
-  expect ''.u.byteslice(-1, 2).to.be.nil?
-  expect ''.u.byteslice(1, -2).to.be.nil?
-  expect ''.u.byteslice(1, -1).to.be.nil?
-  expect ''.u.byteslice(1, 0).to.be.nil?
-  expect ''.u.byteslice(1, 1).to.be.nil?
-  expect ''.u.byteslice(1, 2).to.be.nil?
+  expect nil do ''.u.byteslice(-1, -2) end
+  expect nil do ''.u.byteslice(-1, -1) end
+  expect nil do ''.u.byteslice(-1, 0) end
+  expect nil do ''.u.byteslice(-1, 1) end
+  expect nil do ''.u.byteslice(-1, 2) end
+  expect nil do ''.u.byteslice(1, -2) end
+  expect nil do ''.u.byteslice(1, -1) end
+  expect nil do ''.u.byteslice(1, 0) end
+  expect nil do ''.u.byteslice(1, 1) end
+  expect nil do ''.u.byteslice(1, 2) end
 
   expect nil do ''.u.byteslice(0) end
 
@@ -329,15 +329,15 @@ Expectations do
     "hello\0world".u.lines("\0").entries
   end
 
-  expect ''.u.to.be.empty?
-  expect 'not'.u.not.to.be.empty?
+  expect result.to.be.empty? do ''.u end
+  expect result.not.to.be.empty? do 'not'.u end
 
-  expect 'abc'.u.to.end_with?('c')
-  expect 'abc'.u.not.to.end_with?('d')
-  expect 'cbä'.u.to.end_with?('ä')
-  expect 'cbä'.u.not.to.end_with?('äb')
-  expect 'cbä'.u.to.end_with?('a', 'ä')
-  expect 'cbä'.u.not.to.end_with?
+  expect result.to.end_with?('c') do 'abc'.u end
+  expect result.not.to.end_with?('d') do 'abc'.u end
+  expect result.to.end_with?('ä') do 'cbä'.u end
+  expect result.not.to.end_with?('äb') do 'cbä'.u end
+  expect result.to.end_with?('a', 'ä') do 'cbä'.u end
+  expect result.not.to.end_with? do 'cbä'.u end
 
   expect "abc\0ss".u do "abc\0ß".u.foldcase end
 
@@ -795,11 +795,11 @@ Expectations do
   expect 15 do 'fred'.u.hex end
   # TODO: Add tests for Unicode digit values
 
-  expect 'fööbär'.u.to.include?('f'.u)
-  expect 'fööbär'.u.to.include?('föö'.u)
-  expect 'fööbär'.u.to.include?('bär'.u)
-  expect 'fööbär'.u.not.to.include?('bäz'.u)
-  expect 'fööbär'.u.not.to.include?('z'.u)
+  expect result.to.include?('f'.u) do 'fööbär'.u end
+  expect result.to.include?('föö'.u) do 'fööbär'.u end
+  expect result.to.include?('bär'.u) do 'fööbär'.u end
+  expect result.not.to.include?('bäz'.u) do 'fööbär'.u end
+  expect result.not.to.include?('z'.u) do 'fööbär'.u end
 
   expect 0 do 'hëllö'.u.index('') end
   expect 0 do 'hëllö'.u.index('h') end
@@ -1170,12 +1170,12 @@ Expectations do
   expect 'ää bb cc'.u do 'ää   bb   cc'.u.squeeze(' ') end
   expect 'BxTÿWz'.u do 'BxTÿÿÿWzzz'.u.squeeze('a-zä-ÿ') end
 
-  expect 'abc'.u.to.start_with?('a')
-  expect 'abc'.u.not.to.start_with?('b')
-  expect 'äbc'.u.to.start_with?('ä')
-  expect 'äbc'.u.not.to.start_with?('bc')
-  expect 'äbc'.u.to.start_with?('a', 'ä')
-  expect 'äbc'.u.not.to.start_with?
+  expect result.to.start_with?('a') do 'abc'.u end
+  expect result.not.to.start_with?('b') do 'abc'.u end
+  expect result.to.start_with?('ä') do 'äbc'.u end
+  expect result.not.to.start_with?('bc') do 'äbc'.u end
+  expect result.to.start_with?('a', 'ä') do 'äbc'.u end
+  expect result.not.to.start_with? do 'äbc'.u end
 
   # TODO: Add tests for Unicode whitespace characters
   expect 'あ'.u do 'あ'.u.strip end
