@@ -1,10 +1,8 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains digit characters.  Digit characters
- * are characters belonging to the Number, decimal digit (Nd) category, such as
- * ‘1’, ‘2’, and ‘3’.
- *
- * @return [Boolean] `True` if this {U::String} only contains digit characters */
+/* @overload digit?
+ *   @return [Boolean] True if the receiver contains only characters in the
+ *     general category Number, decimal digit (Nd) */
 VALUE
 rb_u_string_digit(VALUE self)
 {

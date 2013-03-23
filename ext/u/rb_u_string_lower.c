@@ -1,27 +1,10 @@
 #include "rb_includes.h"
 
-/* Checks if this {U::String} has been downcased.
- *
- * @overload lower?
- *
- *   Checks if this {U::String} has been downcased according to the rules of the
- *   locale specified by the environment variable `LC_CTYPE`.
- *
- *   The actual check is if _a_ = _a_{#downcase}, where _a_ =
- *   `self`{#normalize}`(:nfd)`.
- *
- *   @return [Boolean] `True` if `self` has been downcased
- *
- * @overload lower?(locale)
- *
- *   Checks if this {U::String} has been downcased according to the rules of
- *   _locale_.
- *
- *   The actual check is if _a_ = _a_{#downcase}`(locale)`, where _a_ =
- *   `self`{#normalize}`(:nfd)`.
- *
- *   @param [#to_str] locale Locale whose casing rules to use
- *   @return [Boolean] `True` if `self` has been downcased */
+/* @overload lower?(locale = ENV[LC_CTYPE])
+ *   @param [#to_str] locale
+ *   @return [Boolean] True if the receiver has been downcased according to the
+ *     rules of LOCALE, that is, if _a_ = _a_{#downcase}(LOCALE), where _a_ =
+ *     {#normalize}(`:nfd`) */
 VALUE
 rb_u_string_lower(int argc, VALUE *argv, VALUE self)
 {

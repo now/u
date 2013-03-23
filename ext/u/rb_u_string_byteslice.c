@@ -63,49 +63,32 @@ rb_u_string_byteslice(VALUE self, VALUE index)
         }
 }
 
-/* Extracts a substring of this {U::String} based on byte indexes.
- *
- * @overload byteslice(index)
- *
- *   Extracts the substring [max(_i_, 0), min({#length}, _i_ + 1)], where _i_ =
- *   _index_ if _index_ ≥ 0, _i_ = {#length} - abs(_index_) otherwise.  Note
- *   that these are byte indexes, not character indexes.
- *
- *   Any taint or untrust is inherited by the substring.
- *
- *   @param [Integer] index Index to begin at
- *   @return [U::String, nil] The extracted substring, or nil if the resulting
- *     substring is empty
+/* @overload byteslice(index)
+ *   @param [Integer] index
+ *   @return [U::String, nil] The byte-index-based substring [max(_i_, 0),
+ *     min({#bytesize}, _i_ + 1)], where _i_ = INDEX if INDEX ≥ 0, _i_ =
+ *     {#bytesize} - abs(INDEX) otherwise, inheriting any taint or untrust, or
+ *     nil if this substring is empty
  *
  * @overload byteslice(index, length)
- *
- *   Extracts the substring [max(_i_, 0), min({#length}, _i_ + _length_)],
- *   where _i_ = _index_ if _index_ ≥ 0, _i_ = {#length} - abs(_index_)
- *   otherwise. Note that these are byte indexes, not character indexes.
- *
- *   Any taint or untrust is inherited by the substring.
- *
- *   @param [Integer] index Index to begin at
- *   @param [Integer] length Number of bytes to extract
- *   @return [U::String, nil] The extracted substring, or nil if _length_ < 0
+ *   @param [Integer] index
+ *   @param [Integer] length
+ *   @return [U::String, nil] The byte-index-based substring [max(_i_, 0),
+ *     min({#bytesize}, _i_ + LENGTH)], where _i_ = INDEX if INDEX ≥ 0, _i_ =
+ *     {#bytesize} - abs(INDEX) otherwise, inheriting any taint or untrust, or
+ *     nil if LENGTH < 0
  *
  * @overload byteslice(range)
- *
- *   Same as `self[i, j - k]`, where _i_ = _range_`.begin` if _range_`.begin` ≥
- *   0, _i_ = {#length} - abs(_range_`.begin`) otherwise, _j_ = _range_`.end`
- *   if _range_`.end` ≥ 0, _j_ = {#length} - abs(_range_`.end`) otherwise, and
- *   _k_ = 1 if _range_`.exclude_end?`, _k_ = 0 otherwise. Note that these are
- *   byte indexes, not character indexes.
- *
- *   @param [Range] range Range to extract
- *   @return [U::String, nil] The extracted substring, or nil if _j_ - _k_ < 0
+ *   @param [Range] range
+ *   @return [U::String, nil] The result of `#[i, j - k]`, where _i_ =
+ *     RANGE#begin if RANGE#begin ≥ 0, _i_ = {#bytesize} - abs(RANGE#begin)
+ *     otherwise, _j_ = RANGE#end if RANGE#end ≥ 0, _j_ = {#bytesize} -
+ *     abs(RANGE#end) otherwise, and _k_ = 1 if RANGE#exclude_end?, _k_ = 0
+ *     otherwise, or nil if _j_ - _k_ < 0
  *
  * @overload byteslice(object)
- *
- *   Returns `nil` for any object that isn’t any of the classes already listed.
- *
- *   @param [Object] object Any object
- *   @return [nil] nil */
+ *   @param [Object] object
+ *   @return [nil] Nil for any object that doesn’t satisfy the other cases */
 VALUE
 rb_u_string_byteslice_m(int argc, VALUE *argv, VALUE self)
 {

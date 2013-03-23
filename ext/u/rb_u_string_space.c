@@ -1,22 +1,22 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains space characters.  Space characters
- * are those in the Separator Unicode category, that is, characters that belong
- * to any of the categories
+/* @overload space?
  *
- * * Separator, space (Zs)
- * * Separator, line (Zl)
- * * Separator, paragraph (Zp)
+ *   Returns true if the receiver contains only “space” characters.  Space
+ *   characters are those in the general category Separator:
  *
- * such as ‘ ’, or a control character acting as such, namely
+ *   * Separator, space (Zs)
+ *   * Separator, line (Zl)
+ *   * Separator, paragraph (Zp)
  *
- * * U+0009 (CHARACTER TABULATION (HT))
- * * U+000A (LINE FEED (LF))
- * * U+000C (FORM FEED (FF))
- * * U+000D (CARRIAGE RETURN (CR))
+ *   such as ‘ ’, or a control character acting as such, namely
  *
- * @return [Boolean] `True` if this {U::String} only contains space
- *   characters */
+ *   * U+0009 (CHARACTER TABULATION (HT))
+ *   * U+000A (LINE FEED (LF))
+ *   * U+000C (FORM FEED (FF))
+ *   * U+000D (CARRIAGE RETURN (CR))
+ *
+ *   @return [Boolean] */
 VALUE
 rb_u_string_space(VALUE self)
 {

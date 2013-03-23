@@ -53,20 +53,19 @@ rb_u_string_index(VALUE self, VALUE rbsubstring, long offset)
 
 /* @overload index(pattern, offset = 0)
  *
- *   Finds the minimal index into `self` where _pattern_ matches, equal to or
- *   greater than _i_, where _i_ = _offset_ if _offset_ ≥ 0, _i_ = {#length} -
- *   abs(_offset_) otherwise.
+ *   Returns the minimal index of the receiver where PATTERN matches, equal to or
+ *   greater than _i_, where _i_ = OFFSET if OFFSET ≥ 0, _i_ = {#length} -
+ *   abs(OFFSET) otherwise, or nil if there is no match.
  *
- *   If _pattern_ is a Regexp, the Regexp special variables `$&`, `$'`,
+ *   If PATTERN is a Regexp, the Regexp special variables `$&`, `$'`,
  *   <code>$\`</code>, `$1`, `$2`, …, `$`_n_ are updated accordingly.
  *
- *   If _pattern_ responds to `#to_str`, the matching is performed by a byte
+ *   If PATTERN responds to #to_str, the matching is performed by byte
  *   comparison.
  *
- *   @param [Regexp, #to_str] pattern Pattern to search for
- *   @param [Integer] offset Index to start search at
- *   @return [Integer, nil] Index of first match of _pattern_ starting at
- *     _offset_, or `nil` if there is no match
+ *   @param [Regexp, #to_str] pattern
+ *   @param [Integer] offset
+ *   @return [Integer, nil]
  *   @see #rindex */
 VALUE
 rb_u_string_index_m(int argc, VALUE *argv, VALUE self)

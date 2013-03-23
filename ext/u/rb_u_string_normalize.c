@@ -37,7 +37,7 @@ symbol_to_mode(VALUE symbol)
 
 /* @overload normalize(mode = :default)
  *
- * Normalizes this {U::String} according to _mode_.
+ * Returns the normalization of the receiver according to MODE.
  *
  * Normalization is the process of converting characters and sequences of
  * characters in string into a canonical form.  This process includes dealing
@@ -75,9 +75,8 @@ symbol_to_mode(VALUE symbol)
  *   </tbody>
  * </table>
  *
- * @param [Symbol] mode Normalization to perform
- * @return [U::String] `self` normalized to _mode_
- */
+ * @param [Symbol] mode
+ * @return [U::String] */
 VALUE
 rb_u_string_normalize(int argc, VALUE *argv, VALUE self)
 {

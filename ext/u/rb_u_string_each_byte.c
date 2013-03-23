@@ -1,19 +1,14 @@
 #include "rb_includes.h"
 
-/* Enumerates each byte in this {U::String}.
+/* @overload each_byte{ |byte| … }
  *
- * @overload each_byte{ |byte| … }
+ *   Enumerates the bytes in the receiver.
  *
- *   Enumerates each byte in this {U::String}.
- *
- *   @yieldparam [Fixnum] byte Byte at current position
- *   @return [U::String] `self`
+ *   @yieldparam [Fixnum] byte
  *
  * @overload each_byte
  *
- *   Creates an Enumerator over each byte in this {U::String}.
- *
- *   @return [Enumerator] An Enumerator over each byte in this {U::String}
+ *   @return [Enumerator] An Enumerator over the bytes in the receiver
  */
 VALUE
 rb_u_string_each_byte(VALUE self)

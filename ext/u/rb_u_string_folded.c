@@ -1,11 +1,8 @@
 #include "rb_includes.h"
 
-/* Checks if this {U::String} has been case folded.
- *
- * The actual check is if _a_ = _a_{#foldcase}, where _a_ =
- * `self`{#normalize}`(:nfd)`.
- *
- * @return [Boolean] `True` if `self` has been case folded */
+/* @overload folded?
+ *   @return [Boolean] True if the receiver has been case-folded, that is, if
+ *     _a_ = _a_{#foldcase}, where _a_ = {#normalize}(`:nfd`) */
 VALUE
 rb_u_string_folded(VALUE self)
 {

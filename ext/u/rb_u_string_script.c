@@ -303,7 +303,7 @@ script_to_symbol(UnicodeScript script)
         }
 }
 
-/* Determines the script of the characters of this {U::String}.
+/* Returns the script of the characters of the receiver.
  *
  * The script of a character identifies the primary writing system that uses
  * the character.
@@ -407,19 +407,19 @@ script_to_symbol(UnicodeScript script)
  *     <tr><td>:tibetan</td><td>Tibetan</td></tr>
  *     <tr><td>:tifinagh</td><td>Tifinagh</td></tr>
  *     <tr><td>:ugaritic</td><td>Ugaritic</td></tr>
- *     <tr><td>:unknown</td><td>For unassigned, private-use, non-character, and surrogate codepoints</td></tr>
+ *     <tr><td>:unknown</td><td>For unassigned, private-use, non-character, and surrogate code points</td></tr>
  *     <tr><td>:vai</td><td>Vai</td></tr>
  *     <tr><td>:yi</td><td>Yi</td></tr>
  *   </tbody>
  * </table>
  *
- * @see http://www.unicode.org/reports/tr24/
- *
- * @raise [ArgumentError] If `self` contains two characters belonging to
+ * @raise [ArgumentError] If the receiver contains two characters belonging to
  *   different scripts
- * @raise [ArgumentError] If `self` contains an incomplete UTF-8 sequence
- * @raise [ArgumentError] If `self` contains an invalid UTF-8 sequence
- * @return [Symbol] The script of the characters of this {U::String} */
+ * @raise [ArgumentError] If the receiver contains an incomplete UTF-8 sequence
+ * @raise [ArgumentError] If the receiver contains an invalid UTF-8 sequence
+ * @return [Symbol]
+ * @see http://www.unicode.org/reports/tr24/
+ *   Unicode Standard Annex #24 Unicode Script Property */
 VALUE
 rb_u_string_script(VALUE self)
 {

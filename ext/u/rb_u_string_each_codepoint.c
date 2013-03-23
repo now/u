@@ -1,19 +1,13 @@
 #include "rb_includes.h"
 
-/* Enumerates each codepoint in this {U::String}.
+/* @overload each_codepoint{ |codepoint| … }
  *
- * @overload each_codepoint{ |codepoint| … }
+ *   Enumerates the code points of the receiver.
  *
- *   Enumerates each codepoint in this {U::String}.
- *
- *   @yieldparam [Integer] codepoint Codepoint at current position
- *   @return [U::String] `self`
+ *   @yieldparam [Integer] codepoint
  *
  * @overload each_codepoint
- *
- *   Creates an Enumerator over each codepoint in this {U::String}.
- *
- *   @return [Enumerator] An Enumerator over each codepoint in this {U::String}
+ *   @return [Enumerator] An Enumerator over the code points of the receiver
  */
 VALUE
 rb_u_string_each_codepoint(VALUE self)

@@ -1,13 +1,10 @@
 #include "rb_includes.h"
 
 /* @overload +(other)
- *   Concatenates _other_ to this {U::String}.
- *
- *   Any taint on `self` or _other_ will be inherited by the result.
- *   @param [U::String, #to_str] other The string to concatenate to this
- *     {U::String}
- *   @raise [ArgumentError] If {#bytesize} + _other_{#bytesize} > LONG_MAX
- *   @return [U::String] The concatenation of _other_ to this {U::String} */
+ *   @param [U::String, #to_str] other
+ *   @raise [ArgumentError] If {#bytesize} + OTHER{#bytesize} > LONG_MAX
+ *   @return [U::String] The concatenation of OTHER to the receiver, inheriting
+ *     any taint on either */
 VALUE
 rb_u_string_plus(VALUE self, VALUE rbother)
 {

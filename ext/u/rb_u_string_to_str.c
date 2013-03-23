@@ -1,10 +1,7 @@
 #include "rb_includes.h"
 
-/* Converts this {U::String} to a String.
- *
- * Any taint or untrust is inherited.
- *
- * @return [String] `self` converted to a String */
+/* @return The String representation of the receiver, inheriting any taint or
+ *   untrust */
 VALUE
 rb_u_string_to_str(VALUE self)
 {

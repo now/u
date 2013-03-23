@@ -1,13 +1,8 @@
 #include "rb_includes.h"
 
 /* @overload include?(substring)
- *
- * Checks if _substring_ is a substring of `self`.
- *
- * Note that this check is done by byte comparison.
- *
- * @param [#to_str] substring Substring to check for
- * @return [Boolean] `True` if {#index}`(`_substring_`)` ≠ `nil` */
+ *   @param [#to_str] substring
+ *   @return [Boolean] True if {#index}(SUBSTRING) ≠ nil */
 VALUE
 rb_u_string_include(VALUE self, VALUE substring)
 {

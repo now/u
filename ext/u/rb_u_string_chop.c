@@ -1,14 +1,13 @@
 #include "rb_includes.h"
 
-/* Removes the last character in `self`.
+/* Returns the receiver, minus its last character, unless the receiver is
+ * {#empty?} or if the last character is invalidly encoded, in which case the
+ * receiver is returned.
  *
  * If the last character is U+000A LINE FEED and the second-to-last character
  * is U+000D CARRIAGE RETURN, both characters are removed.
  *
- * If `self` is {#empty?} or if the last character of `self` is invalidly
- * encoded, no character is removed.
- *
- * @return [U::String] `self` with the last character removed
+ * @return [U::String]
  *
  * @see #chomp
  * @see #lstrip

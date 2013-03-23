@@ -1,23 +1,15 @@
 #include "rb_includes.h"
 
-/* Enumerates each character in this {U::String}.
+/* @overload each_char{ |char| … }
  *
- * @overload each_char{ |char| … }
+ *   Enumerates the characters in the receiver, each inheriting any taint or
+ *   untrust.
  *
- *   Enumerate each character in this {U::String}.
- *
- *   Any taint or untrust is inherited.
- *
- *   @yieldparam [U::String] char Character at current position
- *   @return [U::String] `self`
+ *   @yieldparam [U::String] char
  *
  * @overload each_char
  *
- *   Creates an Enumerator over each character in this {U::String}.
- *
- *   Any taint or untrust is inherited.
- *
- *   @return [Enumerator] An Enumerator over each character in this {U::String}
+ *   @return [Enumerator] An Enumerator over the characters in the receiver
  */
 VALUE
 rb_u_string_each_char(VALUE self)

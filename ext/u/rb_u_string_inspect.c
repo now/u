@@ -77,50 +77,52 @@ rb_u_string_inspect_default(unichar c, VALUE result)
         rb_str_buf_cat(result, str, unichar_to_u(c, str));
 }
 
-/* Inspects the contents of this {U::String} in a reader-friendly format.
+/* Returns the receiver in a reader-friendly inspectable format, inheriting
+ * any taint and untrust.
  *
- * The first character is `"`.  Then, any {#printable?} characters are output as-is.
- * The following special characters are escaped in the output:
- *
- * <table>
- *   <tr><td>Character</td><td>Dumped Sequence</td></tr>
- *   <tr><td>U+0022 QUOTATION MARK</td><td><code>\"</code></td></tr>
- *   <tr><td>U+005C REVERSE SOLIDUS</td><td><code>\\</code></td></tr>
- *   <tr><td>U+000A LINE FEED (LF)</td><td><code>\n</code></td></tr>
- *   <tr><td>U+000D CARRIAGE RETURN (CR)</td><td><code>\r</code></td></tr>
- *   <tr><td>U+0009 CHARACTER TABULATION</td><td><code>\t</code></td></tr>
- *   <tr><td>U+000C FORM FEED (FF)</td><td><code>\f</code></td></tr>
- *   <tr><td>U+000B LINE TABULATION</td><td><code>\v</code></td></tr>
- *   <tr><td>U+0008 BACKSPACE</td><td><code>\b</code></td></tr>
- *   <tr><td>U+0007 BELL</td><td><code>\a</code></td></tr>
- *   <tr><td>U+001B ESCAPE</td><td><code>\e</code></td></tr>
- * </table>
- *
- * The following special sequences are also escaped:
+ * The reader-friendly inspectable format looks like “`"…".u`”.  Inside the
+ * “…”, any {#printable?} characters are output as-is, the following special
+ * characters are escaped according to the following table:
  *
  * <table>
- *   <tr><td>Sequence</td><td>Dumped Sequence</td></tr>
- *   <tr><td><code>#$</code></td><td><code>\#$</code></td></tr>
- *   <tr><td><code>#@</code></td><td><code>\#@</code></td></tr>
- *   <tr><td><code>#{</code></td><td><code>\#{</code></td></tr>
+ *   <thead><tr><th>Character</th><th>Dumped Sequence</th></tr></thead>
+ *   <tbody>
+ *     <tr><td>U+0022 QUOTATION MARK</td><td><code>\"</code></td></tr>
+ *     <tr><td>U+005C REVERSE SOLIDUS</td><td><code>\\</code></td></tr>
+ *     <tr><td>U+000A LINE FEED (LF)</td><td><code>\n</code></td></tr>
+ *     <tr><td>U+000D CARRIAGE RETURN (CR)</td><td><code>\r</code></td></tr>
+ *     <tr><td>U+0009 CHARACTER TABULATION</td><td><code>\t</code></td></tr>
+ *     <tr><td>U+000C FORM FEED (FF)</td><td><code>\f</code></td></tr>
+ *     <tr><td>U+000B LINE TABULATION</td><td><code>\v</code></td></tr>
+ *     <tr><td>U+0008 BACKSPACE</td><td><code>\b</code></td></tr>
+ *     <tr><td>U+0007 BELL</td><td><code>\a</code></td></tr>
+ *     <tr><td>U+001B ESCAPE</td><td><code>\e</code></td></tr>
+ *   </tbody>
  * </table>
  *
- * Valid UTF-8 byte sequences representing codepoints < 0x10000 are output as
+ * the following special sequences are also escaped:
+ *
+ * <table>
+ *   <thead><tr><th>Character</th><th>Dumped Sequence</th></tr></thead>
+ *   <tbody>
+ *     <tr><td><code>#$</code></td><td><code>\#$</code></td></tr>
+ *     <tr><td><code>#@</code></td><td><code>\#@</code></td></tr>
+ *     <tr><td><code>#{</code></td><td><code>\#{</code></td></tr>
+ *   </tbody>
+ * </table>
+ *
+ * Valid UTF-8 byte sequences representing code points < 0x10000 are output as
  * `\u`_n_, where _n_ is the four-digit uppercase hexadecimal representation
- * of the codepoint.
+ * of the code point.
  *
- * Valid UTF-8 byte sequences representing codepoints ≥ 0x10000 are output as
+ * Valid UTF-8 byte sequences representing code points ≥ 0x10000 are output as
  * `\u{`_n_`}`, where _n_ is the uppercase hexadecimal representation of the
- * codepoint.
+ * code point.
  *
  * Any other byte is output as `\x`_n_, where _n_ is the two-digit uppercase
  * hexadecimal representation of the byte’s value.
  *
- * The result is terminated with `".u`.
- *
- * Any untrust or taint is inherited by the result.
- *
- * @return [U::String] A reader-friendly version of this {U::String} */
+ * @return [String] */
 VALUE
 rb_u_string_inspect(VALUE self)
 {

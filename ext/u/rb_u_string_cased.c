@@ -1,16 +1,15 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains “cased” characters.  A cased
- * character is either in one of the categories
+/* @overload cased?
  *
- * * Letter, uppercase (Lu)
- * * Letter, lowercase (Ll)
- * * Letter, titlecase (Lt) categories
+ *   @return [Boolean] True if the receiver only contains characters in the
+ *     general categories
  *
- * or has the derived properties Other_Uppercase or Other_Lowercase.
+ *     * Letter, uppercase (Lu)
+ *     * Letter, lowercase (Ll)
+ *     * Letter, titlecase (Lt)
  *
- * @return [Boolean] `True` if this {U::String} only contains “cased”
- *   characters. */
+ *     or has the derived properties Other_Uppercase or Other_Lowercase */
 VALUE
 rb_u_string_cased(VALUE self)
 {

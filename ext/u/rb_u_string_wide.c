@@ -1,16 +1,19 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains wide characters.  Wide character are
- * those that have their East_Asian_Width property set to Wide or Fullwidth.
+/* @overload wide?
  *
- * This is mostly useful on a terminal or similar cell-based display.
+ *   Returns true if the receiver contains only “wide” characters.  Wide
+ *   character are those that have their East_Asian_Width property set to Wide
+ *   or Fullwidth.
  *
- * See http://www.unicode.org/reports/tr11/ for more details.
+ *   This is mostly useful for determining how many “cells” a character will
+ *   take up on a terminal or similar cell-based display.
  *
- * @see #width
- *
- * @return [Boolean] `True` if this {U::String} only contains wide
- *   characters */
+ *   @return [Boolean]
+ *   @see http://www.unicode.org/reports/tr11/
+ *     Unicode Standard Annex #11: East Asian Width
+ *   @see #wide_cjk?
+ *   @see #width */
 VALUE
 rb_u_string_wide(VALUE self)
 {

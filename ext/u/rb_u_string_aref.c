@@ -95,70 +95,44 @@ rb_u_string_aref(VALUE self, VALUE index)
         }
 }
 
-/* Extracts a substring of this {U::String}.
- *
- * @overload [](index)
- *
- *   Extracts the substring [max(_i_, 0), min({#length}, _i_ + 1)], where _i_ =
- *   _index_ if _index_ ≥ 0, _i_ = {#length} - abs(_index_) otherwise.
- *
- *   Any taint or untrust is inherited by the substring.
- *
- *   @param [Integer] index Index to begin at
- *   @return [U::String, nil] The extracted substring, or nil if the resulting
- *     substring is empty
+/* @overload [](index)
+ *   @param [Integer] index
+ *   @return [U::String, nil] The substring [max(_i_, 0), min({#length}, _i_ +
+ *     1)], where _i_ = INDEX if INDEX ≥ 0, _i_ = {#length} - abs(INDEX)
+ *     otherwise, inheriting any taint or untrust, or nil if this substring is
+ *     empty
  *
  * @overload [](index, length)
- *
- *   Extracts the substring [max(_i_, 0), min({#length}, _i_ + _length_)],
- *   where _i_ = _index_ if _index_ ≥ 0, _i_ = {#length} - abs(_index_)
- *   otherwise.
- *
- *   Any taint or untrust is inherited by the substring.
- *
- *   @param [Integer] index Index to begin at
- *   @param [Integer] length Number of characters to extract
- *   @return [U::String, nil] The extracted substring, or nil if _length_ < 0
+ *   @param [Integer] index
+ *   @param [Integer] length
+ *   @return [U::String, nil] The substring [max(_i_, 0), min({#length}, _i_ +
+ *     LENGTH)], where _i_ = INDEX if INDEX ≥ 0, _i_ = {#length} - abs(INDEX)
+ *     otherwise, inheriting any taint or untrust, or nil if LENGTH < 0
  *
  * @overload [](range)
- *
- *   Same as `self[i, j - k]`, where _i_ = _range_`.begin` if _range_`.begin` ≥
- *   0, _i_ = {#length} - abs(_range_`.begin`) otherwise, _j_ = _range_`.end`
- *   if _range_`.end` ≥ 0, _j_ = {#length} - abs(_range_`.end`) otherwise, and
- *   _k_ = 1 if _range_`.exclude_end?`, _k_ = 0 otherwise.
- *
- *   @param [Range] range Range to extract
- *   @return [U::String, nil] The extracted substring, or nil if _j_ - _k_ < 0
+ *   @param [Range] range
+ *   @return [U::String, nil] The result of `#[i, j - k]`, where _i_ =
+ *     RANGE#begin if RANGE#begin ≥ 0, _i_ = {#length} - abs(RANGE#begin)
+ *     otherwise, _j_ = RANGE#end if RANGE#end ≥ 0, _j_ = {#length} -
+ *     abs(RANGE#end) otherwise, and _k_ = 1 if RANGE#exclude_end?, _k_ = 0
+ *     otherwise, or nil if _j_ - _k_ < 0
  *
  * @overload [](regexp, reference = 0)
- *
- *   Extracts the submatch _reference_ from the match of _regexp_ in `self`.
- *
- *   Any taint or untrust is inherited by the submatch.
- *
- *   @param [Regexp] regexp Regexp to match against `self`
- *   @param [Integer, String, Symbol] reference Number or name of submatch to
- *     extract
- *   @raise [IndexError] If _reference_ doesn’t refer to a submatch
- *   @return [U::String, nil] The extracted submatch, or nil if no match was
- *     found or if the submatch wasn’t a part of the overall match
+ *   @param [Regexp] regexp
+ *   @param [Integer, #to_str, Symbol] reference
+ *   @raise [IndexError] If REFERENCE doesn’t refer to a submatch
+ *   @return [U::String, nil] The submatch REFERENCE from the first match of
+ *     REGEXP in the receiver, inheriting any taint and untrust, or nil if
+ *     there is no match or if the submatch isn’t part of the overall match
  *
  * @overload [](string)
- *
- *   Returns _string_ if it is a substring of `self`.
- *
- *   Any taint or untrust is inherited by the returned substring.
- *
- *   @param [U::String, String] string Substring to match against `self`
- *   @return [U::String, nil] The substring of `self` equal to _string_, or nil
- *     if it didn’t match
+ *   @param [U::String, ::String] string
+ *   @return [U::String, nil] The substring STRING of the receiver, inheriting
+ *     any taint and untrust, if STRING is a substring of the receiver
  *
  * @overload [](object)
- *
- *   Returns `nil` for any object that isn’t any of the classes already listed.
- *
- *   @param [Object] Any object
- *   @return [nil] nil */
+ *   @param [Object] object
+ *   @return [nil] Nil for any object that doesn’t satisfy the other cases */
 VALUE
 rb_u_string_aref_m(int argc, VALUE *argv, VALUE self)
 {

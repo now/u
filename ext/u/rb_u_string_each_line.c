@@ -88,28 +88,26 @@ again:
         return self;
 }
 
-/* Enumerates each line in this {U::String}.
+/* @overload each_line(separator = $/){ |lp| … }
  *
- * @overload each_line(separator = $/){ |line| … }
+ *   Enumerates the lines of the receiver.
  *
- *   Enumerate each line in this {U::String}.  If _separator_ is nil, yields
- *   `self`.  If _separator_ is {#empty?}, separates each line (paragraph) by
- *   two or more U+000A LINE FEED characters.
+ *   If SEPARATOR is nil, yields self.  If SEPARATOR is {#empty?}, separates
+ *   each line (paragraph) by two or more U+000A LINE FEED characters.
  *
- *   @param [U::String, #to_str] separator Line separator to use
- *   @yieldparam [Integer] line Line at current position
- *   @return [U::String] `self`
+ *   @param [U::String, #to_str] separator
+ *   @yieldparam [U::String, self] lp
  *
  * @overload each_line(separator = $/)
  *
- *   Creates an Enumerator over each codepoint in this {U::String}.  If
- *   _separator_ is `nil`, `self` will be yielded.  If _separator_ is
- *   {#empty?}, separates each line (paragraph) by two or more U+000A LINE FEED
+ *   Returns an Enumerator over the lines of the receiver.
+ *
+ *   If SEPARATOR is nil, self will be yielded.  If SEPARATOR is {#empty?},
+ *   separates each line (paragraph) by two or more U+000A LINE FEED
  *   characters.
  *
- *   @param [U::String, #to_str] separator Line separator to use
- *   @return [Enumerator] An Enumerator over each line in this {U::String}
- */
+ *   @param [U::String, #to_str] separator
+ *   @return [Enumerator] */
 VALUE
 rb_u_string_each_line(int argc, VALUE *argv, VALUE self)
 {

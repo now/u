@@ -1,9 +1,8 @@
 #include "rb_includes.h"
 
-/* Checks if this {U::String} only contains valid UTF-8 sequences.
- *
- * @return [Boolean] `True` if this {U::String} only contains valid UTF-8
- *   sequences */
+/* @overload valid_encoding?
+ *   @return [Boolean] True if the receiver contains only valid UTF-8
+ *     sequences */
 VALUE
 rb_u_string_valid_encoding(VALUE self)
 {

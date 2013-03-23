@@ -1,8 +1,6 @@
 #include "rb_includes.h"
 
-/* Creates a hash value of this {U::String}.
- *
- * @return [Fixnum] Hash value of this {U::String} */
+/* @return [Fixnum] The hash value of the receiver’s content */
 VALUE
 rb_u_string_hash(VALUE self)
 {

@@ -97,16 +97,12 @@ rb_u_string_justify(int argc, VALUE *argv, VALUE self, char jflag)
 }
 
 /* @overload center(width, padding = ' ')
- *
- *   Pads `self` as evenly as possible on both sides with _padding_ to make it
- *   max({#length}, _width_) wide.
- *
- *   @param [Integer] width Width of the resulting string
- *   @param [U::String, #to_str] padding String to pad the result with
- *   @raise [ArgumentError] If _padding_{#length} = 0
- *   @return [U::String] `self` padded as evenly as possible on both sides with
- *     _padding_
- *
+ *   @param [Integer] width
+ *   @param [U::String, #to_str] padding
+ *   @raise [ArgumentError] If PADDING{#length} = 0
+ *   @return [U::String] The receiver padded as evenly as possible on both
+ *     sides with PADDING to make it max({#length}, WIDTH) wide, inheriting any
+ *     taint or untrust from both the receiver and from PADDING
  *   @see #ljust
  *   @see #rjust */
 VALUE
@@ -116,15 +112,12 @@ rb_u_string_center(int argc, VALUE *argv, VALUE self)
 }
 
 /* @overload ljust(width, padding = ' ')
- *
- *   Pads `self` on the right with _padding_ to make it max({#length}, _width_)
- *   wide.
- *
- *   @param [Integer] width Width of the resulting string
- *   @param [U::String, #to_str] padding String to pad the result with
- *   @raise [ArgumentError] If _padding_{#length} = 0
- *   @return [U::String] `self` padded on the right with _padding_
- *
+ *   @param [Integer] width
+ *   @param [U::String, #to_str] padding
+ *   @raise [ArgumentError] If PADDING{#length} = 0
+ *   @return [U::String] The receiver padded on the right with PADDING to make
+ *     it max({#length}, WIDTH) wide, inheriting any taint or untrust from both
+ *     the receiver and from PADDING
  *   @see #center
  *   @see #rjust */
 VALUE
@@ -134,15 +127,12 @@ rb_u_string_ljust(int argc, VALUE *argv, VALUE self)
 }
 
 /* @overload rjust(width, padding = ' ')
- *
- *   Pads `self` on the left with _padding_ to make it max({#length}, _width_)
- *   wide.
- *
- *   @param [Integer] width Width of the resulting string
- *   @param [U::String, #to_str] padding String to pad the result with
- *   @raise [ArgumentError] If _padding_{#length} = 0
- *   @return [U::String] `self` padded on the left with _padding_
- *
+ *   @param [Integer] width
+ *   @param [U::String, #to_str] padding
+ *   @raise [ArgumentError] If PADDING{#length} = 0
+ *   @return [U::String] The receiver padded on the left with PADDING to make
+ *     it max({#length}, WIDTH) wide, inheriting any taint or untrust from both
+ *     the receiver and from PADDING
  *   @see #center
  *   @see #ljust */
 VALUE

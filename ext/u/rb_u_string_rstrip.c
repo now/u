@@ -1,10 +1,8 @@
 #include "rb_includes.h"
 
-/* Removes the maximum {#space?} suffix from this {U::String}.
- *
+/* @return [U::String] The receiver with its maximum {#space?} suffix removed
  * @see #lstrip
- * @see #strip
- * @return [U::String] `self` with the maximum {#space?} suffix removed */
+ * @see #strip */
 VALUE
 rb_u_string_rstrip(VALUE self)
 {

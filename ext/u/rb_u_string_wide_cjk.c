@@ -1,15 +1,19 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains wide or ambiguously wide characters.
- * This is limited to characters with their East_Asian_Width property set to
- * Ambiguous, Wide, or Fullwidth.
+/* @overload wide_cjk?
  *
- * This is mostly useful on a terminal or similar cell-based display.
+ *   Returns true if the receiver contains only “wide” and “ambiguously wide”
+ *   characters.  Wide and ambiguously wide character are those that have their
+ *   East_Asian_Width property set to Ambiguous, Wide or Fullwidth.
  *
- * See http://www.unicode.org/reports/tr11/ for more details.
+ *   This is mostly useful for determining how many “cells” a character will
+ *   take up on a terminal or similar cell-based display.
  *
- * @return [Boolean] `True` if this {U::String} only contains wide or
- *   ambiguously wide characters */
+ *   @return [Boolean]
+ *   @see http://www.unicode.org/reports/tr11/
+ *     Unicode Standard Annex #11: East Asian Width
+ *   @see #wide?
+ *   @see #width */
 VALUE
 rb_u_string_wide_cjk(VALUE self)
 {

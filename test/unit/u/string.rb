@@ -180,6 +180,7 @@ Expectations do
   # thus removes it.
   expect 'hello'.u do "hello\r".u.chomp('') end
   expect 'a'.u do 'aā'.u.chomp('ā') end
+  expect result.tainted? do 'hello'.u.chomp end
 
   expect 'hell'.u do 'hellö'.u.chop end
   expect 'hellö'.u do "hellö\r\n".u.chop end
@@ -382,7 +383,7 @@ Expectations do
   expect ArgumentError.new('cannot use named argument “a”: relative argument number already used') do '%c%<a>c'.u % [0x00e4] end
   expect ArgumentError.new('cannot use named argument “a”: absolute argument number already used') do '%1$c%<a>c'.u % [0x00e4] end
   expect ArgumentError.new('one Hash argument required when using named arguments in format') do '%<a>cbc'.u % 0x00e4 end
-  expect (defined?(KeyError) ? KeyError : ArgumentError).new('named argument not found: a') do '%<a>cbc'.u % { :b => 0x00e4 } end
+  expect((defined?(KeyError) ? KeyError : ArgumentError).new('named argument not found: a')){ '%<a>cbc'.u % { :b => 0x00e4 } }
   expect ArgumentError.new('cannot use positional argument numbers after absolute argument numbers') do '%1$c%c'.u % [0x00e4] end
   expect ArgumentError.new('cannot use positional argument numbers after named arguments') do '%<a>c%c'.u % { :a => 0x00e4 } end
   expect ArgumentError.new('wrong number of arguments (0 for at least 1)') do '%c'.u % [] end

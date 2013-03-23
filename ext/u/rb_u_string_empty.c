@@ -1,8 +1,7 @@
 #include "rb_includes.h"
 
-/* Checks if {#length} = 0.
- *
- * @return [Boolean] `True` if {#length} = 0 */
+/* @overload empty?
+ *   @return [Boolean] True if {#bytesize} = 0 */
 VALUE
 rb_u_string_empty(VALUE self)
 {

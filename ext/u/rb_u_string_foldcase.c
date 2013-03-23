@@ -1,8 +1,6 @@
 #include "rb_includes.h"
 
-/* Case folds this {U::String}.
- *
- * @return [U::String] A case-folded version of `self` */
+/* @return [U::String] The case-folding of the receiver. */
 VALUE
 rb_u_string_foldcase(VALUE self)
 {

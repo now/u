@@ -1,18 +1,17 @@
 #include "rb_includes.h"
 
-/* Determines the width of this {U::String}.
+/* Returns the width of the receiver.  The width is defined as the sum of the
+ * number of “cells” on a terminal or similar cell-based display that the
+ * characters in the string will require.
  *
  * Characters that are {#wide?} have a width of 2.  Characters that are
  * {#zero_width?} have a width of 0.  Other characters have a width of 1.
  *
- * This calculation is mostly useful on a terminal or similar cell-based
- * display.
- *
- * See http://www.unicode.org/reports/tr11/ for more details.
- *
+ * @return [Integer]
+ * @see http://www.unicode.org/reports/tr11/
+ *   Unicode Standard Annex #11: East Asian Width
  * @see #wide?
- *
- * @return [Integer] The sum of the widths of the characters of `self` */
+ * @see #wide_cjk? */
 VALUE
 rb_u_string_width(VALUE self)
 {

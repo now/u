@@ -48,10 +48,12 @@ rb_u_string_chomp_newlines(VALUE self)
 
 /* @overload chomp(separator = $/)
  *
- *   Removes any _separator_ suffix on `self`.
+ *   Returns the receiver, minus any SEPARATOR suffix, unless {#length} = 0, in
+ *   which case nil is returned.  If SEPARATOR is nil or invalidly encoded,
+ *   the receiver is returned.
  *
- *   If _separator_ is `$/` and `$/` has it’s default value or if _separator_
- *   is U+000A LINE FEED, the longest suffix consisting of any of
+ *   If SEPARATOR is `$/` and `$/` has its default value or if SEPARATOR is
+ *   U+000A LINE FEED, the longest suffix consisting of any of
  *
  *   * U+000A LINE FEED
  *   * U+000D CARRIAGE RETURN
@@ -60,13 +62,10 @@ rb_u_string_chomp_newlines(VALUE self)
  *   will be removed. If no such suffix exists and the last character is a
  *   {#newline?}, it will be removed instead.
  *
- *   If _separator_ is {#empty?}, remove the longest {#newline?} suffix.
+ *   If SEPARATOR is {#empty?}, remove the longest {#newline?} suffix.
  *
- *   @param [U::String, #to_str, nil] separator Separator to remove
- *   @return [U::String, nil] `self` with any _separator_ suffix removed,
- *     `self` if _separator_ is `nil` or invalidly encoded, or `nil`, if
- *     {#length} = 0
- *
+ *   @param [U::String, #to_str, nil] separator
+ *   @return [U::String, self, nil]
  *   @see #chop
  *   @see #lstrip
  *   @see #rstrip

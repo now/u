@@ -126,53 +126,53 @@ break_type_to_symbol(UnicodeBreakType type)
         }
 }
 
-/* Determines the break type of the characters of this {U::String}.
+/* Returns the break type of the characters of the receiver.
  *
  * The possible break types are
  *
- * * :mandatory
- * * :carriage_return
- * * :line_feed
- * * :combining_mark
- * * :surrogate
- * * :zero_width_space
- * * :inseparable
- * * :non_breaking_glue
- * * :contingent
- * * :space
  * * :after
+ * * :alphabetic
+ * * :ambiguous
  * * :before
  * * :before_and_after
- * * :hyphen
- * * :non_starter
- * * :open_punctuation
+ * * :carriage_return
+ * * :close_parenthesis
  * * :close_punctuation
- * * :quotation
- * * :exclamation
- * * :ideographic
- * * :numeric
- * * :infix_separator
- * * :symbol
- * * :alphabetic
- * * :prefix
- * * :postfix
+ * * :combining_mark
  * * :complex_context
- * * :ambiguous
- * * :unknown
- * * :next_line
- * * :word_joiner
+ * * :contingent
+ * * :exclamation
  * * :hangul_l_jamo
- * * :hangul_v_jamo
- * * :hangul_t_jamo
  * * :hangul_lv_syllable
  * * :hangul_lvt_syllable
- * * :close_parenthesis
+ * * :hangul_t_jamo
+ * * :hangul_v_jamo
+ * * :hyphen
+ * * :ideographic
+ * * :infix_separator
+ * * :inseparable
+ * * :line_feed
+ * * :mandatory
+ * * :next_line
+ * * :non_breaking_glue
+ * * :non_starter
+ * * :numeric
+ * * :open_punctuation
+ * * :postfix
+ * * :prefix
+ * * :quotation
+ * * :space
+ * * :surrogate
+ * * :symbol
+ * * :unknown
+ * * :word_joiner
+ * * :zero_width_space
  *
  * For more information on the Unicode line-breaking algorithm, see Unicode
  * Standard Annex #14, http://unicode.org/reports/tr14/.
  *
- * @raise [ArgumentError] The string consists of more than one break type
- * @return [Symbol] The break type */
+ * @raise [ArgumentError] If the string consists of more than one break type
+ * @return [Symbol] */
 VALUE
 rb_u_string_break_type(VALUE self)
 {

@@ -1,10 +1,8 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains characters in the ASCII region, that
- * is, U+0000 through U+007F.
- *
- * @return [Boolean] `True` if this {U::String} only contains characters in the
- *   ASCII region. */
+/* @overload ascii_only?
+ *   @return [Boolean] True if the receiver contains only characters in the ASCII region, that
+ *     is, U+0000 through U+007F */
 VALUE
 rb_u_string_ascii_only(VALUE self)
 {

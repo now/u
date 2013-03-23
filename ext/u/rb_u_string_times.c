@@ -1,14 +1,11 @@
 #include "rb_includes.h"
 
 /* @overload *(n)
- *   Concatenates _n_ copies of this {U::String}.
- *
- *   Any taint or untrust is inherited by the result.
- *
- *   @param [Integer] n Number of times to concatenate this {U::String}
- *   @raise [ArgumentError] If _n_ < 0
- *   @raise [ArgumentError] If _n_ > 0 and _n_ × {#bytesize} > LONG_MAX
- *   @return [U::String] The concatenation of _n_ copies of this {U::String} */
+ *   @param [Integer] n
+ *   @raise [ArgumentError] If N < 0
+ *   @raise [ArgumentError] If N > 0 and N × {#bytesize} > LONG_MAX
+ *   @return [U::String] The concatenation of N copies of the receiver,
+ *     inheriting any taint and untrust */
 VALUE
 rb_u_string_times(VALUE self, VALUE rbtimes)
 {

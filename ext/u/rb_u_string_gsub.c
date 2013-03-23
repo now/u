@@ -1,15 +1,14 @@
 #include "rb_includes.h"
 #include "rb_u_re.h"
 
-/* Replaces all instances of a pattern in `self` with a suitable replacement.
+/* @overload gsub(pattern, replacement)
  *
- * @overload gsub(pattern, replacement)
+ *   Returns the receiver with all instances of PATTERN replaced by
+ *   REPLACEMENT, inheriting any taint or untrust from the receiver and from
+ *   REPLACEMENT.
  *
- *   Replaces all instances of _pattern_ in `self` with _replacement_.
- *
- *   _Pattern_ may be either a Regexp or anything that responds to #to_str.
- *
- *   _Replacement_ is used as a specification for what to replace matches with.
+ *   The REPLACEMENT is used as a specification for what to replace matches
+ *   with:
  *
  *   <table>
  *     <thead>
@@ -27,61 +26,53 @@
  *     </tbody>
  *   </table>
  *
- *   Any taint or untrust on <code>self</code> or _replacement_ is inherited.
- *
  *   The Regexp special variables `$&`, `$'`, <code>$\`</code>, `$1`, `$2`, …,
  *   `$`_n_ are updated accordingly.
  *
- *   @param [Regexp, #to_str] pattern Search pattern
- *   @param [#to_str] replacement Match replacement specification
- *   @return [U::String] `self` with any matches to _pattern_ replaced
- *     according to _replacement_
+ *   @param [Regexp, #to_str] pattern
+ *   @param [#to_str] replacement
+ *   @return [U::String]
  *
  * @overload gsub(pattern, replacements)
  *
- *   Replaces all instances of _pattern_ in `self` with
- *   _replacements_`[`_match_`]`, where _match_ is the matched {U::String}.
- *
- *   _Pattern_ may be either a Regexp or anything that responds to #to_str.
+ *   Returns the receiver with all instances of PATTERN replaced by
+ *   REPLACEMENTS#[_match_], where _match_ is the matched substring, inheriting
+ *   any taint and untrust from the receiver and from the
+ *   REPLACEMENTS#[_match_]es.
  *
  *   The Regexp special variables `$&`, `$'`, <code>$\`</code>, `$1`, `$2`, …,
  *   `$`_n_ are updated accordingly.
  *
- *   @param [Regexp, #to_str] pattern Search pattern
- *   @param [#to_hash] replacements Mapping of matches to their replacements
+ *   @param [Regexp, #to_str] pattern
+ *   @param [#to_hash] replacements
  *   @raise [RuntimeError] If any replacement is the result being constructed
- *   @raise Any error raised by _replacements_`#default`, if it gets called
- *   @return [U::String] `self` with any matches to _pattern_ replaced
- *     according to the mapping of matches to their _replacements_
+ *   @raise [Exception] Any error raised by REPLACEMENTS#default, if it gets
+ *     called
+ *   @return [U::String]
  *
  * @overload gsub(pattern){ |match| … }
  *
- *   Replaces all instances of _pattern_ in `self` with the results of the
- *   given block.
- *
- *   _Pattern_ may be either a Regexp or anything that responds to #to_str.
+ *   Returns the receiver with all instances of PATTERN replaced by the results
+ *   of the given block, inheriting any taint and untrust from the receiver and
+ *   from the results of the given block.
  *
  *   The Regexp special variables `$&`, `$'`, <code>$\`</code>, `$1`, `$2`, …,
  *   `$`_n_ are updated accordingly.
  *
- *   @param [Regexp, #to_str] pattern Search pattern
- *   @yield [match] Block to evaluate for replacements
- *   @yieldparam [U::String] match Current match
- *   @yieldreturn [#to_str] Replacement for current match
- *   @return [U::String] `self` with any matches to _pattern_ replaced
- *     according to the results of the given block
+ *   @param [Regexp, #to_str] pattern
+ *   @yieldparam [U::String] match
+ *   @yieldreturn [#to_str]
+ *   @return [U::String]
  *
  * @overload gsub(pattern)
  *
- *   Creates an Enumerator over each match of _pattern_ in `self`.
- *
- *   _Pattern_ may be either a Regexp or anything that responds to #to_str.
+ *   Returns an Enumerator over the matches of PATTERN in the receiver.
  *
  *   The Regexp special variables `$&`, `$'`, <code>$\`</code>, `$1`, `$2`, …,
  *   `$`_n_ will be updated accordingly.
  *
- *   @param [Regexp, #to_str] pattern Search pattern
- *   @return [Enumerator] An Enumerator over each line in this {U::String}
+ *   @param [Regexp, #to_str] pattern
+ *   @return [Enumerator]
  */
 VALUE
 rb_u_string_gsub(int argc, VALUE *argv, VALUE self)

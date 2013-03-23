@@ -1,25 +1,23 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains “case ignorable” characters.  A case
- * ignorable character is defined as a character belonging to one of the
- * categories
+/* @overload case_ignorable?
  *
- * * Mark, nonspacing (Mn)
- * * Mark, enclosing (Me)
- * * Letter, modifier (Lm)
- * * Symbol, modifier (Sk)
- * * Other, format (Cf)
+ *   @return [Boolean] True if the receiver contains only “case ignorable”
+ *     characters, that is, characters in the general categories
  *
- * or is one of the characters
+ *     * Other, format (Cf)
+ *     * Letter, modifier (Lm)
+ *     * Mark, enclosing (Me)
+ *     * Mark, nonspacing (Mn)
+ *     * Symbol, modifier (Sk)
  *
- * * U+0027 APOSTROPHE
- * * U+00AD SOFT HYPHEN
- * * U+2019 RIGHT SINGLE QUOTATION MARK
+ *     and the characters
  *
- * See http://unicode.org/reports/tr21/tr21-5.html for more information.
- *
- * @return [Boolean] `True` if this {U::String} only contains “case ignorable”
- *   characters. */
+ *     * U+0027 APOSTROPHE
+ *     * U+00AD SOFT HYPHEN
+ *     * U+2019 RIGHT SINGLE QUOTATION MARK
+ *   @see http://unicode.org/reports/tr21/tr21-5.html
+ *     Unicode Standard Annex #21: Case Mappings */
 VALUE
 rb_u_string_case_ignorable(VALUE self)
 {

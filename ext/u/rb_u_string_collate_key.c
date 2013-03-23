@@ -1,12 +1,8 @@
 #include "rb_includes.h"
 
-/* Generates the locale-dependent collation key of `self`.  This key can later
- * be compared to other collation keys.  This is generally a faster way of
- * comparing {U::String}s to each other if doing so repeatedly when, for
- * example, sorting a set of {U::String}s.
- *
- * @return [U::String] The collation key of `self`
- */
+/* @return [U::String] The locale-dependent collation key of the receiver
+ * @note Use the collation key when comparing U::Strings to each other
+ *   repeatedly, as occurs when, for example, sorting a list of U::Strings */
 VALUE
 rb_u_string_collate_key(VALUE self)
 {

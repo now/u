@@ -1,25 +1,8 @@
 #include "rb_includes.h"
 
-/* Tests if this {U::String} only contains punctuation and symbol characters.
- * Punctuation characters are those in the Punctuation or Symbol Unicode
- * categories, that is, characters that belong to any of the categories
- *
- * * Punctuation, connector (Pc)
- * * Punctuation, dash (Pd)
- * * Punctuation, open (Ps)
- * * Punctuation, close (Pe)
- * * Punctuation, initial quote (Pi)
- * * Punctuation, final quote (Pf)
- * * Punctuation, other (Po)
- * * Symbol, math (Sm)
- * * Symbol, currency (Sc)
- * * Symbol, modifier (Sk)
- * * Symbol, other (So)
- *
- * such as ‘.’, ‘$’, and ‘‘’.
- *
- * @return [Boolean] `True` if this {U::String} only contains characters in the
- *   Punctuation or Symbol Unicode categories. */
+/* @overload punct?
+ *   @return [Boolean] True if the receiver contains only characters in the
+ *     general categories Punctuation and Symbol */
 VALUE
 rb_u_string_punct(VALUE self)
 {

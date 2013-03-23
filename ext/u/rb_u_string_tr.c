@@ -263,23 +263,21 @@ tr_trans(VALUE self, VALUE rbfrom, VALUE rbto, bool squeeze)
 
 /* @overload tr(from, to)
  *
- * Translates characters in _from_ in `self` to their equivalent character, by
- * index, in _to_.  If _to_{#length} < _from_{#length}, _to_[-1] will be
- * used for any index _i_ > _to_{#length}.
+ *   Returns the receiver, translating characters in FROM to their equivalent
+ *   character, by index, in TO, inheriting any taint or untrust.  If
+ *   TO{#length} < FROM{#length}, TO[-1] will be used for any index _i_ >
+ *   TO{#length}.
  *
- * The complement of all Unicode characters and a given set of characters may
- * be specified by prefixing a non-empty set with ‘`^`’ (U+005E CIRCUMFLEX
- * ACCENT).
+ *   The complement of all Unicode characters and a given set of characters may
+ *   be specified by prefixing a non-empty set with ‘`^`’ (U+005E CIRCUMFLEX
+ *   ACCENT).
  *
- * Any sequence of characters _a_-_b_ inside a set will expand to also
- * include all characters whose codepoints lay between those of _a_ and _b_.
+ *   Any sequence of characters _a_-_b_ inside a set will expand to also
+ *   include all characters whose code points lay between those of _a_ and _b_.
  *
- * Any taint or untrust is inherited by the result.
- *
- * @param [#to_str] from Characters to translate
- * @param [#to_str] to Character to translate to
- * @return [U::String] `self` with characters in _from_ translated into those
- *   in _to_ */
+ *   @param [#to_str] from
+ *   @param [#to_str] to
+ *   @return [U::String] */
 VALUE
 rb_u_string_tr(VALUE self, VALUE from, VALUE to)
 {
@@ -288,27 +286,22 @@ rb_u_string_tr(VALUE self, VALUE from, VALUE to)
 
 /* @overload tr_s(from, to)
  *
- * Translates and squeezes characters in _from_ in `self` to their equivalent
- * character, by index, in _to_.  If _to_{#length} < _from_{#length}, _to_[-1]
- * will be used for any index _i_ > _to_{#length}.
+ *   Returns the receiver, translating characters in FROM to their equivalent
+ *   character, by index, in TO and then squeezing any substrings of
+ *   {#length} > 1 consisting of the same character _c_ with _c_, inheriting
+ *   any taint or untrust.  If TO{#length} < FROM{#length}, TO[-1] will be used
+ *   for any index _i_ > TO{#length}.
  *
- * Squeezing is done after translation, so any substrings translated that now
- * contain substrings of {#length} > 1 consisting of the same character _c_ are
- * replaced by _c_ itself.
+ *   The complement of all Unicode characters and a given set of characters may
+ *   be specified by prefixing a non-empty set with ‘`^`’ (U+005E CIRCUMFLEX
+ *   ACCENT).
  *
- * The complement of all Unicode characters and a given set of characters may
- * be specified by prefixing a non-empty set with ‘`^`’ (U+005E CIRCUMFLEX
- * ACCENT).
+ *   Any sequence of characters _a_-_b_ inside a set will expand to also
+ *   include all characters whose code points lay between those of _a_ and _b_.
  *
- * Any sequence of characters _a_-_b_ inside a set will expand to also
- * include all characters whose codepoints lay between those of _a_ and _b_.
- *
- * Any taint or untrust is inherited by the result.
- *
- * @param [#to_str] from Characters to translate
- * @param [#to_str] to Character to translate to
- * @return [U::String] `self` with characters in _from_ translated into those
- *   in _to_ with any translated substrings squeezed */
+ *   @param [#to_str] from
+ *   @param [#to_str] to
+ *   @return [U::String] */
 VALUE
 rb_u_string_tr_s(VALUE self, VALUE from, VALUE to)
 {

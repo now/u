@@ -1,8 +1,6 @@
 #include "rb_includes.h"
 
-/* Returns the number of bytes in this {U::String}.
- *
- * @return [Integer] The number of bytes in this {U::String} */
+/* @return [Integer] The number of bytes required to represent the receiver */
 VALUE
 rb_u_string_bytesize(VALUE self)
 {
