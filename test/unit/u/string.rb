@@ -287,11 +287,6 @@ Expectations do
   expect true do '01'.u.digit? end
   expect false do '0a'.u.digit? end
 
-  expect true do ''.u.digits? end
-  expect true do '0'.u.digits? end
-  expect true do '01'.u.digits? end
-  expect false do '0a'.u.digits? end
-
   expect 'hëllö'.u do 'hëlLÖ'.u.downcase end
   expect 'hëllö'.u do 'hëllö'.u.downcase end
   expect 'hëllö'.u do 'HËLLÖ'.u.downcase end
@@ -946,11 +941,6 @@ Expectations do
   expect true do "\r\n".u.newline? end
   expect false do 'a'.u.newline? end
 
-  expect true do ''.u.newlines? end
-  expect true do [0x2028].pack('U').u.newlines? end
-  expect true do "\r\n".u.newlines? end
-  expect false do 'a'.u.newlines? end
-
   expect ''.u do ''.u.mirror end
   expect ')'.u do '('.u.mirror end
   expect ')('.u do '()'.u.mirror end
@@ -1015,11 +1005,6 @@ Expectations do
   expect true do 'a'.u.print? end
   expect true do 'ab'.u.print? end
   expect false do "\n".u.print? end
-
-  expect true do ''.u.printable? end
-  expect true do 'a'.u.printable? end
-  expect true do 'ab'.u.printable? end
-  expect false do "\n".u.printable? end
 
   expect true do ''.u.punct? end
   expect true do '.'.u.punct? end
@@ -1424,11 +1409,6 @@ Expectations do
   expect true do '0'.u.xdigit? end
   expect true do '0a'.u.xdigit? end
   expect false do 'g'.u.xdigit? end
-
-  expect true do ''.u.xdigits? end
-  expect true do '0'.u.xdigits? end
-  expect true do '0aＡ'.u.xdigits? end
-  expect false do 'g'.u.xdigits? end
 
   expect true do ''.u.zero_width? end
   expect true do [0x200b].pack('U').u.zero_width? end
