@@ -190,91 +190,109 @@ Init_u_string(VALUE mU)
         rb_define_alloc_func(rb_cUString, rb_u_string_alloc);
         rb_define_private_method(rb_cUString, "initialize", rb_u_string_initialize, -1);
         rb_define_private_method(rb_cUString, "initialize_copy", rb_u_string_initialize_copy, 1);
-        rb_define_method(rb_cUString, "%", rb_u_string_format_m, 1); /* in ext/u/rb_u_string_format.c */
-        rb_define_method(rb_cUString, "*", rb_u_string_times, 1); /* in ext/u/rb_u_string_times.c */
-        rb_define_method(rb_cUString, "+", rb_u_string_plus, 1); /* in ext/u/rb_u_string_plus.c */
-        rb_define_method(rb_cUString, "<=>", rb_u_string_collate, 1); /* in ext/u/rb_u_string_collate.c */
-        rb_define_method(rb_cUString, "==", rb_u_string_equal, 1); /* in ext/u/rb_u_string_equal.c */
-        rb_define_method(rb_cUString, "=~", rb_u_string_match, 1); /* in ext/u/rb_u_string_match.c */
-        rb_define_method(rb_cUString, "[]", rb_u_string_aref_m, -1); /* in ext/u/rb_u_string_aref.c */
+
+        rb_define_method(rb_cUString, "valid_encoding?", rb_u_string_valid_encoding, 0); /* in ext/u/rb_u_string_valid_encoding.c */
+
         rb_define_method(rb_cUString, "alnum?", rb_u_string_alnum, 0); /* in ext/u/rb_u_string_alnum.c */
         rb_define_method(rb_cUString, "alpha?", rb_u_string_alpha, 0); /* in ext/u/rb_u_string_alpha.c */
-        rb_define_method(rb_cUString, "assigned?", rb_u_string_assigned, 0); /* in ext/u/rb_u_string_assigned.c */
         rb_define_method(rb_cUString, "ascii_only?", rb_u_string_ascii_only, 0); /* in ext/u/rb_u_string_ascii_only.c */
-        rb_define_method(rb_cUString, "break_type", rb_u_string_break_type, 0); /* in ext/u/rb_u_string_break_type.c */
-        rb_define_method(rb_cUString, "bytesize", rb_u_string_bytesize, 0); /* in ext/u/rb_u_string_bytesize.c */
-        rb_define_method(rb_cUString, "byteslice", rb_u_string_byteslice_m, -1); /* in ext/u/rb_u_string_byteslice.c */
-        rb_define_method(rb_cUString, "casecmp", rb_u_string_casecmp, 1); /* in ext/u/rb_u_string_casecmp.c */
-        rb_define_method(rb_cUString, "cased?", rb_u_string_cased, 0); /* in ext/u/rb_u_string_cased.c */
+        rb_define_method(rb_cUString, "assigned?", rb_u_string_assigned, 0); /* in ext/u/rb_u_string_assigned.c */
         rb_define_method(rb_cUString, "case_ignorable?", rb_u_string_case_ignorable, 0); /* in ext/u/rb_u_string_case_ignorable.c */
-        rb_define_method(rb_cUString, "center", rb_u_string_center, -1); /* in ext/u/rb_u_string_justify.c */
-        rb_define_method(rb_cUString, "chomp", rb_u_string_chomp, -1); /* in ext/u/rb_u_string_chomp.c */
-        rb_define_method(rb_cUString, "chop", rb_u_string_chop, 0); /* in ext/u/rb_u_string_chop.c */
-        rb_define_method(rb_cUString, "chr", rb_u_string_chr, 0); /* in ext/u/rb_u_string_chr.c */
+        rb_define_method(rb_cUString, "cased?", rb_u_string_cased, 0); /* in ext/u/rb_u_string_cased.c */
         rb_define_method(rb_cUString, "cntrl?", rb_u_string_cntrl, 0); /* in ext/u/rb_u_string_cntrl.c */
+        rb_define_method(rb_cUString, "defined?", rb_u_string_defined, 0); /* in ext/u/rb_u_string_defined.c */
+        rb_define_method(rb_cUString, "digit?", rb_u_string_digit, 0); /* in ext/u/rb_u_string_digit.c */
+        rb_define_method(rb_cUString, "folded?", rb_u_string_folded, 0); /* in ext/u/rb_u_string_folded.c */
+        rb_define_method(rb_cUString, "graph?", rb_u_string_graph, 0); /* in ext/u/rb_u_string_graph.c */
+        rb_define_method(rb_cUString, "lower?", rb_u_string_lower, -1); /* in ext/u/rb_u_string_lower.c */
+        rb_define_method(rb_cUString, "newline?", rb_u_string_newline, 0); /* in ext/u/rb_u_string_newline.c */
+        rb_define_method(rb_cUString, "print?", rb_u_string_print, 0); /* in ext/u/rb_u_string_print.c */
+        rb_define_method(rb_cUString, "punct?", rb_u_string_punct, 0); /* in ext/u/rb_u_string_punct.c */
+        rb_define_method(rb_cUString, "soft_dotted?", rb_u_string_soft_dotted, 0); /* in ext/u/rb_u_string_soft_dotted.c */
+        rb_define_method(rb_cUString, "space?", rb_u_string_space, 0); /* in ext/u/rb_u_string_space.c */
+        rb_define_method(rb_cUString, "upper?", rb_u_string_upper, -1); /* in ext/u/rb_u_string_upper.c */
+        rb_define_method(rb_cUString, "wide?", rb_u_string_wide, 0); /* in ext/u/rb_u_string_wide.c */
+        rb_define_method(rb_cUString, "wide_cjk?", rb_u_string_wide_cjk, 0); /* in ext/u/rb_u_string_wide_cjk.c */
+        rb_define_method(rb_cUString, "xdigit?", rb_u_string_xdigit, 0); /* in ext/u/rb_u_string_xdigit.c */
+        rb_define_method(rb_cUString, "zero_width?", rb_u_string_zero_width, 0); /* in ext/u/rb_u_string_zero_width.c */
+
+        rb_define_method(rb_cUString, "==", rb_u_string_equal, 1); /* in ext/u/rb_u_string_equal.c */
+        rb_define_method(rb_cUString, "=~", rb_u_string_match, 1); /* in ext/u/rb_u_string_match.c */
+        rb_define_method(rb_cUString, "empty?", rb_u_string_empty, 0); /* in ext/u/rb_u_string_empty.c */
+        rb_define_method(rb_cUString, "end_with?", rb_u_string_end_with, -1); /* in ext/u/rb_u_string_end_with.c */
+        rb_define_method(rb_cUString, "eql?", rb_u_string_eql, 1); /* in ext/u/rb_u_string_eql.c */
+        rb_define_method(rb_cUString, "include?", rb_u_string_include, 1); /* in ext/u/rb_u_string_include.c */
+        rb_define_method(rb_cUString, "index", rb_u_string_index_m, -1); /* in ext/u/rb_u_string_index.c */
+        rb_define_method(rb_cUString, "rindex", rb_u_string_rindex_m, -1); /* in ext/u/rb_u_string_rindex.c */
+        rb_define_method(rb_cUString, "start_with?", rb_u_string_start_with, -1); /* in ext/u/rb_u_string_start_with.c */
+
+        rb_define_method(rb_cUString, "<=>", rb_u_string_collate, 1); /* in ext/u/rb_u_string_collate.c */
+        rb_define_method(rb_cUString, "casecmp", rb_u_string_casecmp, 1); /* in ext/u/rb_u_string_casecmp.c */
         /* TODO: Rename this to #collation_key? */
         rb_define_method(rb_cUString, "collate_key", rb_u_string_collate_key, 0); /* in ext/u/rb_u_string_collate_key.c */
+
+        rb_define_method(rb_cUString, "break_type", rb_u_string_break_type, 0); /* in ext/u/rb_u_string_break_type.c */
         rb_define_method(rb_cUString, "combining_class", rb_u_string_combining_class, 0); /* in ext/u/rb_u_string_combining_class.c */
-        rb_define_method(rb_cUString, "count", rb_u_string_count, -1); /* in ext/u/rb_u_string_count.c */
-        rb_define_method(rb_cUString, "defined?", rb_u_string_defined, 0); /* in ext/u/rb_u_string_defined.c */
-        rb_define_method(rb_cUString, "delete", rb_u_string_delete, -1); /* in ext/u/rb_u_string_delete.c */
-        rb_define_method(rb_cUString, "digit?", rb_u_string_digit, 0); /* in ext/u/rb_u_string_digit.c */
-        rb_define_method(rb_cUString, "downcase", rb_u_string_downcase, -1); /* in ext/u/rb_u_string_downcase.c */
-        rb_define_method(rb_cUString, "dump", rb_u_string_dump, 0); /* in ext/u/rb_u_string_dump.c */
+        rb_define_method(rb_cUString, "script", rb_u_string_script, 0); /* in ext/u/rb_u_string_script.c */
+        rb_define_method(rb_cUString, "type", rb_u_string_type, 0); /* in ext/u/rb_u_string_type.c */
+
+        rb_define_method(rb_cUString, "bytesize", rb_u_string_bytesize, 0); /* in ext/u/rb_u_string_bytesize.c */
+        rb_define_method(rb_cUString, "length", rb_u_string_length, 0); /* in ext/u/rb_u_string_length.c */
+        rb_define_method(rb_cUString, "width", rb_u_string_width, 0); /* in ext/u/rb_u_string_width.c */
+
         rb_define_method(rb_cUString, "each_byte", rb_u_string_each_byte, 0); /* in ext/u/rb_u_string_each_byte.c */
         rb_define_method(rb_cUString, "each_char", rb_u_string_each_char, 0); /* in ext/u/rb_u_string_each_char.c */
         rb_define_method(rb_cUString, "each_codepoint", rb_u_string_each_codepoint, 0); /* in ext/u/rb_u_string_each_codepoint.c */
         rb_define_method(rb_cUString, "each_line", rb_u_string_each_line, -1); /* in ext/u/rb_u_string_each_line.c */
-        rb_define_method(rb_cUString, "empty?", rb_u_string_empty, 0); /* in ext/u/rb_u_string_empty.c */
-        rb_define_method(rb_cUString, "end_with?", rb_u_string_end_with, -1); /* in ext/u/rb_u_string_end_with.c */
-        rb_define_method(rb_cUString, "eql?", rb_u_string_eql, 1); /* in ext/u/rb_u_string_eql.c */
-        rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, 0); /* in ext/u/rb_u_string_foldcase.c */
-        rb_define_method(rb_cUString, "folded?", rb_u_string_folded, 0); /* in ext/u/rb_u_string_folded.c */
+
+        rb_define_method(rb_cUString, "[]", rb_u_string_aref_m, -1); /* in ext/u/rb_u_string_aref.c */
+        rb_define_method(rb_cUString, "byteslice", rb_u_string_byteslice_m, -1); /* in ext/u/rb_u_string_byteslice.c */
+        rb_define_method(rb_cUString, "chomp", rb_u_string_chomp, -1); /* in ext/u/rb_u_string_chomp.c */
+        rb_define_method(rb_cUString, "chop", rb_u_string_chop, 0); /* in ext/u/rb_u_string_chop.c */
+        rb_define_method(rb_cUString, "chr", rb_u_string_chr, 0); /* in ext/u/rb_u_string_chr.c */
         rb_define_method(rb_cUString, "getbyte", rb_u_string_getbyte, 1); /* in ext/u/rb_u_string_getbyte.c */
-        rb_define_method(rb_cUString, "graph?", rb_u_string_graph, 0); /* in ext/u/rb_u_string_graph.c */
+        rb_define_method(rb_cUString, "lstrip", rb_u_string_lstrip, 0); /* in ext/u/rb_u_string_lstrip.c */
+        rb_define_method(rb_cUString, "ord", rb_u_string_ord, 0); /* in ext/u/rb_u_string_ord.c */
+        rb_define_method(rb_cUString, "rstrip", rb_u_string_rstrip, 0); /* in ext/u/rb_u_string_rstrip.c */
+        rb_define_method(rb_cUString, "strip", rb_u_string_strip, 0); /* in ext/u/rb_u_string_strip.c */
+
+        rb_define_method(rb_cUString, "downcase", rb_u_string_downcase, -1); /* in ext/u/rb_u_string_downcase.c */
+        rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, 0); /* in ext/u/rb_u_string_foldcase.c */
+        rb_define_method(rb_cUString, "upcase", rb_u_string_upcase, -1); /* in ext/u/rb_u_string_upcase.c */
+
+        rb_define_method(rb_cUString, "mirror", rb_u_string_mirror, 0); /* in ext/u/rb_u_string_mirror.c */
+        rb_define_method(rb_cUString, "normalize", rb_u_string_normalize, -1); /* in ext/u/rb_u_string_normalize.c */
+        rb_define_method(rb_cUString, "reverse", rb_u_string_reverse, 0); /* in ext/u/rb_u_string_reverse.c */
+
+        rb_define_method(rb_cUString, "center", rb_u_string_center, -1); /* in ext/u/rb_u_string_justify.c */
+        rb_define_method(rb_cUString, "ljust", rb_u_string_ljust, -1); /* in ext/u/rb_u_string_justify.c */
+        rb_define_method(rb_cUString, "rjust", rb_u_string_rjust, -1); /* in ext/u/rb_u_string_justify.c */
+
+        rb_define_method(rb_cUString, "count", rb_u_string_count, -1); /* in ext/u/rb_u_string_count.c */
+        rb_define_method(rb_cUString, "delete", rb_u_string_delete, -1); /* in ext/u/rb_u_string_delete.c */
+        rb_define_method(rb_cUString, "squeeze", rb_u_string_squeeze, -1); /* in ext/u/rb_u_string_squeeze.c */
+        rb_define_method(rb_cUString, "tr", rb_u_string_tr, 2); /* in ext/u/rb_u_string_tr.c */
+        rb_define_method(rb_cUString, "tr_s", rb_u_string_tr_s, 2); /* in ext/u/rb_u_string_tr.c */
+
+        rb_define_method(rb_cUString, "partition", rb_u_string_partition, 1); /* in ext/u/rb_u_string_partition.c */
+        rb_define_method(rb_cUString, "rpartition", rb_u_string_rpartition, 1); /* in ext/u/rb_u_string_rpartition.c */
+        rb_define_method(rb_cUString, "scan", rb_u_string_scan, 1); /* in ext/u/rb_u_string_scan.c */
+        rb_define_method(rb_cUString, "split", rb_u_string_split_m, -1); /* in ext/u/rb_u_string_split.c */
+
         rb_define_method(rb_cUString, "gsub", rb_u_string_gsub, -1); /* in ext/u/rb_u_string_gsub.c */
+
+        rb_define_method(rb_cUString, "+", rb_u_string_plus, 1); /* in ext/u/rb_u_string_plus.c */
+        rb_define_method(rb_cUString, "*", rb_u_string_times, 1); /* in ext/u/rb_u_string_times.c */
+
+        rb_define_method(rb_cUString, "%", rb_u_string_format_m, 1); /* in ext/u/rb_u_string_format.c */
+
+        rb_define_method(rb_cUString, "dump", rb_u_string_dump, 0); /* in ext/u/rb_u_string_dump.c */
+        rb_define_method(rb_cUString, "inspect", rb_u_string_inspect, 0); /* in ext/u/rb_u_string_inspect.c */
+
         rb_define_method(rb_cUString, "hash", rb_u_string_hash, 0); /* in ext/u/rb_u_string_hash.c */
         rb_define_method(rb_cUString, "hex", rb_u_string_hex, 0); /* in ext/u/rb_u_string_hex.c */
-        rb_define_method(rb_cUString, "include?", rb_u_string_include, 1); /* in ext/u/rb_u_string_include.c */
-        rb_define_method(rb_cUString, "index", rb_u_string_index_m, -1); /* in ext/u/rb_u_string_index.c */
-        rb_define_method(rb_cUString, "inspect", rb_u_string_inspect, 0); /* in ext/u/rb_u_string_inspect.c */
-        rb_define_method(rb_cUString, "length", rb_u_string_length, 0); /* in ext/u/rb_u_string_length.c */
-        rb_define_method(rb_cUString, "ljust", rb_u_string_ljust, -1); /* in ext/u/rb_u_string_justify.c */
-        rb_define_method(rb_cUString, "lower?", rb_u_string_lower, -1); /* in ext/u/rb_u_string_lower.c */
-        rb_define_method(rb_cUString, "lstrip", rb_u_string_lstrip, 0); /* in ext/u/rb_u_string_lstrip.c */
-        rb_define_method(rb_cUString, "mirror", rb_u_string_mirror, 0); /* in ext/u/rb_u_string_mirror.c */
-        rb_define_method(rb_cUString, "newline?", rb_u_string_newline, 0); /* in ext/u/rb_u_string_newline.c */
-        rb_define_method(rb_cUString, "normalize", rb_u_string_normalize, -1); /* in ext/u/rb_u_string_normalize.c */
         rb_define_method(rb_cUString, "oct", rb_u_string_oct, 0); /* in ext/u/rb_u_string_oct.c */
-        rb_define_method(rb_cUString, "ord", rb_u_string_ord, 0); /* in ext/u/rb_u_string_ord.c */
-        rb_define_method(rb_cUString, "partition", rb_u_string_partition, 1); /* in ext/u/rb_u_string_partition.c */
-        rb_define_method(rb_cUString, "print?", rb_u_string_print, 0); /* in ext/u/rb_u_string_print.c */
-        rb_define_method(rb_cUString, "punct?", rb_u_string_punct, 0); /* in ext/u/rb_u_string_punct.c */
-        rb_define_method(rb_cUString, "reverse", rb_u_string_reverse, 0); /* in ext/u/rb_u_string_reverse.c */
-        rb_define_method(rb_cUString, "rindex", rb_u_string_rindex_m, -1); /* in ext/u/rb_u_string_rindex.c */
-        rb_define_method(rb_cUString, "rjust", rb_u_string_rjust, -1); /* in ext/u/rb_u_string_justify.c */
-        rb_define_method(rb_cUString, "rpartition", rb_u_string_rpartition, 1); /* in ext/u/rb_u_string_rpartition.c */
-        rb_define_method(rb_cUString, "rstrip", rb_u_string_rstrip, 0); /* in ext/u/rb_u_string_rstrip.c */
-        rb_define_method(rb_cUString, "scan", rb_u_string_scan, 1); /* in ext/u/rb_u_string_scan.c */
-        rb_define_method(rb_cUString, "script", rb_u_string_script, 0); /* in ext/u/rb_u_string_script.c */
-        rb_define_method(rb_cUString, "soft_dotted?", rb_u_string_soft_dotted, 0); /* in ext/u/rb_u_string_soft_dotted.c */
-        rb_define_method(rb_cUString, "space?", rb_u_string_space, 0); /* in ext/u/rb_u_string_space.c */
-        rb_define_method(rb_cUString, "split", rb_u_string_split_m, -1); /* in ext/u/rb_u_string_split.c */
-        rb_define_method(rb_cUString, "squeeze", rb_u_string_squeeze, -1); /* in ext/u/rb_u_string_squeeze.c */
-        rb_define_method(rb_cUString, "start_with?", rb_u_string_start_with, -1); /* in ext/u/rb_u_string_start_with.c */
-        rb_define_method(rb_cUString, "strip", rb_u_string_strip, 0); /* in ext/u/rb_u_string_strip.c */
         rb_define_method(rb_cUString, "to_i", rb_u_string_to_i, -1); /* in ext/u/rb_u_string_to_i.c */
         rb_define_method(rb_cUString, "to_str", rb_u_string_to_str, 0); /* in ext/u/rb_u_string_to_str.c */
         rb_define_method(rb_cUString, "to_sym", rb_u_string_to_sym, 0); /* in ext/u/rb_u_string_to_sym.c */
-        rb_define_method(rb_cUString, "tr", rb_u_string_tr, 2); /* in ext/u/rb_u_string_tr.c */
-        rb_define_method(rb_cUString, "tr_s", rb_u_string_tr_s, 2); /* in ext/u/rb_u_string_tr.c */
-        rb_define_method(rb_cUString, "type", rb_u_string_type, 0); /* in ext/u/rb_u_string_type.c */
-        rb_define_method(rb_cUString, "upcase", rb_u_string_upcase, -1); /* in ext/u/rb_u_string_upcase.c */
-        rb_define_method(rb_cUString, "upper?", rb_u_string_upper, -1); /* in ext/u/rb_u_string_upper.c */
-        rb_define_method(rb_cUString, "valid_encoding?", rb_u_string_valid_encoding, 0); /* in ext/u/rb_u_string_valid_encoding.c */
-        rb_define_method(rb_cUString, "wide?", rb_u_string_wide, 0); /* in ext/u/rb_u_string_wide.c */
-        rb_define_method(rb_cUString, "wide_cjk?", rb_u_string_wide_cjk, 0); /* in ext/u/rb_u_string_wide_cjk.c */
-        rb_define_method(rb_cUString, "width", rb_u_string_width, 0); /* in ext/u/rb_u_string_width.c */
-        rb_define_method(rb_cUString, "xdigit?", rb_u_string_xdigit, 0); /* in ext/u/rb_u_string_xdigit.c */
-        rb_define_method(rb_cUString, "zero_width?", rb_u_string_zero_width, 0); /* in ext/u/rb_u_string_zero_width.c */
 }
