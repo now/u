@@ -1080,6 +1080,9 @@ rb_u_buffer_append_format(int argc, const VALUE *argv, VALUE self, VALUE format)
                 directive(&p, end, &arguments, self);
         }
 
+        if (OBJ_TAINTED(format))
+                OBJ_TAINT(self);
+
         return self;
 }
 
@@ -1583,6 +1586,9 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *
  *   A warning is issued if the ‘`#`’ flag is given when the ‘o’ directive has
  *   been given a negative argument.
+ *
+ *   Any taint on the receiver and any taint on arguments to any ‘s’ and ‘p’
+ *   directives is inherited by the result.
  *
  *   @raise [ArgumentError] If the receiver isn’t a valid format specification
  *   @raise [ArgumentError] If any flags are given to the ‘%’, ‘\n’, or ‘\0’

@@ -1,6 +1,7 @@
 #include "rb_includes.h"
 
-/* @return [U::String] The case-folding of the receiver. */
+/* @return [U::String] The case-folding of the receiver, inheriting any taint
+ *   and untrust */
 VALUE
 rb_u_string_foldcase(VALUE self)
 {
@@ -11,5 +12,5 @@ rb_u_string_foldcase(VALUE self)
                                     USTRING_LENGTH(string),
                                     &length);
 
-        return rb_u_string_new_own(folded, length);
+        return rb_u_string_new_c_own(self, folded, length);
 }

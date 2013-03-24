@@ -1,6 +1,7 @@
 #include "rb_includes.h"
 
-/* @return [U::String] The receiver with its maximum {#space?} suffix removed
+/* @return [U::String] The receiver with its maximum {#space?} suffix removed,
+ *   inheriting any taint and untrust from the receiver
  * @see #lstrip
  * @see #strip */
 VALUE
@@ -26,5 +27,5 @@ rb_u_string_rstrip(VALUE self)
         if (p == end)
                 return self;
 
-        return rb_u_string_new(begin, p - begin);
+        return rb_u_string_new_c(self, begin, p - begin);
 }

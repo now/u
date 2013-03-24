@@ -42,7 +42,8 @@ rb_u_string_justified_size(long string_size,
 }
 
 static VALUE
-rb_u_string_justify_impl(const UString *string, long string_length,
+rb_u_string_justify_impl(VALUE self,
+                         const UString *string, long string_length,
                          const UString *padding, long padding_length,
                          long width, char jflag)
 {
@@ -62,7 +63,7 @@ rb_u_string_justify_impl(const UString *string, long string_length,
         p = rb_u_string_justify_one_side(p, padding, padding_length, right_n);
         justified[justified_size] = '\0';
 
-        return rb_u_string_new_own(justified, justified_size);
+        return rb_u_string_new_c_own(self, justified, justified_size);
 }
 
 static VALUE
@@ -86,13 +87,12 @@ rb_u_string_justify(int argc, VALUE *argv, VALUE self, char jflag)
         if (width < 0 || string_length >= width)
                 return self;
 
-        VALUE result = rb_u_string_justify_impl(string, string_length,
+        VALUE result = rb_u_string_justify_impl(self,
+                                                string, string_length,
                                                 padding, padding_length,
                                                 width, jflag);
-        OBJ_INFECT(result, self);
         if (!NIL_P(rbpadding))
                 OBJ_INFECT(result, rbpadding);
-
         return result;
 }
 
@@ -102,7 +102,8 @@ rb_u_string_justify(int argc, VALUE *argv, VALUE self, char jflag)
  *   @raise [ArgumentError] If PADDING{#length} = 0
  *   @return [U::String] The receiver padded as evenly as possible on both
  *     sides with PADDING to make it max({#length}, WIDTH) wide, inheriting any
- *     taint or untrust from both the receiver and from PADDING
+ *     taint and untrust from the receiver and also from PADDING if PADDING is
+ *     used
  *   @see #ljust
  *   @see #rjust */
 VALUE
@@ -116,8 +117,8 @@ rb_u_string_center(int argc, VALUE *argv, VALUE self)
  *   @param [U::String, #to_str] padding
  *   @raise [ArgumentError] If PADDING{#length} = 0
  *   @return [U::String] The receiver padded on the right with PADDING to make
- *     it max({#length}, WIDTH) wide, inheriting any taint or untrust from both
- *     the receiver and from PADDING
+ *     it max({#length}, WIDTH) wide, inheriting any taint and untrust from
+ *     the receiver and also from PADDING if PADDING is used
  *   @see #center
  *   @see #rjust */
 VALUE
@@ -131,8 +132,8 @@ rb_u_string_ljust(int argc, VALUE *argv, VALUE self)
  *   @param [U::String, #to_str] padding
  *   @raise [ArgumentError] If PADDING{#length} = 0
  *   @return [U::String] The receiver padded on the left with PADDING to make
- *     it max({#length}, WIDTH) wide, inheriting any taint or untrust from both
- *     the receiver and from PADDING
+ *     it max({#length}, WIDTH) wide, inheriting any taint and untrust from the
+ *     receiver and also from PADDING if PADDING is used
  *   @see #center
  *   @see #ljust */
 VALUE

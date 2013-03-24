@@ -297,7 +297,9 @@ rb_u_buffer_to_s(VALUE self)
 {
         const UBuffer *buffer = RVAL2UBUFFER(self);
 
-        return rb_u_str_new(buffer->c, buffer->length);
+        VALUE result = rb_u_str_new(buffer->c, buffer->length);
+        OBJ_INFECT(result, self);
+        return result;
 }
 
 VALUE
@@ -305,7 +307,7 @@ rb_u_buffer_to_u(VALUE self)
 {
         const UBuffer *buffer = RVAL2UBUFFER(self);
 
-        return rb_u_string_new(buffer->c, buffer->length);
+        return rb_u_string_new_c(self, buffer->c, buffer->length);
 }
 
 VALUE
@@ -321,7 +323,7 @@ rb_u_buffer_to_u_bang(VALUE self)
         REALLOC_N(c, char, length + 1);
         c[length] = '\0';
 
-        return rb_u_string_new_own(c, length);
+        return rb_u_string_new_c_own(self, c, length);
 }
 
 void

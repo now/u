@@ -1,6 +1,7 @@
 #include "rb_includes.h"
 
-/* @return [U::String] The reversal of the receiver
+/* @return [U::String] The reversal of the receiver, inheriting any taint and
+ *   untrust from the receiver
  * @note This doesn’t take into account proper handling of combining marks,
  *   direction indicators, and similarly relevant characters, so this method is
  *   mostly useful when you know the contents of the string is simple and the
@@ -13,5 +14,5 @@ rb_u_string_reverse(VALUE self)
 
         char *reversed = u_reverse_n(USTRING_STR(string), length);
 
-        return rb_u_string_new_own(reversed, length);
+        return rb_u_string_new_c_own(self, reversed, length);
 }

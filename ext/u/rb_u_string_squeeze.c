@@ -37,7 +37,7 @@ rb_u_string_squeeze_loop(const UString *string, struct tr_table *table,
  *
  *   Returns the receiver, replacing any substrings of {#length} > 1 consisting
  *   of the same character _c_ with _c_, where _c_ is a member of the
- *   intersection of the character sets in SETS, inheriting any taint or
+ *   intersection of the character sets in SETS, inheriting any taint and
  *   untrust.
  *
  *   If SETS is empty, then the set of all Unicode characters is used.
@@ -73,5 +73,5 @@ rb_u_string_squeeze(int argc, VALUE *argv, VALUE self)
         rb_u_string_squeeze_loop(string, table_pointer, remaining);
         remaining[count] = '\0';
 
-        return rb_u_string_new_own(remaining, count);
+        return rb_u_string_new_c_own(self, remaining, count);
 }

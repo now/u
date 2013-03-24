@@ -27,12 +27,12 @@ static VALUE
 rb_u_string_create(VALUE rb, const char *str, long length)
 {
         UString *string = ALLOC(UString);
-
         string->rb = rb;
         string->c = str;
         string->length = length;
-
-        return USTRING2RVAL(string);
+        VALUE result = USTRING2RVAL(string);
+        OBJ_INFECT(result, rb);
+        return result;
 }
 
 static VALUE
@@ -42,43 +42,47 @@ rb_u_string_alloc(UNUSED(VALUE klass))
 }
 
 VALUE
-rb_u_string_new(const char *str, long length)
+rb_u_string_new_uninfected(const char *str, long length)
+{
+        return rb_u_string_new_c(Qnil, str, length);
+}
+
+VALUE
+rb_u_string_new_uninfected_own(const char *str, long length)
+{
+        return rb_u_string_new_c_own(Qnil, str, length);
+}
+
+VALUE
+rb_u_string_new_c(VALUE self, const char *str, long length)
 {
         char *copy = ALLOC_N(char, length + 1);
         MEMCPY(copy, str, char, length);
         copy[length] = '\0';
-
-        return rb_u_string_create(Qnil, copy, length);
+        return rb_u_string_new_c_own(self, copy, length);
 }
 
 VALUE
-rb_u_string_new_own(const char *str, long length)
+rb_u_string_new_c_own(VALUE self, const char *str, long length)
 {
-        return rb_u_string_create(Qnil, str, length);
+        VALUE result = rb_u_string_create(Qnil, str, length);
+        OBJ_INFECT(result, self);
+        return result;
 }
 
 VALUE
 rb_u_string_new_rb(VALUE str)
 {
-        VALUE result = rb_u_string_create(str, NULL, 0);
-
-        OBJ_INFECT(result, str);
-
-        return result;
+        return rb_u_string_create(str, NULL, 0);
 }
 
 VALUE
 rb_u_string_new_subsequence(VALUE self, long begin, long length)
 {
         const UString *string = RVAL2USTRING(self);
-
         /* TODO: Create a subsequence of self, starting at begin and running
          * through length bytes.  The returned value should be infected. */
-        VALUE result = rb_u_string_new(USTRING_STR(string) + begin, length);
-
-        OBJ_INFECT(result, self);
-
-        return result;
+        return rb_u_string_new_c(self, USTRING_STR(string) + begin, length);
 }
 
 VALUE
@@ -168,7 +172,9 @@ rb_u_string_dup(VALUE self)
 {
         const UString *string = RVAL2USTRING(self);
 
-        return rb_u_string_create(string->rb, string->c, string->length);
+        VALUE result = rb_u_string_create(string->rb, string->c, string->length);
+        OBJ_INFECT(result, self);
+        return result;
 }
 
 /* Document-class: U::String

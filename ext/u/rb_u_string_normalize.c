@@ -37,46 +37,47 @@ symbol_to_mode(VALUE symbol)
 
 /* @overload normalize(mode = :default)
  *
- * Returns the normalization of the receiver according to MODE.
+ *   Returns the normalization of the receiver according to MODE, inheriting
+ *   any taint and untrust.
  *
- * Normalization is the process of converting characters and sequences of
- * characters in string into a canonical form.  This process includes dealing
- * with whether characters are represented by a composed character or a base
- * character and combining marks, such as accents.
+ *   Normalization is the process of converting characters and sequences of
+ *   characters in string into a canonical form.  This process includes dealing
+ *   with whether characters are represented by a composed character or a base
+ *   character and combining marks, such as accents.
  *
- * The possible normalization modes are
+ *   The possible normalization modes are
  *
- * <table>
- *   <thead>
- *     <tr><th>Modes</th><th>Description</th></tr>
- *   </thead>
- *   <tbody>
- *     <tr>
- *       <td><code>:default</code>, <code>:nfd</code></td>
- *       <td>Normalizes characters to their maximally decomposed form, ordering
- *           accents and so on according to their combining class</td>
- *     </tr>
- *     <tr>
- *       <td><code>:default_compose</code>, <code>:nfc</code></td>
- *       <td>Normalizes according to <code>:default</code>, then composes any
- *           decomposed characters</td>
- *     </tr>
- *     <tr>
- *       <td><code>:all</code>, <code>:nfkd</code></td>
- *       <td>Normalizes according to <code>:default</code> and also normalizes
- *       “compatibility” characters, such as replacing U+00B3 SUPERSCRIPT THREE
- *       with U+0033 DIGIT THREE</td>
- *     </tr>
- *     <tr>
- *       <td><code>:all_compose</code>, <code>:nfkc</code></td>
- *       <td>Normalizes according to <code>:all</code>, then composes any
- *           decomposed characters</td>
- *     </tr>
- *   </tbody>
- * </table>
+ *   <table>
+ *     <thead>
+ *       <tr><th>Modes</th><th>Description</th></tr>
+ *     </thead>
+ *     <tbody>
+ *       <tr>
+ *         <td><code>:default</code>, <code>:nfd</code></td>
+ *         <td>Normalizes characters to their maximally decomposed form,
+ *         ordering accents and so on according to their combining class</td>
+ *       </tr>
+ *       <tr>
+ *         <td><code>:default_compose</code>, <code>:nfc</code></td>
+ *         <td>Normalizes according to <code>:default</code>, then composes any
+ *         decomposed characters</td>
+ *       </tr>
+ *       <tr>
+ *         <td><code>:all</code>, <code>:nfkd</code></td>
+ *         <td>Normalizes according to <code>:default</code> and also
+ *         normalizes “compatibility” characters, such as replacing U+00B3
+ *         SUPERSCRIPT THREE with U+0033 DIGIT THREE</td>
+ *       </tr>
+ *       <tr>
+ *         <td><code>:all_compose</code>, <code>:nfkc</code></td>
+ *         <td>Normalizes according to <code>:all</code>, then composes any
+ *         decomposed characters</td>
+ *       </tr>
+ *     </tbody>
+ *   </table>
  *
- * @param [Symbol] mode
- * @return [U::String] */
+ *   @param [Symbol] mode
+ *   @return [U::String] */
 VALUE
 rb_u_string_normalize(int argc, VALUE *argv, VALUE self)
 {
@@ -93,5 +94,5 @@ rb_u_string_normalize(int argc, VALUE *argv, VALUE self)
                                          mode,
                                          &length);
 
-        return rb_u_string_new_own(normalized, length);
+        return rb_u_string_new_c_own(self, normalized, length);
 }

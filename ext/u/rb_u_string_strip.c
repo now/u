@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 /* @return [U::String] The receiver with its maximum {#space?} prefix and
- *   suffix removed
+ *   suffix removed, inheriting any taint and untrust
  * @see #lstrip
  * @see #rstrip */
 VALUE
@@ -32,5 +32,5 @@ rb_u_string_strip(VALUE self)
         if (s == begin && t == end)
                 return self;
 
-        return rb_u_string_new(s, t - s);
+        return rb_u_string_new_c(self, s, t - s);
 }

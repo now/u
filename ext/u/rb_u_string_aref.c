@@ -23,11 +23,7 @@ rb_u_string_substr_impl(VALUE self, long offset, long len, bool nil_on_empty)
         if (begin == USTRING_STR(string) && end == USTRING_END(string))
                 return self;
 
-        VALUE substr = rb_u_string_new(begin, end - begin);
-
-        OBJ_INFECT(substr, self);
-
-        return substr;
+        return rb_u_string_new_c(self, begin, end - begin);
 }
 
 VALUE
@@ -79,10 +75,9 @@ rb_u_string_aref(VALUE self, VALUE index)
                 if (rb_u_string_index(self, index, 0) == -1)
                         return Qnil;
 
-                /* TODO: Why not simply return index if it is a U::String? */
                 return TYPE(index) == T_STRING ?
-                        rb_u_string_new(RSTRING_PTR(index), RSTRING_LEN(index)) :
-                        rb_u_string_dup(index);
+                        rb_u_string_new_c(index, RSTRING_PTR(index), RSTRING_LEN(index)) :
+                        index;
         }
 
         switch (TYPE(index)) {
@@ -99,7 +94,7 @@ rb_u_string_aref(VALUE self, VALUE index)
  *   @param [Integer] index
  *   @return [U::String, nil] The substring [max(_i_, 0), min({#length}, _i_ +
  *     1)], where _i_ = INDEX if INDEX ≥ 0, _i_ = {#length} - abs(INDEX)
- *     otherwise, inheriting any taint or untrust, or nil if this substring is
+ *     otherwise, inheriting any taint and untrust, or nil if this substring is
  *     empty
  *
  * @overload [](index, length)
@@ -122,13 +117,14 @@ rb_u_string_aref(VALUE self, VALUE index)
  *   @param [Integer, #to_str, Symbol] reference
  *   @raise [IndexError] If REFERENCE doesn’t refer to a submatch
  *   @return [U::String, nil] The submatch REFERENCE from the first match of
- *     REGEXP in the receiver, inheriting any taint and untrust, or nil if
- *     there is no match or if the submatch isn’t part of the overall match
+ *     REGEXP in the receiver, inheriting any taint and untrust from both
+ *     the receiver and from REGEXP, or nil if there is no match or if the
+ *     submatch isn’t part of the overall match
  *
  * @overload [](string)
  *   @param [U::String, ::String] string
- *   @return [U::String, nil] The substring STRING of the receiver, inheriting
- *     any taint and untrust, if STRING is a substring of the receiver
+ *   @return [U::String, nil] The substring STRING, inheriting any taint and
+ *     untrust from STRING, if STRING is a substring of the receiver
  *
  * @overload [](object)
  *   @param [Object] object

@@ -1,14 +1,13 @@
 #include "rb_includes.h"
 
-/* Returns the receiver, minus its last character, unless the receiver is
- * {#empty?} or if the last character is invalidly encoded, in which case the
- * receiver is returned.
+/* Returns the receiver, minus its last character, inheriting any taint and
+ * untrust, unless the receiver is {#empty?} or if the last character is
+ * invalidly encoded, in which case the receiver is returned.
  *
  * If the last character is U+000A LINE FEED and the second-to-last character
  * is U+000D CARRIAGE RETURN, both characters are removed.
  *
  * @return [U::String]
- *
  * @see #chomp
  * @see #lstrip
  * @see #rstrip
@@ -36,5 +35,5 @@ rb_u_string_chop(VALUE self)
                         last = last_but_one;
         }
 
-        return rb_u_string_new(begin, last - begin);
+        return rb_u_string_new_c(self, begin, last - begin);
 }

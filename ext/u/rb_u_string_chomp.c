@@ -22,7 +22,7 @@ rb_u_string_chomp_default(VALUE self)
                 return self;
         }
 
-        return rb_u_string_new(begin, last - begin);
+        return rb_u_string_new_c(self, begin, last - begin);
 }
 
 static VALUE
@@ -43,14 +43,14 @@ rb_u_string_chomp_newlines(VALUE self)
         if (last == end)
                 return self;
 
-        return rb_u_string_new(begin, last - begin);
+        return rb_u_string_new_c(self, begin, last - begin);
 }
 
 /* @overload chomp(separator = $/)
  *
- *   Returns the receiver, minus any SEPARATOR suffix, unless {#length} = 0, in
- *   which case nil is returned.  If SEPARATOR is nil or invalidly encoded,
- *   the receiver is returned.
+ *   Returns the receiver, minus any SEPARATOR suffix, inheriting any taint and
+ *   untrust, unless {#length} = 0, in which case nil is returned.  If
+ *   SEPARATOR is nil or invalidly encoded, the receiver is returned.
  *
  *   If SEPARATOR is `$/` and `$/` has its default value or if SEPARATOR is
  *   U+000A LINE FEED, the longest suffix consisting of any of
@@ -114,5 +114,5 @@ rb_u_string_chomp(int argc, VALUE *argv, VALUE self)
         /* TODO: It would be nice to share the underlying char * in this case.
          * This would require reference counting. Call the function
          * rb_u_string_new_ref(). */
-        return rb_u_string_new(USTRING_STR(string), length - separator_length);
+        return rb_u_string_new_c(self, USTRING_STR(string), length - separator_length);
 }

@@ -4,7 +4,7 @@
 /* @overload gsub(pattern, replacement)
  *
  *   Returns the receiver with all instances of PATTERN replaced by
- *   REPLACEMENT, inheriting any taint or untrust from the receiver and from
+ *   REPLACEMENT, inheriting any taint and untrust from the receiver and from
  *   REPLACEMENT.
  *
  *   The REPLACEMENT is used as a specification for what to replace matches
@@ -38,7 +38,7 @@
  *   Returns the receiver with all instances of PATTERN replaced by
  *   REPLACEMENTS#[_match_], where _match_ is the matched substring, inheriting
  *   any taint and untrust from the receiver and from the
- *   REPLACEMENTS#[_match_]es.
+ *   REPLACEMENTS#[_match_]es, as well as any taint on REPLACEMENTS.
  *
  *   The Regexp special variables `$&`, `$'`, <code>$\`</code>, `$1`, `$2`, …,
  *   `$`_n_ are updated accordingly.
@@ -118,9 +118,9 @@ rb_u_string_gsub(int argc, VALUE *argv, VALUE self)
                                 VALUE ustr = rb_u_string_new_rb(rb_reg_nth_match(0, match));
                                 result = rb_u_string_object_as_string(rb_yield(ustr));
                         } else {
-                                VALUE ustr = rb_u_string_new(base + registers->beg[0],
-                                                             registers->end[0] - registers->beg[0]);
-                                OBJ_INFECT(ustr, self);
+                                VALUE ustr = rb_u_string_new_c(self,
+                                                               base + registers->beg[0],
+                                                               registers->end[0] - registers->beg[0]);
                                 result = rb_u_string_object_as_string(rb_hash_aref(replacements, ustr));
                         }
 
@@ -142,6 +142,7 @@ rb_u_string_gsub(int argc, VALUE *argv, VALUE self)
 
                 rb_str_buf_cat(substituted, p, registers->beg[0] - (p - base));
                 rb_str_buf_cat(substituted, USTRING_STR(value), USTRING_LENGTH(value));
+                OBJ_INFECT(substituted, result);
 
                 p = base + registers->end[0];
                 if (registers->beg[0] == registers->end[0]) {

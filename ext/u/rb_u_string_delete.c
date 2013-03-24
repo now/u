@@ -33,7 +33,7 @@ rb_u_string_delete_loop(const UString *string, struct tr_table *table,
  *
  *   Returns the receiver, minus any characters that are included in the
  *   intersection of SET and any additional SETS of characters, inheriting any
- *   taint or untrust.
+ *   taint and untrust.
  *
  *   The complement of all Unicode characters and a given set of characters may
  *   be specified by prefixing a non-empty set with ‘`^`’ (U+005E CIRCUMFLEX
@@ -66,7 +66,5 @@ rb_u_string_delete(int argc, VALUE *argv, VALUE self)
         rb_u_string_delete_loop(string, &table, remaining);
         remaining[count] = '\0';
 
-        VALUE result = rb_u_string_new_own(remaining, count);
-        OBJ_INFECT(result, self);
-        return result;
+        return rb_u_string_new_c_own(self, remaining, count);
 }

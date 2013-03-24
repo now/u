@@ -2,7 +2,7 @@
 
 /* @overload each_char{ |char| … }
  *
- *   Enumerates the characters in the receiver, each inheriting any taint or
+ *   Enumerates the characters in the receiver, each inheriting any taint and
  *   untrust.
  *
  *   @yieldparam [U::String] char
@@ -22,12 +22,8 @@ rb_u_string_each_char(VALUE self)
         const char *end = USTRING_END(string);
         while (p < end) {
                 const char *q = rb_u_next_validated(p, end);
-                VALUE c = rb_u_string_new(p, q - p);
-
-                OBJ_INFECT(c, self);
-                rb_yield(c);
-
-                p = u_next(p);
+                rb_yield(rb_u_string_new_c(self, p, q - p));
+                p = q;
         }
 
         return self;

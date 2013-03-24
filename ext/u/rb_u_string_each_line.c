@@ -16,18 +16,13 @@ rb_u_string_each_line_default(VALUE self)
                         break;
                 p++;
 
-                VALUE line = rb_u_string_new(base, p - base);
-                OBJ_INFECT(line, self);
-                rb_yield(line);
+                rb_yield(rb_u_string_new_c(self, base, p - base));
 
                 base = p;
         }
 
-        if (base != end) {
-                VALUE line = rb_u_string_new(base, end - base);
-                OBJ_INFECT(line, self);
-                rb_yield(line);
-        }
+        if (base != end)
+                rb_yield(rb_u_string_new_c(self, base, end - base));
 
         return self;
 }
@@ -71,26 +66,21 @@ again:
                      (end - p >= separator_length &&
                       memcmp(USTRING_STR(separator), p, separator_length) == 0))) {
                         p += separator_length;
-                        VALUE line = rb_u_string_new(base, p - base);
-                        OBJ_INFECT(line, self);
-                        rb_yield(line);
+                        rb_yield(rb_u_string_new_c(self, base, p - base));
                         base = p;
                 } else
                         p = u_next(p);
         }
 
-        if (base != end) {
-                VALUE line = rb_u_string_new(base, end - base);
-                OBJ_INFECT(line, self);
-                rb_yield(line);
-        }
+        if (base != end)
+                rb_yield(rb_u_string_new_c(self, base, end - base));
 
         return self;
 }
 
 /* @overload each_line(separator = $/){ |lp| … }
  *
- *   Enumerates the lines of the receiver.
+ *   Enumerates the lines of the receiver, inheriting any taint and untrust.
  *
  *   If SEPARATOR is nil, yields self.  If SEPARATOR is {#empty?}, separates
  *   each line (paragraph) by two or more U+000A LINE FEED characters.

@@ -1,6 +1,6 @@
 #include "rb_includes.h"
 
-/* @return The String representation of the receiver, inheriting any taint or
+/* @return The String representation of the receiver, inheriting any taint and
  *   untrust */
 VALUE
 rb_u_string_to_str(VALUE self)

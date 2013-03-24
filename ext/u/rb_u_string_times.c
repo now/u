@@ -23,14 +23,13 @@ rb_u_string_times(VALUE self, VALUE rbtimes)
 
         char *product = ALLOC_N(char, length + 1);
         long i = USTRING_LENGTH(string);
-        memcpy(product, USTRING_STR(string), i);
-        for ( ; i <= times / 2; i *= 2)
-                memcpy(product + i, product, i);
-        memcpy(product + i, product, times - i);
+        if (i > 0) {
+                memcpy(product, USTRING_STR(string), i);
+                for ( ; i <= times / 2; i *= 2)
+                        memcpy(product + i, product, i);
+                memcpy(product + i, product, times - i);
+        }
         product[length] = '\0';
 
-        VALUE result = rb_u_string_new_own(product, length);
-        OBJ_INFECT(result, self);
-
-        return result;
+        return rb_u_string_new_c_own(self, product, length);
 }

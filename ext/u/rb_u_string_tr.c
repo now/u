@@ -210,7 +210,7 @@ tr_trans_do(VALUE self, struct tr_table *translation,
                       result, &modified);
         result[len] = '\0';
 
-        return rb_u_string_new_own(result, len);
+        return rb_u_string_new_c_own(self, result, len);
 }
 
 static VALUE
@@ -264,7 +264,7 @@ tr_trans(VALUE self, VALUE rbfrom, VALUE rbto, bool squeeze)
 /* @overload tr(from, to)
  *
  *   Returns the receiver, translating characters in FROM to their equivalent
- *   character, by index, in TO, inheriting any taint or untrust.  If
+ *   character, by index, in TO, inheriting any taint and untrust.  If
  *   TO{#length} < FROM{#length}, TO[-1] will be used for any index _i_ >
  *   TO{#length}.
  *
@@ -289,8 +289,8 @@ rb_u_string_tr(VALUE self, VALUE from, VALUE to)
  *   Returns the receiver, translating characters in FROM to their equivalent
  *   character, by index, in TO and then squeezing any substrings of
  *   {#length} > 1 consisting of the same character _c_ with _c_, inheriting
- *   any taint or untrust.  If TO{#length} < FROM{#length}, TO[-1] will be used
- *   for any index _i_ > TO{#length}.
+ *   any taint and untrust.  If TO{#length} < FROM{#length}, TO[-1] will be
+ *   used for any index _i_ > TO{#length}.
  *
  *   The complement of all Unicode characters and a given set of characters may
  *   be specified by prefixing a non-empty set with ‘`^`’ (U+005E CIRCUMFLEX

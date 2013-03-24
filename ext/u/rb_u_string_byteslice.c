@@ -67,7 +67,7 @@ rb_u_string_byteslice(VALUE self, VALUE index)
  *   @param [Integer] index
  *   @return [U::String, nil] The byte-index-based substring [max(_i_, 0),
  *     min({#bytesize}, _i_ + 1)], where _i_ = INDEX if INDEX ≥ 0, _i_ =
- *     {#bytesize} - abs(INDEX) otherwise, inheriting any taint or untrust, or
+ *     {#bytesize} - abs(INDEX) otherwise, inheriting any taint and untrust, or
  *     nil if this substring is empty
  *
  * @overload byteslice(index, length)
@@ -75,7 +75,7 @@ rb_u_string_byteslice(VALUE self, VALUE index)
  *   @param [Integer] length
  *   @return [U::String, nil] The byte-index-based substring [max(_i_, 0),
  *     min({#bytesize}, _i_ + LENGTH)], where _i_ = INDEX if INDEX ≥ 0, _i_ =
- *     {#bytesize} - abs(INDEX) otherwise, inheriting any taint or untrust, or
+ *     {#bytesize} - abs(INDEX) otherwise, inheriting any taint and untrust, or
  *     nil if LENGTH < 0
  *
  * @overload byteslice(range)

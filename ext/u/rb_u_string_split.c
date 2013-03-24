@@ -1,13 +1,6 @@
 #include "rb_includes.h"
 #include "rb_u_re.h"
 
-VALUE
-rb_u_string_split(VALUE self, const char *separator, long length)
-{
-        VALUE rbseparator = rb_u_string_new_own(separator, length);
-        return rb_u_string_split_m(1, &rbseparator, self);
-}
-
 static VALUE
 rb_u_string_split_trim(VALUE result, bool limit_given, int limit)
 {
@@ -177,7 +170,7 @@ rb_u_string_split_pattern(VALUE self, VALUE pattern, bool limit_given, int limit
 /* @overload split(pattern = $;, limit = 0)
  *
  *   Returns the receiver split into LIMIT substrings separated by PATTERN,
- *   each inheriting any taint or untrust.
+ *   each inheriting any taint and untrust.
  *
  *   If PATTERN = `$;` = nil or PATTERN = `' '`, splits according to AWK rules,
  *   that is, any {#space?} prefix is skipped, then substrings are separated by

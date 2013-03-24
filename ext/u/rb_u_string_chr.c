@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 /* @return [U::String] The substring [0, min({#length}, 1)], inheriting any
- *   taint or untrust */
+ *   taint and untrust */
 VALUE
 rb_u_string_chr(VALUE self)
 {

@@ -51,8 +51,10 @@ rb_u_string_begin_from_offset(const UString *string, long offset)
 extern VALUE rb_cUString;
 
 
-VALUE rb_u_string_new(const char *str, long length);
-VALUE rb_u_string_new_own(const char *str, long length);
+VALUE rb_u_string_new_uninfected(const char *str, long length);
+VALUE rb_u_string_new_uninfected_own(const char *str, long length);
+VALUE rb_u_string_new_c(VALUE self, const char *str, long length);
+VALUE rb_u_string_new_c_own(VALUE self, const char *str, long length);
 VALUE rb_u_string_new_rb(VALUE str);
 VALUE rb_u_string_new_subsequence(VALUE self, long begin, long length);
 VALUE rb_u_string_new_empty(VALUE self);

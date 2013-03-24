@@ -23,4 +23,7 @@ Expectations do
   expect '#<U::Buffer äbcdëwvxÿz>' do U::Buffer.new.append('äbcdëwvxÿz'.u).inspect end
   expect '#<U::Buffer äbcdëfwvxÿz>' do U::Buffer.new.append('äbcdëfwvxÿz'.u).inspect end
   expect '#<U::Buffer äbcdë…wvxÿz>' do U::Buffer.new.append('äbcdëfgwvxÿz'.u).inspect end
+
+  expect result.tainted? do U::Buffer.new.taint.to_s end
+  expect result.tainted? do U::Buffer.new.taint.to_u end
 end

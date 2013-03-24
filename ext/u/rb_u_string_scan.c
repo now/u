@@ -65,18 +65,21 @@ rb_u_string_scan_array(VALUE string, VALUE pattern)
 
 /* @overload scan(pattern)
  *   @param [Regexp] pattern
- *   @return [Array<Array<U::String>>] All sub-matches of matches of PATTERN in
- *     the receiver
+ *   @return [Array<U::String>, Array<Array<U::String>>] All matches – or
+ *     sub-matches, if they exist – of matches of PATTERN in the receiver, each
+ *     inheriting any taint and untrust from both the receiver and from PATTERN
  *   @note The Regexp special variables `$&`, `$'`, <code>$\`</code>, `$1`,
  *     `$2`, …, `$`_n_ are updated accordingly
  *
  * @overload scan(pattern)
  *   @param [#to_str] pattern
- *   @return [Array<U::String>] All matches of PATTERN in the receiver
+ *   @return [Array<U::String>] All matches of PATTERN in the receiver, each
+ *     inheriting any taint and untrust from the receiver
  *
  * @overload scan(pattern){ |*submatches| … }
  *
- *   Enumerates the sub-matches of matches of PATTERN in the receiver.
+ *   Enumerates the sub-matches of matches of PATTERN in the receiver, each
+ *   inheriting any taint and untrust from both the receiver and from PATTERN.
  *
  *   @param [Regexp] pattern
  *   @yieldparam [Array<U::String>] submatches
@@ -86,7 +89,8 @@ rb_u_string_scan_array(VALUE string, VALUE pattern)
  *
  * @overload scan(pattern){ |match| … }
  *
- *   Enumerates the matches of PATTERN in the receiver.
+ *   Enumerates the matches of PATTERN in the receiver, each inheriting any
+ *   taint and untrust from the receiver.
  *
  *   @param [#to_str] pattern
  *   @yieldparam [U::String] match

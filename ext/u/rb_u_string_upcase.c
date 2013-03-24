@@ -3,7 +3,7 @@
 /* @overload upcase(locale = ENV['LC_CTYPE'])
  *   @param [#to_str] locale
  *   @return [U::String] The upcasing of the receiver according to the rules of
- *     LOCALE */
+ *     LOCALE, inheriting any taint and untrust */
 VALUE
 rb_u_string_upcase(int argc, VALUE *argv, VALUE self)
 {
@@ -21,5 +21,5 @@ rb_u_string_upcase(int argc, VALUE *argv, VALUE self)
                                              locale,
                                              &length);
 
-        return rb_u_string_new_own(upcased, length);
+        return rb_u_string_new_c_own(self, upcased, length);
 }

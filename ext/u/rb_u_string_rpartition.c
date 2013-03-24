@@ -64,10 +64,12 @@ rb_u_string_rpartition_string(VALUE self, VALUE rbseparator)
 
 /* @overload rpartition(separator)
  *   @param [Regexp, #to_str] separator
- *   @return [Array<U::String>] The receiver split into {#slice}(0, _i_),
- *     {#slice}(_i_, _n_), {#slice}(_i_ + _n_, -1), where _i_ = _j_ if _j_ ≠
+ *   @return [Array<U::String>] The receiver split into _s₁_ = {#slice}(0, _i_),
+ *     _s₂_ = {#slice}(_i_, _n_), _s₃_ = {#slice}(_i_ + _n_, -1), where _i_ = _j_ if _j_ ≠
  *     nil, _i_ = 0 otherwise, _j_ = {#rindex}(SEPARATOR), _n_ =
- *     SEPARATOR{#length}
+ *     SEPARATOR{#length}, where _s₁_ and _s₃_ inherit any taint and untrust
+ *     from the receiver and _s₂_ inherits any taint and untrust from SEPARATOR
+ *     and also from the receiver if SEPARATOR is a Regexp
  *   @see #partition */
 VALUE
 rb_u_string_rpartition(VALUE self, VALUE separator)
