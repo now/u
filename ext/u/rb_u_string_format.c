@@ -1505,7 +1505,7 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       ‘<code>#</code>’ flag has been given.</p>
  *
  *       <p><em>Fractional-part</em> consists of <em>p</em> digits in base 10
- *       that represent all but the most significant digits of the result of
+ *       that represent all but the most significant digit of the result of
  *       calling Float with the argument as its argument, where <em>p</em> =
  *       precision, if one has been specified, <em>p</em> = 6 otherwise.</p>
  *
@@ -1568,6 +1568,90 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <p>Same as ‘g’, except that it uses an uppercase ‘E’ for the exponent
  *       separator.</p>
  *     </dd>
+ *     <dt>a</dt>
+ *     <dd>
+ *       <p>Outputs</p>
+ *
+ *       <pre><code>[left-padding][prefix/sign][zeroes]
+ *       digit[hexadecimal-point][fractional-part]exponent[right-padding]</code></pre>
+ *
+ *       <p>If a width <em>w</em> has been specified and neither the
+ *       ‘<code>-</code>’ nor the ‘<code>0</code>’ flag has been given,
+ *       <em>left-padding</em> consists of enough spaces to make the whole
+ *       field at least <em>w</em> + <em>e</em> characters wide, where
+ *       <em>e</em> ≥ 3 is the width of the exponent, otherwise it’s
+ *       empty.</p>
+ *
+ *       <p><em>Prefix/sign</em> is “-” if the argument is negative, “+” if the
+ *       ‘<code>+</code>’ flag was given, and “ ” if the ‘<code> </code>’ flag
+ *       was given, otherwise it’s empty.</p>
+ *
+ *       <p>If a width <em>w</em> has been specified and the ‘<code>0</code>’
+ *       flag has been given and the ‘<code>-</code>’ flag has not been given,
+ *       <em>zeroes</em> consists of enough zeroes to make the whole field
+ *       <em>w</em> + <em>e</em> characters wide, where <em>e</em> ≥ 3 is the
+ *       width of the exponent, otherwise it’s empty.</p>
+ *
+ *       <p><em>Digit</em> consists of one digit in base 16 that represent the
+ *       most significant digit of the result of calling Float with the
+ *       argument as its argument, using ‘0’ through ‘9’ and ‘a’ through ‘f’.</p>
+ *
+ *       <p><em>Decimal-point</em> is “.” if the precision isn’t 0 or if the
+ *       ‘<code>#</code>’ flag has been given.</p>
+ *
+ *       <p><em>Fractional-part</em> consists of <em>p</em> digits in base 16
+ *       that represent all but the most significant digit of the result of
+ *       calling Float with the argument as its argument, where <em>p</em> =
+ *       precision, if one has been specified, <em>p</em> = <em>q</em>, where
+ *       <em>q</em> is the number of digits required to represent the number
+ *       exactly, otherwise.  Digits are output using ‘0’ through ‘9’ and ‘a’
+ *       through ‘f’.</p>
+ *
+ *       <p><em>Exponent</em> consists of “p” followed by the exponent of 2 in
+ *       base 10 required to turn the result of calling Float with the argument
+ *       as its argument into a decimal fraction with one non-zero digit in the
+ *       integer part.  If the exponent is 0, “+0” will be output.</p>
+ *
+ *       <p>If a width <em>w</em> has been specified and the ‘<code>-</code>’
+ *       flag has been given, <em>right-padding</em> consists of enough spaces
+ *       to make the whole field at least <em>w</em> + <em>e</em> characters
+ *       wide, where <em>e</em> ≥ 3 is the width of the exponent, otherwise
+ *       it’s empty.</p>
+ *
+ *       <table>
+ *         <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+ *         <tbody>
+ *           <tr>
+ *             <td>(Space)</td>
+ *             <td>Add a “ ” prefix to non-negative numbers</td>
+ *           </tr>
+ *           <tr>
+ *             <td><code>+</code></td>
+ *             <td>Add a “+” sign to non-negative numbers; overrides the
+ *             ‘<code> </code>’ flag</td>
+ *           </tr>
+ *           <tr>
+ *             <td><code>0</code></td>
+ *             <td>Use ‘0’ for any width padding; ignored when a precision has
+ *             been specified</td>
+ *           </tr>
+ *           <tr>
+ *             <td><code>-</code></td>
+ *             <td>Left justify the output with ‘ ’ as padding; overrides the
+ *             ‘<code>0</code>’ flag</td>
+ *           </tr>
+ *           <tr>
+ *             <td>#</td>
+ *             <td>Output a decimal point, even if no fractional part
+ *             follows</td>
+ *           </tr>
+ *         </tbody>
+ *       </table>
+ *     </dd>
+ *     <dt>A</dt>
+ *     <dd>
+ *       <p>Same as ‘a’, except that it uses an uppercase letters instead.</p>
+ *     </dd>
  *   </dl>
  *
  *   A warning is issued if the ‘`0`’ flag is given when the ‘`-`’ flag has
@@ -1577,8 +1661,8 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *   A warning is issued if the ‘`0`’ flag is given when a precision has been
  *   specified for the ‘d’, ‘i’, ‘u’, ‘o’, ‘x’, ‘X’, ‘b’, or ‘B’ directives.
  *
- *   A warning is issued if the ‘` `’ flag is given when the ‘`+`’ flag has
- *   also been given to the ‘d’, ‘i’, ‘u’, ‘o’, ‘x’, ‘X’, ‘b’, or ‘B’
+ *   A warning is issued if the ‘<code> </code>’ flag is given when the ‘`+`’
+ *   flag has also been given to the ‘d’, ‘i’, ‘u’, ‘o’, ‘x’, ‘X’, ‘b’, or ‘B’
  *   directives.
  *
  *   A warning is issued if the ‘`0`’ flag is given when the ‘o’, ‘x’, ‘X’,
@@ -1599,8 +1683,8 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *     directives
  *   @raise [ArgumentError] If a precision is specified for the ‘%’, ‘\n’, ‘\0’,
  *     or ‘c’ directives
- *   @raise [ArgumentError] If any of the flags ‘` `’, ‘`+`’, ’`0`’, or ‘`#`’
- *     are given to the ‘c’, ‘s’, or ‘p’ directives
+ *   @raise [ArgumentError] If any of the flags ‘<code> </code>’, ‘`+`’, ’`0`’,
+ *     or ‘`#`’ are given to the ‘c’, ‘s’, or ‘p’ directives
  *   @raise [ArgumentError] If the ‘`#`’ flag is given to the ‘d’, ‘i’, or ‘u’
  *     directives
  *   @raise [ArgumentError] If the argument to the ‘c’ directive doesn’t respond
