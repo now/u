@@ -81,7 +81,7 @@ rb_u_string_inspect_default(unichar c, VALUE result)
  * any taint and untrust.
  *
  * The reader-friendly inspectable format looks like “`"…".u`”.  Inside the
- * “…”, any {#printable?} characters are output as-is, the following special
+ * “…”, any {#print?} characters are output as-is, the following special
  * characters are escaped according to the following table:
  *
  * <table>

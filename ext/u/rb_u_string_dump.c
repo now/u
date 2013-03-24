@@ -83,7 +83,7 @@ rb_u_string_dump_hex(VALUE buffer, unsigned char c)
  * untrust.
  *
  * The reader-friendly format looks like “`"…".u`”.  Inside the “…”, any
- * {#printable?} characters in the ASCII range are output as-is, the following
+ * {#print?} characters in the ASCII range are output as-is, the following
  * special characters are escaped according to the following table:
  *
  * <table>
