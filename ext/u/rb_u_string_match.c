@@ -10,7 +10,7 @@
 VALUE
 rb_u_string_match(VALUE self, VALUE other)
 {
-        if (rb_obj_is_kind_of(other, rb_cUString))
+        if (RTEST(rb_obj_is_kind_of(other, rb_cUString)))
                 rb_u_raise(rb_eTypeError, "type mismatch: U::String given");
 
         switch (TYPE(other)) {

@@ -547,7 +547,7 @@ directive_integer_value_m(VALUE argument, VALUE *bignum)
         case T_FIXNUM:
                 return FIX2LONG(argument);
         default:
-                if (rb_obj_is_kind_of(argument, rb_cUString))
+                if (RTEST(rb_obj_is_kind_of(argument, rb_cUString)))
                         return directive_integer_value_m(rb_u_string_to_inum(argument, 0, true), bignum);
                 return directive_integer_value_m(rb_Integer(argument), bignum);
         }

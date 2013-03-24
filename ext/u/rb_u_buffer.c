@@ -229,7 +229,7 @@ rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
         need_at_least_n_arguments(argc, 1);
 
         for (int i = 0; i < argc; i++)
-                if (rb_obj_is_kind_of(argv[i], rb_cUBuffer)) {
+                if (RTEST(rb_obj_is_kind_of(argv[i], rb_cUBuffer))) {
                         const UBuffer *buffer = RVAL2UBUFFER(argv[i]);
 
                         rb_u_buffer_append(self, buffer->c, buffer->length);
@@ -273,7 +273,7 @@ rb_u_buffer_eql(VALUE self, VALUE rbother)
         if (self == rbother)
                 return Qtrue;
 
-        if (!rb_obj_is_kind_of(rbother, rb_cUBuffer))
+        if (!RTEST(rb_obj_is_kind_of(rbother, rb_cUBuffer)))
                 return Qfalse;
 
         const UBuffer *buffer = RVAL2UBUFFER(self);

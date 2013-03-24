@@ -71,7 +71,7 @@ rb_u_string_aref_default(VALUE self, VALUE index)
 static VALUE
 rb_u_string_aref(VALUE self, VALUE index)
 {
-        if (TYPE(index) == T_STRING || rb_obj_is_kind_of(index, rb_cUString)) {
+        if (TYPE(index) == T_STRING || RTEST(rb_obj_is_kind_of(index, rb_cUString))) {
                 if (rb_u_string_index(self, index, 0) == -1)
                         return Qnil;
 

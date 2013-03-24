@@ -94,7 +94,7 @@ rb_u_string_new_empty(VALUE self)
 VALUE
 rb_u_string_check_type(VALUE str)
 {
-        if (rb_obj_is_kind_of(str, rb_cUString))
+        if (RTEST(rb_obj_is_kind_of(str, rb_cUString)))
                 return str;
 
         return rb_check_string_type(str);
@@ -116,7 +116,7 @@ rb_u_string_validate_type(VALUE str)
 VALUE
 rb_u_string_object_as_string(VALUE object)
 {
-        if (TYPE(object) == T_STRING || rb_obj_is_kind_of(object, rb_cUString))
+        if (TYPE(object) == T_STRING || RTEST(rb_obj_is_kind_of(object, rb_cUString)))
                 return object;
 
         static ID id_to_s;

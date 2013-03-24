@@ -11,7 +11,7 @@ rb_u_string_equal(VALUE self, VALUE rbother)
         if (self == rbother)
                 return Qtrue;
 
-        if (rb_obj_is_kind_of(rbother, rb_cUString))
+        if (RTEST(rb_obj_is_kind_of(rbother, rb_cUString)))
                 return rb_u_string_eql(self, rbother);
 
         if (!rb_respond_to(rbother, rb_intern("to_str")))

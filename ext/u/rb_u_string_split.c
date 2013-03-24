@@ -216,7 +216,7 @@ rb_u_string_split_m(int argc, VALUE *argv, VALUE self)
         else if (NIL_P(rbpattern))
                 rbpattern = rb_fs;
 
-        if (TYPE(rbpattern) != T_STRING && !rb_obj_is_kind_of(rbpattern, rb_cUString))
+        if (TYPE(rbpattern) != T_STRING && !RTEST(rb_obj_is_kind_of(rbpattern, rb_cUString)))
                 return rb_u_string_split_pattern(self,
                                                  rb_u_pattern_argument(rbpattern, true),
                                                  limit_given,
