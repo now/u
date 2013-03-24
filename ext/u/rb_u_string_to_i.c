@@ -26,7 +26,7 @@
  *
  *      Note that only one separator is allowed in a row.
  *
- *   @param [Integer] base
+ *   @param [#to_int] base
  *   @raise [ArgumentError] Unless 2 ≤ BASE ≤ 36
  *   @return [Integer] */
 VALUE

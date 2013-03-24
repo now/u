@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 /* @overload getbyte(index)
- *   @param [Integer] index
+ *   @param [#to_int] index
  *   @return [Fixnum, nil] The byte at byte-index _i_, where _i_ = INDEX if
  *     INDEX ≥ 0, _i_ = {#bytesize} - abs(INDEX) otherwise, or nil if _i_ lays
  *     outside of [0, {#bytesize}] */

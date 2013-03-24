@@ -91,15 +91,15 @@ rb_u_string_aref(VALUE self, VALUE index)
 }
 
 /* @overload [](index)
- *   @param [Integer] index
+ *   @param [#to_int] index
  *   @return [U::String, nil] The substring [max(_i_, 0), min({#length}, _i_ +
  *     1)], where _i_ = INDEX if INDEX ≥ 0, _i_ = {#length} - abs(INDEX)
  *     otherwise, inheriting any taint and untrust, or nil if this substring is
  *     empty
  *
  * @overload [](index, length)
- *   @param [Integer] index
- *   @param [Integer] length
+ *   @param [#to_int] index
+ *   @param [#to_int] length
  *   @return [U::String, nil] The substring [max(_i_, 0), min({#length}, _i_ +
  *     LENGTH)], where _i_ = INDEX if INDEX ≥ 0, _i_ = {#length} - abs(INDEX)
  *     otherwise, inheriting any taint or untrust, or nil if LENGTH < 0
@@ -114,7 +114,7 @@ rb_u_string_aref(VALUE self, VALUE index)
  *
  * @overload [](regexp, reference = 0)
  *   @param [Regexp] regexp
- *   @param [Integer, #to_str, Symbol] reference
+ *   @param [#to_int, #to_str, Symbol] reference
  *   @raise [IndexError] If REFERENCE doesn’t refer to a submatch
  *   @return [U::String, nil] The submatch REFERENCE from the first match of
  *     REGEXP in the receiver, inheriting any taint and untrust from both

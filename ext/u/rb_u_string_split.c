@@ -188,7 +188,7 @@ rb_u_string_split_pattern(VALUE self, VALUE pattern, bool limit_given, int limit
  *   If LIMIT > 1, then the receiver is split into at most LIMIT substrings.
  *
  *   @param [Regexp, #to_str] pattern
- *   @param [Integer] limit
+ *   @param [#to_int] limit
  *   @return [Array<U::String>] */
 VALUE
 rb_u_string_split_m(int argc, VALUE *argv, VALUE self)

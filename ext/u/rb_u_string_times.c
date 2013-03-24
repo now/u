@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 /* @overload *(n)
- *   @param [Integer] n
+ *   @param [#to_int] n
  *   @raise [ArgumentError] If N < 0
  *   @raise [ArgumentError] If N > 0 and N × {#bytesize} > LONG_MAX
  *   @return [U::String] The concatenation of N copies of the receiver,

@@ -97,7 +97,7 @@ rb_u_string_justify(int argc, VALUE *argv, VALUE self, char jflag)
 }
 
 /* @overload center(width, padding = ' ')
- *   @param [Integer] width
+ *   @param [#to_int] width
  *   @param [U::String, #to_str] padding
  *   @raise [ArgumentError] If PADDING{#length} = 0
  *   @return [U::String] The receiver padded as evenly as possible on both
@@ -113,7 +113,7 @@ rb_u_string_center(int argc, VALUE *argv, VALUE self)
 }
 
 /* @overload ljust(width, padding = ' ')
- *   @param [Integer] width
+ *   @param [#to_int] width
  *   @param [U::String, #to_str] padding
  *   @raise [ArgumentError] If PADDING{#length} = 0
  *   @return [U::String] The receiver padded on the right with PADDING to make
@@ -128,7 +128,7 @@ rb_u_string_ljust(int argc, VALUE *argv, VALUE self)
 }
 
 /* @overload rjust(width, padding = ' ')
- *   @param [Integer] width
+ *   @param [#to_int] width
  *   @param [U::String, #to_str] padding
  *   @raise [ArgumentError] If PADDING{#length} = 0
  *   @return [U::String] The receiver padded on the left with PADDING to make

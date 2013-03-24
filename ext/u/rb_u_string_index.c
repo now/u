@@ -64,7 +64,7 @@ rb_u_string_index(VALUE self, VALUE rbsubstring, long offset)
  *   comparison.
  *
  *   @param [Regexp, #to_str] pattern
- *   @param [Integer] offset
+ *   @param [#to_int] offset
  *   @return [Integer, nil]
  *   @see #rindex */
 VALUE
