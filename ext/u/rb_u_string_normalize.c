@@ -76,7 +76,7 @@ symbol_to_mode(VALUE symbol)
  *     </tbody>
  *   </table>
  *
- *   @param [Symbol] mode
+ *   @param [#to_sym] mode
  *   @return [U::String] */
 VALUE
 rb_u_string_normalize(int argc, VALUE *argv, VALUE self)
