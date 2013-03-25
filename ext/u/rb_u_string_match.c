@@ -53,8 +53,10 @@ rb_u_string_match(VALUE self, VALUE other)
 VALUE
 rb_u_string_match_m(int argc, VALUE *argv, VALUE self)
 {
-        VALUE re, index;
-        rb_scan_args(argc, argv, "1*", &re, &index);
+        VALUE re;
+        if (argc < 0)
+                need_m_to_n_arguments(argc, 1, 2);
+        re = argv[0];
         argv[0] = self;
         VALUE result = rb_funcall2(rb_u_pattern_argument(re, false),
                                    rb_intern("match"), argc, argv);
