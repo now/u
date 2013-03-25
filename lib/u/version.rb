@@ -183,6 +183,7 @@ module U
               rb_u_string_squeeze.c
               rb_u_string_start_with.c
               rb_u_string_strip.c
+              rb_u_string_sub.c
               rb_u_string_times.c
               rb_u_string_to_i.c
               rb_u_string_to_inum.c

@@ -282,6 +282,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "split", rb_u_string_split_m, -1); /* in ext/u/rb_u_string_split.c */
 
         rb_define_method(rb_cUString, "gsub", rb_u_string_gsub, -1); /* in ext/u/rb_u_string_gsub.c */
+        rb_define_method(rb_cUString, "sub", rb_u_string_sub, -1); /* in ext/u/rb_u_string_sub.c */
 
         rb_define_method(rb_cUString, "+", rb_u_string_plus, 1); /* in ext/u/rb_u_string_plus.c */
         rb_define_method(rb_cUString, "*", rb_u_string_times, 1); /* in ext/u/rb_u_string_times.c */

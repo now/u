@@ -3,9 +3,8 @@
 
 /* @overload gsub(pattern, replacement)
  *
- *   Returns the receiver with all instances of PATTERN replaced by
- *   REPLACEMENT, inheriting any taint and untrust from the receiver and from
- *   REPLACEMENT.
+ *   Returns the receiver with all matches of PATTERN replaced by REPLACEMENT,
+ *   inheriting any taint and untrust from the receiver and from REPLACEMENT.
  *
  *   The REPLACEMENT is used as a specification for what to replace matches
  *   with:
@@ -35,7 +34,7 @@
  *
  * @overload gsub(pattern, replacements)
  *
- *   Returns the receiver with all instances of PATTERN replaced by
+ *   Returns the receiver with all matches of PATTERN replaced by
  *   REPLACEMENTS#[_match_], where _match_ is the matched substring, inheriting
  *   any taint and untrust from the receiver and from the
  *   REPLACEMENTS#[_match_]es, as well as any taint on REPLACEMENTS.
@@ -52,7 +51,7 @@
  *
  * @overload gsub(pattern){ |match| … }
  *
- *   Returns the receiver with all instances of PATTERN replaced by the results
+ *   Returns the receiver with all matches of PATTERN replaced by the results
  *   of the given block, inheriting any taint and untrust from the receiver and
  *   from the results of the given block.
  *
@@ -72,8 +71,7 @@
  *   `$`_n_ will be updated accordingly.
  *
  *   @param [Regexp, #to_str] pattern
- *   @return [Enumerator]
- */
+ *   @return [Enumerator] */
 VALUE
 rb_u_string_gsub(int argc, VALUE *argv, VALUE self)
 {

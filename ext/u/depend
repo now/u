@@ -155,6 +155,8 @@ rb_u_string_start_with.o: rb_u_string_start_with.c rb_includes.h \
   extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_strip.o: rb_u_string_strip.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
+rb_u_string_sub.o: rb_u_string_sub.c rb_includes.h extconf.h u.h \
+  private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_times.o: rb_u_string_times.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_to_i.o: rb_u_string_to_i.c rb_includes.h extconf.h u.h \

@@ -46,7 +46,7 @@ Inventory::Rake::Tasks.unless_installing_dependencies do
         lib_so = 'lib/%s/%s' % [@inventory.package_path, File.basename(ext_so)]
         task :compile => name
         task name => [makefile, lib_so]
-        file makefile => [extension.extconf, extension.depend] do
+        file makefile => [@inventory.path, extension.extconf, extension.depend] do
           Dir.chdir extension.path do
             ENV['CFLAGS'] = '-Werror' unless ENV['CFLAGS']
             ruby File.basename(extension.extconf)

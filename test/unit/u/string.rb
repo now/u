@@ -860,11 +860,9 @@ Expectations do
   expect 'h*ll*'.u do 'hello'.u.gsub(/[aeiou]/u, '*'.u) end
   expect 'h*ll*'.u do 'hëllö'.u.gsub(/[äëïöü]/u, '*'.u) end
   expect 'h<ë>ll<ö>'.u do 'hëllö'.u.gsub(/([äëïöü])/u, '<\\1>'.u) end
-  # TODO: Relies on #hash, which isn’t available yet
-  # expect 'h<ë>ll<ö>'.u do 'hëllö'.u.gsub(/([ëö])/u, 'ë'.u => '<ë>'.u, 'ö'.u => '<ö>'.u) end
+  expect 'h<ë>ll<ö>'.u do 'hëllö'.u.gsub(/([ëö])/u, 'ë'.u => '<ë>'.u, 'ö'.u => '<ö>'.u) end
   expect 'h ë l l ö '.u do 'hëllö'.u.gsub(/./u){ |s| s[0].to_s + ' ' } end
   expect 'HËLL-ö'.u do 'hëllö'.u.gsub(/(hëll)(.)/u){ |s| $1.u.upcase + '-'.u + $2.u } end
-  expect true do 'hëllö'.u.taint.gsub(/./, '*'.u).tainted? end
   expect ArgumentError do 'hëllö'.gsub end
   expect result.tainted? do 'a'.u.taint.gsub(/a/, 'b') end
   expect result.untrusted? do 'a'.u.untrust.gsub(/a/, 'b') end
@@ -880,6 +878,29 @@ Expectations do
   expect result.untrusted? do 'a'.u.gsub(/a/, Hash.new{ 'b'.untrust }) end
   expect result.tainted? do 'a'.u.gsub(/a/){ 'b'.taint } end
   expect result.untrusted? do 'a'.u.gsub(/a/){ 'b'.untrust } end
+
+  expect 'bbc'.u do 'abc'.u.sub('a', 'b') end
+  expect 'h*llo'.u do 'hello'.u.sub(/[aeiou]/u, '*'.u) end
+  expect 'h*llö'.u do 'hëllö'.u.sub(/[äëïöü]/u, '*'.u) end
+  expect 'h<ë>llö'.u do 'hëllö'.u.sub(/([äëïöü])/u, '<\\1>'.u) end
+  expect 'h<ë>llö'.u do 'hëllö'.u.sub(/([ëö])/u, 'ë'.u => '<ë>'.u, 'ö'.u => '<ö>'.u) end
+  expect 'h ëllö'.u do 'hëllö'.u.sub(/./u){ |s| s[0].to_s + ' ' } end
+  expect 'HËLL-ö'.u do 'hëllö'.u.sub(/(hëll)(.)/u){ |s| $1.u.upcase + '-'.u + $2.u } end
+  expect ArgumentError do 'hëllö'.sub end
+  expect result.tainted? do 'a'.u.taint.sub(/a/, 'b') end
+  expect result.untrusted? do 'a'.u.untrust.sub(/a/, 'b') end
+  expect result.not.tainted? do 'a'.u.sub(/a/.taint, 'b') end
+  expect result.not.untrusted? do 'a'.u.sub(/a/.untrust, 'b') end
+  expect result.tainted? do 'a'.u.sub(/a/, 'b'.taint) end
+  expect result.untrusted? do 'a'.u.sub(/a/, 'b'.untrust) end
+  expect result.tainted? do 'a'.u.sub(/a/, {'a'.u => 'b'}.taint) end
+  expect result.untrusted? do 'a'.u.sub(/a/, {'a'.u => 'b'}.untrust) end
+  expect result.tainted? do 'a'.u.sub(/a/, {'a'.u => 'b'.taint}) end
+  expect result.untrusted? do 'a'.u.sub(/a/, {'a'.u => 'b'.untrust}) end
+  expect result.tainted? do 'a'.u.sub(/a/, Hash.new{ 'b'.taint }) end
+  expect result.untrusted? do 'a'.u.sub(/a/, Hash.new{ 'b'.untrust }) end
+  expect result.tainted? do 'a'.u.sub(/a/){ 'b'.taint } end
+  expect result.untrusted? do 'a'.u.sub(/a/){ 'b'.untrust } end
 
   expect true do 'hëllö'.u.hash == 'hëllö'.u.hash end
   expect false do 'hëllö'.u.hash == 'hëlLÖ'.u.hash end
