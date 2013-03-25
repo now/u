@@ -455,6 +455,10 @@ Expectations do
   expect ' äbc'.u do '%2$*1$cbc'.u % [2, 0x00e4] end
   expect 'äbc'.u do '%<a>cbc'.u % { :a => 0x00e4 } end
   expect ' äbc'.u do '%<a>2cbc'.u % { :a => 0x00e4 } end
+  expect 'あ'.u do '%c'.u % 0x3042 end
+  expect 'あ'.u do '%2c'.u % 0x3042 end
+  expect ' あ'.u do '%3c'.u % 0x3042 end
+  expect '   ​'.u do '%3c'.u % 0x200b end
   expect ArgumentError.new('cannot use absolute argument number 1: relative argument number already used') do '%c%1$c'.u % [0x00e4] end
   expect ArgumentError.new('cannot use absolute argument number 1: named argument already used') do '%<a>c%1$c'.u % { :a => 0x00e4 } end
   expect ArgumentError.new('absolute argument number beyond end of argument list: 1 > 0') do '%1$%'.u % [] end
@@ -475,6 +479,11 @@ Expectations do
   expect 'ä  c'.u do '%-3.1sc'.u % ['äb'.u] end
   expect 'äbc'.u do '%{a}c'.u % { :a => 'äb'.u } end
   expect 'äb3.3c'.u do '%{a}3.3c'.u % { :a => 'äb'.u } end
+  expect 'あ'.u do '%.1s'.u % ['あbc'.u] end
+  expect 'あ'.u do '%.2s'.u % ['あbc'.u] end
+  expect 'あb'.u do '%.3s'.u % ['あbc'.u] end
+  expect 'あbc'.u do '%.4s'.u % ['あbc'.u] end
+  expect ' あbc'.u do '%5s'.u % ['あbc'.u] end
 
   # TODO: Add flag checks?
   expect '"äbc".u'.u do '%p'.u % ['äbc'.u] end

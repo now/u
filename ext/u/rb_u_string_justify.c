@@ -13,6 +13,7 @@ rb_u_string_justify_one_side(char *p, const UString *padding, long padding_width
 
         const char *q = padding_str;
         while (i < n) {
+                // TODO Verify u_aref_char/u_next
                 i += unichar_width(u_aref_char(q));
                 q = u_next(q);
         }
@@ -30,6 +31,7 @@ rounding_size(const UString *padding, long padding_width, long n)
         long r = n % padding_width;
         long i = 0;
         while (i < r && q < end) {
+                // TODO Verify u_aref_char/u_next
 		i += unichar_width(u_aref_char(q));
                 q = u_next(q);
         }

@@ -481,7 +481,7 @@ directive_character(UNUSED(unichar directive), int flags, int width, UNUSED(int 
                 length = rb_unichar_to_u(c, buf);
         }
 
-        int padding = width - (unichar_iswide(c) ? 2 : 1);
+        int padding = width - (int)unichar_width(c);
         if (padding < 0) {
                 rb_u_buffer_append_unichar(result, c);
                 return;
@@ -503,21 +503,23 @@ directive_string(UNUSED(unichar directive), int flags, int width, int precision,
         long length = USTRING_LENGTH(string);
 
         if (precision > 0) {
-                /* TODO: Should really wrap this in a rb_u_offset_to_pointer_n
-                 * so that we can validate that the region walked is valid. */
-                const char *q = u_offset_to_pointer_n(p, precision, length);
-                if (q != NULL)
-                        length = q - p;
+                int i = 0;
+                const char *q = p, *end = p + length;
+                while (i < precision && q < end) {
+                        // TODO Verify u_aref_char/u_next
+                        i += (int)unichar_width(u_aref_char(q));
+                        q = u_next(q);
+                }
+                length = q - p;
         }
 
-        long n_chars;
-        /* TODO: Use u_width_n() instead.  This affects the precision calculation as well. */
-        if (width == 0 || width < (n_chars = u_length_n(p, length))) {
+        long n_cells;
+        if (width == 0 || width < (n_cells = u_width_n(p, length))) {
                 rb_u_buffer_append(result, p, length);
                 return;
         }
 
-        directive_pad(flags, width - (int)n_chars, p, length, result);
+        directive_pad(flags, width - (int)n_cells, p, length, result);
 }
 
 static void
@@ -1165,18 +1167,18 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <p>If a width <em>w</em> has been specified and the
  *       ‘<code>-</code>’ flag hasn’t been given, <em>left-padding</em>
  *       consists of enough spaces to make the whole field at least <em>w</em>
- *       characters wide, otherwise it’s empty.</p>
+ *       cells wide, otherwise it’s empty.</p>
  *
  *       <p><em>Character</em> is the result of #to_str#chr on the
  *       argument, if it responds to #to_str, otherwise it’s the result of
  *       #to_int turned into a string containing the character at that code
- *       point.  A precision isn’t allowed.  Characters that are {#wide?}  will
- *       count as two in any width calculation.</p>
+ *       point.  A precision isn’t allowed.  The {#width} of the character is
+ *       used in any width calculations.</p>
  *
  *       <p>If a width <em>w</em> has been specified and the ‘<code>-</code>’
  *       flag has been given, <em>right-padding</em> consists of enough spaces
- *       to make the whole field at least <em>w</em> characters wide, otherwise
- *       it’s empty.</p>
+ *       to make the whole field at least <em>w</em> cells wide, otherwise it’s
+ *       empty.</p>
  *     </dd>
  *     <dt>s</dt>
  *     <dd>
@@ -1187,9 +1189,9 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <p><em>Left-padding</em> and <em>right-padding</em> are the same as
  *       for the ‘c’ directive described above.</p>
  *
- *       <p><em>String</em> is the substring [0, min(<em>i</em>,
- *       {#length})] of the result of #to_s on the argument, where <em>i</em> =
- *       precision, if a precision has been specified, <em>i</em> = {#length}
+ *       <p><em>String</em> is a substring of the result of #to_s on the
+ *       argument that is <em>w</em> cells wide, where <em>w</em> = precision,
+ *       if a precision has been specified, <em>w</em> = {#width}
  *       otherwise.</p>
  *     </dd>
  *     <dt>p</dt>
@@ -1201,9 +1203,9 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <p><em>Left-padding</em> and <em>right-padding</em> are the same as
  *       for the ‘c’ directive described above.</p>
  *
- *       <p><em>Inspect</em> is the substring [0, min(<em>i</em>,
- *       {#length})] of the result of #inspect on the argument, where <em>i</em> =
- *       precision, if a precision has been specified, <em>i</em> = {#length}
+ *       <p><em>String</em> is a substring of the result of #inspect on the
+ *       argument that is <em>w</em> cells wide, where <em>w</em> = precision,
+ *       if a precision has been specified, <em>w</em> = {#width}
  *       otherwise.</p>
  *     </dd>
  *     <dt>d</dt>
@@ -1218,7 +1220,7 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <p>If a width <em>w</em> has been specified and neither the
  *       ‘<code>-</code>’ nor the ‘<code>0</code>’ flag has been given,
  *       <em>left-padding</em> consists of enough spaces to make the whole
- *       field at least <em>w</em> characters wide, otherwise it’s empty.</p>
+ *       field at least <em>w</em> cells wide, otherwise it’s empty.</p>
  *
  *       <p><em>Prefix/sign</em> is “-” if the argument is negative, “+” if the
  *       ‘<code>+</code>’ flag was given, and “ ” if the ‘<code> </code>’ flag
@@ -1227,8 +1229,8 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <p>If a width <em>w</em> has been specified and the ‘<code>0</code>’
  *       flag has been given and neither the ‘<code>-</code>’ flag has been
  *       given nor a precision has been specified, <em>zeroes</em> consists of
- *       enough zeroes to make the whole field at least <em>w</em> characters
- *       wide, otherwise it’s empty.</p>
+ *       enough zeroes to make the whole field at least <em>w</em> cells wide,
+ *       otherwise it’s empty.</p>
  *
  *       <p>If a precision <em>p</em> has been specified,
  *       <em>precision-filler</em> consists of enough zeroes to make for
@@ -1239,8 +1241,8 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *
  *       <p>If a width <em>w</em> has been specified and the ‘<code>-</code>’
  *       flag has been given, <em>right-padding</em> consists of enough spaces
- *       to make the whole field at least <em>w</em> characters wide, otherwise
- *       it’s empty.</p>
+ *       to make the whole field at least <em>w</em> cells wide, otherwise it’s
+ *       empty.</p>
  *
  *       <table>
  *         <thead><tr><th>Flag</th><th>Description</th></tr></thead>
@@ -1277,7 +1279,7 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <p>If a width <em>w</em> has been specified and neither the
  *       ‘<code>-</code>’ nor the ‘<code>0</code>’ flag has been given,
  *       <em>left-padding</em> consists of enough spaces to make the whole
- *       field at least <em>w</em> characters wide, otherwise it’s empty.</p>
+ *       field at least <em>w</em> cells wide, otherwise it’s empty.</p>
  *
  *       <p><em>Prefix/sign</em> is “-” if the argument is negative and the
  *       ‘<code>+</code>’ or ‘<code> </code>’ flag was given, “..” if the
@@ -1289,8 +1291,8 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       given nor a precision has been specified, <em>zeroes/sevens</em>
  *       consists of enough zeroes, if the argument is non-negative or if the
  *       ‘<code>+</code>’ or ‘<code> </code>’ flag has been specified, sevens
- *       otherwise, to make the whole field at least <em>w</em> characters
- *       wide, otherwise it’s empty.</p>
+ *       otherwise, to make the whole field at least <em>w</em> cells wide,
+ *       otherwise it’s empty.</p>
  *
  *       <p>If a precision <em>p</em> has been specified,
  *       <em>precision-filler</em> consists of enough zeroes, if the argument
@@ -1304,8 +1306,8 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *
  *       <p>If a width <em>w</em> has been specified and the ‘<code>-</code>’
  *       flag has been given, <em>right-padding</em> consists of enough spaces
- *       to make the whole field at least <em>w</em> characters wide, otherwise
- *       it’s empty.</p>
+ *       to make the whole field at least <em>w</em> cells wide, otherwise it’s
+ *       empty.</p>
  *
  *       <table>
  *         <thead><tr><th>Flag</th><th>Description</th></tr></thead>
@@ -1415,7 +1417,7 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <p>If a width <em>w</em> has been specified and neither the
  *       ‘<code>-</code>’ nor the ‘<code>0</code>’ flag has been given,
  *       <em>left-padding</em> consists of enough spaces to make the whole
- *       field at least <em>w</em> characters wide, otherwise it’s empty.</p>
+ *       field at least <em>w</em> cells wide, otherwise it’s empty.</p>
  *
  *       <p><em>Prefix/sign</em> is “-” if the argument is negative, “+” if the
  *       ‘<code>+</code>’ flag was given, and “ ” if the ‘<code> </code>’ flag
@@ -1424,7 +1426,7 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <p>If a width <em>w</em> has been specified and the ‘<code>0</code>’
  *       flag has been given and the ‘<code>-</code>’ flag has not been given,
  *       <em>zeroes</em> consists of enough zeroes to make the whole field
- *       at least <em>w</em> characters wide, otherwise it’s empty.</p>
+ *       at least <em>w</em> cells wide, otherwise it’s empty.</p>
  *
  *       <p><em>Integer-part</em> consists of the digits in base 10 that
  *       represent the integer part of the result of calling Float with the
@@ -1440,8 +1442,8 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *
  *       <p>If a width <em>w</em> has been specified and the ‘<code>-</code>’
  *       flag has been given, <em>right-padding</em> consists of enough spaces
- *       to make the whole field at least <em>w</em> characters wide, otherwise
- *       it’s empty.</p>
+ *       to make the whole field at least <em>w</em> cells wide, otherwise it’s
+ *       empty.</p>
  *
  *       <table>
  *         <thead><tr><th>Flag</th><th>Description</th></tr></thead>
@@ -1483,9 +1485,8 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <p>If a width <em>w</em> has been specified and neither the
  *       ‘<code>-</code>’ nor the ‘<code>0</code>’ flag has been given,
  *       <em>left-padding</em> consists of enough spaces to make the whole
- *       field at least <em>w</em> + <em>e</em> characters wide, where
- *       <em>e</em> ≥ 4 is the width of the exponent, otherwise it’s
- *       empty.</p>
+ *       field at least <em>w</em> + <em>e</em> cells wide, where <em>e</em> ≥
+ *       4 is the width of the exponent, otherwise it’s empty.</p>
  *
  *       <p><em>Prefix/sign</em> is “-” if the argument is negative, “+” if the
  *       ‘<code>+</code>’ flag was given, and “ ” if the ‘<code> </code>’ flag
@@ -1494,8 +1495,8 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <p>If a width <em>w</em> has been specified and the ‘<code>0</code>’
  *       flag has been given and the ‘<code>-</code>’ flag has not been given,
  *       <em>zeroes</em> consists of enough zeroes to make the whole field
- *       <em>w</em> + <em>e</em> characters wide, where <em>e</em> ≥ 4 is the
- *       width of the exponent, otherwise it’s empty.</p>
+ *       <em>w</em> + <em>e</em> cells wide, where <em>e</em> ≥ 4 is the width
+ *       of the exponent, otherwise it’s empty.</p>
  *
  *       <p><em>Digit</em> consists of one digit in base 10 that represent the
  *       most significant digit of the result of calling Float with the
@@ -1516,9 +1517,9 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *
  *       <p>If a width <em>w</em> has been specified and the ‘<code>-</code>’
  *       flag has been given, <em>right-padding</em> consists of enough spaces
- *       to make the whole field at least <em>w</em> + <em>e</em> characters
- *       wide, where <em>e</em> ≥ 4 is the width of the exponent, otherwise
- *       it’s empty.</p>
+ *       to make the whole field at least <em>w</em> + <em>e</em> cells wide,
+ *       where <em>e</em> ≥ 4 is the width of the exponent, otherwise it’s
+ *       empty.</p>
  *
  *       <table>
  *         <thead><tr><th>Flag</th><th>Description</th></tr></thead>
@@ -1578,9 +1579,8 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <p>If a width <em>w</em> has been specified and neither the
  *       ‘<code>-</code>’ nor the ‘<code>0</code>’ flag has been given,
  *       <em>left-padding</em> consists of enough spaces to make the whole
- *       field at least <em>w</em> + <em>e</em> characters wide, where
- *       <em>e</em> ≥ 3 is the width of the exponent, otherwise it’s
- *       empty.</p>
+ *       field at least <em>w</em> + <em>e</em> cells wide, where <em>e</em> ≥
+ *       3 is the width of the exponent, otherwise it’s empty.</p>
  *
  *       <p><em>Prefix/sign</em> is “-” if the argument is negative, “+” if the
  *       ‘<code>+</code>’ flag was given, and “ ” if the ‘<code> </code>’ flag
@@ -1589,8 +1589,8 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *       <p>If a width <em>w</em> has been specified and the ‘<code>0</code>’
  *       flag has been given and the ‘<code>-</code>’ flag has not been given,
  *       <em>zeroes</em> consists of enough zeroes to make the whole field
- *       <em>w</em> + <em>e</em> characters wide, where <em>e</em> ≥ 3 is the
- *       width of the exponent, otherwise it’s empty.</p>
+ *       <em>w</em> + <em>e</em> cells wide, where <em>e</em> ≥ 3 is the width
+ *       of the exponent, otherwise it’s empty.</p>
  *
  *       <p><em>Digit</em> consists of one digit in base 16 that represent the
  *       most significant digit of the result of calling Float with the
@@ -1614,7 +1614,7 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *
  *       <p>If a width <em>w</em> has been specified and the ‘<code>-</code>’
  *       flag has been given, <em>right-padding</em> consists of enough spaces
- *       to make the whole field at least <em>w</em> + <em>e</em> characters
+ *       to make the whole field at least <em>w</em> + <em>e</em> cells
  *       wide, where <em>e</em> ≥ 3 is the width of the exponent, otherwise
  *       it’s empty.</p>
  *
