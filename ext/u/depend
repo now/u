@@ -33,6 +33,8 @@ rb_u_string_casecmp.o: rb_u_string_casecmp.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_cased.o: rb_u_string_cased.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
+rb_u_string_category.o: rb_u_string_category.c rb_includes.h extconf.h \
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_chomp.o: rb_u_string_chomp.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_chop.o: rb_u_string_chop.c rb_includes.h extconf.h u.h \
@@ -69,7 +71,7 @@ rb_u_string_each_line.o: rb_u_string_each_line.c rb_includes.h extconf.h \
   u.h private.h rb_private.h rb_u_string.h
 rb_u_string_empty.o: rb_u_string_empty.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
-rb_u_string_ends_with.o: rb_u_string_ends_with.c rb_includes.h extconf.h \
+rb_u_string_end_with.o: rb_u_string_end_with.c rb_includes.h extconf.h \
   u.h private.h rb_private.h rb_u_string.h
 rb_u_string_eql.o: rb_u_string_eql.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
@@ -79,6 +81,9 @@ rb_u_string_foldcase.o: rb_u_string_foldcase.c rb_includes.h extconf.h \
   u.h private.h rb_private.h rb_u_string.h
 rb_u_string_folded.o: rb_u_string_folded.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
+rb_u_string_format.o: rb_u_string_format.c rb_includes.h extconf.h u.h \
+  private.h rb_private.h rb_u_string.h rb_u_buffer.h \
+  rb_u_string_to_inum.h
 rb_u_string_getbyte.o: rb_u_string_getbyte.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_graph.o: rb_u_string_graph.c rb_includes.h extconf.h u.h \
@@ -87,6 +92,8 @@ rb_u_string_gsub.o: rb_u_string_gsub.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_hash.o: rb_u_string_hash.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
+rb_u_string_hex.o: rb_u_string_hex.c rb_includes.h extconf.h u.h \
+  private.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
 rb_u_string_include.o: rb_u_string_include.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_index.o: rb_u_string_index.c rb_includes.h extconf.h u.h \
@@ -105,13 +112,15 @@ rb_u_string_lower.o: rb_u_string_lower.c rb_includes.h extconf.h u.h \
 rb_u_string_lstrip.o: rb_u_string_lstrip.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_match.o: rb_u_string_match.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_mirror.o: rb_u_string_mirror.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_newline.o: rb_u_string_newline.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_normalize.o: rb_u_string_normalize.c rb_includes.h extconf.h \
   u.h private.h rb_private.h rb_u_string.h
+rb_u_string_oct.o: rb_u_string_oct.c rb_includes.h extconf.h u.h \
+  private.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
 rb_u_string_ord.o: rb_u_string_ord.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_partition.o: rb_u_string_partition.c rb_includes.h extconf.h \
@@ -142,12 +151,14 @@ rb_u_string_split.o: rb_u_string_split.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_squeeze.o: rb_u_string_squeeze.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
-rb_u_string_starts_with.o: rb_u_string_starts_with.c rb_includes.h \
+rb_u_string_start_with.o: rb_u_string_start_with.c rb_includes.h \
   extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_strip.o: rb_u_string_strip.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_times.o: rb_u_string_times.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
+rb_u_string_to_i.o: rb_u_string_to_i.c rb_includes.h extconf.h u.h \
+  private.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
 rb_u_string_to_inum.o: rb_u_string_to_inum.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
 rb_u_string_to_str.o: rb_u_string_to_str.c rb_includes.h extconf.h u.h \
@@ -156,8 +167,6 @@ rb_u_string_to_sym.o: rb_u_string_to_sym.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_tr.o: rb_u_string_tr.c rb_includes.h extconf.h u.h private.h \
   rb_private.h rb_u_string.h rb_u_string_internal_tr.h
-rb_u_string_type.o: rb_u_string_type.c rb_includes.h extconf.h u.h \
-  private.h rb_private.h rb_u_string.h
 rb_u_string_upcase.o: rb_u_string_upcase.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_upper.o: rb_u_string_upper.c rb_includes.h extconf.h u.h \

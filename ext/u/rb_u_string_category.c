@@ -159,7 +159,7 @@ type_to_symbol(UnicodeType type)
  * @see http://www.unicode.org/notes/tn36/
  *   Unicode Technical Note #36: A Categorization of Unicode Characters */
 VALUE
-rb_u_string_type(VALUE self)
+rb_u_string_category(VALUE self)
 {
         UnicodeType current = (UnicodeType)-1;
 

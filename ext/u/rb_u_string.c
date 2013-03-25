@@ -235,7 +235,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "break_type", rb_u_string_break_type, 0); /* in ext/u/rb_u_string_break_type.c */
         rb_define_method(rb_cUString, "combining_class", rb_u_string_combining_class, 0); /* in ext/u/rb_u_string_combining_class.c */
         rb_define_method(rb_cUString, "script", rb_u_string_script, 0); /* in ext/u/rb_u_string_script.c */
-        rb_define_method(rb_cUString, "type", rb_u_string_type, 0); /* in ext/u/rb_u_string_type.c */
+        rb_define_method(rb_cUString, "category", rb_u_string_category, 0); /* in ext/u/rb_u_string_category.c */
 
         rb_define_method(rb_cUString, "bytesize", rb_u_string_bytesize, 0); /* in ext/u/rb_u_string_bytesize.c */
         rb_define_method(rb_cUString, "length", rb_u_string_length, 0); /* in ext/u/rb_u_string_length.c */

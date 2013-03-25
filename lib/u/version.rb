@@ -122,6 +122,7 @@ module U
               rb_u_string_case_ignorable.c
               rb_u_string_casecmp.c
               rb_u_string_cased.c
+              rb_u_string_category.c
               rb_u_string_chomp.c
               rb_u_string_chop.c
               rb_u_string_chr.c
@@ -189,7 +190,6 @@ module U
               rb_u_string_to_str.c
               rb_u_string_to_sym.c
               rb_u_string_tr.c
-              rb_u_string_type.c
               rb_u_string_upcase.c
               rb_u_string_upper.c
               rb_u_string_valid_encoding.c
