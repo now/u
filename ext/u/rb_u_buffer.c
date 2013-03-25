@@ -263,7 +263,7 @@ rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
                                            USTRING_STR(string),
                                            USTRING_LENGTH(string));
                 }
-        
+
         return self;
 }
 
@@ -326,6 +326,9 @@ rb_u_buffer_to_u_bang(VALUE self)
         return rb_u_string_new_c_own(self, c, length);
 }
 
+/* Document-class: U::Buffer
+ *
+ * A buffer for building {String}s. */
 void
 Init_u_buffer(VALUE mU)
 {

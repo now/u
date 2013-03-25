@@ -179,7 +179,8 @@ rb_u_string_dup(VALUE self)
 
 /* Document-class: U::String
  *
- * This is a docstring for u::String. */
+ * A U::String is a collection of zero or more Unicode characters encoded as
+ * UTF-8. */
 void
 Init_u_string(VALUE mU)
 {

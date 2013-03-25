@@ -158,6 +158,10 @@ _rb_u_string_test_in_locale(int argc, VALUE *argv, VALUE self,
         return result;
 }
 
+/* Document-module: U
+ *
+ * The U namespace contains a string builder in {U::Buffer} and a string
+ * representation in {U::String}. */
 void Init_u(void);
 void
 Init_u(void)
