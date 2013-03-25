@@ -84,6 +84,8 @@ unichar unichar_toupper(unichar c);
 unichar unichar_tolower(unichar c);
 unichar unichar_totitle(unichar c);
 
+size_t unichar_width(unichar c);
+
 int unichar_digit_value(unichar c);
 int unichar_xdigit_value(unichar c);
 

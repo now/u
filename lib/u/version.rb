@@ -258,6 +258,7 @@ module U
               unichar_toupper.c
               unichar_type.c
               unichar_xdigit_value.c
+              unichar_width.c
               utf8.h'
          end
 

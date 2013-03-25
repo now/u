@@ -202,6 +202,12 @@ Expectations do
   expect '   hëllö   '.u do 'hëllö'.u.center(11) end
   expect 'ababaababa'.u do ''.u.center(10, 'ab') end
   expect 'ababaababab'.u do ''.u.center(11, 'ab') end
+  expect 'あ3あ'.u do '3'.u.center(5, 'あ') end
+  expect ArgumentError.new('zero-width padding') do '3'.u.center(2, '') end
+  expect 'あ3あ'.u do '3'.u.center(5, 'あ ') end
+  expect 'あ3あ '.u do '3'.u.center(6, 'あ ') end
+  expect 'あ 3あ '.u do '3'.u.center(7, 'あ ') end
+  expect ArgumentError.new('padding is too wide to complete rounding (2 > 1)') do '3'.u.center(4, 'あ') end
   # TODO: Adjust this to LONG_MAX in Ruby
 #  expect ArgumentError do ''.u.center(9223372036854775807) end
 
