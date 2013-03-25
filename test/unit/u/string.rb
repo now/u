@@ -99,6 +99,19 @@ Expectations do
   expect nil do 'FëëFiëFöö-Fum'.u =~ /FUM$/u end
   expect 'fööbar' do 'föö'.u =~ Object.new.tap{ |o| stub(o).=~{ |t| t + 'bar'.u } } end
 
+  expect 'a' do 'abc'.u.match(/a/)[0] end
+  expect nil do 'abc'.u.match(/d/) end
+  expect 'a' do 'abc'.u.match('a')[0] end
+  expect nil do 'abc'.u.match('d') end
+  expect result.tainted? do 'abc'.u.taint.match(/a/) end
+  expect result.untrusted? do 'abc'.u.untrust.match(/a/) end
+  expect result.tainted? do 'abc'.u.taint.match('a') end
+  expect result.untrusted? do 'abc'.u.untrust.match('a') end
+  expect result.tainted? do 'abc'.u.match(/a/.taint) end
+  expect result.untrusted? do 'abc'.u.match(/a/.untrust) end
+  expect result.tainted? do 'abc'.u.match('a'.taint) end
+  expect result.untrusted? do 'abc'.u.match('a'.untrust) end
+
   # TODO: Should <=>, ==, ===, eql?, and casecmp use collation or not?  When
   # should collation be used?  #collate and #collation_key?
 

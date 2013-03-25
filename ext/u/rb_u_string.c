@@ -219,6 +219,7 @@ Init_u_string(VALUE mU)
 
         rb_define_method(rb_cUString, "==", rb_u_string_equal, 1); /* in ext/u/rb_u_string_equal.c */
         rb_define_method(rb_cUString, "=~", rb_u_string_match, 1); /* in ext/u/rb_u_string_match.c */
+        rb_define_method(rb_cUString, "match", rb_u_string_match_m, -1); /* in ext/u/rb_u_string_match.c */
         rb_define_method(rb_cUString, "empty?", rb_u_string_empty, 0); /* in ext/u/rb_u_string_empty.c */
         rb_define_method(rb_cUString, "end_with?", rb_u_string_end_with, -1); /* in ext/u/rb_u_string_end_with.c */
         rb_define_method(rb_cUString, "eql?", rb_u_string_eql, 1); /* in ext/u/rb_u_string_eql.c */

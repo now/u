@@ -4,7 +4,7 @@
 /* @overload =~(other)
  *   @param [Regexp, #=~] other
  *   @raise [TypeError] If OTHER is a {U::String} or String
- *   @return [Numeric, nil] The result of OTHER`#=~(self)`, that is, the index
+ *   @return [Numeric, nil] The result of OTHER`#=~`(self), that is, the index
  *     of the first character of the match of OTHER in the receiver, if one
  *     exists */
 VALUE
@@ -31,4 +31,34 @@ rb_u_string_match(VALUE self, VALUE other)
         default:
                 return rb_funcall(other, rb_intern("=~"), 1, self);
         }
+}
+
+/* @overload match(pattern, index = 0)
+ *   @param [Regexp, #to_str] pattern
+ *   @param [#to_int] index
+ *   @return [MatchData, nil] The result of _r_#match(self, index), that is,
+ *     the match data of the first match of _r_ in the receiver, inheriting any
+ *     taint and untrust from both the receiver and from PATTERN, if one
+ *     exists, where _r_ = PATTERN, if PATTERN is a Regexp, _r_ =
+ *     Regexp.new(PATTERN) otherwise
+ * @overload match(pattern, index = 0){ |matchdata| … }
+ *   @param [Regexp, #to_str] pattern
+ *   @param [#to_int] index
+ *   @yieldparam [MatchData] matchdata
+ *   @return [Object, nil] The result of calling the given block with the
+ *     result of _r_#match(self, index), that is, the match data of the first
+ *     match of _r_ in the receiver, inheriting any taint and untrust from both
+ *     the recevier and from PATTERN, if one exists, where _r_ = PATTERN, if
+ *     PATTERN is a Regexp, _r_ = Regexp.new(PATTERN) otherwise */
+VALUE
+rb_u_string_match_m(int argc, VALUE *argv, VALUE self)
+{
+        VALUE re, index;
+        rb_scan_args(argc, argv, "1*", &re, &index);
+        argv[0] = self;
+        VALUE result = rb_funcall2(rb_u_pattern_argument(re, false),
+                                   rb_intern("match"), argc, argv);
+        if (!NIL_P(result) && rb_block_given_p())
+                return rb_yield(result);
+        return result;
 }
