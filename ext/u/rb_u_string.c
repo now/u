@@ -222,7 +222,88 @@ rb_u_string_dup(VALUE self)
  * {U::String#to_str}.
  *
  * Validation of a U::String’s content isn’t performed until any access to it
- * is made, at which time an ArgumentError will be raised if it isn’t valid. */
+ * is made, at which time an ArgumentError will be raised if it isn’t valid.
+ *
+ * U::String has a lot of methods defined upon it, so let’s break them up into
+ * categories to get a proper overview of what’s possible to do with one.
+ * Let’s begin with the interrogators.  There are three kinds of interrogators,
+ * validity-checking ones, property-checking ones, and content-matching ones.
+ *
+ * The validity-checking interrogator is {#valid_encoding?}, which makes sure
+ * that the UTF-8 sequence itself is valid.
+ *
+ * The property-checking interrogators are {#alnum?}, {#alpha?},
+ * {#ascii_only?}, {#assigned?}, {#case_ignorable?}, {#cased?}, {#cntrl?},
+ * {#defined?}, {#digit?}, {#folded?}, {#graph?}, {#lower?}, {#newline?},
+ * {#print?}, {#punct?}, {#soft_dotted?}, {#space?}, {#upper?}, {#valid?},
+ * {#wide?}, {#wide_cjk?}, {#xdigit?}, and {#zero_width?}.  These interrogators
+ * check the corresponding Unicode property of each characters in the U::String
+ * and if all characters have this property, they’ll return true.
+ *
+ * The content-matching interrogators are {#==}, {#===}, {#=~}, {#match},
+ * {#empty?}, {#end_with?}, {#eql?}, {#include?}, {#index}, {#rindex}, and
+ * {#start_with?}.  These interrogators check that a substring of the U::String
+ * matches another string or Regexp and either return a Boolean result, and
+ * index into the U::String where the match begins or MatchData for full
+ * matching information.
+ *
+ * Related to the content-matching interrogators are {#<=>}, {#casecmp}, and
+ * {#collate_key}, all of which compare a U::String against another for
+ * ordering.
+ *
+ * Related to the property-checking interrogators are {#break_type},
+ * {#combining_class}, {#script}, and {#category}, which return the value of
+ * the Unicode property in question, the category being the one often
+ * interrogated.
+ *
+ * There are a couple of other “interrogators” in {#bytesize}, {#length},
+ * {#size}, {#width} that return integer properties of the U::String as a
+ * whole, where #length and #width are probably the most useful.
+ *
+ * Beyond interrogators there are quite a few methods for iterating over the
+ * content of a U::String, each viewing it in its own way: {#each_byte},
+ * {#each_char}, {#each_codepoint}, and {#each_line}.  They all have aliases
+ * ({#bytes}, {#chars}, {#codepoints}, {#lines}) that sometimes read better.
+ *
+ * Quite a few methods are devoted to extracting a substring of a U::String,
+ * namely {#[]}, {#slice}, {#byteslice}, {#chomp}, {#chop}, {#chr}, {#getbyte},
+ * {#lstrip}, {#ord}, {#rstrip}, {#strip}.
+ *
+ * There are a few methods for case-shifting: {#downcase}, {#foldcase},
+ * {#upcase}.  Then there’s {#mirror}, {#normalize}, and {#reverse} that alter
+ * the string in other ways.
+ *
+ * The methods {#center}, {#ljust}, and {#rjust} pad a U::String to make it a
+ * certain number of cells wide.
+ *
+ * Then there’s a couple of methods that are more related in the arguments they
+ * take than in function: {#count}, {#delete}, {#squeeze}, {#tr}, and {#tr_s}.
+ * These methods all take specifications of character/code point ranges that
+ * should be counted, deleted, squeezed, and translated (plus squeezed).
+ *
+ * Deconstructing a U::String can be done with {#partition} and {#rpartition},
+ * which splits it around a divider, {#scan}, which extracts matches to a
+ * pattern, and {#split}, which splits it on a divider.
+ *
+ * Substitution of all matches to a pattern can be made with {#gsub} and of the
+ * first match to a pattern with {#sub}.
+ *
+ * Creating larger U::Strings from smaller ones is done with {#+}, which
+ * concatenates two of them, and {#*}, which concatenates a U::String to itself
+ * a number of times.
+ *
+ * A U::String can also be used as a specification as to how to format a number
+ * of values via {#%} (and its alias {#format}) into a new U::String, much like
+ * snprintf(3) in C.
+ *
+ * The contents of a U::String can be {#dump}ed and {#inspect}ed to make it
+ * reader-friendly, but also debugger-friendly.
+ *
+ * Finally, a U::String has a few methods to turn its content into other
+ * values: {#hash}, which turns it into a hash value to be used for hashing,
+ * {#hex}, {#oct}, {#to_i}, which turn it into a Integer, {#to_str}, {#to_s},
+ * {#b}, which turn it into a String, and {#to_sym} (and its alias {#intern}),
+ * which turns it into a Symbol. */
 void
 Init_u_string(VALUE mU)
 {
