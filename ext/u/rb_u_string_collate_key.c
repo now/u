@@ -3,7 +3,7 @@
 /* @return [U::String] The locale-dependent collation key of the receiver,
  *   inheriting any taint and untrust
  * @note Use the collation key when comparing U::Strings to each other
- *   repeatedly, as occurs when, for example, sorting a list of U::Strings */
+ *   repeatedly, as occurs when, for example, sorting a list of U::Strings. */
 VALUE
 rb_u_string_collate_key(VALUE self)
 {

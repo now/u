@@ -69,7 +69,7 @@ rb_u_string_scan_array(VALUE string, VALUE pattern)
  *     sub-matches, if they exist – of matches of PATTERN in the receiver, each
  *     inheriting any taint and untrust from both the receiver and from PATTERN
  *   @note The Regexp special variables `$&`, `$'`, <code>$\`</code>, `$1`,
- *     `$2`, …, `$`_n_ are updated accordingly
+ *     `$2`, …, `$`_n_ are updated accordingly.
  *
  * @overload scan(pattern)
  *   @param [#to_str] pattern
@@ -85,7 +85,7 @@ rb_u_string_scan_array(VALUE string, VALUE pattern)
  *   @yieldparam [Array<U::String>] submatches
  *   @return [self]
  *   @note The Regexp special variables `$&`, `$'`, <code>$\`</code>, `$1`,
- *     `$2`, …, `$`_n_ are updated accordingly
+ *     `$2`, …, `$`_n_ are updated accordingly.
  *
  * @overload scan(pattern){ |match| … }
  *
