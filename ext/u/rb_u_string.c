@@ -1,3 +1,5 @@
+/* -*- coding: utf-8 -*- */
+
 #include <ruby.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -133,6 +135,13 @@ rb_u_string_object_as_string(VALUE object)
         return str;
 }
 
+/* @!visibility public
+ * @overload new(string = nil)
+ *
+ *   Sets up a U::String wrapping STRING.
+ *
+ *   @param [String] string
+ */
 static VALUE
 rb_u_string_initialize(int argc, VALUE *argv, VALUE self)
 {
@@ -179,8 +188,25 @@ rb_u_string_dup(VALUE self)
 
 /* Document-class: U::String
  *
- * A U::String is a collection of zero or more Unicode characters encoded as
- * UTF-8. */
+ * A U::String is a sequence of zero or more Unicode characters encoded as
+ * UTF-8.  It’s interface is an extension of that of Ruby’s built-in String
+ * class that provides better Unicode support, as it handles things such as
+ * casing, width, collation, and various other Unicode properties that Ruby’s
+ * built-in String class simply doesn’t bother itself with.  It also provides
+ * “backwards compatibility” with Ruby 1.8.7 so that you can use Unicode
+ * without upgrading to Ruby 2.0 (which you probably should do, though).
+ *
+ * It differs from Ruby’s built-in String class in one other very important way
+ * in that it doesn’t provide any way to change an existing object.  That is, a
+ * U::String is a value object.
+ *
+ * A U::String is most easily created from a String by calling {String#u}.
+ * Most U::String methods that return a stringy result will return a U::String,
+ * so you only have to do that once.  You can get back a String by calling
+ * {U::String#to_str}.
+ *
+ * Validation of a U::String’s content isn’t performed until any access to it
+ * is made, at which time an ArgumentError will be raised if it isn’t valid. */
 void
 Init_u_string(VALUE mU)
 {
@@ -212,12 +238,14 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "soft_dotted?", rb_u_string_soft_dotted, 0); /* in ext/u/rb_u_string_soft_dotted.c */
         rb_define_method(rb_cUString, "space?", rb_u_string_space, 0); /* in ext/u/rb_u_string_space.c */
         rb_define_method(rb_cUString, "upper?", rb_u_string_upper, -1); /* in ext/u/rb_u_string_upper.c */
+        rb_define_method(rb_cUString, "valid?", rb_u_string_valid, 0); /* in ext/u/rb_u_string_valid.c */
         rb_define_method(rb_cUString, "wide?", rb_u_string_wide, 0); /* in ext/u/rb_u_string_wide.c */
         rb_define_method(rb_cUString, "wide_cjk?", rb_u_string_wide_cjk, 0); /* in ext/u/rb_u_string_wide_cjk.c */
         rb_define_method(rb_cUString, "xdigit?", rb_u_string_xdigit, 0); /* in ext/u/rb_u_string_xdigit.c */
         rb_define_method(rb_cUString, "zero_width?", rb_u_string_zero_width, 0); /* in ext/u/rb_u_string_zero_width.c */
 
         rb_define_method(rb_cUString, "==", rb_u_string_equal, 1); /* in ext/u/rb_u_string_equal.c */
+        rb_define_alias(rb_cUString, "===", "==");
         rb_define_method(rb_cUString, "=~", rb_u_string_match, 1); /* in ext/u/rb_u_string_match.c */
         rb_define_method(rb_cUString, "match", rb_u_string_match_m, -1); /* in ext/u/rb_u_string_match.c */
         rb_define_method(rb_cUString, "empty?", rb_u_string_empty, 0); /* in ext/u/rb_u_string_empty.c */
@@ -240,14 +268,20 @@ Init_u_string(VALUE mU)
 
         rb_define_method(rb_cUString, "bytesize", rb_u_string_bytesize, 0); /* in ext/u/rb_u_string_bytesize.c */
         rb_define_method(rb_cUString, "length", rb_u_string_length, 0); /* in ext/u/rb_u_string_length.c */
+        rb_define_alias(rb_cUString, "size", "length");
         rb_define_method(rb_cUString, "width", rb_u_string_width, 0); /* in ext/u/rb_u_string_width.c */
 
         rb_define_method(rb_cUString, "each_byte", rb_u_string_each_byte, 0); /* in ext/u/rb_u_string_each_byte.c */
+        rb_define_alias(rb_cUString, "bytes", "each_byte");
         rb_define_method(rb_cUString, "each_char", rb_u_string_each_char, 0); /* in ext/u/rb_u_string_each_char.c */
+        rb_define_alias(rb_cUString, "chars", "each_char");
         rb_define_method(rb_cUString, "each_codepoint", rb_u_string_each_codepoint, 0); /* in ext/u/rb_u_string_each_codepoint.c */
+        rb_define_alias(rb_cUString, "codepoints", "each_codepoint");
         rb_define_method(rb_cUString, "each_line", rb_u_string_each_line, -1); /* in ext/u/rb_u_string_each_line.c */
+        rb_define_alias(rb_cUString, "lines", "each_line");
 
         rb_define_method(rb_cUString, "[]", rb_u_string_aref_m, -1); /* in ext/u/rb_u_string_aref.c */
+        rb_define_alias(rb_cUString, "slice", "[]");
         rb_define_method(rb_cUString, "byteslice", rb_u_string_byteslice_m, -1); /* in ext/u/rb_u_string_byteslice.c */
         rb_define_method(rb_cUString, "chomp", rb_u_string_chomp, -1); /* in ext/u/rb_u_string_chomp.c */
         rb_define_method(rb_cUString, "chop", rb_u_string_chop, 0); /* in ext/u/rb_u_string_chop.c */
@@ -288,6 +322,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "*", rb_u_string_times, 1); /* in ext/u/rb_u_string_times.c */
 
         rb_define_method(rb_cUString, "%", rb_u_string_format_m, 1); /* in ext/u/rb_u_string_format.c */
+        rb_define_alias(rb_cUString, "format", "%");
 
         rb_define_method(rb_cUString, "dump", rb_u_string_dump, 0); /* in ext/u/rb_u_string_dump.c */
         rb_define_method(rb_cUString, "inspect", rb_u_string_inspect, 0); /* in ext/u/rb_u_string_inspect.c */
@@ -297,5 +332,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "oct", rb_u_string_oct, 0); /* in ext/u/rb_u_string_oct.c */
         rb_define_method(rb_cUString, "to_i", rb_u_string_to_i, -1); /* in ext/u/rb_u_string_to_i.c */
         rb_define_method(rb_cUString, "to_str", rb_u_string_to_str, 0); /* in ext/u/rb_u_string_to_str.c */
+        rb_define_alias(rb_cUString, "to_s", "to_str");
         rb_define_method(rb_cUString, "to_sym", rb_u_string_to_sym, 0); /* in ext/u/rb_u_string_to_sym.c */
+        rb_define_alias(rb_cUString, "intern", "to_sym");
 }

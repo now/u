@@ -1088,6 +1088,12 @@ rb_u_buffer_append_format(int argc, const VALUE *argv, VALUE self, VALUE format)
         return self;
 }
 
+/* @overload append_format(format, *values)
+ *
+ *   Appends the result of FORMAT#%(values) to the receiver.
+ *
+ *   @param [U::String, #to_str] format
+ *   @return [self] */
 VALUE
 rb_u_buffer_append_format_m(int argc, const VALUE *argv, VALUE self)
 {

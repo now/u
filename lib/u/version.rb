@@ -193,6 +193,7 @@ module U
               rb_u_string_tr.c
               rb_u_string_upcase.c
               rb_u_string_upper.c
+              rb_u_string_valid.c
               rb_u_string_valid_encoding.c
               rb_u_string_wide.c
               rb_u_string_wide_cjk.c

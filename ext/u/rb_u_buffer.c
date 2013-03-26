@@ -1,3 +1,5 @@
+/* -*- coding: utf-8 -*- */
+
 #include <ruby.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -190,6 +192,12 @@ rb_u_buffer_append_printf(VALUE self, size_t needed, const char *format, ...)
 }
 #pragma GCC diagnostic warning "-Wformat-nonliteral"
 
+/* @!visibility public
+ * @overload new(size = 128)
+ *
+ *   Sets up a new buffer of SIZE bytes.
+ *
+ *   @param [#to_int] size */
 static VALUE
 rb_u_buffer_initialize(int argc, VALUE *argv, VALUE self)
 {
@@ -223,6 +231,15 @@ rb_u_buffer_initialize_copy(VALUE self, VALUE rboriginal)
         return self;
 }
 
+/* @overload <<(*parts)
+ *
+ *   Append each _p_ in PARTS, append _q_ to the receiver, where _q_ =
+ *   _p_#to_s, if _p_ is a U::Buffer, _q_ = _p_#chr, if _p_ is a Fixnum or
+ *   Bignum, _q_ = _p_#to_str, if _p_ is a U::String or responds to #to_str.
+ *
+ *   @param [U::Buffer, Fixnum, Bignum, U::String, #to_str] parts
+ *   @raise [RangeError] If a _p_ is a Fixnum or Bignum and ¬_p_#chr#valid?
+ *   @return [self] */
 VALUE
 rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
 {
@@ -267,6 +284,10 @@ rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
         return self;
 }
 
+/* @overload ==(other)
+ *   @param [U::Buffer] other
+ *   @return [Boolean] True if the receiver’s class and content equal those of
+ *     OTHER */
 VALUE
 rb_u_buffer_eql(VALUE self, VALUE rbother)
 {
@@ -284,6 +305,7 @@ rb_u_buffer_eql(VALUE self, VALUE rbother)
                 Qtrue : Qfalse;
 }
 
+/* @return [Fixnum] The hash value of the receiver’s content */
 VALUE
 rb_u_buffer_hash(VALUE self)
 {
@@ -292,6 +314,7 @@ rb_u_buffer_hash(VALUE self)
         return INT2FIX(rb_memhash(buffer->c, buffer->length));
 }
 
+/* @return [String] A UTF-8 encoded string of the receiver’s content */
 VALUE
 rb_u_buffer_to_s(VALUE self)
 {
@@ -302,6 +325,7 @@ rb_u_buffer_to_s(VALUE self)
         return result;
 }
 
+/* @return [U::String] A UTF-8 encoded string of the receiver’s content */
 VALUE
 rb_u_buffer_to_u(VALUE self)
 {
@@ -310,6 +334,11 @@ rb_u_buffer_to_u(VALUE self)
         return rb_u_string_new_c(self, buffer->c, buffer->length);
 }
 
+/* @return [U::String] The UTF-8 encoded string of the receiver’s content after
+ *   clearing it from the receiver
+ * @note This method differs from {#to_u} in that it doesn’t copy the result,
+ *   so it’s generally faster; call it when you’re done building your
+ *   {U::String}. */
 VALUE
 rb_u_buffer_to_u_bang(VALUE self)
 {
@@ -328,7 +357,7 @@ rb_u_buffer_to_u_bang(VALUE self)
 
 /* Document-class: U::Buffer
  *
- * A buffer for building {String}s. */
+ * A buffer for building {U::String}s. */
 void
 Init_u_buffer(VALUE mU)
 {
@@ -337,11 +366,11 @@ Init_u_buffer(VALUE mU)
         rb_define_alloc_func(rb_cUBuffer, rb_u_buffer_alloc);
         rb_define_private_method(rb_cUBuffer, "initialize", rb_u_buffer_initialize, -1);
         rb_define_private_method(rb_cUBuffer, "initialize_copy", rb_u_buffer_initialize_copy, 1);
-        rb_define_method(rb_cUBuffer, "<<", rb_u_buffer_append_m, -1);
-        rb_define_method(rb_cUBuffer, "==", rb_u_buffer_eql, 1);
         rb_define_method(rb_cUBuffer, "append", rb_u_buffer_append_m, -1);
-        rb_define_method(rb_cUBuffer, "append_format", rb_u_buffer_append_format_m, -1);
-        rb_define_method(rb_cUBuffer, "eql?", rb_u_buffer_eql, 1);
+        rb_define_alias(rb_cUBuffer, "<<", "append");
+        rb_define_method(rb_cUBuffer, "append_format", rb_u_buffer_append_format_m, -1); /* in ext/u/rb_u_string_format.c */
+        rb_define_method(rb_cUBuffer, "==", rb_u_buffer_eql, 1);
+        rb_define_alias(rb_cUBuffer, "eql?", "==");
         rb_define_method(rb_cUBuffer, "hash", rb_u_buffer_hash, 0);
         rb_define_method(rb_cUBuffer, "to_s", rb_u_buffer_to_s, 0);
         rb_define_method(rb_cUBuffer, "to_u", rb_u_buffer_to_u, 0);
