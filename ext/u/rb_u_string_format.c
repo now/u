@@ -835,6 +835,10 @@ directive_hexadecimal(unichar directive, int flags, int width, int precision, VA
         const char *digits;
         int length = directive_signed_or_unsigned_number(directive, flags, precision, argument, 16, prefix, &digits, buffer, &str);
 
+        if ((flags & DIRECTIVE_FLAGS_SHARP) && (length == 1 && digits[0] == '0'))
+                for (char *p = prefix; *p != '\0'; p++)
+                        *p = '\0';
+
         if (directive == 'X')
                 for (char *p = (char *)digits; *p != '\0'; p++)
                         *p = unichar_toupper(*p);
@@ -852,6 +856,10 @@ directive_binary(unichar directive, int flags, int width, int precision, VALUE a
         VALUE str;
         const char *digits;
         int length = directive_signed_or_unsigned_number(directive, flags, precision, argument, 2, prefix, &digits, buffer, &str);
+
+        if ((flags & DIRECTIVE_FLAGS_SHARP) && (length == 1 && digits[0] == '0'))
+                for (char *p = prefix; *p != '\0'; p++)
+                        *p = '\0';
 
         directive_unsigned_number_output(directive, flags, width, precision, prefix, digits, length, result);
 }
@@ -1351,14 +1359,26 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *     <dd>
  *       <p>Outputs</p>
  *
- *       <pre><code>[left-padding][prefix/sign][zeroes/fs]
+ *       <pre><code>[left-padding][sign][base-prefix][prefix][zeroes/fs]
  *       [precision-filler]hexadecimal-digits[right-padding]</code></pre>
  *
- *       <p><em>Left-padding</em>, <em>prefix/sign</em>, and
- *       <em>right-padding</em> are the same as for the ‘o’ directive described
- *       above.  <em>Zeroes/fs</em> is the same as <em>zeroes/sevens</em> for
- *       the ‘o’ directive, except that it uses ‘f’ characters instead of
- *       sevens.  The same goes for <em>precision-filler</em>.</p>
+ *       <p><em>Left-padding</em> and <em>right-padding</em> are the same as
+ *       for the ‘o’ directive described above.  <em>Zeroes/fs</em> is the same
+ *       as <em>zeroes/sevens</em> for the ‘o’ directive, except that it uses
+ *       ‘f’ characters instead of sevens.  The same goes for
+ *       <em>precision-filler</em>.</p>
+ *
+ *       <p><em>Sign</em> is “-” if the argument is negative and the
+ *       ‘<code>+</code>’ or ‘<code> </code>’ flag was given, “+” if the
+ *       argument is non-negative and the ‘<code>+</code>’ flag was given, and
+ *       “ ” if the argument is non-negative and the ‘<code> </code>’ flag was
+ *       given, otherwise it’s empty.</p>
+ *
+ *       <p><em>Base-prefix</em> is “0x” if the ‘<code>#</code>’ flag was given
+ *       and the result of #to_int on the argument is non-zero.</p>
+ *
+ *       <p><em>Prefix</em> is “..” if the argument is negative and neither the
+ *       ‘<code>+</code>’ nor the ‘<code> </code>’ flag was given.</p>
  *
  *       <p><em>Hexadecimal-digits</em> consists of the digits in base 16 that
  *       represent the result of #to_int on the argument, using ‘0’ through ‘9’
@@ -1384,14 +1404,15 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
  *     <dd>
  *       <p>Outputs</p>
  *
- *       <pre><code>[left-padding][prefix/sign][zeroes/ones]
+ *       <pre><code>[left-padding][sign][base-prefix][prefix][zeroes/ones]
  *       [precision-filler]binary-digits[right-padding]</code></pre>
  *
- *       <p><em>Left-padding</em>, <em>prefix/sign</em>, and
- *       <em>right-padding</em> are the same as for the ‘o’ directive described
- *       above.  <em>Zeroes/ones</em> is the same as <em>zeroes/sevens</em> for
- *       the ‘o’ directive, except that it uses ones instead of sevens.  The
- *       same goes for <em>precision-filler</em>.</p>
+ *       <p><em>Left-padding</em> and <em>right-padding</em> are the same as
+ *       for the ‘o’ directive described above.  <em>Base-prefix</em> and
+ *       <em>prefix</em> are the same as for the ‘x’ directive, except that
+ *       <em>base-prefix</em> outputs “0b”.  <em>Zeroes/ones</em> is the same
+ *       as <em>zeroes/fs</em> for the ‘x’ directive, except that it uses ones
+ *       instead of sevens.  The same goes for <em>precision-filler</em>.</p>
  *
  *       <p><em>Binary-digits</em> consists of the digits in base 2 that
  *       represent the result of #to_int on the argument, using ‘0’ and ‘1’.  A

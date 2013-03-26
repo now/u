@@ -609,6 +609,8 @@ Expectations do
 
   expect '0x10e'.u do '%#x'.u % 0x10e end
 
+  expect '0'.u do '%#x'.u % 0x0 end
+
   expect ' 10e'.u do '% x'.u % +0x10e end
   expect '+10e'.u do '%+x'.u % +0x10e end
   expect '-10e'.u do '%+x'.u % -0x10e end
@@ -686,6 +688,8 @@ Expectations do
   expect '101'.u do '%b'.u % 0b101 end
 
   expect '0b101'.u do '%#b'.u % 0b101 end
+
+  expect '0'.u do '%#b'.u % 0b0 end
 
   expect ' 101'.u do '% b'.u % +0b101 end
   expect '+101'.u do '%+b'.u % +0b101 end
