@@ -150,6 +150,7 @@ VALUE rb_u_string_strip(VALUE self);
 VALUE rb_u_string_sub(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_substr(VALUE self, long offset, long len);
 VALUE rb_u_string_times(VALUE self, VALUE rbtimes);
+VALUE rb_u_string_title(VALUE self);
 VALUE rb_u_string_to_i(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_to_str(VALUE self);
 VALUE rb_u_string_to_sym(VALUE self);

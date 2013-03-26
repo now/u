@@ -235,10 +235,10 @@ rb_u_string_dup(VALUE self)
  * The property-checking interrogators are {#alnum?}, {#alpha?},
  * {#ascii_only?}, {#assigned?}, {#case_ignorable?}, {#cased?}, {#cntrl?},
  * {#defined?}, {#digit?}, {#folded?}, {#graph?}, {#lower?}, {#newline?},
- * {#print?}, {#punct?}, {#soft_dotted?}, {#space?}, {#upper?}, {#valid?},
- * {#wide?}, {#wide_cjk?}, {#xdigit?}, and {#zero_width?}.  These interrogators
- * check the corresponding Unicode property of each characters in the U::String
- * and if all characters have this property, they’ll return true.
+ * {#print?}, {#punct?}, {#soft_dotted?}, {#space?}, {#title?}, {#upper?},
+ * {#valid?}, {#wide?}, {#wide_cjk?}, {#xdigit?}, and {#zero_width?}.  These
+ * interrogators check the corresponding Unicode property of each characters in
+ * the U::String and if all characters have this property, they’ll return true.
  *
  * The content-matching interrogators are {#==}, {#===}, {#=~}, {#match},
  * {#empty?}, {#end_with?}, {#eql?}, {#include?}, {#index}, {#rindex}, and
@@ -334,6 +334,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "punct?", rb_u_string_punct, 0); /* in ext/u/rb_u_string_punct.c */
         rb_define_method(rb_cUString, "soft_dotted?", rb_u_string_soft_dotted, 0); /* in ext/u/rb_u_string_soft_dotted.c */
         rb_define_method(rb_cUString, "space?", rb_u_string_space, 0); /* in ext/u/rb_u_string_space.c */
+        rb_define_method(rb_cUString, "title?", rb_u_string_title, 0); /* in ext/u/rb_u_string_title.c */
         rb_define_method(rb_cUString, "upper?", rb_u_string_upper, -1); /* in ext/u/rb_u_string_upper.c */
         rb_define_method(rb_cUString, "valid?", rb_u_string_valid, 0); /* in ext/u/rb_u_string_valid.c */
         rb_define_method(rb_cUString, "wide?", rb_u_string_wide, 0); /* in ext/u/rb_u_string_wide.c */

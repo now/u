@@ -1426,6 +1426,11 @@ Expectations do
   expect result.tainted? do 'a'.u.taint.upcase end
   expect result.untrusted? do 'a'.u.untrust.upcase end
 
+  expect false do 'i'.u.title? end
+  expect false do 'I'.u.title? end
+  expect false do 'Ǳ'.u.title? end
+  expect true do 'ǲ'.u.title? end
+
   expect false do 'i'.u.upper? end
   expect false do 'i'.u.upper?('lt') end
   expect false do 'i'.u.upper?('tr') end
