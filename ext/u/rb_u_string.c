@@ -1,6 +1,9 @@
 /* -*- coding: utf-8 -*- */
 
 #include <ruby.h>
+#ifdef HAVE_RUBY_ENCODING_H
+#  include <ruby/encoding.h>
+#endif
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -26,15 +29,29 @@ rb_u_string_free(UString *string)
 }
 
 static VALUE
+rb_u_string_set_rb(VALUE self, VALUE rb)
+{
+        UString *string = RVAL2USTRING(self);
+        if (NIL_P(rb)) {
+                string->rb = rb;
+                return self;
+        }
+#ifdef HAVE_RUBY_ENCODING_H
+        rb = rb_str_encode(rb, rb_enc_from_encoding(rb_utf8_encoding()), 0, Qnil);
+#endif
+        string->rb = rb_str_freeze(rb);
+        OBJ_INFECT(self, string->rb);
+        return self;
+}
+
+static VALUE
 rb_u_string_create(VALUE rb, const char *str, long length)
 {
         UString *string = ALLOC(UString);
-        string->rb = rb;
         string->c = str;
         string->length = length;
         VALUE result = USTRING2RVAL(string);
-        OBJ_INFECT(result, rb);
-        return result;
+        return rb_u_string_set_rb(result, rb);
 }
 
 static VALUE
@@ -138,21 +155,20 @@ rb_u_string_object_as_string(VALUE object)
 /* @!visibility public
  * @overload new(string = nil)
  *
- *   Sets up a U::String wrapping STRING.
+ *   Sets up a U::String wrapping STRING after encoding it as UTF-8 and
+ *   freezing it.
  *
  *   @param [String] string
  */
 static VALUE
 rb_u_string_initialize(int argc, VALUE *argv, VALUE self)
 {
-        UString *string = RVAL2USTRING(self);
         VALUE rb;
 
         rb_scan_args(argc, argv, "01", &rb);
         if (!NIL_P(rb)) {
                 StringValue(rb);
-                string->rb = rb_str_freeze(rb);
-                OBJ_INFECT(self, string->rb);
+                rb_u_string_set_rb(self, rb);
         }
 
         return Qnil;
