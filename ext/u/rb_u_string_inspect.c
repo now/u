@@ -78,7 +78,7 @@ rb_u_string_inspect_default(unichar c, VALUE result)
 }
 
 /* Returns the receiver in a reader-friendly inspectable format, inheriting
- * any taint and untrust.
+ * any taint and untrust, encoded using UTF-8.
  *
  * The reader-friendly inspectable format looks like “`"…".u`”.  Inside the
  * “…”, any {#print?} characters are output as-is, the following special
