@@ -21,6 +21,8 @@ rb_u_string_ascii_only.o: rb_u_string_ascii_only.c rb_includes.h \
   extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_assigned.o: rb_u_string_assigned.c rb_includes.h extconf.h \
   u.h private.h rb_private.h rb_u_string.h
+rb_u_string_b.o: rb_u_string_b.c rb_includes.h extconf.h u.h private.h \
+  rb_private.h rb_u_string.h
 rb_u_string_break_type.o: rb_u_string_break_type.c rb_includes.h \
   extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_bytesize.o: rb_u_string_bytesize.c rb_includes.h extconf.h \
@@ -173,6 +175,8 @@ rb_u_string_upcase.o: rb_u_string_upcase.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_upper.o: rb_u_string_upper.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
+rb_u_string_valid.o: rb_u_string_valid.c rb_includes.h extconf.h u.h \
+  private.h rb_private.h rb_u_string.h
 rb_u_string_valid_encoding.o: rb_u_string_valid_encoding.c rb_includes.h \
   extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_wide.o: rb_u_string_wide.c rb_includes.h extconf.h u.h \
@@ -266,4 +270,5 @@ unichar_tolower.o: unichar_tolower.c u.h private.h data/constants.h \
 unichar_toupper.o: unichar_toupper.c u.h private.h data/constants.h \
   attributes.h titled.h types.h
 unichar_type.o: unichar_type.c u.h private.h data/constants.h types.h
+unichar_width.o: unichar_width.c u.h
 unichar_xdigit_value.o: unichar_xdigit_value.c u.h private.h

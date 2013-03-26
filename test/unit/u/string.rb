@@ -1469,4 +1469,8 @@ Expectations do
   expect 'äbcdëf'.u do "äbc\0dëf".u.collate_key end
   expect result.tainted? do ''.u.taint.collate_key end
   expect result.untrusted? do ''.u.untrust.collate_key end
+
+  if defined? ::Encoding
+    expect Encoding::ASCII_8BIT do ''.u.b.encoding end
+  end
 end

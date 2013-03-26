@@ -116,6 +116,7 @@ module U
               rb_u_string_aref.c
               rb_u_string_ascii_only.c
               rb_u_string_assigned.c
+              rb_u_string_b.c
               rb_u_string_break_type.c
               rb_u_string_bytesize.c
               rb_u_string_byteslice.c

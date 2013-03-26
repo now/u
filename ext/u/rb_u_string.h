@@ -75,6 +75,7 @@ VALUE rb_u_string_alpha(VALUE self);
 VALUE rb_u_string_assigned(VALUE self);
 VALUE rb_u_string_aref_m(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_ascii_only(VALUE self);
+VALUE rb_u_string_b(VALUE self);
 VALUE rb_u_string_break_type(VALUE self);
 VALUE rb_u_string_bytesize(VALUE self);
 VALUE rb_u_string_byteslice_m(int argc, VALUE *argv, VALUE self);

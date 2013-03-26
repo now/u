@@ -349,6 +349,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "to_i", rb_u_string_to_i, -1); /* in ext/u/rb_u_string_to_i.c */
         rb_define_method(rb_cUString, "to_str", rb_u_string_to_str, 0); /* in ext/u/rb_u_string_to_str.c */
         rb_define_alias(rb_cUString, "to_s", "to_str");
+        rb_define_method(rb_cUString, "b", rb_u_string_b, 0); /* in ext/u/rb_u_string_b.c */
         rb_define_method(rb_cUString, "to_sym", rb_u_string_to_sym, 0); /* in ext/u/rb_u_string_to_sym.c */
         rb_define_alias(rb_cUString, "intern", "to_sym");
 }
