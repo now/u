@@ -270,8 +270,8 @@ rb_u_string_dup(VALUE self)
  * {#lstrip}, {#ord}, {#rstrip}, {#strip}.
  *
  * There are a few methods for case-shifting: {#downcase}, {#foldcase},
- * {#upcase}.  Then there’s {#mirror}, {#normalize}, and {#reverse} that alter
- * the string in other ways.
+ * {#titlecase}, and {#upcase}.  Then there’s {#mirror}, {#normalize}, and
+ * {#reverse} that alter the string in other ways.
  *
  * The methods {#center}, {#ljust}, and {#rjust} pad a U::String to make it a
  * certain number of cells wide.
@@ -303,7 +303,16 @@ rb_u_string_dup(VALUE self)
  * values: {#hash}, which turns it into a hash value to be used for hashing,
  * {#hex}, {#oct}, {#to_i}, which turn it into a Integer, {#to_str}, {#to_s},
  * {#b}, which turn it into a String, and {#to_sym} (and its alias {#intern}),
- * which turns it into a Symbol. */
+ * which turns it into a Symbol.
+ *
+ * Note that some methods defined on String are missing.  #Capitalize doesn’t
+ * exist, as capitalization isn’t a Unicode concept.  #Sum doesn’t exist, as a
+ * U::String generally doesn’t contain content that you need a checksum of.
+ * #Crypt doesn’t exist for similar reasons.  #Swapcase isn’t useful on a
+ * String and it certainly isn’t useful in a Unicode context.  As a U::String
+ * doesn’t contain arbitrary data, #unpack is left to String.  #Next/#succ
+ * would perhaps be implementable, but haven’t, as a satisfactory
+ * implementation hasn’t been thought of. */
 void
 Init_u_string(VALUE mU)
 {
