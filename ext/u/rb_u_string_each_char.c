@@ -9,8 +9,7 @@
  *
  * @overload each_char
  *
- *   @return [Enumerator] An Enumerator over the characters in the receiver
- */
+ *   @return [Enumerator] An Enumerator over the characters in the receiver */
 VALUE
 rb_u_string_each_char(VALUE self)
 {

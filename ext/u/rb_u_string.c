@@ -252,9 +252,9 @@ rb_u_string_dup(VALUE self)
  * ordering.
  *
  * Related to the property-checking interrogators are {#break_type},
- * {#combining_class}, {#script}, and {#category}, which return the value of
- * the Unicode property in question, the category being the one often
- * interrogated.
+ * {#category}, {#combining_class}, {#script}, and {#word_break_type}, which
+ * return the value of the Unicode property in question, the category being the
+ * one often interrogated.
  *
  * There are a couple of other “interrogators” in {#bytesize}, {#length},
  * {#size}, {#width} that return integer properties of the U::String as a
@@ -262,8 +262,9 @@ rb_u_string_dup(VALUE self)
  *
  * Beyond interrogators there are quite a few methods for iterating over the
  * content of a U::String, each viewing it in its own way: {#each_byte},
- * {#each_char}, {#each_codepoint}, and {#each_line}.  They all have aliases
- * ({#bytes}, {#chars}, {#codepoints}, {#lines}) that sometimes read better.
+ * {#each_char}, {#each_codepoint}, {#each_line}, and {#each_word}.  They all
+ * have aliases ({#bytes}, {#chars}, {#codepoints}, {#lines}, {#words}) that
+ * sometimes read better.
  *
  * Quite a few methods are devoted to extracting a substring of a U::String,
  * namely {#[]}, {#slice}, {#byteslice}, {#chomp}, {#chop}, {#chr}, {#getbyte},
@@ -283,7 +284,8 @@ rb_u_string_dup(VALUE self)
  *
  * Deconstructing a U::String can be done with {#partition} and {#rpartition},
  * which splits it around a divider, {#scan}, which extracts matches to a
- * pattern, and {#split}, which splits it on a divider.
+ * pattern, {#split}, which splits it on a divider, and {#word_split}, which
+ * splits it into words as defined by the Unicode standard.
  *
  * Substitution of all matches to a pattern can be made with {#gsub} and of the
  * first match to a pattern with {#sub}.
@@ -369,9 +371,10 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "collate_key", rb_u_string_collate_key, 0); /* in ext/u/rb_u_string_collate_key.c */
 
         rb_define_method(rb_cUString, "break_type", rb_u_string_break_type, 0); /* in ext/u/rb_u_string_break_type.c */
+        rb_define_method(rb_cUString, "category", rb_u_string_category, 0); /* in ext/u/rb_u_string_category.c */
         rb_define_method(rb_cUString, "combining_class", rb_u_string_combining_class, 0); /* in ext/u/rb_u_string_combining_class.c */
         rb_define_method(rb_cUString, "script", rb_u_string_script, 0); /* in ext/u/rb_u_string_script.c */
-        rb_define_method(rb_cUString, "category", rb_u_string_category, 0); /* in ext/u/rb_u_string_category.c */
+        rb_define_method(rb_cUString, "word_break_type", rb_u_string_word_break_type, 0); /* in ext/u/rb_u_string_word_break_type.c */
 
         rb_define_method(rb_cUString, "bytesize", rb_u_string_bytesize, 0); /* in ext/u/rb_u_string_bytesize.c */
         rb_define_method(rb_cUString, "length", rb_u_string_length, 0); /* in ext/u/rb_u_string_length.c */
@@ -386,6 +389,8 @@ Init_u_string(VALUE mU)
         rb_define_alias(rb_cUString, "codepoints", "each_codepoint");
         rb_define_method(rb_cUString, "each_line", rb_u_string_each_line, -1); /* in ext/u/rb_u_string_each_line.c */
         rb_define_alias(rb_cUString, "lines", "each_line");
+        rb_define_method(rb_cUString, "each_word", rb_u_string_each_word, 0); /* in ext/u/rb_u_string_each_word.c */
+        rb_define_alias(rb_cUString, "words", "each_word");
 
         rb_define_method(rb_cUString, "[]", rb_u_string_aref_m, -1); /* in ext/u/rb_u_string_aref.c */
         rb_define_alias(rb_cUString, "slice", "[]");

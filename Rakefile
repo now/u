@@ -138,6 +138,7 @@ data_file 'Scripts.txt'
 data_file 'SpecialCasing.txt'
 data_file 'UnicodeData.txt'
 data_auxiliary_file 'WordBreakProperty.txt'
+data_auxiliary_file 'WordBreakTest.txt'
 data_extracted_file 'DerivedEastAsianWidth.txt'
 
 def generate_data_header(task, *arguments)
@@ -213,7 +214,14 @@ data_header 'ext/u/data/wide-cjk.h' => %w[build/ext/u/data/wide.rb
   generate_data_header t, 'A'
 end
 
-task :test => %w[test/unit/case.rb test/unit/foldcase.rb] # test/unit/normalize.rb]
+data_header 'ext/u/data/word-break.h' => %w[build/ext/u/data/word-break.rb
+                                            build/data/UnicodeData.marshalled
+                                            build/data/WordBreakProperty.txt]
+
+task :test => %w[test/unit/case.rb
+                 test/unit/foldcase.rb
+                 test/unit/wordbreak.rb]
+               # test/unit/normalize.rb
 
 file 'test/unit/case.rb' => %w[build/test/unit/case.rb
                                build/data/SpecialCasing.txt
@@ -232,6 +240,13 @@ end
 
 file 'test/unit/normalize.rb' => %w[build/test/unit/normalize.rb
                                     build/data/NormalizationTest.txt] do |t|
+  generate_file t.name do |tmp|
+    ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
+  end
+end
+
+file 'test/unit/wordbreak.rb' => %w[build/test/unit/wordbreak.rb
+                                    build/data/WordBreakTest.txt] do |t|
   generate_file t.name do |tmp|
     ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
   end

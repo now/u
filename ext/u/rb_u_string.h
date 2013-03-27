@@ -102,6 +102,7 @@ VALUE rb_u_string_each_byte(VALUE self);
 VALUE rb_u_string_each_char(VALUE self);
 VALUE rb_u_string_each_codepoint(VALUE self);
 VALUE rb_u_string_each_line(int argc, VALUE *argv, VALUE self);
+VALUE rb_u_string_each_word(VALUE self);
 VALUE rb_u_string_empty(VALUE self);
 VALUE rb_u_string_end_with(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_equal(VALUE self, VALUE other);
@@ -163,6 +164,7 @@ VALUE rb_u_string_valid_encoding(VALUE self);
 VALUE rb_u_string_wide(VALUE self);
 VALUE rb_u_string_wide_cjk(VALUE self);
 VALUE rb_u_string_width(VALUE self);
+VALUE rb_u_string_word_break_type(VALUE self);
 VALUE rb_u_string_xdigit(VALUE self);
 VALUE rb_u_string_zero_width(VALUE self);
 

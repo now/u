@@ -141,6 +141,25 @@ typedef enum {
 
 UnicodeBreakType unichar_break_type(unichar c);
 
+typedef enum {
+        UNICODE_WORD_BREAK_ALETTER,
+        UNICODE_WORD_BREAK_CR,
+        UNICODE_WORD_BREAK_EXTEND,
+        UNICODE_WORD_BREAK_EXTENDNUMLET,
+        UNICODE_WORD_BREAK_FORMAT,
+        UNICODE_WORD_BREAK_KATAKANA,
+        UNICODE_WORD_BREAK_LF,
+        UNICODE_WORD_BREAK_MIDLETTER,
+        UNICODE_WORD_BREAK_MIDNUM,
+        UNICODE_WORD_BREAK_MIDNUMLET,
+        UNICODE_WORD_BREAK_NEWLINE,
+        UNICODE_WORD_BREAK_NUMERIC,
+        UNICODE_WORD_BREAK_OTHER,
+        UNICODE_WORD_BREAK_REGIONAL_INDICATOR,
+} UnicodeWordBreakType;
+
+UnicodeWordBreakType unichar_word_break_type(unichar c);
+
 
 typedef enum {
         UNICODE_SCRIPT_COMMON,
@@ -336,6 +355,9 @@ char *u_reverse_n(const char *str, size_t len);
 
 bool u_isvalid(const char *str);
 bool u_isvalid_n(const char *str, size_t max, const char **end);
+
+typedef void (*UnicodeWordBreakFn)(const char *, void *);
+void u_word_breaks(const char *string, size_t n, UnicodeWordBreakFn fn, void *closure);
 
 int unichar_to_u(unichar c, char *result);
 char *ucs4_to_u(unichar *str, size_t *items_read, size_t *items_written);

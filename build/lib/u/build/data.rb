@@ -11,4 +11,5 @@ module U::Build::Data
   require 'u/build/data/scripts'
   require 'u/build/data/specialcasing'
   require 'u/build/data/unicode'
+  require 'u/build/data/wordbreak'
 end

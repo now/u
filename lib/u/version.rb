@@ -97,6 +97,7 @@ module U
               data/types.h
               data/wide-cjk.h
               data/wide.h
+              data/word-break.h
               locale_type.c
               locale_type.h
               private.c
@@ -141,6 +142,7 @@ module U
               rb_u_string_each_char.c
               rb_u_string_each_codepoint.c
               rb_u_string_each_line.c
+              rb_u_string_each_word.c
               rb_u_string_empty.c
               rb_u_string_end_with.c
               rb_u_string_eql.c
@@ -200,6 +202,7 @@ module U
               rb_u_string_wide.c
               rb_u_string_wide_cjk.c
               rb_u_string_width.c
+              rb_u_string_word_break_type.c
               rb_u_string_xdigit.c
               rb_u_string_zero_width.c
               titled.c
@@ -229,6 +232,7 @@ module U
               u_rindex.c
               u_upcase.c
               u_width.c
+              u_word_breaks.c
               ucs4_to_u.c
               unichar_break_type.c
               unichar_combining_class.c
@@ -261,8 +265,11 @@ module U
               unichar_toupper.c
               unichar_type.c
               unichar_xdigit_value.c
+              unichar_word_break_type.c
               unichar_width.c
-              utf8.h'
+              utf8.h
+              word-break.c
+              word-break.h'
          end
 
          def additional_files
@@ -281,6 +288,7 @@ module U
               build/ext/u/data/title-table.rb
               build/ext/u/data/types.rb
               build/ext/u/data/wide.rb
+              build/ext/u/data/word-break.rb
               build/lib/u/build.rb
               build/lib/u/build/data.rb
               build/lib/u/build/data/bidimirroring.rb
@@ -296,6 +304,7 @@ module U
               build/lib/u/build/data/unicode/entry.rb
               build/lib/u/build/data/unicode/entry/decomposition.rb
               build/lib/u/build/data/unicode/points.rb
+              build/lib/u/build/data/wordbreak.rb
               build/lib/u/build/header.rb
               build/lib/u/build/header/table.rb
               build/lib/u/build/header/table/row.rb
@@ -318,13 +327,15 @@ module U
 
     def additional_unit_tests
       %w'case.rb
-         foldcase.rb'
+         foldcase.rb
+         wordbreak.rb'
     end
 
     def additional_files
       %w'build/test/unit/case.rb
          build/test/unit/foldcase.rb
-         build/test/unit/normalize.rb'
+         build/test/unit/normalize.rb
+         build/test/unit/wordbreak.rb'
     end
   }
 end

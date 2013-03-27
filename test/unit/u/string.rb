@@ -1239,6 +1239,8 @@ Expectations do
   expect :brahmi do [0x11000].pack('U').u.script end
   expect :mandaic do [0x0840].pack('U').u.script end
 
+  expect :aletter do 'a'.u.word_break_type end
+
   expect 0 do ''.u.size end
   expect 4 do '1234'.u.size end
   expect 6 do "1234\r\n".u.size end
