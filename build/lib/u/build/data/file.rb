@@ -13,16 +13,16 @@ class U::Build::Data::File
 
     def each(path, fields)
       open(path, fields) do |file|
-        file.each do |point, *fields|
-          yield point, *fields
+        file.each do |point, *fs|
+          yield point, *fs
         end
       end
     end
 
     def each_with_unlisted(path, fields)
       open(path, fields) do |file|
-        file.each_with_unlisted do |point, previous, unlisted, *fields|
-          yield point, previous, unlisted, *fields
+        file.each_with_unlisted do |point, previous, unlisted, *fs|
+          yield point, previous, unlisted, *fs
         end
       end
     end
