@@ -442,6 +442,7 @@ Expectations do
   expect 'Ɠ'.u do 'ɠ'.u.upcase end
   expect 'Ɣ'.u do 'ɣ'.u.upcase end
   expect 'Ɥ'.u do 'ɥ'.u.upcase end
+  expect 'Ɦ'.u do 'ɦ'.u.upcase end
   expect 'Ɨ'.u do 'ɨ'.u.upcase end
   expect 'Ɩ'.u do 'ɩ'.u.upcase end
   expect 'Ɫ'.u do 'ɫ'.u.upcase end
@@ -981,6 +982,8 @@ Expectations do
   expect 'ⴣ'.u do 'Ⴣ'.u.downcase end
   expect 'ⴤ'.u do 'Ⴤ'.u.downcase end
   expect 'ⴥ'.u do 'Ⴥ'.u.downcase end
+  expect 'ⴧ'.u do 'Ⴧ'.u.downcase end
+  expect 'ⴭ'.u do 'Ⴭ'.u.downcase end
   expect 'Ᵹ'.u do 'ᵹ'.u.upcase end
   expect 'Ᵽ'.u do 'ᵽ'.u.upcase end
   expect 'ḁ'.u do 'Ḁ'.u.downcase end
@@ -1709,6 +1712,8 @@ Expectations do
   expect 'Ⳬ'.u do 'ⳬ'.u.upcase end
   expect 'ⳮ'.u do 'Ⳮ'.u.downcase end
   expect 'Ⳮ'.u do 'ⳮ'.u.upcase end
+  expect 'ⳳ'.u do 'Ⳳ'.u.downcase end
+  expect 'Ⳳ'.u do 'ⳳ'.u.upcase end
   expect 'Ⴀ'.u do 'ⴀ'.u.upcase end
   expect 'Ⴁ'.u do 'ⴁ'.u.upcase end
   expect 'Ⴂ'.u do 'ⴂ'.u.upcase end
@@ -1747,6 +1752,8 @@ Expectations do
   expect 'Ⴣ'.u do 'ⴣ'.u.upcase end
   expect 'Ⴤ'.u do 'ⴤ'.u.upcase end
   expect 'Ⴥ'.u do 'ⴥ'.u.upcase end
+  expect 'Ⴧ'.u do 'ⴧ'.u.upcase end
+  expect 'Ⴭ'.u do 'ⴭ'.u.upcase end
   expect 'ꙁ'.u do 'Ꙁ'.u.downcase end
   expect 'Ꙁ'.u do 'ꙁ'.u.upcase end
   expect 'ꙃ'.u do 'Ꙃ'.u.downcase end
@@ -1913,6 +1920,8 @@ Expectations do
   expect 'ɥ'.u do 'Ɥ'.u.downcase end
   expect 'ꞑ'.u do 'Ꞑ'.u.downcase end
   expect 'Ꞑ'.u do 'ꞑ'.u.upcase end
+  expect 'ꞓ'.u do 'Ꞓ'.u.downcase end
+  expect 'Ꞓ'.u do 'ꞓ'.u.upcase end
   expect 'ꞡ'.u do 'Ꞡ'.u.downcase end
   expect 'Ꞡ'.u do 'ꞡ'.u.upcase end
   expect 'ꞣ'.u do 'Ꞣ'.u.downcase end
@@ -1923,6 +1932,7 @@ Expectations do
   expect 'Ꞧ'.u do 'ꞧ'.u.upcase end
   expect 'ꞩ'.u do 'Ꞩ'.u.downcase end
   expect 'Ꞩ'.u do 'ꞩ'.u.upcase end
+  expect 'ɦ'.u do 'Ɦ'.u.downcase end
   expect 'FF'.u do 'ﬀ'.u.upcase end
   expect 'FI'.u do 'ﬁ'.u.upcase end
   expect 'FL'.u do 'ﬂ'.u.upcase end

@@ -104,6 +104,13 @@ script_to_symbol(UnicodeScript script)
         SCRIPT2ID(UNICODE_SCRIPT_BATAK, batak);
         SCRIPT2ID(UNICODE_SCRIPT_BRAHMI, brahmi);
         SCRIPT2ID(UNICODE_SCRIPT_MANDAIC, mandaic);
+        SCRIPT2ID(UNICODE_SCRIPT_MEROITIC_HIEROGLYPHS, meroitic_hieroglyphs);
+        SCRIPT2ID(UNICODE_SCRIPT_MEROITIC_CURSIVE, meroitic_cursive);
+        SCRIPT2ID(UNICODE_SCRIPT_SORA_SOMPENG, sora_sompeng);
+        SCRIPT2ID(UNICODE_SCRIPT_CHAKMA, chakma);
+        SCRIPT2ID(UNICODE_SCRIPT_SHARADA, sharada);
+        SCRIPT2ID(UNICODE_SCRIPT_TAKRI, takri);
+        SCRIPT2ID(UNICODE_SCRIPT_MIAO, miao);
 
         switch (script) {
         case UNICODE_SCRIPT_COMMON:
@@ -298,6 +305,20 @@ script_to_symbol(UnicodeScript script)
                 return ID2SYM(id_brahmi);
         case UNICODE_SCRIPT_MANDAIC:
                 return ID2SYM(id_mandaic);
+        case UNICODE_SCRIPT_MEROITIC_HIEROGLYPHS:
+                return ID2SYM(id_meroitic_hieroglyphs);
+        case UNICODE_SCRIPT_MEROITIC_CURSIVE:
+                return ID2SYM(id_meroitic_cursive);
+        case UNICODE_SCRIPT_SORA_SOMPENG:
+                return ID2SYM(id_sora_sompeng);
+        case UNICODE_SCRIPT_CHAKMA:
+                return ID2SYM(id_chakma);
+        case UNICODE_SCRIPT_SHARADA:
+                return ID2SYM(id_sharada);
+        case UNICODE_SCRIPT_TAKRI:
+                return ID2SYM(id_takri);
+        case UNICODE_SCRIPT_MIAO:
+                return ID2SYM(id_miao);
         default:
                 rb_u_raise(rb_eNotImpError, "unknown script: %d", script);
         }
@@ -325,6 +346,7 @@ script_to_symbol(UnicodeScript script)
  *     <tr><td>:buhid</td><td>Buhid</td></tr>
  *     <tr><td>:canadian_aboriginal</td><td>Canadian Aboriginal</td></tr>
  *     <tr><td>:carian</td><td>Carian</td></tr>
+ *     <tr><td>:chakma</td><td>Chakma</td></tr>
  *     <tr><td>:cham</td><td>Cham</td></tr>
  *     <tr><td>:cherokee</td><td>Cherokee</td></tr>
  *     <tr><td>:common</td><td>For other characters that may be used with multiple scripts</td></tr>
@@ -357,12 +379,12 @@ script_to_symbol(UnicodeScript script)
  *     <tr><td>:javanese</td><td>Javanese</td></tr>
  *     <tr><td>:kaithi</td><td>Kaithi</td></tr>
  *     <tr><td>:kannada</td><td>Kannada</td></tr>
- *     <tr><td>:KATAKANA</td><td>Katakana</td></tr>
- *     <tr><td>:KAYAH_LI</td><td>Kayah Li</td></tr>
- *     <tr><td>:KHAROSHTHI</td><td>Kharoshthi</td></tr>
- *     <tr><td>:KHMER</td><td>Khmer</td></tr>
- *     <tr><td>:LAO</td><td>Lao</td></tr>
- *     <tr><td>:LATIN</td><td>Latin</td></tr>
+ *     <tr><td>:katakana</td><td>Katakana</td></tr>
+ *     <tr><td>:kayah_li</td><td>Kayah Li</td></tr>
+ *     <tr><td>:kharoshthi</td><td>Kharoshthi</td></tr>
+ *     <tr><td>:khmer</td><td>Khmer</td></tr>
+ *     <tr><td>:lao</td><td>Lao</td></tr>
+ *     <tr><td>:latin</td><td>Latin</td></tr>
  *     <tr><td>:lepcha</td><td>Lepcha</td></tr>
  *     <tr><td>:limbu</td><td>Limbu</td></tr>
  *     <tr><td>:linear_b</td><td>Linear B</td></tr>
@@ -372,6 +394,9 @@ script_to_symbol(UnicodeScript script)
  *     <tr><td>:malayalam</td><td>Malayalam</td></tr>
  *     <tr><td>:mandaic</td><td>Mandaic</td></tr>
  *     <tr><td>:meetei_mayek</td><td>Meetei Mayek</td></tr>
+ *     <tr><td>:meroitic_hieroglyphs</td><td>Meroitic Hieroglyphs</td></tr>
+ *     <tr><td>:meroitic_cursive</td><td>Meroitic Cursives</td></tr>
+ *     <tr><td>:miao</td><td>Miao</td></tr>
  *     <tr><td>:mongolian</td><td>Mongolian</td></tr>
  *     <tr><td>:myanmar</td><td>Myanmar</td></tr>
  *     <tr><td>:new_tai_lue</td><td>New Tai Lue</td></tr>
@@ -390,8 +415,10 @@ script_to_symbol(UnicodeScript script)
  *     <tr><td>:runic</td><td>Runic</td></tr>
  *     <tr><td>:samaritan</td><td>Samaritan</td></tr>
  *     <tr><td>:saurashtra</td><td>Saurashtra</td></tr>
+ *     <tr><td>:sharada</td><td>Sharada</td></tr>
  *     <tr><td>:shavian</td><td>Shavian</td></tr>
  *     <tr><td>:sinhala</td><td>Sinhala</td></tr>
+ *     <tr><td>:sora_sompeng</td><td>Sora Sompeng</td></tr>
  *     <tr><td>:sundanese</td><td>Sundanese</td></tr>
  *     <tr><td>:syloti_nagri</td><td>Syloti Nagri</td></tr>
  *     <tr><td>:syriac</td><td>Syriac</td></tr>
@@ -400,6 +427,7 @@ script_to_symbol(UnicodeScript script)
  *     <tr><td>:tai_le</td><td>Tai Le</td></tr>
  *     <tr><td>:tai_tham</td><td>Tai Tham</td></tr>
  *     <tr><td>:tai_viet</td><td>Tai Viet</td></tr>
+ *     <tr><td>:takri</td><td>Takri</td></tr>
  *     <tr><td>:tamil</td><td>Tamil</td></tr>
  *     <tr><td>:telugu</td><td>Telugu</td></tr>
  *     <tr><td>:thaana</td><td>Thaana</td></tr>

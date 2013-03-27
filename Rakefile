@@ -84,7 +84,11 @@ Inventory::Rake::Tasks.unless_installing_dependencies do
 end
 
 # TODO: Move to U::Version::Unicode
-UnicodeVersion = '6.0.0'
+UnicodeVersion = '6.2.0'
+
+UnicodeBaseUrl = 'http://www.unicode.org/Public/%s/ucd' % UnicodeVersion
+UnicodeAuxiliaryUrl = '%s/auxiliary' % UnicodeBaseUrl
+UnicodeExtractedUrl = '%s/extracted' % UnicodeBaseUrl
 
 def through_temporary_file(name)
   tmp = '%s.tmp' % name
@@ -99,6 +103,42 @@ def generate_file(name)
     chmod 0444, tmp
   end
 end
+
+def data_file(name, url = UnicodeBaseUrl)
+  path = 'build/data/%s' % name
+  file path do
+    generate_file path do |tmp|
+      url_path = '%s/%s' % [url, name]
+      rake_output_message 'wget -O%s %s' % [tmp, url_path] if verbose
+      require 'open-uri'
+      content = open(url_path, &:read)
+      File.open(tmp, 'wb') do |f|
+        f.write content
+      end
+    end
+  end
+end
+
+def data_auxiliary_file(name)
+  data_file name, UnicodeAuxiliaryUrl
+end
+
+def data_extracted_file(name)
+  data_file name, UnicodeExtractedUrl
+end
+
+data_file 'BidiMirroring.txt'
+data_file 'CaseFolding.txt'
+data_file 'CompositionExclusions.txt'
+data_file 'LineBreak.txt'
+data_file 'NormalizationTest.txt'
+data_file 'NormalizationTest.txt'
+data_file 'PropList.txt'
+data_file 'Scripts.txt'
+data_file 'SpecialCasing.txt'
+data_file 'UnicodeData.txt'
+data_auxiliary_file 'WordBreakProperty.txt'
+data_extracted_file 'DerivedEastAsianWidth.txt'
 
 def generate_data_header(task, *arguments)
   generate_file task.name do |tmp|
@@ -177,7 +217,7 @@ task :test => %w[test/unit/case.rb test/unit/foldcase.rb] # test/unit/normalize.
 
 file 'test/unit/case.rb' => %w[build/test/unit/case.rb
                                build/data/SpecialCasing.txt
-                               build/data/UnicodeData.marshalled] do |t|
+                               build/data/UnicodeData.txt] do |t|
   generate_file t.name do |tmp|
     ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
   end

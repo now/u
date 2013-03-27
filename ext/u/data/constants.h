@@ -1,6 +1,6 @@
 /* Automatically generated file */
 
-#define UNICODE_DATA_VERSION "6.0.0"
+#define UNICODE_DATA_VERSION "6.2.0"
 
 #define UNICODE_LAST_CHAR 0x10ffff
 

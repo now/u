@@ -45,6 +45,9 @@ break_type_to_symbol(UnicodeBreakType type)
         BREAKTYPE2ID(UNICODE_BREAK_HANGUL_LV_SYLLABLE, hangul_lv_syllable);
         BREAKTYPE2ID(UNICODE_BREAK_HANGUL_LVT_SYLLABLE, hangul_lvt_syllable);
         BREAKTYPE2ID(UNICODE_BREAK_CLOSE_PARENTHESIS, close_parenthesis);
+        BREAKTYPE2ID(UNICODE_BREAK_HEBREW_LETTER, hebrew_letter);
+        BREAKTYPE2ID(UNICODE_BREAK_CONDITIONAL_JAPANESE_STARTER, conditional_japanese_starter);
+        BREAKTYPE2ID(UNICODE_BREAK_REGIONAL_INDICATOR, regional_indicator);
 
         switch (type) {
 	case UNICODE_BREAK_MANDATORY:
@@ -121,6 +124,12 @@ break_type_to_symbol(UnicodeBreakType type)
 		return ID2SYM(id_hangul_lvt_syllable);
         case UNICODE_BREAK_CLOSE_PARENTHESIS:
 		return ID2SYM(id_close_parenthesis);
+        case UNICODE_BREAK_HEBREW_LETTER:
+                return ID2SYM(id_hebrew_letter);
+        case UNICODE_BREAK_CONDITIONAL_JAPANESE_STARTER:
+                return ID2SYM(id_conditional_japanese_starter);
+        case UNICODE_BREAK_REGIONAL_INDICATOR:
+                return ID2SYM(id_regional_indicator);
         default:
                 rb_u_raise(rb_eNotImpError, "unknown break type: %d", type);
         }
@@ -140,6 +149,7 @@ break_type_to_symbol(UnicodeBreakType type)
  * * :close_punctuation
  * * :combining_mark
  * * :complex_context
+ * * :conditional_japanese_starter
  * * :contingent
  * * :exclamation
  * * :hangul_l_jamo
@@ -147,6 +157,7 @@ break_type_to_symbol(UnicodeBreakType type)
  * * :hangul_lvt_syllable
  * * :hangul_t_jamo
  * * :hangul_v_jamo
+ * * :hebrew_letter
  * * :hyphen
  * * :ideographic
  * * :infix_separator
@@ -161,6 +172,7 @@ break_type_to_symbol(UnicodeBreakType type)
  * * :postfix
  * * :prefix
  * * :quotation
+ * * :regional_indicator
  * * :space
  * * :surrogate
  * * :symbol

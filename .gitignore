@@ -10,7 +10,7 @@ extconf.h
 mkmf.log
 /.yardoc/
 /.yardopts.html
-/build/data/UnicodeData.marshalled
+/build/data/
 /doc/
 /ext/u/Makefile
 /ext/u/u.bundle.dSYM/

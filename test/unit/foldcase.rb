@@ -521,6 +521,8 @@ Expectations do
   expect 'ⴣ'.u do 'Ⴣ'.u.foldcase end
   expect 'ⴤ'.u do 'Ⴤ'.u.foldcase end
   expect 'ⴥ'.u do 'Ⴥ'.u.foldcase end
+  expect 'ⴧ'.u do 'Ⴧ'.u.foldcase end
+  expect 'ⴭ'.u do 'Ⴭ'.u.foldcase end
   expect 'ḁ'.u do 'Ḁ'.u.foldcase end
   expect 'ḃ'.u do 'Ḃ'.u.foldcase end
   expect 'ḅ'.u do 'Ḅ'.u.foldcase end
@@ -961,6 +963,7 @@ Expectations do
   expect 'ⳣ'.u do 'Ⳣ'.u.foldcase end
   expect 'ⳬ'.u do 'Ⳬ'.u.foldcase end
   expect 'ⳮ'.u do 'Ⳮ'.u.foldcase end
+  expect 'ⳳ'.u do 'Ⳳ'.u.foldcase end
   expect 'ꙁ'.u do 'Ꙁ'.u.foldcase end
   expect 'ꙃ'.u do 'Ꙃ'.u.foldcase end
   expect 'ꙅ'.u do 'Ꙅ'.u.foldcase end
@@ -1045,11 +1048,13 @@ Expectations do
   expect 'ꞌ'.u do 'Ꞌ'.u.foldcase end
   expect 'ɥ'.u do 'Ɥ'.u.foldcase end
   expect 'ꞑ'.u do 'Ꞑ'.u.foldcase end
+  expect 'ꞓ'.u do 'Ꞓ'.u.foldcase end
   expect 'ꞡ'.u do 'Ꞡ'.u.foldcase end
   expect 'ꞣ'.u do 'Ꞣ'.u.foldcase end
   expect 'ꞥ'.u do 'Ꞥ'.u.foldcase end
   expect 'ꞧ'.u do 'Ꞧ'.u.foldcase end
   expect 'ꞩ'.u do 'Ꞩ'.u.foldcase end
+  expect 'ɦ'.u do 'Ɦ'.u.foldcase end
   expect 'ff'.u do 'ﬀ'.u.foldcase end
   expect 'fi'.u do 'ﬁ'.u.foldcase end
   expect 'fl'.u do 'ﬂ'.u.foldcase end
