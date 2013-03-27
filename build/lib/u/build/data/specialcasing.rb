@@ -99,7 +99,7 @@ private
         "\0",
         field2
       ].compact.join(' ')), @offset).tap{ |e|
-        @offset += e.to_s.length + 1
+        @offset += e.to_s.bytesize + 1
       }
     end
   end

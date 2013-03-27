@@ -18,7 +18,7 @@ private
  */
 static const struct {
 \tuint16_t ch;
-\tchar data[#{casefolding.map{ |c| c.to_s.length }.max + 1}];
+\tchar data[#{casefolding.map{ |c| c.to_s.bytesize }.max + 1}];
 } casefold_table[]"
       # TODO: Check that this sort_by will be needed.  (Or should be sorted by
       # Casefolds

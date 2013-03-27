@@ -72,7 +72,7 @@ private
       @decomp_string << "\n  \"%s\\0\" /* offset %d */" %
         [escape(decomp), @decomp_string_offset]
       result = @decomp_string_offset
-      @decomp_string_offset += decomp.length + 1
+      @decomp_string_offset += decomp.bytesize + 1
       result
     end
 
