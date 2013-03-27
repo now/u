@@ -115,18 +115,18 @@ def data_header(headers, &block)
 end
 
 data_header 'ext/u/data/attributes.h' => %w[build/ext/u/data/attributes.rb
-                                            build/data/UnicodeData.txt
+                                            build/data/UnicodeData.marshalled
                                             build/data/SpecialCasing.txt]
 
 data_header 'ext/u/data/bidi-mirroring.h' => %w[build/ext/u/data/bidi-mirroring.rb
                                                 build/data/BidiMirroring.txt]
 
 data_header 'ext/u/data/break.h' => %w[build/ext/u/data/break.rb
-                                       build/data/UnicodeData.txt
+                                       build/data/UnicodeData.marshalled
                                        build/data/LineBreak.txt]
 
 data_header 'ext/u/data/case-folding.h' => %w[build/ext/u/data/case-folding.rb
-                                              build/data/UnicodeData.txt
+                                              build/data/UnicodeData.marshalled
                                               build/data/SpecialCasing.txt
                                               build/data/CaseFolding.txt]
 
@@ -144,12 +144,12 @@ data_header 'ext/u/data/combining-class.h' => %w[build/ext/u/data/combining-clas
                                                  build/data/UnicodeData.marshalled]
 
 data_header 'ext/u/data/constants.h' => %w[build/ext/u/data/constants.rb
-                                           build/data/UnicodeData.txt] do |t|
+                                           build/data/UnicodeData.marshalled] do |t|
   generate_data_header t, UnicodeVersion
 end
 
 data_header 'ext/u/data/decompose.h' => %w[build/ext/u/data/decompose.rb
-                                           build/data/UnicodeData.txt]
+                                           build/data/UnicodeData.marshalled]
 
 data_header 'ext/u/data/script.h' => %w[build/ext/u/data/script.rb
                                         build/data/Scripts.txt]
@@ -158,10 +158,10 @@ data_header 'ext/u/data/soft-dotted.h' => %w[build/ext/u/data/soft-dotted.rb
                                              build/data/PropList.txt]
 
 data_header 'ext/u/data/title-table.h' => %w[build/ext/u/data/title-table.rb
-                                             build/data/UnicodeData.txt]
+                                             build/data/UnicodeData.marshalled]
 
 data_header 'ext/u/data/types.h' => %w[build/ext/u/data/types.rb
-                                       build/data/UnicodeData.txt]
+                                       build/data/UnicodeData.marshalled]
 
 data_header 'ext/u/data/wide.h' => %w[build/ext/u/data/wide.rb
                                       build/data/DerivedEastAsianWidth.txt] do |t|
@@ -177,7 +177,7 @@ task :test => %w[test/unit/case.rb test/unit/foldcase.rb] # test/unit/normalize.
 
 file 'test/unit/case.rb' => %w[build/test/unit/case.rb
                                build/data/SpecialCasing.txt
-                               build/data/UnicodeData.txt] do |t|
+                               build/data/UnicodeData.marshalled] do |t|
   generate_file t.name do |tmp|
     ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
   end

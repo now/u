@@ -21,10 +21,10 @@ private
       # TODO: Add #code to Entry and use #select on data here.
       data.each_with_index do |entry, code|
         next unless entry.title_to_lower
-        self << U::Build::Header::Table::Row.new(*[code, entry.title_to_upper, entry.title_to_lower].map{ |i| '%#06x' % i })
+        self << U::Build::Header::Table::Row.new(*[code, entry.title_to_upper, entry.title_to_lower].map{ |i| '0x%04x' % i })
       end
     end
   end
 end
 
-TitleTable.new(U::Build::Data::Unicode.new(ARGV[0]))
+TitleTable.new(Marshal.load(File.open(ARGV[0], 'rb', &:read)))

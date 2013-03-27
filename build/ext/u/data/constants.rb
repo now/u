@@ -28,4 +28,4 @@ EOH
   end
 end
 
-Constants.new(U::Build::Data::Unicode.new(ARGV[0]), ARGV[1])
+Constants.new(Marshal.load(File.open(ARGV[0], 'rb', &:read)), ARGV[1])

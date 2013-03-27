@@ -64,5 +64,5 @@ private
   end
 end
 
-data = U::Build::Data::Unicode.new(ARGV[0])
+data = Marshal.load(File.open(ARGV[0], 'rb', &:read))
 Break.new(data, U::Build::Data::LineBreak.new(data, ARGV[1]))

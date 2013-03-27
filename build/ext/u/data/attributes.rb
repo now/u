@@ -35,5 +35,5 @@ static const char special_case_table[]'
   end
 end
 
-data = U::Build::Data::Unicode.new(ARGV[0])
+data = Marshal.load(File.open(ARGV[0], 'rb', &:read))
 Attributes.new(data, U::Build::Data::SpecialCasing.new(data, ARGV[1]))

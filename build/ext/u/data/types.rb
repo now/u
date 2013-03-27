@@ -61,4 +61,4 @@ private
   end
 end
 
-Types.new(U::Build::Data::Unicode.new(ARGV[0]))
+Types.new(Marshal.load(File.open(ARGV[0], 'rb', &:read)))

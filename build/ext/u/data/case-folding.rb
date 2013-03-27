@@ -33,7 +33,7 @@ static const struct {
   end
 end
 
-data = U::Build::Data::Unicode.new(ARGV[0])
+data = Marshal.load(File.open(ARGV[0], 'rb', &:read))
 CaseFolding.new(U::Build::Data::CaseFolding.new(data,
                                                 U::Build::Data::SpecialCasing.new(data, ARGV[1]),
                                                 ARGV[2]))

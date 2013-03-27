@@ -82,4 +82,4 @@ private
   end
 end
 
-Decompose.new(U::Build::Data::Unicode.new(ARGV[0]))
+Decompose.new(Marshal.load(File.open(ARGV[0], 'rb', &:read)))

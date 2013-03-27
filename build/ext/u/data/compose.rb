@@ -300,5 +300,5 @@ private
   end
 end
 
-Compose.new(Marshal.load(File.open(ARGV[0], 'rb'){ |f| f.read }),
+Compose.new(Marshal.load(File.open(ARGV[0], 'rb', &:read)),
             U::Build::Data::CompositionExclusions.new(ARGV[1]))
