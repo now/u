@@ -342,6 +342,11 @@ Expectations do
   expect result.tainted? do 'A'.u.taint.downcase end
   expect result.untrusted? do 'A'.u.untrust.downcase end
 
+  expect 'Ab Iς Ssσ/Ffi'.u do 'aB iς ßσ/ﬃ'.u.titlecase end
+
+  expect 'Ijssel Igloo Ijssel'.u do 'ijssEl iglOo IJSSEL'.u.titlecase end
+  expect 'IJssel Igloo IJssel'.u do 'ijssEl iglOo IJSSEL'.u.titlecase('nl') end
+
   expect '"\xC3bc\u{e4}bc".u'.u do "\xC3bcäbc".u.dump end
   expect result.tainted? do ''.u.taint.dump end
   expect result.untrusted? do ''.u.untrust.dump end

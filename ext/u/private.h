@@ -61,5 +61,14 @@ HIDDEN unichar *_u_normalize_wc(const char *string,
                                 NormalizeMode mode,
                                 size_t *new_length);
 
+#include "locale_type.h"
+
+HIDDEN size_t _u_downcase_step(const char *string, const char *p,
+                               const char *end, bool use_end,
+                               LocaleType locale_type, char *result);
+
+HIDDEN size_t _u_upcase_step(const char *string, const char **p,
+                             const char *end, bool use_end,
+                             LocaleType locale_type, bool title, char *result);
 
 #endif /* PRIVATE_H */

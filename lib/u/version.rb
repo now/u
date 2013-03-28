@@ -189,6 +189,7 @@ module U
               rb_u_string_sub.c
               rb_u_string_times.c
               rb_u_string_title.c
+              rb_u_string_titlecase.c
               rb_u_string_to_i.c
               rb_u_string_to_inum.c
               rb_u_string_to_inum.h
@@ -230,6 +231,7 @@ module U
               u_prev.c
               u_reverse.c
               u_rindex.c
+              u_titlecase.c
               u_upcase.c
               u_width.c
               u_word_breaks.c

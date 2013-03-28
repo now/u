@@ -24,6 +24,12 @@ HIDDEN VALUE _rb_u_string_test_in_locale(int argc, VALUE *argv, VALUE self,
                                          char *(convert)(const char *, size_t,
                                                          const char *, size_t *));
 
+HIDDEN VALUE _rb_u_string_case_in_locale(int argc, VALUE *argv, VALUE self,
+                                         char *(case_in_locale_n)(const char *,
+                                                                  size_t,
+                                                                  const char *,
+                                                                  size_t *));
+
 HIDDEN VALUE rb_u_pattern_argument(VALUE pattern, bool quote);
 
 HIDDEN long rb_u_string_index_regexp(VALUE self, const char *begin, VALUE regex, bool reverse);

@@ -165,6 +165,8 @@ rb_u_string_times.o: rb_u_string_times.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_title.o: rb_u_string_title.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
+rb_u_string_titlecase.o: rb_u_string_titlecase.c rb_includes.h extconf.h \
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_to_i.o: rb_u_string_to_i.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
 rb_u_string_to_inum.o: rb_u_string_to_inum.c rb_includes.h extconf.h u.h \
@@ -220,6 +222,7 @@ u_pointer_to_offset.o: u_pointer_to_offset.c u.h private.h
 u_prev.o: u_prev.c u.h private.h utf8.h
 u_reverse.o: u_reverse.c u.h private.h
 u_rindex.o: u_rindex.c u.h private.h
+u_titlecase.o: u_titlecase.c u.h private.h locale_type.h
 u_upcase.o: u_upcase.c u.h private.h data/constants.h attributes.h \
   titled.h types.h locale_type.h
 u_width.o: u_width.c u.h private.h

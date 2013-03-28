@@ -9,7 +9,8 @@
 typedef enum {
 	LOCALE_NORMAL,
 	LOCALE_TURKIC,
-	LOCALE_LITHUANIAN
+	LOCALE_LITHUANIAN,
+        LOCALE_DUTCH,
 } LocaleType;
 
 

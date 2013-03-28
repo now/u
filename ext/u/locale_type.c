@@ -34,5 +34,8 @@ _u_locale_type_from_string(const char *locale)
 	if (locale[0] == 'l' && locale[1] == 't')
 		return LOCALE_LITHUANIAN;
 
+        if (locale[0] == 'n' && locale[1] == 'l')
+                return LOCALE_DUTCH;
+
         return LOCALE_NORMAL;
 }

@@ -215,9 +215,9 @@ downcase_simple(unichar c, int type, char *result)
         return unichar_to_u(tv != '\0' ? tv : c, result);
 }
 
-static size_t
-downcase_step(const char *string, const char *p, const char *end, bool use_end,
-              LocaleType locale_type, char *result)
+size_t
+_u_downcase_step(const char *string, const char *p, const char *end, bool use_end,
+                 LocaleType locale_type, char *result)
 {
         unichar c = u_aref_char(p);
 
@@ -267,8 +267,8 @@ downcase_loop(const char *string, size_t length, bool use_length,
 	const char *p = string;
         const char *end = string + length;
         while (P_WITHIN_STR(p, end, use_length)) {
-                n += downcase_step(string, p, end, use_length, locale_type,
-                                   OFFSET_IF(result, n));
+                n += _u_downcase_step(string, p, end, use_length, locale_type,
+                                      OFFSET_IF(result, n));
 
                 p = u_next(p);
 	}

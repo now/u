@@ -160,6 +160,28 @@ _rb_u_string_test_in_locale(int argc, VALUE *argv, VALUE self,
         return result;
 }
 
+VALUE
+_rb_u_string_case_in_locale(int argc, VALUE *argv, VALUE self,
+                            char *(case_in_locale_n)(const char *, size_t,
+                                                     const char *, size_t *))
+{
+        const char *locale = NULL;
+
+        VALUE rblocale;
+        if (rb_scan_args(argc, argv, "01", &rblocale) == 1)
+                locale = StringValuePtr(rblocale);
+
+        const UString *string = RVAL2USTRING(self);
+
+        size_t length;
+        char *cased = case_in_locale_n(USTRING_STR(string),
+                                       USTRING_LENGTH(string),
+                                       locale,
+                                       &length);
+
+        return rb_u_string_new_c_own(self, cased, length);
+}
+
 void Init_u(void);
 void
 Init_u(void)

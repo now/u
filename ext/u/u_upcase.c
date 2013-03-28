@@ -69,15 +69,14 @@ is_after_soft_dotted(const char *string, const char *p)
 }
 
 static inline size_t
-upcase_simple(unichar c, int type, char *result)
+upcase_simple(unichar c, int type, char *result, bool title)
 {
-	bool upper = (type != UNICODE_LOWERCASE_LETTER);
 	unichar tv = s_attribute(c);
 
 	if (tv >= UNICODE_SPECIAL_CASE_TABLE_START)
                 return _u_special_case_output(result,
                                               tv - UNICODE_SPECIAL_CASE_TABLE_START,
-                                              type, upper);
+                                              type, title);
 
         if (type == UNICODE_TITLECASE_LETTER) {
                 unichar tu = _u_titlecase_table_lookup(c, true);
@@ -88,13 +87,13 @@ upcase_simple(unichar c, int type, char *result)
         return unichar_to_u(tv != '\0' ? tv : c, result);
 }
 
-static inline size_t
-upcase_step(const char *string, const char **p, const char *end, bool use_end,
-            LocaleType locale_type, char *result)
+size_t
+_u_upcase_step(const char *string, const char **p, const char *end, bool use_end,
+               LocaleType locale_type, bool title, char *result)
 {
         unichar c = u_aref_char(*p);
 
-        if (c == COMBINING_GREEK_YPOGEGRAMMENI) {
+        if (!title && c == COMBINING_GREEK_YPOGEGRAMMENI) {
                 /* When COMBINING GREEK YPOGEGRAMMENI (U+0345) is uppercased or
                  * titlecased, the result will be incorrect unless it is moved
                  * to the end of any sequence of combining marks, as the
@@ -116,7 +115,8 @@ upcase_step(const char *string, const char **p, const char *end, bool use_end,
         int type = s_type(c);
         if (IS(type, OR(UNICODE_LOWERCASE_LETTER,
                         OR(UNICODE_TITLECASE_LETTER, 0))))
-                return upcase_simple(c, type, result);
+                return upcase_simple(c, type, result,
+                                     title || type != UNICODE_LOWERCASE_LETTER);
 
         size_t length = u_next(*p) - *p;
 
@@ -135,8 +135,8 @@ upcase_loop(const char *string, size_t length, bool use_length,
 	const char *p = string;
         const char *end = p + length;
         while (P_WITHIN_STR(p, end, use_length)) {
-                n += upcase_step(string, &p, end, use_length, locale_type,
-                                 OFFSET_IF(result, n));
+                n += _u_upcase_step(string, &p, end, use_length, locale_type,
+                                    false, OFFSET_IF(result, n));
 
                 p = u_next(p);
 	}

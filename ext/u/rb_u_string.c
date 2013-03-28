@@ -310,7 +310,7 @@ rb_u_string_dup(VALUE self)
  * Note that some methods defined on String are missing.  #Capitalize doesn’t
  * exist, as capitalization isn’t a Unicode concept.  #Sum doesn’t exist, as a
  * U::String generally doesn’t contain content that you need a checksum of.
- * #Crypt doesn’t exist for similar reasons.  #Swapcase isn’t useful on a
+ * \#Crypt doesn’t exist for similar reasons.  #Swapcase isn’t useful on a
  * String and it certainly isn’t useful in a Unicode context.  As a U::String
  * doesn’t contain arbitrary data, #unpack is left to String.  #Next/#succ
  * would perhaps be implementable, but haven’t, as a satisfactory
@@ -406,6 +406,7 @@ Init_u_string(VALUE mU)
 
         rb_define_method(rb_cUString, "downcase", rb_u_string_downcase, -1); /* in ext/u/rb_u_string_downcase.c */
         rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, 0); /* in ext/u/rb_u_string_foldcase.c */
+        rb_define_method(rb_cUString, "titlecase", rb_u_string_titlecase, -1); /* in ext/u/rb_u_string_titlecase.c */
         rb_define_method(rb_cUString, "upcase", rb_u_string_upcase, -1); /* in ext/u/rb_u_string_upcase.c */
 
         rb_define_method(rb_cUString, "mirror", rb_u_string_mirror, 0); /* in ext/u/rb_u_string_mirror.c */
