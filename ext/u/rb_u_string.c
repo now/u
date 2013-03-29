@@ -262,9 +262,9 @@ rb_u_string_dup(VALUE self)
  *
  * Beyond interrogators there are quite a few methods for iterating over the
  * content of a U::String, each viewing it in its own way: {#each_byte},
- * {#each_char}, {#each_codepoint}, {#each_line}, and {#each_word}.  They all
- * have aliases ({#bytes}, {#chars}, {#codepoints}, {#lines}, {#words}) that
- * sometimes read better.
+ * {#each_char}, {#each_codepoint}, {#each_grapheme_cluster}, {#each_line}, and
+ * {#each_word}.  They all have aliases ({#bytes}, {#chars}, {#codepoints},
+ * {#grapheme_clusters}, {#lines}, {#words}) that sometimes read better.
  *
  * Quite a few methods are devoted to extracting a substring of a U::String,
  * namely {#[]}, {#slice}, {#byteslice}, {#chomp}, {#chop}, {#chr}, {#getbyte},
@@ -284,8 +284,7 @@ rb_u_string_dup(VALUE self)
  *
  * Deconstructing a U::String can be done with {#partition} and {#rpartition},
  * which splits it around a divider, {#scan}, which extracts matches to a
- * pattern, {#split}, which splits it on a divider, and {#word_split}, which
- * splits it into words as defined by the Unicode standard.
+ * pattern, {#split}, which splits it on a divider.
  *
  * Substitution of all matches to a pattern can be made with {#gsub} and of the
  * first match to a pattern with {#sub}.
@@ -387,6 +386,8 @@ Init_u_string(VALUE mU)
         rb_define_alias(rb_cUString, "chars", "each_char");
         rb_define_method(rb_cUString, "each_codepoint", rb_u_string_each_codepoint, 0); /* in ext/u/rb_u_string_each_codepoint.c */
         rb_define_alias(rb_cUString, "codepoints", "each_codepoint");
+        rb_define_method(rb_cUString, "each_grapheme_cluster", rb_u_string_each_grapheme_cluster, 0); /* in ext/u/rb_u_string_each_grapheme_cluster.c */
+        rb_define_alias(rb_cUString, "grapheme_clusters", "each_grapheme_cluster");
         rb_define_method(rb_cUString, "each_line", rb_u_string_each_line, -1); /* in ext/u/rb_u_string_each_line.c */
         rb_define_alias(rb_cUString, "lines", "each_line");
         rb_define_method(rb_cUString, "each_word", rb_u_string_each_word, 0); /* in ext/u/rb_u_string_each_word.c */

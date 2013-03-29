@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class U::Build::Data::WordBreak
+class U::Build::Data::Break
   def initialize(path)
     @entries = Hash.new{ 'Other' }
     U::Build::Data::File.each(path, 2) do |point, property|

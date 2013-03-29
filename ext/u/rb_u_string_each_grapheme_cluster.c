@@ -21,22 +21,23 @@ each(const char *p, struct closure *closure)
         closure->previous = p;
 }
 
-/* @overload each_word{ |word| … }
+/* @overload each_grapheme_cluster{ |cluster| … }
  *
- *   Enumerates the words in the receiver, each inheriting any taint and
- *   untrust.
+ *   Enumerates the grapheme clusters in the receiver, each inheriting any
+ *   taint and untrust.
  *
- *   @yieldparam [U::String] word
+ *   @yieldparam [U::String] cluster
  *   @see http://www.unicode.org/reports/tr29/
  *     Unicode Standard Annex #29: Unicode Text Segmentation
  *
- * @overload each_word
+ * @overload each_grapheme_cluster
  *
- *   @return [Enumerator] An Enumerator over the characters in the receiver
+ *   @return [Enumerator] An Enumerator over the grapheme clusters in the
+ *     receiver
  *   @see http://www.unicode.org/reports/tr29/
  *     Unicode Standard Annex #29: Unicode Text Segmentation */
 VALUE
-rb_u_string_each_word(VALUE self)
+rb_u_string_each_grapheme_cluster(VALUE self)
 {
         RETURN_ENUMERATOR(self, 0, NULL);
 
@@ -46,7 +47,7 @@ rb_u_string_each_word(VALUE self)
         size_t length = end - p;
         rb_u_validate(p, length);
         struct closure closure = { self, p };
-        u_word_breaks(p, length, (UnicodeBreakFn)each, &closure);
+        u_grapheme_breaks(p, length, (UnicodeBreakFn)each, &closure);
         if (closure.previous != end)
                 yield(end, &closure);
         return self;

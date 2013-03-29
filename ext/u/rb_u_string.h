@@ -101,6 +101,7 @@ VALUE rb_u_string_dup(VALUE self);
 VALUE rb_u_string_each_byte(VALUE self);
 VALUE rb_u_string_each_char(VALUE self);
 VALUE rb_u_string_each_codepoint(VALUE self);
+VALUE rb_u_string_each_grapheme_cluster(VALUE self);
 VALUE rb_u_string_each_line(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_each_word(VALUE self);
 VALUE rb_u_string_empty(VALUE self);

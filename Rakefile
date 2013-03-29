@@ -137,6 +137,8 @@ data_file 'PropList.txt'
 data_file 'Scripts.txt'
 data_file 'SpecialCasing.txt'
 data_file 'UnicodeData.txt'
+data_auxiliary_file 'GraphemeBreakProperty.txt'
+data_auxiliary_file 'GraphemeBreakTest.txt'
 data_auxiliary_file 'WordBreakProperty.txt'
 data_auxiliary_file 'WordBreakTest.txt'
 data_extracted_file 'DerivedEastAsianWidth.txt'
@@ -214,12 +216,21 @@ data_header 'ext/u/data/wide-cjk.h' => %w[build/ext/u/data/wide.rb
   generate_data_header t, 'A'
 end
 
-data_header 'ext/u/data/word-break.h' => %w[build/ext/u/data/word-break.rb
+data_header 'ext/u/data/word-break.h' => %w[build/ext/u/data/grapheme-word-break.rb
                                             build/data/UnicodeData.marshalled
-                                            build/data/WordBreakProperty.txt]
+                                            build/data/WordBreakProperty.txt] do |t|
+  generate_data_header t, 'word'
+end
+
+data_header 'ext/u/data/grapheme-break.h' => %w[build/ext/u/data/grapheme-word-break.rb
+                                                build/data/UnicodeData.marshalled
+                                                build/data/GraphemeBreakProperty.txt] do |t|
+  generate_data_header t, 'grapheme'
+end
 
 task :test => %w[test/unit/case.rb
                  test/unit/foldcase.rb
+                 test/unit/graphemebreak.rb
                  test/unit/wordbreak.rb]
                # test/unit/normalize.rb
 
@@ -238,6 +249,13 @@ file 'test/unit/foldcase.rb' => %w[build/test/unit/foldcase.rb
   end
 end
 
+file 'test/unit/graphemebreak.rb' => %w[build/test/unit/break.rb
+                                        build/data/GraphemeBreakTest.txt] do |t|
+  generate_file t.name do |tmp|
+    ruby '-w -Ilib %s grapheme_clusters > %s' % [t.prerequisites.join(' '), tmp]
+  end
+end
+
 file 'test/unit/normalize.rb' => %w[build/test/unit/normalize.rb
                                     build/data/NormalizationTest.txt] do |t|
   generate_file t.name do |tmp|
@@ -245,9 +263,9 @@ file 'test/unit/normalize.rb' => %w[build/test/unit/normalize.rb
   end
 end
 
-file 'test/unit/wordbreak.rb' => %w[build/test/unit/wordbreak.rb
+file 'test/unit/wordbreak.rb' => %w[build/test/unit/break.rb
                                     build/data/WordBreakTest.txt] do |t|
   generate_file t.name do |tmp|
-    ruby '-w -Ilib %s > %s' % [t.prerequisites.join(' '), tmp]
+    ruby '-w -Ilib %s words > %s' % [t.prerequisites.join(' '), tmp]
   end
 end

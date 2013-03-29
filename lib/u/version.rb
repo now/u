@@ -91,6 +91,7 @@ module U
               data/compose.h
               data/constants.h
               data/decompose.h
+              data/grapheme-break.h
               data/script.h
               data/soft-dotted.h
               data/title-table.h
@@ -98,6 +99,8 @@ module U
               data/wide-cjk.h
               data/wide.h
               data/word-break.h
+              grapheme-break.c
+              grapheme-break.h
               locale_type.c
               locale_type.h
               private.c
@@ -141,6 +144,7 @@ module U
               rb_u_string_each_byte.c
               rb_u_string_each_char.c
               rb_u_string_each_codepoint.c
+              rb_u_string_each_grapheme_cluster.c
               rb_u_string_each_line.c
               rb_u_string_each_word.c
               rb_u_string_empty.c
@@ -219,6 +223,7 @@ module U
               u_copy.c
               u_downcase.c
               u_foldcase.c
+              u_grapheme_breaks.c
               u_has_prefix.c
               u_index.c
               u_is_ascii_only.c
@@ -239,6 +244,7 @@ module U
               unichar_break_type.c
               unichar_combining_class.c
               unichar_digit_value.c
+              unichar_grapheme_break_type.c
               unichar_isalnum.c
               unichar_isalpha.c
               unichar_isassigned.c
@@ -284,16 +290,17 @@ module U
               build/ext/u/data/compose.rb
               build/ext/u/data/constants.rb
               build/ext/u/data/decompose.rb
+              build/ext/u/data/grapheme-word-break.rb
               build/ext/u/data/marshalled.rb
               build/ext/u/data/script.rb
               build/ext/u/data/soft-dotted.rb
               build/ext/u/data/title-table.rb
               build/ext/u/data/types.rb
               build/ext/u/data/wide.rb
-              build/ext/u/data/word-break.rb
               build/lib/u/build.rb
               build/lib/u/build/data.rb
               build/lib/u/build/data/bidimirroring.rb
+              build/lib/u/build/data/break.rb
               build/lib/u/build/data/casefolding.rb
               build/lib/u/build/data/compositionexclusions.rb
               build/lib/u/build/data/derivedeastasianwidth.rb
@@ -306,7 +313,6 @@ module U
               build/lib/u/build/data/unicode/entry.rb
               build/lib/u/build/data/unicode/entry/decomposition.rb
               build/lib/u/build/data/unicode/points.rb
-              build/lib/u/build/data/wordbreak.rb
               build/lib/u/build/header.rb
               build/lib/u/build/header/table.rb
               build/lib/u/build/header/table/row.rb
@@ -330,14 +336,15 @@ module U
     def additional_unit_tests
       %w'case.rb
          foldcase.rb
+         graphemebreak.rb
          wordbreak.rb'
     end
 
     def additional_files
-      %w'build/test/unit/case.rb
+      %w'build/test/unit/break.rb
+         build/test/unit/case.rb
          build/test/unit/foldcase.rb
-         build/test/unit/normalize.rb
-         build/test/unit/wordbreak.rb'
+         build/test/unit/normalize.rb'
     end
   }
 end

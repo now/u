@@ -1,20 +1,25 @@
 # -*- coding: utf-8 -*-
 
-class WordBreak
-  def initialize(path, io = $stdout)
+class Break
+  def initialize(path, method, io = $stdout)
     io.puts '# -*- coding: utf-8 -*-',
       '# Automatically generated, so don’t edit!',
       '',
       'Expectations do'
     Lines.new(path).each do |splits|
-      io.printf "  expect [%s] do %s.u.words.to_a end\n",
-        splits.map{ |e| '%s.u' % e.split(' ').map{ |s| s.hex }.pack('U*').dump }.join(', '),
-        splits.join(' ').split(' ').map{ |s| s.hex }.pack('U*').dump
+      io.printf "  expect [%s] do \"%s\".u.%s.to_a end\n",
+        splits.map{ |e| '"%s".u' % uify(e) }.join(', '),
+        uify(splits.join(' ')),
+        method
     end
     io.puts 'end'
   end
 
 private
+
+  def uify(chars)
+    chars.split(' ').map{ |s| '\u{%s}' % (s == 'D800' ? '0001' : s) }.join('')
+  end
 
   class Lines
     include Enumerable
@@ -37,4 +42,4 @@ private
   end
 end
 
-WordBreak.new ARGV[0]
+Break.new ARGV[0], ARGV[1]

@@ -142,6 +142,24 @@ typedef enum {
 UnicodeBreakType unichar_break_type(unichar c);
 
 typedef enum {
+        UNICODE_GRAPHEME_BREAK_CONTROL,
+        UNICODE_GRAPHEME_BREAK_CR,
+        UNICODE_GRAPHEME_BREAK_EXTEND,
+        UNICODE_GRAPHEME_BREAK_L,
+        UNICODE_GRAPHEME_BREAK_LF,
+        UNICODE_GRAPHEME_BREAK_LV,
+        UNICODE_GRAPHEME_BREAK_LVT,
+        UNICODE_GRAPHEME_BREAK_OTHER,
+        UNICODE_GRAPHEME_BREAK_PREPEND,
+        UNICODE_GRAPHEME_BREAK_REGIONAL_INDICATOR,
+        UNICODE_GRAPHEME_BREAK_SPACINGMARK,
+        UNICODE_GRAPHEME_BREAK_T,
+        UNICODE_GRAPHEME_BREAK_V,
+} UnicodeGraphemeBreakType;
+
+UnicodeGraphemeBreakType unichar_grapheme_break_type(unichar c);
+
+typedef enum {
         UNICODE_WORD_BREAK_ALETTER,
         UNICODE_WORD_BREAK_CR,
         UNICODE_WORD_BREAK_EXTEND,
@@ -362,8 +380,9 @@ char *u_reverse_n(const char *str, size_t len);
 bool u_isvalid(const char *str);
 bool u_isvalid_n(const char *str, size_t max, const char **end);
 
-typedef void (*UnicodeWordBreakFn)(const char *, void *);
-void u_word_breaks(const char *string, size_t n, UnicodeWordBreakFn fn, void *closure);
+typedef void (*UnicodeBreakFn)(const char *, void *);
+void u_word_breaks(const char *string, size_t n, UnicodeBreakFn fn, void *closure);
+void u_grapheme_breaks(const char *string, size_t n, UnicodeBreakFn fn, void *closure);
 
 int unichar_to_u(unichar c, char *result);
 char *ucs4_to_u(unichar *str, size_t *items_read, size_t *items_written);

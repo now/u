@@ -69,7 +69,7 @@ titlecase_loop(const char *string, size_t length, bool use_length,
 {
         const char *end = string + (use_length ? length : strlen(string));
         struct titlecase_closure closure = { string, string, locale_type, 0, result };
-        u_word_breaks(string, length, (UnicodeWordBreakFn)titlecase_word_break, &closure);
+        u_word_breaks(string, length, (UnicodeBreakFn)titlecase_word_break, &closure);
         if (closure.previous != end)
                 titlecase_step(end, &closure);
         return closure.n;

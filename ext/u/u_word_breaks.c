@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -46,7 +45,7 @@ static const uint8_t wb_dfa[][UNICODE_WORD_BREAK_REGIONAL_INDICATOR + 1] = {
 #undef K
 
 void
-u_word_breaks(const char *string, size_t n, UnicodeWordBreakFn fn, void *closure)
+u_word_breaks(const char *string, size_t n, UnicodeBreakFn fn, void *closure)
 {
         const char *p = string;
         const char *end = p + n;
@@ -58,7 +57,6 @@ u_word_breaks(const char *string, size_t n, UnicodeWordBreakFn fn, void *closure
                 case 1:
                         break;
                 case 2:
-                        assert(s == NULL);
                         s = p;
                         break;
                 case 3:
