@@ -7,7 +7,7 @@ class Script
 
   class << self
     def name(script)
-      'UNICODE_SCRIPT_%s' % script.upcase
+      'U_SCRIPT_%s' % script.upcase
     end
   end
 

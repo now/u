@@ -29,7 +29,7 @@ unichar_script_bsearch(unichar c)
                 middle = binary_search_middle_of(begin, end);
         } while (begin <= end);
 
-        return UNICODE_SCRIPT_UNKNOWN;
+        return U_SCRIPT_UNKNOWN;
 }
 
 UnicodeScript
