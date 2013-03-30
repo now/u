@@ -341,17 +341,22 @@ rb_u_string_to_inum(VALUE self, int base, bool verify)
         if (verify && (s == NULL || memchr(s, '\0', USTRING_LENGTH(string))))
                 rb_u_raise(rb_eArgError, "string contains null byte");
 
+        bool allocated = false;
         if (s != NULL) {
                 long len = USTRING_LENGTH(string);
                 /* no sentinel somehow */
                 if (s[len] != '\0') {
-                        char *p = ALLOCA_N(char, len + 1);
+                        char *p = ALLOC_N(char, len + 1);
 
                         MEMCPY(p, s, char, len);
                         p[len] = '\0';
                         s = p;
+                        allocated = true;
                 }
         }
 
-        return rb_cutf_to_inum(s, base, verify);
+        VALUE result = rb_cutf_to_inum(s, base, verify);
+        if (allocated)
+                free((char *)s);
+        return result;
 }
