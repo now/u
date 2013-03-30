@@ -17,8 +17,8 @@ bool
 unichar_isprint(unichar c)
 {
         return !IS(s_type(c),
-                   OR(UNICODE_CONTROL,
-                      OR(UNICODE_FORMAT,
-                         OR(UNICODE_UNASSIGNED,
-                            OR(UNICODE_SURROGATE, 0)))));
+                   OR(U_CONTROL,
+                      OR(U_FORMAT,
+                         OR(U_UNASSIGNED,
+                            OR(U_SURROGATE, 0)))));
 }

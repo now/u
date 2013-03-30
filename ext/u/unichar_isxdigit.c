@@ -26,5 +26,5 @@ unichar_isxdigit(unichar c)
 		(c >= 'A' && c <= 'F') ||
                 (c >= UNICHAR_FULLWIDTH_a && c <= UNICHAR_FULLWIDTH_f) ||
                 (c >= UNICHAR_FULLWIDTH_A && c <= UNICHAR_FULLWIDTH_F) ||
-                (s_type(c) == UNICODE_DECIMAL_NUMBER));
+                (s_type(c) == U_DECIMAL_NUMBER));
 }

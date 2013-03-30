@@ -15,5 +15,5 @@
 bool
 unichar_isassigned(unichar c)
 {
-	return s_type(c) != UNICODE_UNASSIGNED;
+	return s_type(c) != U_UNASSIGNED;
 }

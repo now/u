@@ -43,7 +43,7 @@ _u_special_case_output(char *buf, int offset, int type, bool upper)
 {
 	const char *p = _u_special_case_table + offset;
 
-	if (type != UNICODE_TITLECASE_LETTER)
+	if (type != U_TITLECASE_LETTER)
 		p = u_next(p);
 
 	if (upper)

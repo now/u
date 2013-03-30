@@ -20,9 +20,9 @@ unichar_iszerowidth(unichar c)
                 return false;
 
         if (UNLIKELY(IS(s_type(c),
-                        OR(UNICODE_NON_SPACING_MARK,
-                           OR(UNICODE_ENCLOSING_MARK,
-                              OR(UNICODE_FORMAT, 0))))))
+                        OR(U_NON_SPACING_MARK,
+                           OR(U_ENCLOSING_MARK,
+                              OR(U_FORMAT, 0))))))
                 return true;
 
         if (UNLIKELY((0x1160 <= c && c < 0x1200) || c == ZERO_WIDTH_SPACE))

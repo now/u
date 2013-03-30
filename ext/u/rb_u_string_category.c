@@ -8,97 +8,97 @@
 static VALUE
 type_to_symbol(UnicodeType type)
 {
-        TYPE2ID(UNICODE_CONTROL, control);
-        TYPE2ID(UNICODE_FORMAT, format);
-        TYPE2ID(UNICODE_UNASSIGNED, unassigned);
-        TYPE2ID(UNICODE_PRIVATE_USE, private_use);
-        TYPE2ID(UNICODE_SURROGATE, surrogate);
-        TYPE2ID(UNICODE_LOWERCASE_LETTER, lowercase_letter);
-        TYPE2ID(UNICODE_MODIFIER_LETTER, modifier_letter);
-        TYPE2ID(UNICODE_OTHER_LETTER, other_letter);
-        TYPE2ID(UNICODE_TITLECASE_LETTER, titlecase_letter);
-        TYPE2ID(UNICODE_UPPERCASE_LETTER, uppercase_letter);
-        TYPE2ID(UNICODE_SPACING_MARK, spacing_mark);
-        TYPE2ID(UNICODE_ENCLOSING_MARK, enclosing_mark);
-        TYPE2ID(UNICODE_NON_SPACING_MARK, non_spacing_mark);
-        TYPE2ID(UNICODE_DECIMAL_NUMBER, decimal_number);
-        TYPE2ID(UNICODE_LETTER_NUMBER, letter_number);
-        TYPE2ID(UNICODE_OTHER_NUMBER, other_number);
-        TYPE2ID(UNICODE_CONNECT_PUNCTUATION, connect_punctuation);
-        TYPE2ID(UNICODE_DASH_PUNCTUATION, dash_punctuation);
-        TYPE2ID(UNICODE_CLOSE_PUNCTUATION, close_punctuation);
-        TYPE2ID(UNICODE_FINAL_PUNCTUATION, final_punctuation);
-        TYPE2ID(UNICODE_INITIAL_PUNCTUATION, initial_punctuation);
-        TYPE2ID(UNICODE_OTHER_PUNCTUATION, other_punctuation);
-        TYPE2ID(UNICODE_OPEN_PUNCTUATION, open_punctuation);
-        TYPE2ID(UNICODE_CURRENCY_SYMBOL, currency_symbol);
-        TYPE2ID(UNICODE_MODIFIER_SYMBOL, modifier_symbol);
-        TYPE2ID(UNICODE_MATH_SYMBOL, math_symbol);
-        TYPE2ID(UNICODE_OTHER_SYMBOL, other_symbol);
-        TYPE2ID(UNICODE_LINE_SEPARATOR, line_separator);
-        TYPE2ID(UNICODE_PARAGRAPH_SEPARATOR, paragraph_separator);
-        TYPE2ID(UNICODE_SPACE_SEPARATOR, space_separator);
+        TYPE2ID(U_CONTROL, control);
+        TYPE2ID(U_FORMAT, format);
+        TYPE2ID(U_UNASSIGNED, unassigned);
+        TYPE2ID(U_PRIVATE_USE, private_use);
+        TYPE2ID(U_SURROGATE, surrogate);
+        TYPE2ID(U_LOWERCASE_LETTER, lowercase_letter);
+        TYPE2ID(U_MODIFIER_LETTER, modifier_letter);
+        TYPE2ID(U_OTHER_LETTER, other_letter);
+        TYPE2ID(U_TITLECASE_LETTER, titlecase_letter);
+        TYPE2ID(U_UPPERCASE_LETTER, uppercase_letter);
+        TYPE2ID(U_SPACING_MARK, spacing_mark);
+        TYPE2ID(U_ENCLOSING_MARK, enclosing_mark);
+        TYPE2ID(U_NON_SPACING_MARK, non_spacing_mark);
+        TYPE2ID(U_DECIMAL_NUMBER, decimal_number);
+        TYPE2ID(U_LETTER_NUMBER, letter_number);
+        TYPE2ID(U_OTHER_NUMBER, other_number);
+        TYPE2ID(U_CONNECT_PUNCTUATION, connect_punctuation);
+        TYPE2ID(U_DASH_PUNCTUATION, dash_punctuation);
+        TYPE2ID(U_CLOSE_PUNCTUATION, close_punctuation);
+        TYPE2ID(U_FINAL_PUNCTUATION, final_punctuation);
+        TYPE2ID(U_INITIAL_PUNCTUATION, initial_punctuation);
+        TYPE2ID(U_OTHER_PUNCTUATION, other_punctuation);
+        TYPE2ID(U_OPEN_PUNCTUATION, open_punctuation);
+        TYPE2ID(U_CURRENCY_SYMBOL, currency_symbol);
+        TYPE2ID(U_MODIFIER_SYMBOL, modifier_symbol);
+        TYPE2ID(U_MATH_SYMBOL, math_symbol);
+        TYPE2ID(U_OTHER_SYMBOL, other_symbol);
+        TYPE2ID(U_LINE_SEPARATOR, line_separator);
+        TYPE2ID(U_PARAGRAPH_SEPARATOR, paragraph_separator);
+        TYPE2ID(U_SPACE_SEPARATOR, space_separator);
 
         switch (type) {
-        case UNICODE_CONTROL:
+        case U_CONTROL:
                 return ID2SYM(id_control);
-        case UNICODE_FORMAT:
+        case U_FORMAT:
                 return ID2SYM(id_format);
-        case UNICODE_UNASSIGNED:
+        case U_UNASSIGNED:
                 return ID2SYM(id_unassigned);
-        case UNICODE_PRIVATE_USE:
+        case U_PRIVATE_USE:
                 return ID2SYM(id_private_use);
-        case UNICODE_SURROGATE:
+        case U_SURROGATE:
                 return ID2SYM(id_surrogate);
-        case UNICODE_LOWERCASE_LETTER:
+        case U_LOWERCASE_LETTER:
                 return ID2SYM(id_lowercase_letter);
-        case UNICODE_MODIFIER_LETTER:
+        case U_MODIFIER_LETTER:
                 return ID2SYM(id_modifier_letter);
-        case UNICODE_OTHER_LETTER:
+        case U_OTHER_LETTER:
                 return ID2SYM(id_other_letter);
-        case UNICODE_TITLECASE_LETTER:
+        case U_TITLECASE_LETTER:
                 return ID2SYM(id_titlecase_letter);
-        case UNICODE_UPPERCASE_LETTER:
+        case U_UPPERCASE_LETTER:
                 return ID2SYM(id_uppercase_letter);
-        case UNICODE_SPACING_MARK:
+        case U_SPACING_MARK:
                 return ID2SYM(id_spacing_mark);
-        case UNICODE_ENCLOSING_MARK:
+        case U_ENCLOSING_MARK:
                 return ID2SYM(id_enclosing_mark);
-        case UNICODE_NON_SPACING_MARK:
+        case U_NON_SPACING_MARK:
                 return ID2SYM(id_non_spacing_mark);
-        case UNICODE_DECIMAL_NUMBER:
+        case U_DECIMAL_NUMBER:
                 return ID2SYM(id_decimal_number);
-        case UNICODE_LETTER_NUMBER:
+        case U_LETTER_NUMBER:
                 return ID2SYM(id_letter_number);
-        case UNICODE_OTHER_NUMBER:
+        case U_OTHER_NUMBER:
                 return ID2SYM(id_other_number);
-        case UNICODE_CONNECT_PUNCTUATION:
+        case U_CONNECT_PUNCTUATION:
                 return ID2SYM(id_connect_punctuation);
-        case UNICODE_DASH_PUNCTUATION:
+        case U_DASH_PUNCTUATION:
                 return ID2SYM(id_dash_punctuation);
-        case UNICODE_CLOSE_PUNCTUATION:
+        case U_CLOSE_PUNCTUATION:
                 return ID2SYM(id_close_punctuation);
-        case UNICODE_FINAL_PUNCTUATION:
+        case U_FINAL_PUNCTUATION:
                 return ID2SYM(id_final_punctuation);
-        case UNICODE_INITIAL_PUNCTUATION:
+        case U_INITIAL_PUNCTUATION:
                 return ID2SYM(id_initial_punctuation);
-        case UNICODE_OTHER_PUNCTUATION:
+        case U_OTHER_PUNCTUATION:
                 return ID2SYM(id_other_punctuation);
-        case UNICODE_OPEN_PUNCTUATION:
+        case U_OPEN_PUNCTUATION:
                 return ID2SYM(id_open_punctuation);
-        case UNICODE_CURRENCY_SYMBOL:
+        case U_CURRENCY_SYMBOL:
                 return ID2SYM(id_currency_symbol);
-        case UNICODE_MODIFIER_SYMBOL:
+        case U_MODIFIER_SYMBOL:
                 return ID2SYM(id_modifier_symbol);
-        case UNICODE_MATH_SYMBOL:
+        case U_MATH_SYMBOL:
                 return ID2SYM(id_math_symbol);
-        case UNICODE_OTHER_SYMBOL:
+        case U_OTHER_SYMBOL:
                 return ID2SYM(id_other_symbol);
-        case UNICODE_LINE_SEPARATOR:
+        case U_LINE_SEPARATOR:
                 return ID2SYM(id_line_separator);
-        case UNICODE_PARAGRAPH_SEPARATOR:
+        case U_PARAGRAPH_SEPARATOR:
                 return ID2SYM(id_paragraph_separator);
-        case UNICODE_SPACE_SEPARATOR:
+        case U_SPACE_SEPARATOR:
                 return ID2SYM(id_space_separator);
         default:
                 rb_u_raise(rb_eNotImpError, "unknown type: %d", type);

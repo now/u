@@ -15,5 +15,5 @@
 bool
 unichar_islower(unichar c)
 {
-	return s_type(c) == UNICODE_LOWERCASE_LETTER;
+	return s_type(c) == U_LOWERCASE_LETTER;
 }

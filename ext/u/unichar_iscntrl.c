@@ -15,5 +15,5 @@
 bool
 unichar_iscntrl(unichar c)
 {
-	return s_type(c) == UNICODE_CONTROL;
+	return s_type(c) == U_CONTROL;
 }

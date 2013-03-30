@@ -206,7 +206,7 @@ downcase_simple(unichar c, int type, char *result)
                                               tv - UNICODE_SPECIAL_CASE_TABLE_START,
                                               type, false);
 
-        if (type == UNICODE_TITLECASE_LETTER) {
+        if (type == U_TITLECASE_LETTER) {
                 unichar tu = _u_titlecase_table_lookup(c, false);
                 if (tu != c)
                         return unichar_to_u(tu, result);
@@ -246,8 +246,7 @@ _u_downcase_step(const char *string, const char *p, const char *end, bool use_en
         }
 
         int type = s_type(c);
-        if (IS(type, OR(UNICODE_UPPERCASE_LETTER,
-                        OR(UNICODE_TITLECASE_LETTER, 0))))
+        if (IS(type, OR(U_UPPERCASE_LETTER, OR(U_TITLECASE_LETTER, 0))))
                 return downcase_simple(c, type, result);
 
         size_t length = u_next(p) - p;

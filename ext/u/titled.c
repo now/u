@@ -37,7 +37,7 @@ unichar_totitle(unichar c)
                     title_table[i].lower == c)
 			return title_table[i].ch;
 
-        if (s_type(c) == UNICODE_LOWERCASE_LETTER)
+        if (s_type(c) == U_LOWERCASE_LETTER)
                 return unichar_toupper(c);
 
         return c;
