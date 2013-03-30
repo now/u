@@ -11,21 +11,21 @@
 
 #define ROW(other, cr, lf, control, l, v, lv, lvt, t, regional_indicator, \
             prepend, extend, spacingmark) \
-        { [UNICODE_GRAPHEME_BREAK_OTHER] = other, \
-          [UNICODE_GRAPHEME_BREAK_CR] = cr, \
-          [UNICODE_GRAPHEME_BREAK_LF] = lf, \
-          [UNICODE_GRAPHEME_BREAK_CONTROL] = control, \
-          [UNICODE_GRAPHEME_BREAK_L] = l, \
-          [UNICODE_GRAPHEME_BREAK_V] = v, \
-          [UNICODE_GRAPHEME_BREAK_LV] = lv, \
-          [UNICODE_GRAPHEME_BREAK_LVT] = lvt, \
-          [UNICODE_GRAPHEME_BREAK_T] = t, \
-          [UNICODE_GRAPHEME_BREAK_REGIONAL_INDICATOR] = regional_indicator, \
-          [UNICODE_GRAPHEME_BREAK_EXTEND] = extend, \
-          [UNICODE_GRAPHEME_BREAK_SPACINGMARK] = spacingmark, \
-          [UNICODE_GRAPHEME_BREAK_PREPEND] = prepend }
+        { [U_GRAPHEME_BREAK_OTHER] = other, \
+          [U_GRAPHEME_BREAK_CR] = cr, \
+          [U_GRAPHEME_BREAK_LF] = lf, \
+          [U_GRAPHEME_BREAK_CONTROL] = control, \
+          [U_GRAPHEME_BREAK_L] = l, \
+          [U_GRAPHEME_BREAK_V] = v, \
+          [U_GRAPHEME_BREAK_LV] = lv, \
+          [U_GRAPHEME_BREAK_LVT] = lvt, \
+          [U_GRAPHEME_BREAK_T] = t, \
+          [U_GRAPHEME_BREAK_REGIONAL_INDICATOR] = regional_indicator, \
+          [U_GRAPHEME_BREAK_EXTEND] = extend, \
+          [U_GRAPHEME_BREAK_SPACINGMARK] = spacingmark, \
+          [U_GRAPHEME_BREAK_PREPEND] = prepend }
 #define K(s) (s | (1 << 4))
-static const uint8_t gb_dfa[][UNICODE_GRAPHEME_BREAK_V + 1] = {
+static const uint8_t gb_dfa[][U_GRAPHEME_BREAK_V + 1] = {
         ROW(  0 ,  1 ,  2 ,  2 ,  3 ,  4 ,  4 ,  5 ,  5 ,  6 ,  7 ,K(0),K(0)), // Other | Extend | SpacingMark
         ROW(  0 ,  1 ,K(2),  2 ,  3 ,  4 ,  4 ,  5 ,  5 ,  6 ,  7 ,  0 ,  0 ), // CR
         ROW(  0 ,  1 ,  2 ,  2 ,  3 ,  4 ,  4 ,  5 ,  5 ,  6 ,  7 ,  0 ,  0 ), // LF | Control

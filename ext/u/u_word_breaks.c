@@ -11,24 +11,24 @@
 
 #define ROW(other, cr, lf, newline, aletter, numeric, katakana, extendnumlet, \
             regional_indicator, midletter, midnumlet, midnum, format, extend) \
-        { [UNICODE_WORD_BREAK_OTHER] = other, \
-          [UNICODE_WORD_BREAK_CR] = cr, \
-          [UNICODE_WORD_BREAK_LF] = lf, \
-          [UNICODE_WORD_BREAK_NEWLINE] = newline, \
-          [UNICODE_WORD_BREAK_FORMAT] = format, \
-          [UNICODE_WORD_BREAK_EXTEND] = extend, \
-          [UNICODE_WORD_BREAK_ALETTER] = aletter, \
-          [UNICODE_WORD_BREAK_NUMERIC] = numeric, \
-          [UNICODE_WORD_BREAK_KATAKANA] = katakana, \
-          [UNICODE_WORD_BREAK_EXTENDNUMLET] = extendnumlet, \
-          [UNICODE_WORD_BREAK_REGIONAL_INDICATOR] = regional_indicator, \
-          [UNICODE_WORD_BREAK_MIDLETTER] = midletter, \
-          [UNICODE_WORD_BREAK_MIDNUMLET] = midnumlet, \
-          [UNICODE_WORD_BREAK_MIDNUM] = midnum }
+        { [U_WORD_BREAK_OTHER] = other, \
+          [U_WORD_BREAK_CR] = cr, \
+          [U_WORD_BREAK_LF] = lf, \
+          [U_WORD_BREAK_NEWLINE] = newline, \
+          [U_WORD_BREAK_FORMAT] = format, \
+          [U_WORD_BREAK_EXTEND] = extend, \
+          [U_WORD_BREAK_ALETTER] = aletter, \
+          [U_WORD_BREAK_NUMERIC] = numeric, \
+          [U_WORD_BREAK_KATAKANA] = katakana, \
+          [U_WORD_BREAK_EXTENDNUMLET] = extendnumlet, \
+          [U_WORD_BREAK_REGIONAL_INDICATOR] = regional_indicator, \
+          [U_WORD_BREAK_MIDLETTER] = midletter, \
+          [U_WORD_BREAK_MIDNUMLET] = midnumlet, \
+          [U_WORD_BREAK_MIDNUM] = midnum }
 #define K(s) (s | (1 << 4))
 #define S(s) (s | (2 << 4))
 #define D(s) (s | (3 << 4))
-static const uint8_t wb_dfa[][UNICODE_WORD_BREAK_REGIONAL_INDICATOR + 1] = {
+static const uint8_t wb_dfa[][U_WORD_BREAK_REGIONAL_INDICATOR + 1] = {
         ROW(0,1,  2 ,2,  3 ,  4 ,  5 ,  6 ,  7 ,  0 ,  0 ,  0 ,K(0),K(0)), // Other
         ROW(0,1,K(2),2,  3 ,  4 ,  5 ,  6 ,  7 ,  0 ,  0 ,  0 ,  0 ,  0 ), // CR
         ROW(0,1,  2 ,2,  3 ,  4 ,  5 ,  6 ,  7 ,  0 ,  0 ,  0 ,  0 ,  0 ), // LF | Newline

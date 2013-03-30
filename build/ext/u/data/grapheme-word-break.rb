@@ -6,7 +6,7 @@ class Break
   def initialize(data, breaks, name, io = $stdout)
     U::Build::Header.new(io) do
       io.puts U::Build::Header::Tables::Split.new(data, 'uint8_t', '%s_break_property' % name){ |i|
-        'UNICODE_%s_BREAK_%s' % [name.upcase, breaks[i].upcase]
+        'U_%s_BREAK_%s' % [name.upcase, breaks[i].upcase]
       }
     end
   end
