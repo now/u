@@ -8,127 +8,127 @@
 static VALUE
 break_type_to_symbol(UnicodeBreakType type)
 {
-	BREAKTYPE2ID(UNICODE_BREAK_MANDATORY, mandatory);
-	BREAKTYPE2ID(UNICODE_BREAK_CARRIAGE_RETURN, carriage_return);
-	BREAKTYPE2ID(UNICODE_BREAK_LINE_FEED, line_feed);
-	BREAKTYPE2ID(UNICODE_BREAK_COMBINING_MARK, combining_mark);
-	BREAKTYPE2ID(UNICODE_BREAK_SURROGATE, surrogate);
-	BREAKTYPE2ID(UNICODE_BREAK_ZERO_WIDTH_SPACE, zero_width_space);
-	BREAKTYPE2ID(UNICODE_BREAK_INSEPARABLE, inseparable);
-	BREAKTYPE2ID(UNICODE_BREAK_NON_BREAKING_GLUE, non_breaking_glue);
-	BREAKTYPE2ID(UNICODE_BREAK_CONTINGENT, contingent);
-	BREAKTYPE2ID(UNICODE_BREAK_SPACE, space);
-	BREAKTYPE2ID(UNICODE_BREAK_AFTER, after);
-	BREAKTYPE2ID(UNICODE_BREAK_BEFORE, before);
-	BREAKTYPE2ID(UNICODE_BREAK_BEFORE_AND_AFTER, before_and_after);
-	BREAKTYPE2ID(UNICODE_BREAK_HYPHEN, hyphen);
-	BREAKTYPE2ID(UNICODE_BREAK_NON_STARTER, non_starter);
-	BREAKTYPE2ID(UNICODE_BREAK_OPEN_PUNCTUATION, open_punctuation);
-	BREAKTYPE2ID(UNICODE_BREAK_CLOSE_PUNCTUATION, close_punctuation);
-	BREAKTYPE2ID(UNICODE_BREAK_QUOTATION, quotation);
-	BREAKTYPE2ID(UNICODE_BREAK_EXCLAMATION, exclamation);
-	BREAKTYPE2ID(UNICODE_BREAK_IDEOGRAPHIC, ideographic);
-	BREAKTYPE2ID(UNICODE_BREAK_NUMERIC, numeric);
-	BREAKTYPE2ID(UNICODE_BREAK_INFIX_SEPARATOR, infix_separator);
-	BREAKTYPE2ID(UNICODE_BREAK_SYMBOL, symbol);
-	BREAKTYPE2ID(UNICODE_BREAK_ALPHABETIC, alphabetic);
-	BREAKTYPE2ID(UNICODE_BREAK_PREFIX, prefix);
-	BREAKTYPE2ID(UNICODE_BREAK_POSTFIX, postfix);
-	BREAKTYPE2ID(UNICODE_BREAK_COMPLEX_CONTEXT, complex_context);
-	BREAKTYPE2ID(UNICODE_BREAK_AMBIGUOUS, ambiguous);
-	BREAKTYPE2ID(UNICODE_BREAK_UNKNOWN, unknown);
-	BREAKTYPE2ID(UNICODE_BREAK_NEXT_LINE, next_line);
-	BREAKTYPE2ID(UNICODE_BREAK_WORD_JOINER, word_joiner);
-        BREAKTYPE2ID(UNICODE_BREAK_HANGUL_L_JAMO, hangul_l_jamo);
-        BREAKTYPE2ID(UNICODE_BREAK_HANGUL_V_JAMO, hangul_v_jamo);
-        BREAKTYPE2ID(UNICODE_BREAK_HANGUL_T_JAMO, hangul_t_jamo);
-        BREAKTYPE2ID(UNICODE_BREAK_HANGUL_LV_SYLLABLE, hangul_lv_syllable);
-        BREAKTYPE2ID(UNICODE_BREAK_HANGUL_LVT_SYLLABLE, hangul_lvt_syllable);
-        BREAKTYPE2ID(UNICODE_BREAK_CLOSE_PARENTHESIS, close_parenthesis);
-        BREAKTYPE2ID(UNICODE_BREAK_HEBREW_LETTER, hebrew_letter);
-        BREAKTYPE2ID(UNICODE_BREAK_CONDITIONAL_JAPANESE_STARTER, conditional_japanese_starter);
-        BREAKTYPE2ID(UNICODE_BREAK_REGIONAL_INDICATOR, regional_indicator);
+	BREAKTYPE2ID(U_BREAK_MANDATORY, mandatory);
+	BREAKTYPE2ID(U_BREAK_CARRIAGE_RETURN, carriage_return);
+	BREAKTYPE2ID(U_BREAK_LINE_FEED, line_feed);
+	BREAKTYPE2ID(U_BREAK_COMBINING_MARK, combining_mark);
+	BREAKTYPE2ID(U_BREAK_SURROGATE, surrogate);
+	BREAKTYPE2ID(U_BREAK_ZERO_WIDTH_SPACE, zero_width_space);
+	BREAKTYPE2ID(U_BREAK_INSEPARABLE, inseparable);
+	BREAKTYPE2ID(U_BREAK_NON_BREAKING_GLUE, non_breaking_glue);
+	BREAKTYPE2ID(U_BREAK_CONTINGENT, contingent);
+	BREAKTYPE2ID(U_BREAK_SPACE, space);
+	BREAKTYPE2ID(U_BREAK_AFTER, after);
+	BREAKTYPE2ID(U_BREAK_BEFORE, before);
+	BREAKTYPE2ID(U_BREAK_BEFORE_AND_AFTER, before_and_after);
+	BREAKTYPE2ID(U_BREAK_HYPHEN, hyphen);
+	BREAKTYPE2ID(U_BREAK_NON_STARTER, non_starter);
+	BREAKTYPE2ID(U_BREAK_OPEN_PUNCTUATION, open_punctuation);
+	BREAKTYPE2ID(U_BREAK_CLOSE_PUNCTUATION, close_punctuation);
+	BREAKTYPE2ID(U_BREAK_QUOTATION, quotation);
+	BREAKTYPE2ID(U_BREAK_EXCLAMATION, exclamation);
+	BREAKTYPE2ID(U_BREAK_IDEOGRAPHIC, ideographic);
+	BREAKTYPE2ID(U_BREAK_NUMERIC, numeric);
+	BREAKTYPE2ID(U_BREAK_INFIX_SEPARATOR, infix_separator);
+	BREAKTYPE2ID(U_BREAK_SYMBOL, symbol);
+	BREAKTYPE2ID(U_BREAK_ALPHABETIC, alphabetic);
+	BREAKTYPE2ID(U_BREAK_PREFIX, prefix);
+	BREAKTYPE2ID(U_BREAK_POSTFIX, postfix);
+	BREAKTYPE2ID(U_BREAK_COMPLEX_CONTEXT, complex_context);
+	BREAKTYPE2ID(U_BREAK_AMBIGUOUS, ambiguous);
+	BREAKTYPE2ID(U_BREAK_UNKNOWN, unknown);
+	BREAKTYPE2ID(U_BREAK_NEXT_LINE, next_line);
+	BREAKTYPE2ID(U_BREAK_WORD_JOINER, word_joiner);
+        BREAKTYPE2ID(U_BREAK_HANGUL_L_JAMO, hangul_l_jamo);
+        BREAKTYPE2ID(U_BREAK_HANGUL_V_JAMO, hangul_v_jamo);
+        BREAKTYPE2ID(U_BREAK_HANGUL_T_JAMO, hangul_t_jamo);
+        BREAKTYPE2ID(U_BREAK_HANGUL_LV_SYLLABLE, hangul_lv_syllable);
+        BREAKTYPE2ID(U_BREAK_HANGUL_LVT_SYLLABLE, hangul_lvt_syllable);
+        BREAKTYPE2ID(U_BREAK_CLOSE_PARENTHESIS, close_parenthesis);
+        BREAKTYPE2ID(U_BREAK_HEBREW_LETTER, hebrew_letter);
+        BREAKTYPE2ID(U_BREAK_CONDITIONAL_JAPANESE_STARTER, conditional_japanese_starter);
+        BREAKTYPE2ID(U_BREAK_REGIONAL_INDICATOR, regional_indicator);
 
         switch (type) {
-	case UNICODE_BREAK_MANDATORY:
+	case U_BREAK_MANDATORY:
 		return ID2SYM(id_mandatory);
-	case UNICODE_BREAK_CARRIAGE_RETURN:
+	case U_BREAK_CARRIAGE_RETURN:
 		return ID2SYM(id_carriage_return);
-	case UNICODE_BREAK_LINE_FEED:
+	case U_BREAK_LINE_FEED:
 		return ID2SYM(id_line_feed);
-	case UNICODE_BREAK_COMBINING_MARK:
+	case U_BREAK_COMBINING_MARK:
 		return ID2SYM(id_combining_mark);
-	case UNICODE_BREAK_SURROGATE:
+	case U_BREAK_SURROGATE:
 		return ID2SYM(id_surrogate);
-	case UNICODE_BREAK_ZERO_WIDTH_SPACE:
+	case U_BREAK_ZERO_WIDTH_SPACE:
 		return ID2SYM(id_space);
-	case UNICODE_BREAK_INSEPARABLE:
+	case U_BREAK_INSEPARABLE:
 		return ID2SYM(id_inseparable);
-	case UNICODE_BREAK_NON_BREAKING_GLUE:
+	case U_BREAK_NON_BREAKING_GLUE:
 		return ID2SYM(id_non_breaking_glue);
-	case UNICODE_BREAK_CONTINGENT:
+	case U_BREAK_CONTINGENT:
 		return ID2SYM(id_contingent);
-	case UNICODE_BREAK_SPACE:
+	case U_BREAK_SPACE:
 		return ID2SYM(id_space);
-	case UNICODE_BREAK_AFTER:
+	case U_BREAK_AFTER:
 		return ID2SYM(id_after);
-	case UNICODE_BREAK_BEFORE:
+	case U_BREAK_BEFORE:
 		return ID2SYM(id_before);
-	case UNICODE_BREAK_BEFORE_AND_AFTER:
+	case U_BREAK_BEFORE_AND_AFTER:
 		return ID2SYM(id_after);
-	case UNICODE_BREAK_HYPHEN:
+	case U_BREAK_HYPHEN:
 		return ID2SYM(id_hyphen);
-	case UNICODE_BREAK_NON_STARTER:
+	case U_BREAK_NON_STARTER:
 		return ID2SYM(id_non_starter);
-	case UNICODE_BREAK_OPEN_PUNCTUATION:
+	case U_BREAK_OPEN_PUNCTUATION:
 		return ID2SYM(id_open_punctuation);
-	case UNICODE_BREAK_CLOSE_PUNCTUATION:
+	case U_BREAK_CLOSE_PUNCTUATION:
 		return ID2SYM(id_close_punctuation);
-	case UNICODE_BREAK_QUOTATION:
+	case U_BREAK_QUOTATION:
 		return ID2SYM(id_quotation);
-	case UNICODE_BREAK_EXCLAMATION:
+	case U_BREAK_EXCLAMATION:
 		return ID2SYM(id_exclamation);
-	case UNICODE_BREAK_IDEOGRAPHIC:
+	case U_BREAK_IDEOGRAPHIC:
 		return ID2SYM(id_ideographic);
-	case UNICODE_BREAK_NUMERIC:
+	case U_BREAK_NUMERIC:
 		return ID2SYM(id_numeric);
-	case UNICODE_BREAK_INFIX_SEPARATOR:
+	case U_BREAK_INFIX_SEPARATOR:
 		return ID2SYM(id_infix_separator);
-	case UNICODE_BREAK_SYMBOL:
+	case U_BREAK_SYMBOL:
 		return ID2SYM(id_symbol);
-	case UNICODE_BREAK_ALPHABETIC:
+	case U_BREAK_ALPHABETIC:
 		return ID2SYM(id_alphabetic);
-	case UNICODE_BREAK_PREFIX:
+	case U_BREAK_PREFIX:
 		return ID2SYM(id_prefix);
-	case UNICODE_BREAK_POSTFIX:
+	case U_BREAK_POSTFIX:
 		return ID2SYM(id_postfix);
-	case UNICODE_BREAK_COMPLEX_CONTEXT:
+	case U_BREAK_COMPLEX_CONTEXT:
 		return ID2SYM(id_complex_context);
-	case UNICODE_BREAK_AMBIGUOUS:
+	case U_BREAK_AMBIGUOUS:
 		return ID2SYM(id_ambiguous);
-	case UNICODE_BREAK_UNKNOWN:
+	case U_BREAK_UNKNOWN:
 		return ID2SYM(id_unknown);
-	case UNICODE_BREAK_NEXT_LINE:
+	case U_BREAK_NEXT_LINE:
 		return ID2SYM(id_next_line);
-	case UNICODE_BREAK_WORD_JOINER:
+	case U_BREAK_WORD_JOINER:
 		return ID2SYM(id_word_joiner);
-        case UNICODE_BREAK_HANGUL_L_JAMO:
+        case U_BREAK_HANGUL_L_JAMO:
 		return ID2SYM(id_hangul_l_jamo);
-        case UNICODE_BREAK_HANGUL_V_JAMO:
+        case U_BREAK_HANGUL_V_JAMO:
 		return ID2SYM(id_hangul_v_jamo);
-        case UNICODE_BREAK_HANGUL_T_JAMO:
+        case U_BREAK_HANGUL_T_JAMO:
 		return ID2SYM(id_hangul_t_jamo);
-        case UNICODE_BREAK_HANGUL_LV_SYLLABLE:
+        case U_BREAK_HANGUL_LV_SYLLABLE:
 		return ID2SYM(id_hangul_lv_syllable);
-        case UNICODE_BREAK_HANGUL_LVT_SYLLABLE:
+        case U_BREAK_HANGUL_LVT_SYLLABLE:
 		return ID2SYM(id_hangul_lvt_syllable);
-        case UNICODE_BREAK_CLOSE_PARENTHESIS:
+        case U_BREAK_CLOSE_PARENTHESIS:
 		return ID2SYM(id_close_parenthesis);
-        case UNICODE_BREAK_HEBREW_LETTER:
+        case U_BREAK_HEBREW_LETTER:
                 return ID2SYM(id_hebrew_letter);
-        case UNICODE_BREAK_CONDITIONAL_JAPANESE_STARTER:
+        case U_BREAK_CONDITIONAL_JAPANESE_STARTER:
                 return ID2SYM(id_conditional_japanese_starter);
-        case UNICODE_BREAK_REGIONAL_INDICATOR:
+        case U_BREAK_REGIONAL_INDICATOR:
                 return ID2SYM(id_regional_indicator);
         default:
                 rb_u_raise(rb_eNotImpError, "unknown break type: %d", type);
@@ -188,7 +188,7 @@ break_type_to_symbol(UnicodeBreakType type)
 VALUE
 rb_u_string_break_type(VALUE self)
 {
-        UnicodeBreakType current = UNICODE_BREAK_UNKNOWN;
+        UnicodeBreakType current = U_BREAK_UNKNOWN;
 
         const UString *string = RVAL2USTRING(self);
 
@@ -197,7 +197,7 @@ rb_u_string_break_type(VALUE self)
         while (p < end) {
                 UnicodeBreakType type = unichar_break_type(u_aref_char_validated_n(p, end - p));
 
-                if (current == UNICODE_BREAK_UNKNOWN)
+                if (current == U_BREAK_UNKNOWN)
                         current = type;
                 else if (type != current)
                         rb_u_raise(rb_eArgError,

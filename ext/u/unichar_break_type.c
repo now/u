@@ -20,7 +20,7 @@ unichar_break_type(unichar c)
         else if (UNICODE_FIRST_CHAR_PART2 <= c && c <= UNICODE_LAST_CHAR)
                 index = break_property_table_part2[(c - UNICODE_FIRST_CHAR_PART2) >> 8];
 	else
-		return UNICODE_BREAK_UNKNOWN;
+		return U_BREAK_UNKNOWN;
 
 	if (index >= UNICODE_MAX_TABLE_INDEX)
 		return index - UNICODE_MAX_TABLE_INDEX;
