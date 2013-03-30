@@ -11,10 +11,10 @@
  *
  *   such as ‘ ’, or a control character acting as such, namely
  *
- *   * U+0009 (CHARACTER TABULATION (HT))
- *   * U+000A (LINE FEED (LF))
- *   * U+000C (FORM FEED (FF))
- *   * U+000D (CARRIAGE RETURN (CR))
+ *   * U+0009 CHARACTER TABULATION (HT)
+ *   * U+000A LINE FEED (LF)
+ *   * U+000C FORM FEED (FF)
+ *   * U+000D CARRIAGE RETURN (CR)
  *
  *   @return [Boolean] */
 VALUE
