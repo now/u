@@ -111,7 +111,7 @@ _rb_u_string_test(VALUE self,
         size_t nfd_length;
         char *nfd = u_normalize_n(USTRING_STR(string),
                                   USTRING_LENGTH(string),
-                                  NORMALIZE_NFD,
+                                  U_NORMALIZE_NFD,
                                   &nfd_length);
 
         size_t converted_length;
@@ -142,7 +142,7 @@ _rb_u_string_test_in_locale(int argc, VALUE *argv, VALUE self,
         size_t nfd_length;
         char *nfd = u_normalize_n(USTRING_STR(string),
                                   USTRING_LENGTH(string),
-                                  NORMALIZE_NFD,
+                                  U_NORMALIZE_NFD,
                                   &nfd_length);
 
         size_t converted_length;

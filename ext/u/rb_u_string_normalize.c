@@ -8,7 +8,7 @@
                 return mode;                            \
 } while (0)
 
-static NormalizeMode
+static UnicodeNormalizeMode
 symbol_to_mode(VALUE symbol)
 {
         if (!SYMBOL_P(symbol)) {
@@ -21,14 +21,14 @@ symbol_to_mode(VALUE symbol)
 
         ID id = SYM2ID(symbol);
 
-        SYMBOL2MODE(default, NORMALIZE_DEFAULT, id);
-        SYMBOL2MODE(nfd, NORMALIZE_NFD, id);
-        SYMBOL2MODE(default_compose, NORMALIZE_DEFAULT_COMPOSE, id);
-        SYMBOL2MODE(nfc, NORMALIZE_NFC, id);
-        SYMBOL2MODE(all, NORMALIZE_ALL, id);
-        SYMBOL2MODE(nfkd, NORMALIZE_NFKD, id);
-        SYMBOL2MODE(all_compose, NORMALIZE_ALL_COMPOSE, id);
-        SYMBOL2MODE(nfkc, NORMALIZE_NFKC, id);
+        SYMBOL2MODE(default, U_NORMALIZE_DEFAULT, id);
+        SYMBOL2MODE(nfd, U_NORMALIZE_NFD, id);
+        SYMBOL2MODE(default_compose, U_NORMALIZE_DEFAULT_COMPOSE, id);
+        SYMBOL2MODE(nfc, U_NORMALIZE_NFC, id);
+        SYMBOL2MODE(all, U_NORMALIZE_ALL, id);
+        SYMBOL2MODE(nfkd, U_NORMALIZE_NFKD, id);
+        SYMBOL2MODE(all_compose, U_NORMALIZE_ALL_COMPOSE, id);
+        SYMBOL2MODE(nfkc, U_NORMALIZE_NFKC, id);
 
         rb_u_raise(rb_eArgError,
                    "unknown normalization mode: :%s",
@@ -84,7 +84,7 @@ rb_u_string_normalize(int argc, VALUE *argv, VALUE self)
         const UString *string = RVAL2USTRING(self);
 
         VALUE rbmode;
-        NormalizeMode mode = NORMALIZE_DEFAULT;
+        UnicodeNormalizeMode mode = U_NORMALIZE_DEFAULT;
         if (rb_scan_args(argc, argv, "01", &rbmode) == 1)
                 mode = symbol_to_mode(rbmode);
 

@@ -288,18 +288,19 @@ typedef enum {
 UnicodeScript unichar_script(unichar c);
 
 typedef enum {
-	NORMALIZE_DEFAULT,
-	NORMALIZE_NFD = NORMALIZE_DEFAULT,
-	NORMALIZE_DEFAULT_COMPOSE,
-	NORMALIZE_NFC = NORMALIZE_DEFAULT_COMPOSE,
-	NORMALIZE_ALL,
-	NORMALIZE_NFKD = NORMALIZE_ALL,
-	NORMALIZE_ALL_COMPOSE,
-	NORMALIZE_NFKC = NORMALIZE_ALL_COMPOSE
-} NormalizeMode;
+	U_NORMALIZE_DEFAULT,
+	U_NORMALIZE_NFD = U_NORMALIZE_DEFAULT,
+	U_NORMALIZE_DEFAULT_COMPOSE,
+	U_NORMALIZE_NFC = U_NORMALIZE_DEFAULT_COMPOSE,
+	U_NORMALIZE_ALL,
+	U_NORMALIZE_NFKD = U_NORMALIZE_ALL,
+	U_NORMALIZE_ALL_COMPOSE,
+	U_NORMALIZE_NFKC = U_NORMALIZE_ALL_COMPOSE
+} UnicodeNormalizeMode;
 
-char *u_normalize(const char *string, NormalizeMode mode);
-char *u_normalize_n(const char *string, size_t length, NormalizeMode mode, size_t *new_length);
+char *u_normalize(const char *string, UnicodeNormalizeMode mode);
+char *u_normalize_n(const char *string, size_t length,
+                    UnicodeNormalizeMode mode, size_t *new_length);
 
 char *u_downcase(const char *string);
 char *u_downcase_n(const char *string, size_t length, size_t *new_length);

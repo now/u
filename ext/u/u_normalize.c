@@ -95,11 +95,11 @@ decomposition_to_wc(const char *decomposition, unichar *result)
 }
 
 static size_t
-decompose_simple(unichar c, NormalizeMode mode, unichar *result)
+decompose_simple(unichar c, UnicodeNormalizeMode mode, unichar *result)
 {
         const char *decomposition = find_decomposition(c,
-                                                       (mode == NORMALIZE_NFKC ||
-                                                        mode == NORMALIZE_NFKD));
+                                                       (mode == U_NORMALIZE_NFKC ||
+                                                        mode == U_NORMALIZE_NFKD));
 
         if (decomposition == NULL) {
                 if (result != NULL)
@@ -157,7 +157,7 @@ unicode_canonical_ordering(unichar *string, size_t length)
 }
 
 static inline size_t
-decompose_step(unichar c, NormalizeMode mode, unichar *result)
+decompose_step(unichar c, UnicodeNormalizeMode mode, unichar *result)
 {
         return (SBase <= c && c <= SLast) ?
                 decompose_hangul(c, result) :
@@ -166,7 +166,7 @@ decompose_step(unichar c, NormalizeMode mode, unichar *result)
 
 static size_t
 decompose_loop(const char *string, size_t length, bool use_length,
-               NormalizeMode mode, unichar *result)
+               UnicodeNormalizeMode mode, unichar *result)
 {
         size_t n = 0;
         size_t prev_start = 0;
@@ -307,13 +307,13 @@ compose_loop(unichar *string, size_t length)
 
 unichar *
 _u_normalize_wc(const char *string, size_t length, bool use_length,
-                NormalizeMode mode, size_t *new_length)
+                UnicodeNormalizeMode mode, size_t *new_length)
 {
         size_t n = decompose_loop(string, length, use_length, mode, NULL);
         unichar *result = ALLOC_N(unichar, n + 1);
         decompose_loop(string, length, use_length, mode, result);
 
-        if (mode == NORMALIZE_NFC || mode == NORMALIZE_NFKC)
+        if (mode == U_NORMALIZE_NFC || mode == U_NORMALIZE_NFKC)
                 n = compose_loop(result, n);
 
         result[n] = '\0';
@@ -325,7 +325,7 @@ _u_normalize_wc(const char *string, size_t length, bool use_length,
 }
 
 char *
-u_normalize(const char *string, NormalizeMode mode)
+u_normalize(const char *string, UnicodeNormalizeMode mode)
 {
         unichar *wcs = _u_normalize_wc(string, 0, false, mode, NULL);
         char *u = ucs4_to_u(wcs, NULL, NULL);
@@ -336,7 +336,7 @@ u_normalize(const char *string, NormalizeMode mode)
 }
 
 char *
-u_normalize_n(const char *string, size_t length, NormalizeMode mode,
+u_normalize_n(const char *string, size_t length, UnicodeNormalizeMode mode,
               size_t *new_length)
 {
         size_t length_wcs;
