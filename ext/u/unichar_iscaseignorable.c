@@ -24,9 +24,9 @@ unichar_iscaseignorable(unichar c)
                 c == SOFT_HYPHEN ||
                 c == RIGHT_SINGLE_QUOTATION_MARK ||
                 IS(s_type(c),
-                   OR(U_NON_SPACING_MARK,
-                      OR(U_ENCLOSING_MARK,
-                         OR(U_FORMAT,
-                            OR(U_MODIFIER_LETTER,
-                               OR(U_MODIFIER_SYMBOL, 0)))))) ? true : false;
+                   OR(U_MARK_NON_SPACING,
+                      OR(U_MARK_ENCLOSING,
+                         OR(U_OTHER_FORMAT,
+                            OR(U_LETTER_MODIFIER,
+                               OR(U_SYMBOL_MODIFIER, 0)))))) ? true : false;
 }

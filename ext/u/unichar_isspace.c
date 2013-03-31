@@ -24,8 +24,8 @@ unichar_isspace(unichar c)
 		return true;
 	default:
                 return IS(s_type(c),
-                          OR(U_SPACE_SEPARATOR,
-                             OR(U_LINE_SEPARATOR,
-                                OR(U_PARAGRAPH_SEPARATOR, 0)))) ? true : false;
+                          OR(U_SEPARATOR_SPACE,
+                             OR(U_SEPARATOR_LINE,
+                                OR(U_SEPARATOR_PARAGRAPH, 0)))) ? true : false;
 	}
 }

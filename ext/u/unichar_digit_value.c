@@ -15,7 +15,7 @@
 int
 unichar_digit_value(unichar c)
 {
-	if (s_type(c) == U_DECIMAL_NUMBER)
+	if (s_type(c) == U_NUMBER_DECIMAL)
 		return s_attribute(c);
 
         return -1;

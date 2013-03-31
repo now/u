@@ -16,9 +16,9 @@ bool
 unichar_iscased(unichar c)
 {
         return IS(s_type(c),
-                  OR(U_TITLECASE_LETTER,
-                     OR(U_UPPERCASE_LETTER,
-                        OR(U_LOWERCASE_LETTER, 0)))) ||
+                  OR(U_LETTER_TITLECASE,
+                     OR(U_LETTER_UPPERCASE,
+                        OR(U_LETTER_LOWERCASE, 0)))) ||
                 bsearch(&c, cased, lengthof(cased), sizeof(cased[0]),
                         unichar_interval_compare) != NULL;
 }

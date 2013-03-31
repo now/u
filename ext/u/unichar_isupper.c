@@ -15,5 +15,5 @@
 bool
 unichar_isupper(unichar c)
 {
-	return s_type(c) == U_UPPERCASE_LETTER;
+	return s_type(c) == U_LETTER_UPPERCASE;
 }

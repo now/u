@@ -1416,10 +1416,10 @@ Expectations do
   expect result.not.tainted? do 'abc'.u.tr('a', 'b'.taint) end
   expect result.not.untrusted? do 'abc'.u.tr('a', 'b'.untrust) end
 
-  expect :uppercase_letter do 'A'.u.category end
-  expect :other_punctuation do '.'.u.category end
-  expect :currency_symbol do '$'.u.category end
-  expect :space_separator do ' '.u.category end
+  expect :letter_uppercase do 'A'.u.category end
+  expect :punctuation_other do '.'.u.category end
+  expect :symbol_currency do '$'.u.category end
+  expect :separator_space do ' '.u.category end
 
   expect 'HËLLÖ'.u do 'hëlLÖ'.u.upcase end
   expect 'HËLLÖ'.u do 'hëllö'.u.upcase end

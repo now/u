@@ -13,6 +13,6 @@ bool
 unichar_isdefined(unichar c)
 {
         return !IS(s_type(c),
-                   OR(U_UNASSIGNED,
-                      OR(U_SURROGATE, 0)));
+                   OR(U_OTHER_NOT_ASSIGNED,
+                      OR(U_OTHER_SURROGATE, 0)));
 }

@@ -78,7 +78,7 @@ upcase_simple(unichar c, int type, char *result, bool title)
                                               tv - UNICODE_SPECIAL_CASE_TABLE_START,
                                               type, title);
 
-        if (type == U_TITLECASE_LETTER) {
+        if (type == U_LETTER_TITLECASE) {
                 unichar tu = _u_titlecase_table_lookup(c, true);
                 if (tu != c)
                         return unichar_to_u(tu, result);
@@ -113,9 +113,9 @@ _u_upcase_step(const char *string, const char **p, const char *end, bool use_end
                 return unichar_to_u(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE, result);
 
         int type = s_type(c);
-        if (IS(type, OR(U_LOWERCASE_LETTER, OR(U_TITLECASE_LETTER, 0))))
+        if (IS(type, OR(U_LETTER_LOWERCASE, OR(U_LETTER_TITLECASE, 0))))
                 return upcase_simple(c, type, result,
-                                     title || type != U_LOWERCASE_LETTER);
+                                     title || type != U_LETTER_LOWERCASE);
 
         size_t length = u_next(*p) - *p;
 

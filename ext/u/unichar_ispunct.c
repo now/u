@@ -16,15 +16,15 @@ bool
 unichar_ispunct(unichar c)
 {
         return IS(s_type(c),
-                  OR(U_CONNECT_PUNCTUATION,
-                     OR(U_DASH_PUNCTUATION,
-                        OR(U_OPEN_PUNCTUATION,
-                           OR(U_CLOSE_PUNCTUATION,
-                              OR(U_INITIAL_PUNCTUATION,
-                                 OR(U_FINAL_PUNCTUATION,
-                                    OR(U_OTHER_PUNCTUATION,
-                                       OR(U_MODIFIER_SYMBOL,
-                                          OR(U_MATH_SYMBOL,
-                                             OR(U_CURRENCY_SYMBOL,
-                                                OR(U_OTHER_SYMBOL, 0)))))))))))) ? true : false;
+                  OR(U_PUNCTUATION_CONNECTOR,
+                     OR(U_PUNCTUATION_DASH,
+                        OR(U_PUNCTUATION_OPEN,
+                           OR(U_PUNCTUATION_CLOSE,
+                              OR(U_PUNCTUATION_INITIAL_QUOTE,
+                                 OR(U_PUNCTUATION_FINAL_QUOTE,
+                                    OR(U_PUNCTUATION_OTHER,
+                                       OR(U_SYMBOL_MODIFIER,
+                                          OR(U_SYMBOL_MATH,
+                                             OR(U_SYMBOL_CURRENCY,
+                                                OR(U_SYMBOL_OTHER, 0)))))))))))) ? true : false;
 }

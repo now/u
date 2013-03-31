@@ -16,10 +16,10 @@ unichar_toupper(unichar c)
 {
 	int type = s_type(c);
 
-	if (type == U_LOWERCASE_LETTER)
+	if (type == U_LETTER_LOWERCASE)
                 return _u_special_case_table_lookup(c);
 
-        if (type == U_TITLECASE_LETTER)
+        if (type == U_LETTER_TITLECASE)
                 return _u_titlecase_table_lookup(c, true);
 
         return c;

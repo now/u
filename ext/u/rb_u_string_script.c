@@ -435,7 +435,7 @@ script_to_symbol(UnicodeScript script)
  *     <tr><td>:tibetan</td><td>Tibetan</td></tr>
  *     <tr><td>:tifinagh</td><td>Tifinagh</td></tr>
  *     <tr><td>:ugaritic</td><td>Ugaritic</td></tr>
- *     <tr><td>:unknown</td><td>For unassigned, private-use, non-character, and surrogate code points</td></tr>
+ *     <tr><td>:unknown</td><td>For not assigned, private-use, non-character, and surrogate code points</td></tr>
  *     <tr><td>:vai</td><td>Vai</td></tr>
  *     <tr><td>:yi</td><td>Yi</td></tr>
  *   </tbody>

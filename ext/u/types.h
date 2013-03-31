@@ -21,7 +21,7 @@ s_type(unichar c)
         else if (UNICODE_FIRST_CHAR_PART2 <= c && c <= UNICODE_LAST_CHAR)
                 index = _u_type_table_part2[(c - UNICODE_FIRST_CHAR_PART2) >> 8];
 	else
-		return U_UNASSIGNED;
+		return U_OTHER_NOT_ASSIGNED;
 
 	if (index >= UNICODE_MAX_TABLE_INDEX)
 		return index - UNICODE_MAX_TABLE_INDEX;
@@ -34,9 +34,9 @@ static inline bool
 s_isdigit(int type)
 {
         return IS(type,
-                  OR(U_DECIMAL_NUMBER,
-                     OR(U_LETTER_NUMBER,
-                        OR(U_OTHER_NUMBER, 0))));
+                  OR(U_NUMBER_DECIMAL,
+                     OR(U_NUMBER_LETTER,
+                        OR(U_NUMBER_OTHER, 0))));
 }
 
 
@@ -44,11 +44,11 @@ static inline bool
 s_isalpha(int type)
 {
         return IS(type,
-                  OR(U_LOWERCASE_LETTER,
-                     OR(U_UPPERCASE_LETTER,
-                        OR(U_TITLECASE_LETTER,
-                           OR(U_MODIFIER_LETTER,
-                              OR(U_OTHER_LETTER, 0))))));
+                  OR(U_LETTER_LOWERCASE,
+                     OR(U_LETTER_UPPERCASE,
+                        OR(U_LETTER_TITLECASE,
+                           OR(U_LETTER_MODIFIER,
+                              OR(U_LETTER_OTHER, 0))))));
 }
 
 
@@ -56,9 +56,9 @@ static inline bool
 s_ismark(int type)
 {
         return IS(type,
-                  OR(U_NON_SPACING_MARK,
-                     OR(U_SPACING_MARK,
-                        OR(U_ENCLOSING_MARK, 0))));
+                  OR(U_MARK_NON_SPACING,
+                     OR(U_MARK_SPACING_COMBINING,
+                        OR(U_MARK_ENCLOSING, 0))));
 }
 
 

@@ -8,98 +8,98 @@
 static VALUE
 type_to_symbol(UnicodeType type)
 {
-        TYPE2ID(U_CONTROL, control);
-        TYPE2ID(U_FORMAT, format);
-        TYPE2ID(U_UNASSIGNED, unassigned);
-        TYPE2ID(U_PRIVATE_USE, private_use);
-        TYPE2ID(U_SURROGATE, surrogate);
-        TYPE2ID(U_LOWERCASE_LETTER, lowercase_letter);
-        TYPE2ID(U_MODIFIER_LETTER, modifier_letter);
-        TYPE2ID(U_OTHER_LETTER, other_letter);
-        TYPE2ID(U_TITLECASE_LETTER, titlecase_letter);
-        TYPE2ID(U_UPPERCASE_LETTER, uppercase_letter);
-        TYPE2ID(U_SPACING_MARK, spacing_mark);
-        TYPE2ID(U_ENCLOSING_MARK, enclosing_mark);
-        TYPE2ID(U_NON_SPACING_MARK, non_spacing_mark);
-        TYPE2ID(U_DECIMAL_NUMBER, decimal_number);
-        TYPE2ID(U_LETTER_NUMBER, letter_number);
-        TYPE2ID(U_OTHER_NUMBER, other_number);
-        TYPE2ID(U_CONNECT_PUNCTUATION, connect_punctuation);
-        TYPE2ID(U_DASH_PUNCTUATION, dash_punctuation);
-        TYPE2ID(U_CLOSE_PUNCTUATION, close_punctuation);
-        TYPE2ID(U_FINAL_PUNCTUATION, final_punctuation);
-        TYPE2ID(U_INITIAL_PUNCTUATION, initial_punctuation);
-        TYPE2ID(U_OTHER_PUNCTUATION, other_punctuation);
-        TYPE2ID(U_OPEN_PUNCTUATION, open_punctuation);
-        TYPE2ID(U_CURRENCY_SYMBOL, currency_symbol);
-        TYPE2ID(U_MODIFIER_SYMBOL, modifier_symbol);
-        TYPE2ID(U_MATH_SYMBOL, math_symbol);
-        TYPE2ID(U_OTHER_SYMBOL, other_symbol);
-        TYPE2ID(U_LINE_SEPARATOR, line_separator);
-        TYPE2ID(U_PARAGRAPH_SEPARATOR, paragraph_separator);
-        TYPE2ID(U_SPACE_SEPARATOR, space_separator);
+        TYPE2ID(U_OTHER_CONTROL, other_control);
+        TYPE2ID(U_OTHER_FORMAT, other_format);
+        TYPE2ID(U_OTHER_NOT_ASSIGNED, other_not_assigned);
+        TYPE2ID(U_OTHER_PRIVATE_USE, other_private_use);
+        TYPE2ID(U_OTHER_SURROGATE, other_surrogate);
+        TYPE2ID(U_LETTER_LOWERCASE, letter_lowercase);
+        TYPE2ID(U_LETTER_MODIFIER, letter_modifier);
+        TYPE2ID(U_LETTER_OTHER, letter_other);
+        TYPE2ID(U_LETTER_TITLECASE, letter_titlecase);
+        TYPE2ID(U_LETTER_UPPERCASE, letter_uppercase);
+        TYPE2ID(U_MARK_SPACING_COMBINING, mark_spacing_combining);
+        TYPE2ID(U_MARK_ENCLOSING, mark_enclosing);
+        TYPE2ID(U_MARK_NON_SPACING, mark_non_spacing);
+        TYPE2ID(U_NUMBER_DECIMAL, number_decimal);
+        TYPE2ID(U_NUMBER_LETTER, number_letter);
+        TYPE2ID(U_NUMBER_OTHER, number_other);
+        TYPE2ID(U_PUNCTUATION_CONNECTOR, punctuation_connector);
+        TYPE2ID(U_PUNCTUATION_DASH, punctuation_dash);
+        TYPE2ID(U_PUNCTUATION_CLOSE, punctuation_close);
+        TYPE2ID(U_PUNCTUATION_FINAL_QUOTE, punctuation_final_quote);
+        TYPE2ID(U_PUNCTUATION_INITIAL_QUOTE, punctuation_initial_quote);
+        TYPE2ID(U_PUNCTUATION_OTHER, punctuation_other);
+        TYPE2ID(U_PUNCTUATION_OPEN, punctuation_open);
+        TYPE2ID(U_SYMBOL_CURRENCY, symbol_currency);
+        TYPE2ID(U_SYMBOL_MODIFIER, symbol_modifier);
+        TYPE2ID(U_SYMBOL_MATH, symbol_math);
+        TYPE2ID(U_SYMBOL_OTHER, symbol_other);
+        TYPE2ID(U_SEPARATOR_LINE, separator_line);
+        TYPE2ID(U_SEPARATOR_PARAGRAPH, separator_paragraph);
+        TYPE2ID(U_SEPARATOR_SPACE, separator_space);
 
         switch (type) {
-        case U_CONTROL:
-                return ID2SYM(id_control);
-        case U_FORMAT:
-                return ID2SYM(id_format);
-        case U_UNASSIGNED:
-                return ID2SYM(id_unassigned);
-        case U_PRIVATE_USE:
-                return ID2SYM(id_private_use);
-        case U_SURROGATE:
-                return ID2SYM(id_surrogate);
-        case U_LOWERCASE_LETTER:
-                return ID2SYM(id_lowercase_letter);
-        case U_MODIFIER_LETTER:
-                return ID2SYM(id_modifier_letter);
-        case U_OTHER_LETTER:
-                return ID2SYM(id_other_letter);
-        case U_TITLECASE_LETTER:
-                return ID2SYM(id_titlecase_letter);
-        case U_UPPERCASE_LETTER:
-                return ID2SYM(id_uppercase_letter);
-        case U_SPACING_MARK:
-                return ID2SYM(id_spacing_mark);
-        case U_ENCLOSING_MARK:
-                return ID2SYM(id_enclosing_mark);
-        case U_NON_SPACING_MARK:
-                return ID2SYM(id_non_spacing_mark);
-        case U_DECIMAL_NUMBER:
-                return ID2SYM(id_decimal_number);
-        case U_LETTER_NUMBER:
-                return ID2SYM(id_letter_number);
-        case U_OTHER_NUMBER:
-                return ID2SYM(id_other_number);
-        case U_CONNECT_PUNCTUATION:
-                return ID2SYM(id_connect_punctuation);
-        case U_DASH_PUNCTUATION:
-                return ID2SYM(id_dash_punctuation);
-        case U_CLOSE_PUNCTUATION:
-                return ID2SYM(id_close_punctuation);
-        case U_FINAL_PUNCTUATION:
-                return ID2SYM(id_final_punctuation);
-        case U_INITIAL_PUNCTUATION:
-                return ID2SYM(id_initial_punctuation);
-        case U_OTHER_PUNCTUATION:
-                return ID2SYM(id_other_punctuation);
-        case U_OPEN_PUNCTUATION:
-                return ID2SYM(id_open_punctuation);
-        case U_CURRENCY_SYMBOL:
-                return ID2SYM(id_currency_symbol);
-        case U_MODIFIER_SYMBOL:
-                return ID2SYM(id_modifier_symbol);
-        case U_MATH_SYMBOL:
-                return ID2SYM(id_math_symbol);
-        case U_OTHER_SYMBOL:
-                return ID2SYM(id_other_symbol);
-        case U_LINE_SEPARATOR:
-                return ID2SYM(id_line_separator);
-        case U_PARAGRAPH_SEPARATOR:
-                return ID2SYM(id_paragraph_separator);
-        case U_SPACE_SEPARATOR:
-                return ID2SYM(id_space_separator);
+        case U_OTHER_CONTROL:
+                return ID2SYM(id_other_control);
+        case U_OTHER_FORMAT:
+                return ID2SYM(id_other_format);
+        case U_OTHER_NOT_ASSIGNED:
+                return ID2SYM(id_other_not_assigned);
+        case U_OTHER_PRIVATE_USE:
+                return ID2SYM(id_other_private_use);
+        case U_OTHER_SURROGATE:
+                return ID2SYM(id_other_surrogate);
+        case U_LETTER_LOWERCASE:
+                return ID2SYM(id_letter_lowercase);
+        case U_LETTER_MODIFIER:
+                return ID2SYM(id_letter_modifier);
+        case U_LETTER_OTHER:
+                return ID2SYM(id_letter_other);
+        case U_LETTER_TITLECASE:
+                return ID2SYM(id_letter_titlecase);
+        case U_LETTER_UPPERCASE:
+                return ID2SYM(id_letter_uppercase);
+        case U_MARK_SPACING_COMBINING:
+                return ID2SYM(id_mark_spacing_combining);
+        case U_MARK_ENCLOSING:
+                return ID2SYM(id_mark_enclosing);
+        case U_MARK_NON_SPACING:
+                return ID2SYM(id_mark_non_spacing);
+        case U_NUMBER_DECIMAL:
+                return ID2SYM(id_number_decimal);
+        case U_NUMBER_LETTER:
+                return ID2SYM(id_number_letter);
+        case U_NUMBER_OTHER:
+                return ID2SYM(id_number_other);
+        case U_PUNCTUATION_CONNECTOR:
+                return ID2SYM(id_punctuation_connector);
+        case U_PUNCTUATION_DASH:
+                return ID2SYM(id_punctuation_dash);
+        case U_PUNCTUATION_CLOSE:
+                return ID2SYM(id_punctuation_close);
+        case U_PUNCTUATION_FINAL_QUOTE:
+                return ID2SYM(id_punctuation_final_quote);
+        case U_PUNCTUATION_INITIAL_QUOTE:
+                return ID2SYM(id_punctuation_initial_quote);
+        case U_PUNCTUATION_OTHER:
+                return ID2SYM(id_punctuation_other);
+        case U_PUNCTUATION_OPEN:
+                return ID2SYM(id_punctuation_open);
+        case U_SYMBOL_CURRENCY:
+                return ID2SYM(id_symbol_currency);
+        case U_SYMBOL_MODIFIER:
+                return ID2SYM(id_symbol_modifier);
+        case U_SYMBOL_MATH:
+                return ID2SYM(id_symbol_math);
+        case U_SYMBOL_OTHER:
+                return ID2SYM(id_symbol_other);
+        case U_SEPARATOR_LINE:
+                return ID2SYM(id_separator_line);
+        case U_SEPARATOR_PARAGRAPH:
+                return ID2SYM(id_separator_paragraph);
+        case U_SEPARATOR_SPACE:
+                return ID2SYM(id_separator_space);
         default:
                 rb_u_raise(rb_eNotImpError, "unknown type: %d", type);
         }
@@ -118,36 +118,36 @@ type_to_symbol(UnicodeType type)
  *     </tr>
  *   </thead>
  *   <tbody>
- *     <tr><td>Other, control</td><td>Cc</td><td>:control</td></tr>
- *     <tr><td>Other, format</td><td>Cf</td><td>:format</td></tr>
- *     <tr><td>Other, not assigned</td><td>Cn</td><td>:unassigned</td></tr>
- *     <tr><td>Other, private use</td><td>Co</td><td>:private_use</td></tr>
- *     <tr><td>Other, surrogate</td><td>Cs</td><td>:surrogate</td></tr>
- *     <tr><td>Letter, lowercase</td><td>Ll</td><td>:lowercase_letter</td></tr>
- *     <tr><td>Letter, modifier</td><td>Lm</td><td>:modifier_letter</td></tr>
- *     <tr><td>Letter, other</td><td>Lo</td><td>:other_letter</td></tr>
- *     <tr><td>Letter, titlecase</td><td>Lt</td><td>:titlecase_letter</td></tr>
- *     <tr><td>Letter, uppercase</td><td>Lu</td><td>:uppercase_letter</td></tr>
- *     <tr><td>Mark, spacing combining</td><td>Mc</td><td>:spacing_mark</td></tr>
- *     <tr><td>Mark, enclosing</td><td>Me</td><td>:enclosing_mark</td></tr>
- *     <tr><td>Mark, nonspacing</td><td>Mn</td><td>:non_spacing_mark</td></tr>
- *     <tr><td>Number, decimal digit</td><td>Nd</td><td>:decimal_number</td></tr>
- *     <tr><td>Number, letter</td><td>Nl</td><td>:letter_number</td></tr>
- *     <tr><td>Number, other</td><td>No</td><td>:other_number</td></tr>
- *     <tr><td>Punctuation, connector</td><td>Pc</td><td>:connect_punctuation</td></tr>
- *     <tr><td>Punctuation, dash</td><td>Pd</td><td>:dash_punctuation</td></tr>
- *     <tr><td>Punctuation, close</td><td>Pe</td><td>:close_punctuation</td></tr>
- *     <tr><td>Punctuation, final quote</td><td>Pf</td><td>:final_punctuation</td></tr>
- *     <tr><td>Punctuation, initial quote</td><td>Pi</td><td>:initial_punctuation</td></tr>
- *     <tr><td>Punctuation, other</td><td>Po</td><td>:other_punctuation</td></tr>
- *     <tr><td>Punctuation, open</td><td>Ps</td><td>:open_punctuation</td></tr>
- *     <tr><td>Symbol, currency</td><td>Sc</td><td>:currency_symbol</td></tr>
- *     <tr><td>Symbol, modifier</td><td>Sk</td><td>:modifier_symbol</td></tr>
- *     <tr><td>Symbol, math</td><td>Sm</td><td>:math_symbol</td></tr>
- *     <tr><td>Symbol, other</td><td>So</td><td>:other_symbol</td></tr>
- *     <tr><td>Separator, line</td><td>Zl</td><td>:line_separator</td></tr>
- *     <tr><td>Separator, paragraph</td><td>Zp</td><td>:paragraph_separator</td></tr>
- *     <tr><td>Separator, space</td><td>Zs</td><td>:space_separator</td></tr>
+ *     <tr><td>Other, control</td><td>Cc</td><td>:other_control</td></tr>
+ *     <tr><td>Other, format</td><td>Cf</td><td>:other_format</td></tr>
+ *     <tr><td>Other, not assigned</td><td>Cn</td><td>:other_not_assigned</td></tr>
+ *     <tr><td>Other, private use</td><td>Co</td><td>:other_private_use</td></tr>
+ *     <tr><td>Other, surrogate</td><td>Cs</td><td>:other_surrogate</td></tr>
+ *     <tr><td>Letter, lowercase</td><td>Ll</td><td>:letter_lowercase</td></tr>
+ *     <tr><td>Letter, modifier</td><td>Lm</td><td>:letter_modifier</td></tr>
+ *     <tr><td>Letter, other</td><td>Lo</td><td>:letter_other</td></tr>
+ *     <tr><td>Letter, titlecase</td><td>Lt</td><td>:letter_titlecase</td></tr>
+ *     <tr><td>Letter, uppercase</td><td>Lu</td><td>:letter_uppercase</td></tr>
+ *     <tr><td>Mark, spacing combining</td><td>Mc</td><td>:mark_spacing_combining</td></tr>
+ *     <tr><td>Mark, enclosing</td><td>Me</td><td>:mark_enclosing</td></tr>
+ *     <tr><td>Mark, nonspacing</td><td>Mn</td><td>:mark_non_spacing</td></tr>
+ *     <tr><td>Number, decimal digit</td><td>Nd</td><td>:number_decimal</td></tr>
+ *     <tr><td>Number, letter</td><td>Nl</td><td>:number_letter</td></tr>
+ *     <tr><td>Number, other</td><td>No</td><td>:number_other</td></tr>
+ *     <tr><td>Punctuation, connector</td><td>Pc</td><td>:punctuation_connector</td></tr>
+ *     <tr><td>Punctuation, dash</td><td>Pd</td><td>:punctuation_dash</td></tr>
+ *     <tr><td>Punctuation, close</td><td>Pe</td><td>:punctuation_close</td></tr>
+ *     <tr><td>Punctuation, final quote</td><td>Pf</td><td>:punctuation_final_quote</td></tr>
+ *     <tr><td>Punctuation, initial quote</td><td>Pi</td><td>:punctuation_initial_quote</td></tr>
+ *     <tr><td>Punctuation, other</td><td>Po</td><td>:punctuation_other</td></tr>
+ *     <tr><td>Punctuation, open</td><td>Ps</td><td>:punctuation_open</td></tr>
+ *     <tr><td>Symbol, currency</td><td>Sc</td><td>:symbol_currency</td></tr>
+ *     <tr><td>Symbol, modifier</td><td>Sk</td><td>:symbol_modifier</td></tr>
+ *     <tr><td>Symbol, math</td><td>Sm</td><td>:symbol_math</td></tr>
+ *     <tr><td>Symbol, other</td><td>So</td><td>:symbol_other</td></tr>
+ *     <tr><td>Separator, line</td><td>Zl</td><td>:separator_line</td></tr>
+ *     <tr><td>Separator, paragraph</td><td>Zp</td><td>:separator_paragraph</td></tr>
+ *     <tr><td>Separator, space</td><td>Zs</td><td>:separator_space</td></tr>
  *   </tbody>
  * </table>
  *

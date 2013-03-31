@@ -15,5 +15,5 @@
 bool
 unichar_isdigit(unichar c)
 {
-	return s_type(c) == U_DECIMAL_NUMBER;
+	return s_type(c) == U_NUMBER_DECIMAL;
 }

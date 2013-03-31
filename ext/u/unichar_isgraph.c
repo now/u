@@ -17,9 +17,9 @@ bool
 unichar_isgraph(unichar c)
 {
         return !IS(s_type(c),
-                   OR(U_CONTROL,
-                      OR(U_FORMAT,
-                         OR(U_UNASSIGNED,
-                            OR(U_SURROGATE,
-                               OR(U_SPACE_SEPARATOR, 0))))));
+                   OR(U_OTHER_CONTROL,
+                      OR(U_OTHER_FORMAT,
+                         OR(U_OTHER_NOT_ASSIGNED,
+                            OR(U_OTHER_SURROGATE,
+                               OR(U_SEPARATOR_SPACE, 0))))));
 }
