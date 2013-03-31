@@ -27,8 +27,6 @@ rb_u_string_assigned.o: rb_u_string_assigned.c rb_includes.h extconf.h \
   u.h private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_b.o: rb_u_string_b.c rb_includes.h extconf.h u.h private.h \
   locale_type.h rb_private.h rb_u_string.h
-rb_u_string_break_type.o: rb_u_string_break_type.c rb_includes.h \
-  extconf.h u.h private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_bytesize.o: rb_u_string_bytesize.c rb_includes.h extconf.h \
   u.h private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_byteslice.o: rb_u_string_byteslice.c rb_includes.h extconf.h \
@@ -122,6 +120,9 @@ rb_u_string_justify.o: rb_u_string_justify.c rb_includes.h extconf.h u.h \
   private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_length.o: rb_u_string_length.c rb_includes.h extconf.h u.h \
   private.h locale_type.h rb_private.h rb_u_string.h
+rb_u_string_line_break_type.o: rb_u_string_line_break_type.c \
+  rb_includes.h extconf.h u.h private.h locale_type.h rb_private.h \
+  rb_u_string.h
 rb_u_string_lower.o: rb_u_string_lower.c rb_includes.h extconf.h u.h \
   private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_lstrip.o: rb_u_string_lstrip.c rb_includes.h extconf.h u.h \
@@ -250,8 +251,6 @@ u_width.o: u_width.c u.h private.h locale_type.h
 u_word_breaks.o: u_word_breaks.c u.h private.h locale_type.h \
   data/constants.h word-break.h
 ucs4_to_u.o: ucs4_to_u.c u.h utf8.h private.h locale_type.h
-unichar_break_type.o: unichar_break_type.c u.h data/constants.h \
-  data/break.h private.h locale_type.h
 unichar_combining_class.o: unichar_combining_class.c u.h private.h \
   locale_type.h data/constants.h combining_class.h
 unichar_digit_value.o: unichar_digit_value.c u.h private.h locale_type.h \
@@ -298,6 +297,8 @@ unichar_isxdigit.o: unichar_isxdigit.c u.h private.h locale_type.h \
   data/constants.h types.h
 unichar_iszerowidth.o: unichar_iszerowidth.c u.h private.h locale_type.h \
   data/constants.h types.h
+unichar_line_break_type.o: unichar_line_break_type.c u.h data/constants.h \
+  data/line-break.h private.h locale_type.h
 unichar_mirror.o: unichar_mirror.c u.h private.h locale_type.h \
   data/bidi-mirroring.h
 unichar_script.o: unichar_script.c u.h private.h locale_type.h \

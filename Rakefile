@@ -164,9 +164,9 @@ data_header 'ext/u/data/attributes.h' => %w[build/ext/u/data/attributes.rb
 data_header 'ext/u/data/bidi-mirroring.h' => %w[build/ext/u/data/bidi-mirroring.rb
                                                 build/data/BidiMirroring.txt]
 
-data_header 'ext/u/data/break.h' => %w[build/ext/u/data/break.rb
-                                       build/data/UnicodeData.marshalled
-                                       build/data/LineBreak.txt]
+data_header 'ext/u/data/line-break.h' => %w[build/ext/u/data/line-break.rb
+                                            build/data/UnicodeData.marshalled
+                                            build/data/LineBreak.txt]
 
 data_header 'ext/u/data/case-folding.h' => %w[build/ext/u/data/case-folding.rb
                                               build/data/UnicodeData.marshalled

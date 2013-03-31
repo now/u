@@ -251,10 +251,10 @@ rb_u_string_dup(VALUE self)
  * {#collate_key}, all of which compare a U::String against another for
  * ordering.
  *
- * Related to the property-checking interrogators are {#break_type},
- * {#category}, {#combining_class}, {#script}, and {#word_break_type}, which
- * return the value of the Unicode property in question, the category being the
- * one often interrogated.
+ * Related to the property-checking interrogators are {#category},
+ * {#combining_class}, {#line_break_type}, {#script}, and {#word_break_type},
+ * which return the value of the Unicode property in question, the category
+ * being the one often interrogated.
  *
  * There are a couple of other “interrogators” in {#bytesize}, {#length},
  * {#size}, {#width} that return integer properties of the U::String as a
@@ -369,9 +369,9 @@ Init_u_string(VALUE mU)
         /* TODO: Rename this to #collation_key? */
         rb_define_method(rb_cUString, "collate_key", rb_u_string_collate_key, 0); /* in ext/u/rb_u_string_collate_key.c */
 
-        rb_define_method(rb_cUString, "break_type", rb_u_string_break_type, 0); /* in ext/u/rb_u_string_break_type.c */
         rb_define_method(rb_cUString, "category", rb_u_string_category, 0); /* in ext/u/rb_u_string_category.c */
         rb_define_method(rb_cUString, "combining_class", rb_u_string_combining_class, 0); /* in ext/u/rb_u_string_combining_class.c */
+        rb_define_method(rb_cUString, "line_break_type", rb_u_string_line_break_type, 0); /* in ext/u/rb_u_string_line_break_type.c */
         rb_define_method(rb_cUString, "script", rb_u_string_script, 0); /* in ext/u/rb_u_string_script.c */
         rb_define_method(rb_cUString, "word_break_type", rb_u_string_word_break_type, 0); /* in ext/u/rb_u_string_word_break_type.c */
 

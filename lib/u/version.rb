@@ -84,7 +84,6 @@ module U
               combining_class.h
               data/attributes.h
               data/bidi-mirroring.h
-              data/break.h
               data/case-folding.h
               data/cased.h
               data/combining-class.h
@@ -92,6 +91,7 @@ module U
               data/constants.h
               data/decompose.h
               data/grapheme-break.h
+              data/line-break.h
               data/script.h
               data/soft-dotted.h
               data/title-table.h
@@ -121,7 +121,6 @@ module U
               rb_u_string_ascii_only.c
               rb_u_string_assigned.c
               rb_u_string_b.c
-              rb_u_string_break_type.c
               rb_u_string_bytesize.c
               rb_u_string_byteslice.c
               rb_u_string_case_ignorable.c
@@ -166,6 +165,7 @@ module U
               rb_u_string_internal_tr.h
               rb_u_string_justify.c
               rb_u_string_length.c
+              rb_u_string_line_break_type.c
               rb_u_string_lower.c
               rb_u_string_lstrip.c
               rb_u_string_match.c
@@ -241,7 +241,6 @@ module U
               u_width.c
               u_word_breaks.c
               ucs4_to_u.c
-              unichar_break_type.c
               unichar_combining_class.c
               unichar_digit_value.c
               unichar_grapheme_break_type.c
@@ -266,6 +265,7 @@ module U
               unichar_iswide_cjk.c
               unichar_isxdigit.c
               unichar_iszerowidth.c
+              unichar_line_break_type.c
               unichar_mirror.c
               unichar_script.c
               unichar_to_u.c

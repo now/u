@@ -133,8 +133,8 @@ Expectations do
   expect true do 'abc'.u.ascii_only? end
   expect false do 'äbc'.u.ascii_only? end
 
-  expect :open_punctuation do '('.u.break_type end
-  expect :close_parenthesis do ')'.u.break_type end
+  expect :open_punctuation do '('.u.line_break_type end
+  expect :close_parenthesis do ')'.u.line_break_type end
 
   expect 4 do 'äbc'.u.bytesize end
   expect 9 do "äbc\0dëf".u.bytesize end
