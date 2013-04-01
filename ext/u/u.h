@@ -144,7 +144,7 @@ enum u_line_break {
 
 U_CONST enum u_line_break u_char_line_break(uint32_t c);
 
-typedef enum {
+enum u_grapheme_break {
         U_GRAPHEME_BREAK_CONTROL,
         U_GRAPHEME_BREAK_CR,
         U_GRAPHEME_BREAK_EXTEND,
@@ -158,9 +158,9 @@ typedef enum {
         U_GRAPHEME_BREAK_SPACINGMARK,
         U_GRAPHEME_BREAK_T,
         U_GRAPHEME_BREAK_V,
-} UnicodeGraphemeBreak;
+};
 
-U_CONST UnicodeGraphemeBreak u_char_grapheme_break(uint32_t c);
+U_CONST enum u_grapheme_break u_char_grapheme_break(uint32_t c);
 
 typedef enum {
         U_WORD_BREAK_ALETTER,

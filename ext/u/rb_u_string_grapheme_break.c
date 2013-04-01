@@ -9,7 +9,7 @@
         }
 
 static VALUE
-break_to_symbol(UnicodeGraphemeBreak value)
+break_to_symbol(enum u_grapheme_break value)
 {
         switch (value) {
         BREAK2ID(CONTROL, control)

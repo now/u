@@ -9,7 +9,7 @@
 #include "grapheme-break.h"
 
 
-UnicodeGraphemeBreak
+enum u_grapheme_break
 u_char_grapheme_break(uint32_t c)
 {
 	return s_grapheme_break(c);
