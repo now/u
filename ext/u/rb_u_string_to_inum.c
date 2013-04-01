@@ -124,12 +124,13 @@ rb_u_string_to_inum_num_separator(const char *str, const char *s, bool verify,
         }
 
         if (*previous_was_separator) {
-                if (verify)
-                        rb_u_raise(rb_eArgError,
-                                   "unexpected ‘%lc’ found at position %ld",
-                                   c, u_pointer_to_offset(str, s));
-                else
+                if (!verify)
                         return false;
+                char buf[U_CHAR_MAX_BYTE_LENGTH];
+                int length = u_char_to_u(c, buf);
+                rb_u_raise(rb_eArgError,
+                           "unexpected ‘%.*s’ found at position %ld",
+                           length, buf, u_pointer_to_offset(str, s));
         }
 
         *previous_was_separator = true;
@@ -171,9 +172,11 @@ rb_u_string_to_inum_digit_value(const char *str, const char *s, uint32_t c,
         if (value == -1) {
                 if (!verify)
                         return false;
+                char buf[U_CHAR_MAX_BYTE_LENGTH];
+                int length = u_char_to_u(c, buf);
                 rb_u_raise(rb_eArgError,
-                           "non-digit character ‘%lc’ found at position %ld",
-                           c, u_pointer_to_offset(str, s));
+                           "non-digit character ‘%.*s’ found at position %ld",
+                           length, buf, u_pointer_to_offset(str, s));
         }
 
         if (value >= base) {

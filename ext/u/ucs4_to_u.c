@@ -22,9 +22,11 @@ ucs4_to_u_n_impl(uint32_t *str, size_t len, bool use_len,
 			if (items_read != NULL)
 				*items_read = i;
 
+                        char buf[U_CHAR_MAX_BYTE_LENGTH];
+                        int length = u_char_to_u(str[i], buf);
 			rb_raise(rb_eArgError,
-                                 "UCS-4 input contains character outside of range for UTF-8 (%lc))",
-                                 str[i]);
+                                 "UCS-4 input contains character outside of range for UTF-8 (%*.s))",
+                                 length, buf);
 		}
 
 		result_len += _utf8_length(str[i]);

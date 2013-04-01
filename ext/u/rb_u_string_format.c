@@ -405,41 +405,45 @@ directive_validate_flags(uint32_t c, int flags, int valid)
 
         invalid[n] = '\0';
 
+        char buf[U_CHAR_MAX_BYTE_LENGTH];
+        int length = u_char_to_u(c, buf);
         if (n == 1)
                 rb_u_raise(rb_eArgError,
-                           "invalid flag ‘%s’ given to directive ‘%lc’",
-                           invalid, c);
+                           "invalid flag ‘%s’ given to directive ‘%.*s’",
+                           invalid, length, buf);
 
         rb_u_raise(rb_eArgError,
-                   "invalid flags “%s” given to directive ‘%lc’",
-                   invalid, c);
+                   "invalid flags “%s” given to directive ‘%.*s’",
+                   invalid, length, buf);
+}
+
+NORETURN(static void
+         directive_simple_error(uint32_t c, const char *message))
+{
+        char buf[U_CHAR_MAX_BYTE_LENGTH];
+        int length = u_char_to_u(c, buf);
+        rb_u_raise(rb_eArgError, "%s: %.*s", message, length, buf);
 }
 
 static void
 directive_validate_argument_not_given(uint32_t c, VALUE argument)
 {
         if (argument != Qundef)
-                rb_u_raise(rb_eArgError,
-                           "directive does not take an argument: %lc",
-                           c);
+                directive_simple_error(c, "directive does not take an argument");
 }
 
 static void
 directive_validate_width_not_given(uint32_t c, int width)
 {
         if (width != 0)
-                rb_u_raise(rb_eArgError,
-                           "directive does not allow specifying a width: %lc",
-                           c);
+                directive_simple_error(c, "directive does not allow specifying a width");
 }
 
 static void
 directive_validate_precision_not_given(uint32_t c, int precision)
 {
         if (precision >= 0)
-                rb_u_raise(rb_eArgError,
-                           "directive does not allow specifying a precision: %lc",
-                           c);
+                directive_simple_error(c, "directive does not allow specifying a precision");
 }
 
 static void
@@ -603,12 +607,20 @@ directive_number_output(int flags, int width, int precision,
 #define BASE2FORMAT(base) \
         ((base) == 10 ? "%ld" : ((base) == 16 ? "%lx" : "%lo"))
 
+static void
+directive_conflicting_flags_warning(uint32_t directive, int ignored, int when)
+{
+        char buf[U_CHAR_MAX_BYTE_LENGTH];
+        int length = u_char_to_u(directive, buf);
+        rb_warning("‘%.*s’ directive ignores ‘%c’ flag when ‘%c’ flag has been specified",
+                   length, buf, ignored, when);
+}
+
 static bool
 directive_number_sign(uint32_t directive, bool negative, int flags, char *sign)
 {
         if (flags & DIRECTIVE_FLAGS_PLUS && flags & DIRECTIVE_FLAGS_SPACE)
-                rb_warning("‘%lc’ directive ignores ‘ ’ flag when ‘+’ flag has been specified",
-                           directive);
+                directive_conflicting_flags_warning(directive, ' ', '+');
 
         if (negative) {
                 sign[0] = '-';
@@ -653,12 +665,14 @@ static void
 directive_number_check_flags(uint32_t directive, int flags, int precision)
 {
         if ((flags & DIRECTIVE_FLAGS_MINUS) && (flags & DIRECTIVE_FLAGS_ZERO))
-                rb_warning("‘%lc’ directive ignores ‘0’ flag when ‘-’ flag has been specified",
-                           directive);
+                directive_conflicting_flags_warning(directive, '0', '-');
 
-        if (precision >= 0 && (flags & DIRECTIVE_FLAGS_ZERO))
-                rb_warning("‘%lc’ directive ignores ‘0’ flag when precision (%d) has been specified",
-                           directive, precision);
+        if (precision >= 0 && (flags & DIRECTIVE_FLAGS_ZERO)) {
+                char buf[U_CHAR_MAX_BYTE_LENGTH];
+                int length = u_char_to_u(directive, buf);
+                rb_warning("‘%.*s’ directive ignores ‘0’ flag when precision (%d) has been specified",
+                           length, buf, precision);
+        }
 }
 
 static int
@@ -780,14 +794,22 @@ directive_number_is_unsigned(char *prefix)
 }
 
 static void
+directive_ignored_flag_on_negative_argument_warning(uint32_t directive, int ignored)
+{
+        char buf[U_CHAR_MAX_BYTE_LENGTH];
+        int length = u_char_to_u(directive, buf);
+        rb_warning("‘%.*s’ directive ignores ‘%c’ flag when given a negative argument",
+                   length, buf, ignored);
+}
+
+static void
 directive_unsigned_number_output(uint32_t directive, int flags, int width, int precision,
                                  char *prefix, const char *digits, int length,
                                  VALUE result)
 {
         if (directive_number_is_unsigned(prefix)) {
                 if (flags & DIRECTIVE_FLAGS_ZERO)
-                        rb_warning("‘%lc’ directive ignores ‘0’ flag when given a negative argument",
-                                   directive);
+                        directive_ignored_flag_on_negative_argument_warning(directive, '0');
 
                 directive_number_output(flags & ~DIRECTIVE_FLAGS_ZERO,
                                         width,
@@ -814,8 +836,7 @@ directive_octal(uint32_t directive, int flags, int width, int precision, VALUE a
              directive_number_is_unsigned(prefix) ||
              (length == 1 && digits[0] == '0'))) {
                 if (directive_number_is_unsigned(prefix))
-                        rb_warning("‘%lc’ directive ignores ‘#’ flag when given a negative argument",
-                                   directive);
+                        directive_ignored_flag_on_negative_argument_warning(directive, '#');
 
                 for (char *p = prefix; *p != '\0'; p++)
                         *p = *(p + 1);
@@ -1055,8 +1076,9 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
                         return;
                 }
 
-
-        rb_u_raise(rb_eArgError, "unknown directive: %lc", c);
+        char buf[U_CHAR_MAX_BYTE_LENGTH];
+        int length = u_char_to_u(c, buf);
+        rb_u_raise(rb_eArgError, "unknown directive: %.*s", length, buf);
 }
 
 VALUE
