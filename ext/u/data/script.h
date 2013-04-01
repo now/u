@@ -2552,7 +2552,7 @@ static const unsigned char script_easy_table[8192] = {
 
 
 static const struct {
-	unichar start;
+	uint32_t start;
 	uint16_t chars;
 	uint16_t script;
 } script_table[] = {

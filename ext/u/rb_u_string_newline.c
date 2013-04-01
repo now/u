@@ -17,5 +17,5 @@
 VALUE
 rb_u_string_newline(VALUE self)
 {
-        return _rb_u_character_test(self, unichar_isnewline);
+        return _rb_u_character_test(self, u_char_isnewline);
 }

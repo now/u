@@ -10,10 +10,10 @@
 
 #include "locale_type.h"
 
-#define LATIN_CAPITAL_LETTER_I ((unichar)0x0049)
-#define LATIN_CAPITAL_LETTER_J ((unichar)0x004a)
-#define LATIN_SMALL_LETTER_I ((unichar)0x0069)
-#define LATIN_SMALL_LETTER_J ((unichar)0x006a)
+#define LATIN_CAPITAL_LETTER_I ((uint32_t)0x0049)
+#define LATIN_CAPITAL_LETTER_J ((uint32_t)0x004a)
+#define LATIN_SMALL_LETTER_I ((uint32_t)0x0069)
+#define LATIN_SMALL_LETTER_J ((uint32_t)0x006a)
 
 struct titlecase_closure {
         const char *string;
@@ -27,7 +27,7 @@ static void
 titlecase_step(const char *p, struct titlecase_closure *closure)
 {
         const char *t = closure->previous;
-        while (t < p && !unichar_iscased(u_aref_char(t)))
+        while (t < p && !u_char_iscased(u_aref_char(t)))
                 t = u_next(t);
         if (closure->result != NULL)
                 memcpy(closure->result + closure->n, closure->previous, t - closure->previous);

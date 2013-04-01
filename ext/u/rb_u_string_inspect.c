@@ -18,12 +18,12 @@ rb_u_string_inspect_bad_input(const char *p, const char *end, VALUE result)
 }
 
 static void
-rb_u_string_inspect_special_char(unichar c, VALUE result)
+rb_u_string_inspect_special_char(uint32_t c, VALUE result)
 {
-        char str[MAX_UNICHAR_BYTE_LENGTH];
+        char str[U_CHAR_MAX_BYTE_LENGTH];
 
         rb_str_buf_cat2(result, "\\");
-        rb_str_buf_cat(result, str, unichar_to_u(c, str));
+        rb_str_buf_cat(result, str, u_char_to_u(c, str));
 }
 
 static const char *
@@ -36,9 +36,9 @@ rb_u_string_inspect_hash_char(const char *p, const char *end, VALUE result)
                 return end;
         }
 
-        unichar c = u_aref_char(next);
+        uint32_t c = u_aref_char(next);
         switch (c) {
-        case UTF_BAD_INPUT_UNICHAR:
+        case U_BAD_INPUT_CHAR:
                 rb_str_buf_cat2(result, "#");
                 return rb_u_string_inspect_bad_input(p, end, result);
         case '$':
@@ -53,7 +53,7 @@ rb_u_string_inspect_hash_char(const char *p, const char *end, VALUE result)
 }
 
 static void
-rb_u_string_inspect_escaped_char(unichar c, VALUE result)
+rb_u_string_inspect_escaped_char(uint32_t c, VALUE result)
 {
         char str[4 + 8 + 1];
 
@@ -66,15 +66,15 @@ rb_u_string_inspect_escaped_char(unichar c, VALUE result)
 }
 
 static void
-rb_u_string_inspect_default(unichar c, VALUE result)
+rb_u_string_inspect_default(uint32_t c, VALUE result)
 {
-        if (!unichar_isprint(c)) {
+        if (!u_char_isprint(c)) {
                 rb_u_string_inspect_escaped_char(c, result);
                 return;
         }
 
-        char str[MAX_UNICHAR_BYTE_LENGTH];
-        rb_str_buf_cat(result, str, unichar_to_u(c, str));
+        char str[U_CHAR_MAX_BYTE_LENGTH];
+        rb_str_buf_cat(result, str, u_char_to_u(c, str));
 }
 
 /* Returns the receiver in a reader-friendly inspectable format, inheriting
@@ -133,9 +133,9 @@ rb_u_string_inspect(VALUE self)
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                unichar c = u_aref_char(p);
+                uint32_t c = u_aref_char(p);
                 switch (c) {
-                case UTF_BAD_INPUT_UNICHAR:
+                case U_BAD_INPUT_CHAR:
                         p = rb_u_string_inspect_bad_input(p, end, result);
                         continue;
                 case '"':

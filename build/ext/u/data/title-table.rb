@@ -14,9 +14,9 @@ private
   class TitleTable < U::Build::Header::Table
     def initialize(data)
       super "static const struct {
-\tunichar ch;
-\tunichar upper;
-\tunichar lower;
+\tuint32_t ch;
+\tuint32_t upper;
+\tuint32_t lower;
 } title_table[]"
       # TODO: Add #code to Entry and use #select on data here.
       data.each_with_index do |entry, code|

@@ -24,7 +24,7 @@ static const struct {
       # Casefolds
       casefolding.sort_by{ |c| c.char }.each do |casefold|
         raise RuntimeError,
-          'casefold_table.ch field too short; upgrade to unichar to fit values beyond 0xffff: %s' %
+          'casefold_table.ch field too short; upgrade to uint32_t to fit values beyond 0xffff: %s' %
             casefold.char if
               casefold.char > 0xffff
         self << U::Build::Header::Table::Row.new('%#06x' % casefold.char, '"%s"' % casefold.to_escaped_s)

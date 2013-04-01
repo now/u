@@ -15,11 +15,11 @@
 #include "locale_type.h"
 
 
-#define LATIN_SMALL_LETTER_I                    ((unichar)0x0069)
-#define LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE   ((unichar)0x0130)
-#define COMBINING_DOT_ABOVE                     ((unichar)0x0307)
-#define COMBINING_GREEK_YPOGEGRAMMENI           ((unichar)0x0345)
-#define GREEK_CAPITAL_LETTER_IOTA               ((unichar)0x0399)
+#define LATIN_SMALL_LETTER_I ((uint32_t)0x0069)
+#define LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE ((uint32_t)0x0130)
+#define COMBINING_DOT_ABOVE ((uint32_t)0x0307)
+#define COMBINING_GREEK_YPOGEGRAMMENI ((uint32_t)0x0345)
+#define GREEK_CAPITAL_LETTER_IOTA ((uint32_t)0x0399)
 
 #define CANONICAL_COMBINING_CLASS_ABOVE 230
 #define CANONICAL_COMBINING_CLASS_NOT_REORDERED 0
@@ -32,12 +32,12 @@ output_marks(const char **p, const char *end, bool use_end, char *result)
 
         const char *q = u_next(*p);
         while (P_WITHIN_STR(q, end, use_end)) {
-		unichar c = u_aref_char(q);
+		uint32_t c = u_aref_char(q);
 
                 if (!s_ismark(s_type(c)))
                         break;
 
-                length += unichar_to_u(c, OFFSET_IF(result, length));
+                length += u_char_to_u(c, OFFSET_IF(result, length));
 
                 q = u_next(q);
 	}
@@ -54,24 +54,24 @@ is_after_soft_dotted(const char *string, const char *p)
                 return false;
 
         for (const char *q = u_prev(p); q > string; q = u_prev(q)) {
-                unichar c = u_aref_char(q);
+                uint32_t c = u_aref_char(q);
 
-                if (unichar_issoftdotted(c))
+                if (u_char_issoftdotted(c))
                         return true;
 
-		int c_class = unichar_combining_class(u_aref_char(p));
+		int c_class = u_char_combining_class(u_aref_char(p));
                 if (c_class == CANONICAL_COMBINING_CLASS_ABOVE ||
                     c_class == CANONICAL_COMBINING_CLASS_NOT_REORDERED)
                         return false;
 	}
 
-        return unichar_issoftdotted(u_aref_char(string));
+        return u_char_issoftdotted(u_aref_char(string));
 }
 
 static inline size_t
-upcase_simple(unichar c, int type, char *result, bool title)
+upcase_simple(uint32_t c, int type, char *result, bool title)
 {
-	unichar tv = s_attribute(c);
+	uint32_t tv = s_attribute(c);
 
 	if (tv >= UNICODE_SPECIAL_CASE_TABLE_START)
                 return _u_special_case_output(result,
@@ -79,19 +79,19 @@ upcase_simple(unichar c, int type, char *result, bool title)
                                               type, title);
 
         if (type == U_LETTER_TITLECASE) {
-                unichar tu = _u_titlecase_table_lookup(c, true);
+                uint32_t tu = _u_titlecase_table_lookup(c, true);
                 if (tu != c)
-                        return unichar_to_u(tu, result);
+                        return u_char_to_u(tu, result);
         }
 
-        return unichar_to_u(tv != '\0' ? tv : c, result);
+        return u_char_to_u(tv != '\0' ? tv : c, result);
 }
 
 size_t
 _u_upcase_step(const char *string, const char **p, const char *end, bool use_end,
                LocaleType locale_type, bool title, char *result)
 {
-        unichar c = u_aref_char(*p);
+        uint32_t c = u_aref_char(*p);
 
         if (!title && c == COMBINING_GREEK_YPOGEGRAMMENI) {
                 /* When COMBINING GREEK YPOGEGRAMMENI (U+0345) is uppercased or
@@ -100,8 +100,8 @@ _u_upcase_step(const char *string, const char **p, const char *end, bool use_end
                  * uppercase version isn’t a combining mark, but a GREEK
                  * CAPITAL LETTER IOTA (U+0399). */
                 size_t length = output_marks(p, end, use_end, result);
-                return length + unichar_to_u(GREEK_CAPITAL_LETTER_IOTA,
-                                             OFFSET_IF(result, length));
+                return length + u_char_to_u(GREEK_CAPITAL_LETTER_IOTA,
+                                            OFFSET_IF(result, length));
         }
 
         if (locale_type == LOCALE_LITHUANIAN &&
@@ -110,7 +110,7 @@ _u_upcase_step(const char *string, const char **p, const char *end, bool use_end
                 return 0;
 
         if (locale_type == LOCALE_TURKIC && c == LATIN_SMALL_LETTER_I)
-                return unichar_to_u(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE, result);
+                return u_char_to_u(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE, result);
 
         int type = s_type(c);
         if (IS(type, OR(U_LETTER_LOWERCASE, OR(U_LETTER_TITLECASE, 0))))

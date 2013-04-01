@@ -3,8 +3,8 @@
 
 struct tr_range
 {
-        unichar begin;
-        unichar end;
+        uint32_t begin;
+        uint32_t end;
 };
 
 static int
@@ -40,14 +40,14 @@ struct tr_trans_closure
         int n_to;
 };
 
-static unichar
-tr_trans_replace_exclude(UNUSED(unichar c), void *closure)
+static uint32_t
+tr_trans_replace_exclude(UNUSED(uint32_t c), void *closure)
 {
-        return *((unichar *)closure);
+        return *((uint32_t *)closure);
 }
 
 static int
-tr_trans_replace_include_offset_of(struct tr_range *ranges, int range, unichar c)
+tr_trans_replace_include_offset_of(struct tr_range *ranges, int range, uint32_t c)
 {
         int offset = 0;
 
@@ -59,7 +59,7 @@ tr_trans_replace_include_offset_of(struct tr_range *ranges, int range, unichar c
 }
 
 static int
-tr_trans_replace_include_find_from_range(struct tr_trans_closure *closure, unichar c)
+tr_trans_replace_include_find_from_range(struct tr_trans_closure *closure, uint32_t c)
 {
         for (int i = closure->n_from - 1; i >= 0; i--)
                 if (closure->from[i].begin <= c && c <= closure->from[i].end)
@@ -68,8 +68,8 @@ tr_trans_replace_include_find_from_range(struct tr_trans_closure *closure, unich
         return -1;
 }
 
-static unichar
-tr_trans_replace_include_find_to_unichar(struct tr_trans_closure *closure, int offset)
+static uint32_t
+tr_trans_replace_include_find_to_u_char(struct tr_trans_closure *closure, int offset)
 {
         for (int i = 0, seen = 0; i < closure->n_to; i++) {
                 int size = closure->to[i].end - closure->to[i].begin + 1;
@@ -81,8 +81,8 @@ tr_trans_replace_include_find_to_unichar(struct tr_trans_closure *closure, int o
         return closure->to[closure->n_to - 1].end;
 }
 
-static unichar
-tr_trans_replace_include(unichar c, void *v_closure)
+static uint32_t
+tr_trans_replace_include(uint32_t c, void *v_closure)
 {
         struct tr_trans_closure *closure = (struct tr_trans_closure *)v_closure;
 
@@ -92,32 +92,32 @@ tr_trans_replace_include(unichar c, void *v_closure)
 
         int offset = tr_trans_replace_include_offset_of(closure->from, from, c);
 
-        return tr_trans_replace_include_find_to_unichar(closure, offset);
+        return tr_trans_replace_include_find_to_u_char(closure, offset);
 }
 
 static long
 tr_trans_real_squeeze(const char *str, const char *end,
                       struct tr_table *translation,
-                      unichar (*replace)(unichar, void *), void *closure,
+                      uint32_t (*replace)(uint32_t, void *), void *closure,
                       char *result, bool *modified)
 {
         long len = 0;
 
         const char *p = str;
 
-        unichar prev_c = UNICODE_N_CODEPOINTS;
+        uint32_t prev_c = U_N_CODEPOINTS;
         while (p < end) {
-                unichar c0 = u_aref_char(p);
+                uint32_t c0 = u_aref_char(p);
 
                 const char *prev = p;
                 p = u_next(p);
 
                 if (tr_table_lookup(translation, c0)) {
-                        unichar c = replace(c0, closure);
+                        uint32_t c = replace(c0, closure);
                         if (prev_c == c)
                                 continue;
                         prev_c = c;
-                        len += unichar_to_u(c, OFFSET_IF(result, len));
+                        len += u_char_to_u(c, OFFSET_IF(result, len));
                         if (c != c0)
                                 *modified = true;
                 } else {
@@ -126,7 +126,7 @@ tr_trans_real_squeeze(const char *str, const char *end,
                                 memcpy(result + len, prev, run);
                         len += run;
 
-                        prev_c = UNICODE_N_CODEPOINTS;
+                        prev_c = U_N_CODEPOINTS;
                 }
 
         }
@@ -140,7 +140,7 @@ tr_trans_real_squeeze(const char *str, const char *end,
 static long
 tr_trans_real_standard(const char *str, const char *end,
                        struct tr_table *translation,
-                       unichar (*replace)(unichar, void *), void *closure,
+                       uint32_t (*replace)(uint32_t, void *), void *closure,
                        char *result, bool *modified)
 {
         long len = 0;
@@ -148,14 +148,14 @@ tr_trans_real_standard(const char *str, const char *end,
         const char *p = str;
 
         while (p < end) {
-                unichar c = u_aref_char(p);
+                uint32_t c = u_aref_char(p);
 
                 const char *prev = p;
                 p = u_next(p);
 
                 if (tr_table_lookup(translation, c)) {
-                        unichar replacement = replace(c, closure);
-                        len += unichar_to_u(replacement, OFFSET_IF(result, len));
+                        uint32_t replacement = replace(c, closure);
+                        len += u_char_to_u(replacement, OFFSET_IF(result, len));
                         if (replacement != c)
                                 *modified = true;
                 } else {
@@ -172,7 +172,7 @@ tr_trans_real_standard(const char *str, const char *end,
 static long
 tr_trans_real(const char *str, const char *end,
               struct tr_table *translation,
-              unichar (*replace)(unichar, void *), void *closure, bool squeeze,
+              uint32_t (*replace)(uint32_t, void *), void *closure, bool squeeze,
               char *result, bool *modified)
 {
         if (squeeze)
@@ -190,7 +190,7 @@ tr_trans_real(const char *str, const char *end,
 
 static VALUE
 tr_trans_do(VALUE self, struct tr_table *translation,
-            unichar (*replace)(unichar, void *), void *closure, bool squeeze)
+            uint32_t (*replace)(uint32_t, void *), void *closure, bool squeeze)
 {
         const UString *string = RVAL2USTRING(self);
 

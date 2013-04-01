@@ -3,9 +3,9 @@
 
 
 static const struct {
-	unichar ch;
-	unichar upper;
-	unichar lower;
+	uint32_t ch;
+	uint32_t upper;
+	uint32_t lower;
 } title_table[] = {
 	{ 0x01c5, 0x01c4, 0x01c6 },
 	{ 0x01c8, 0x01c7, 0x01c9 },

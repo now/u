@@ -104,18 +104,18 @@ directive_parse_int(const char **p, const char *end, const char *type)
         int n = 0;
 
         while (q < end) {
-                unichar c = _rb_u_aref_char_validated(q, end);
+                uint32_t c = _rb_u_aref_char_validated(q, end);
 
-                if (!unichar_isdigit(c)) {
+                if (!u_char_isdigit(c)) {
                         *p = q;
                         return n;
                 }
 
                 q = u_next(q);
 
-                int m = 10 * n + unichar_digit_value(c);
+                int m = 10 * n + u_char_digit_value(c);
                 if (m / 10 != n) {
-                        while (q < end && unichar_isdigit(u_aref_char_validated_n(q, end - q)))
+                        while (q < end && u_char_isdigit(u_aref_char_validated_n(q, end - q)))
                                 q = u_next(q);
                         /* TODO: Test this. */
                         rb_u_raise(rb_eArgError,
@@ -266,7 +266,7 @@ directive_flags(const char **p, const char *end,
         ID argument_id = 0;
 
         while (*p < end) {
-                unichar c = _rb_u_aref_char_validated(*p, end);
+                uint32_t c = _rb_u_aref_char_validated(*p, end);
 
                 int flag;
 
@@ -346,7 +346,7 @@ directive_width(const char **p, const char *end,
         if (*p == end)
                 return 0;
 
-        unichar c = _rb_u_aref_char_validated(*p, end);
+        uint32_t c = _rb_u_aref_char_validated(*p, end);
 
         if (c != '*')
                 return directive_parse_int(p, end, "field width");
@@ -374,7 +374,7 @@ directive_precision(const char **p, const char *end)
         if (*p == end)
                 return -1;
 
-        unichar c = _rb_u_aref_char_validated(*p, end);
+        uint32_t c = _rb_u_aref_char_validated(*p, end);
 
         if (c != '.')
                 return -1;
@@ -385,7 +385,7 @@ directive_precision(const char **p, const char *end)
 }
 
 static void
-directive_validate_flags(unichar c, int flags, int valid)
+directive_validate_flags(uint32_t c, int flags, int valid)
 {
         char invalid[6];
         int n = 0;
@@ -416,7 +416,7 @@ directive_validate_flags(unichar c, int flags, int valid)
 }
 
 static void
-directive_validate_argument_not_given(unichar c, VALUE argument)
+directive_validate_argument_not_given(uint32_t c, VALUE argument)
 {
         if (argument != Qundef)
                 rb_u_raise(rb_eArgError,
@@ -425,7 +425,7 @@ directive_validate_argument_not_given(unichar c, VALUE argument)
 }
 
 static void
-directive_validate_width_not_given(unichar c, int width)
+directive_validate_width_not_given(uint32_t c, int width)
 {
         if (width != 0)
                 rb_u_raise(rb_eArgError,
@@ -434,7 +434,7 @@ directive_validate_width_not_given(unichar c, int width)
 }
 
 static void
-directive_validate_precision_not_given(unichar c, int precision)
+directive_validate_precision_not_given(uint32_t c, int precision)
 {
         if (precision >= 0)
                 rb_u_raise(rb_eArgError,
@@ -443,9 +443,9 @@ directive_validate_precision_not_given(unichar c, int precision)
 }
 
 static void
-directive_escape(unichar c, VALUE result)
+directive_escape(uint32_t c, VALUE result)
 {
-        rb_u_buffer_append_unichar(result, c);
+        rb_u_buffer_append_char(result, c);
 }
 
 static void
@@ -453,19 +453,19 @@ directive_pad(int flags, int padding, const char *str, long length, VALUE result
 {
         if (flags & DIRECTIVE_FLAGS_MINUS) {
                 rb_u_buffer_append(result, str, length);
-                rb_u_buffer_append_unichar_n(result, ' ', padding);
+                rb_u_buffer_append_char_n(result, ' ', padding);
         } else {
-                rb_u_buffer_append_unichar_n(result, ' ', padding);
+                rb_u_buffer_append_char_n(result, ' ', padding);
                 rb_u_buffer_append(result, str, length);
         }
 }
 
 static void
-directive_character(UNUSED(unichar directive), int flags, int width, UNUSED(int precision), VALUE argument, VALUE result)
+directive_character(UNUSED(uint32_t directive), int flags, int width, UNUSED(int precision), VALUE argument, VALUE result)
 {
         VALUE tmp = rb_u_string_check_type(argument);
 
-        unichar c;
+        uint32_t c;
         const char *p;
         int length;
 
@@ -475,15 +475,15 @@ directive_character(UNUSED(unichar directive), int flags, int width, UNUSED(int 
                 c = _rb_u_aref_char_validated(p, USTRING_END(string));
                 length = (int)(u_next(p) - p);
         } else {
-                char buf[MAX_UNICHAR_BYTE_LENGTH];
+                char buf[U_CHAR_MAX_BYTE_LENGTH];
                 p = buf;
                 c = NUM2INT(argument);
-                length = rb_unichar_to_u(c, buf);
+                length = rb_u_char_to_u(c, buf);
         }
 
-        int padding = width - (int)unichar_width(c);
+        int padding = width - (int)u_char_width(c);
         if (padding < 0) {
-                rb_u_buffer_append_unichar(result, c);
+                rb_u_buffer_append_char(result, c);
                 return;
         }
 
@@ -491,7 +491,7 @@ directive_character(UNUSED(unichar directive), int flags, int width, UNUSED(int 
 }
 
 static void
-directive_string(UNUSED(unichar directive), int flags, int width, int precision, VALUE argument, VALUE result)
+directive_string(UNUSED(uint32_t directive), int flags, int width, int precision, VALUE argument, VALUE result)
 {
         VALUE str = rb_u_string_object_as_string(argument);
 
@@ -507,7 +507,7 @@ directive_string(UNUSED(unichar directive), int flags, int width, int precision,
                 const char *q = p, *end = p + length;
                 while (i < precision && q < end) {
                         // TODO Verify u_aref_char/u_next
-                        i += (int)unichar_width(u_aref_char(q));
+                        i += (int)u_char_width(u_aref_char(q));
                         q = u_next(q);
                 }
                 length = q - p;
@@ -523,7 +523,7 @@ directive_string(UNUSED(unichar directive), int flags, int width, int precision,
 }
 
 static void
-directive_inspect(unichar directive, int flags, int width, int precision, VALUE argument, VALUE result)
+directive_inspect(uint32_t directive, int flags, int width, int precision, VALUE argument, VALUE result)
 {
         directive_string(directive, flags, width, precision, rb_inspect(argument), result);
 }
@@ -566,7 +566,7 @@ directive_integer_value(VALUE argument, int base, VALUE *bignum)
 
 static void
 directive_number_output(int flags, int width, int precision,
-                        const char *prefix, unichar precision_filler, const char *digits, int length,
+                        const char *prefix, uint32_t precision_filler, const char *digits, int length,
                         VALUE result)
 {
         int prefix_length = (int)strlen(prefix);
@@ -580,19 +580,19 @@ directive_number_output(int flags, int width, int precision,
         width -= precision;
 
         if (!(flags & DIRECTIVE_FLAGS_MINUS) && !(flags & DIRECTIVE_FLAGS_ZERO))
-                rb_u_buffer_append_unichar_n(result, ' ', width);
+                rb_u_buffer_append_char_n(result, ' ', width);
 
         rb_u_buffer_append(result, prefix, prefix_length);
 
         if (!(flags & DIRECTIVE_FLAGS_MINUS) && (flags & DIRECTIVE_FLAGS_ZERO))
-                rb_u_buffer_append_unichar_n(result, '0', width);
+                rb_u_buffer_append_char_n(result, '0', width);
 
-        rb_u_buffer_append_unichar_n(result, precision_filler, precision - length);
+        rb_u_buffer_append_char_n(result, precision_filler, precision - length);
 
         rb_u_buffer_append(result, digits, length);
 
         if (flags & DIRECTIVE_FLAGS_MINUS)
-                rb_u_buffer_append_unichar_n(result, ' ', width);
+                rb_u_buffer_append_char_n(result, ' ', width);
 }
 
 #define BITS2DECIMALDIGITS(n) (((long)(n) * 146) / 485 + 1) /* lg(10)⁻¹ ≈ 146/485 */
@@ -604,7 +604,7 @@ directive_number_output(int flags, int width, int precision,
         ((base) == 10 ? "%ld" : ((base) == 16 ? "%lx" : "%lo"))
 
 static bool
-directive_number_sign(unichar directive, bool negative, int flags, char *sign)
+directive_number_sign(uint32_t directive, bool negative, int flags, char *sign)
 {
         if (flags & DIRECTIVE_FLAGS_PLUS && flags & DIRECTIVE_FLAGS_SPACE)
                 rb_warning("‘%lc’ directive ignores ‘ ’ flag when ‘+’ flag has been specified",
@@ -626,7 +626,7 @@ directive_number_sign(unichar directive, bool negative, int flags, char *sign)
 }
 
 static inline int
-directive_number_long_signed(unichar directive, int flags, long argument,
+directive_number_long_signed(uint32_t directive, int flags, long argument,
                              int base, char *sign, const char **digits, char *buffer)
 {
         if (directive_number_sign(directive, argument < 0, flags, sign))
@@ -637,7 +637,7 @@ directive_number_long_signed(unichar directive, int flags, long argument,
 }
 
 static inline int
-directive_number_bignum_signed(unichar directive, int flags, VALUE argument,
+directive_number_bignum_signed(uint32_t directive, int flags, VALUE argument,
                                int base, char *sign, const char **digits, VALUE *str)
 {
         *str = rb_big2str(argument, base);
@@ -650,7 +650,7 @@ directive_number_bignum_signed(unichar directive, int flags, VALUE argument,
 }
 
 static void
-directive_number_check_flags(unichar directive, int flags, int precision)
+directive_number_check_flags(uint32_t directive, int flags, int precision)
 {
         if ((flags & DIRECTIVE_FLAGS_MINUS) && (flags & DIRECTIVE_FLAGS_ZERO))
                 rb_warning("‘%lc’ directive ignores ‘0’ flag when ‘-’ flag has been specified",
@@ -662,7 +662,7 @@ directive_number_check_flags(unichar directive, int flags, int precision)
 }
 
 static int
-directive_signed_number(unichar directive, int flags, int precision, VALUE argument,
+directive_signed_number(uint32_t directive, int flags, int precision, VALUE argument,
                         int base, char *sign, const char **digits, char *buffer, VALUE *str)
 {
         directive_number_check_flags(directive, flags, precision);
@@ -730,7 +730,7 @@ directive_number_bignum_unsigned(VALUE argument,
 }
 
 static inline int
-directive_unsigned_number(unichar directive, int flags, int precision, VALUE argument,
+directive_unsigned_number(uint32_t directive, int flags, int precision, VALUE argument,
                           int base, char *prefix, const char **digits, char *buffer, VALUE *str)
 {
         directive_number_check_flags(directive, flags, precision);
@@ -744,7 +744,7 @@ directive_unsigned_number(unichar directive, int flags, int precision, VALUE arg
 }
 
 static int
-directive_signed_or_unsigned_number(unichar directive, int flags, int precision, VALUE argument,
+directive_signed_or_unsigned_number(uint32_t directive, int flags, int precision, VALUE argument,
                                     int base, char *prefix, const char **digits, char *buffer, VALUE *str)
 {
         if (!(flags & DIRECTIVE_FLAGS_SHARP))
@@ -762,7 +762,7 @@ directive_signed_or_unsigned_number(unichar directive, int flags, int precision,
 }
 
 static void
-directive_integer(unichar directive, int flags, int width, int precision, VALUE argument, VALUE result)
+directive_integer(uint32_t directive, int flags, int width, int precision, VALUE argument, VALUE result)
 {
         char sign[] = "\0\0";
         char buffer[DIGITS_BUFFER_SIZE];
@@ -780,7 +780,7 @@ directive_number_is_unsigned(char *prefix)
 }
 
 static void
-directive_unsigned_number_output(unichar directive, int flags, int width, int precision,
+directive_unsigned_number_output(uint32_t directive, int flags, int width, int precision,
                                  char *prefix, const char *digits, int length,
                                  VALUE result)
 {
@@ -801,7 +801,7 @@ directive_unsigned_number_output(unichar directive, int flags, int width, int pr
 }
 
 static void
-directive_octal(unichar directive, int flags, int width, int precision, VALUE argument, VALUE result)
+directive_octal(uint32_t directive, int flags, int width, int precision, VALUE argument, VALUE result)
 {
         char prefix[] = "0\0\0\0\0";
         char buffer[DIGITS_BUFFER_SIZE];
@@ -825,7 +825,7 @@ directive_octal(unichar directive, int flags, int width, int precision, VALUE ar
 }
 
 static void
-directive_hexadecimal(unichar directive, int flags, int width, int precision, VALUE argument, VALUE result)
+directive_hexadecimal(uint32_t directive, int flags, int width, int precision, VALUE argument, VALUE result)
 {
         char prefix[] = "0x\0\0\0\0";
         if (directive == 'X')
@@ -841,13 +841,13 @@ directive_hexadecimal(unichar directive, int flags, int width, int precision, VA
 
         if (directive == 'X')
                 for (char *p = (char *)digits; *p != '\0'; p++)
-                        *p = unichar_toupper(*p);
+                        *p = u_char_toupper(*p);
 
         directive_unsigned_number_output(directive, flags, width, precision, prefix, digits, length, result);
 }
 
 static void
-directive_binary(unichar directive, int flags, int width, int precision, VALUE argument, VALUE result)
+directive_binary(uint32_t directive, int flags, int width, int precision, VALUE argument, VALUE result)
 {
         char prefix[] = "0b\0\0\0\0";
         if (directive == 'B')
@@ -865,7 +865,7 @@ directive_binary(unichar directive, int flags, int width, int precision, VALUE a
 }
 
 static inline void
-directive_float_nan(unichar directive, int flags, int width, VALUE result)
+directive_float_nan(uint32_t directive, int flags, int width, VALUE result)
 {
         /* sign? + NaN + \0 */
         char buffer[1 + 3 + 1] = "\0";
@@ -881,7 +881,7 @@ directive_float_nan(unichar directive, int flags, int width, VALUE result)
 }
 
 static inline void
-directive_float_inf(unichar directive, int flags, int width, double argument, VALUE result)
+directive_float_inf(uint32_t directive, int flags, int width, double argument, VALUE result)
 {
         /* sign? + Inf + \0 */
         char buffer[1 + 3 + 1] = "\0";
@@ -898,7 +898,7 @@ directive_float_inf(unichar directive, int flags, int width, double argument, VA
 
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
 static void
-directive_float_format(unichar directive, int flags, int width, int precision, double argument, VALUE result)
+directive_float_format(uint32_t directive, int flags, int width, int precision, double argument, VALUE result)
 {
         char format[1 +                                                 /* '%' */
                     5 +                                                 /* flags{0,5} */
@@ -959,7 +959,7 @@ directive_float_format(unichar directive, int flags, int width, int precision, d
 #pragma GCC diagnostic warning "-Wformat-nonliteral"
 
 static void
-directive_float(unichar directive, int flags, int width, int precision, VALUE argument, VALUE result)
+directive_float(uint32_t directive, int flags, int width, int precision, VALUE argument, VALUE result)
 {
         double value = RFLOAT_VALUE(rb_Float(argument));
 
@@ -988,7 +988,7 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
 
         int precision = directive_precision(p, end);
 
-        unichar c = '\0';
+        uint32_t c = '\0';
         if (*p < end) {
                 c = _rb_u_aref_char_validated(*p, end);
                 *p = u_next(*p);
@@ -1011,11 +1011,11 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
 
         /* TODO: Should MINUS be legal without a width? */
         static struct {
-                unichar c;
+                uint32_t c;
                 int flags;
                 bool width;
                 bool precision;
-                void (*f)(unichar c, int, int, int, VALUE, VALUE);
+                void (*f)(uint32_t c, int, int, int, VALUE, VALUE);
         } directives[] = {
                 { 'c', DIRECTIVE_FLAGS_MINUS, true, false, directive_character },
                 { 's', DIRECTIVE_FLAGS_MINUS, true, true, directive_string },

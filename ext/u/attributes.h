@@ -2,7 +2,7 @@
 #define ATTRIBUTES_H
 
 
-HIDDEN extern const unichar (*_u_attr_data)[256];
+HIDDEN extern const uint32_t (*_u_attr_data)[256];
 HIDDEN extern const int16_t *_u_attr_table_part1;
 HIDDEN extern const int16_t *_u_attr_table_part2;
 HIDDEN extern const char *_u_special_case_table;
@@ -11,11 +11,11 @@ HIDDEN extern const char *_u_special_case_table;
 /* This function may only be called if C has been verified to be of a
  * UnicodeType that supports attributes, as it doesn’t perform bounds checking
  * on C. */
-static inline unichar
-s_attribute(unichar c)
+static inline uint32_t
+s_attribute(uint32_t c)
 {
-        unichar page = c >> 8;
-        unichar index = page <= UNICODE_LAST_PAGE_PART1 ?
+        uint32_t page = c >> 8;
+        uint32_t index = page <= UNICODE_LAST_PAGE_PART1 ?
                 _u_attr_table_part1[page] :
                 _u_attr_table_part2[(c - UNICODE_FIRST_CHAR_PART2) >> 8];
 
@@ -25,7 +25,7 @@ s_attribute(unichar c)
         return _u_attr_data[index][c & 0xff];
 }
 
-unichar _u_special_case_table_lookup(unichar c);
+uint32_t _u_special_case_table_lookup(uint32_t c);
 size_t _u_special_case_output(char *buf, int offset, int type, bool upper);
 
 

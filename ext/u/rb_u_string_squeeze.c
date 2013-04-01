@@ -10,10 +10,10 @@ rb_u_string_squeeze_loop(const UString *string, struct tr_table *table,
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
 
-        unichar previous = UNICODE_N_CODEPOINTS;
+        uint32_t previous = U_N_CODEPOINTS;
         char *base = result;
         while (p < end) {
-                unichar c = _rb_u_aref_char_validated(p, end);
+                uint32_t c = _rb_u_aref_char_validated(p, end);
                 const char *next = u_next(p);
 
                 if (c != previous ||

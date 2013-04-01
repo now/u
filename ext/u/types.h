@@ -12,7 +12,7 @@ HIDDEN extern const int16_t *_u_type_table_part2;
 
 
 static inline int
-s_type(unichar c)
+s_type(uint32_t c)
 {
         int16_t index;
 

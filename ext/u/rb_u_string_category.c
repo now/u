@@ -110,7 +110,7 @@ rb_u_string_category(VALUE self)
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                UnicodeType type = unichar_type(u_aref_char_validated_n(p, end - p));
+                UnicodeType type = u_char_type(u_aref_char_validated_n(p, end - p));
 
                 if (current == (UnicodeType)-1)
                         current = type;

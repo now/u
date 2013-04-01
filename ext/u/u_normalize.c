@@ -31,7 +31,7 @@ enum {
 /* Decompose the character ‘s’ according to the rules outlined in
  * http://www.unicode.org/unicode/reports/tr15/#Hangul. */
 static size_t
-decompose_hangul(unichar s, unichar *result)
+decompose_hangul(uint32_t s, uint32_t *result)
 {
         int SIndex = s - SBase;
 
@@ -42,9 +42,9 @@ decompose_hangul(unichar s, unichar *result)
                 return 1;
         }
 
-        unichar L = LBase + SIndex / NCount;
-        unichar V = VBase + (SIndex % NCount) / TCount;
-        unichar T = TBase + SIndex % TCount;
+        uint32_t L = LBase + SIndex / NCount;
+        uint32_t V = VBase + (SIndex % NCount) / TCount;
+        uint32_t T = TBase + SIndex % TCount;
 
         if (result != NULL) {
                 result[0] = L;
@@ -61,7 +61,7 @@ decompose_hangul(unichar s, unichar *result)
 }
 
 static inline const char *
-find_decomposition(unichar c, bool compat)
+find_decomposition(uint32_t c, bool compat)
 {
         size_t index;
         if (!unicode_table_lookup(decomp_table, c, &index))
@@ -84,7 +84,7 @@ find_decomposition(unichar c, bool compat)
 }
 
 static inline size_t
-decomposition_to_wc(const char *decomposition, unichar *result)
+decomposition_to_wc(const char *decomposition, uint32_t *result)
 {
         size_t i = 0;
 
@@ -95,7 +95,7 @@ decomposition_to_wc(const char *decomposition, unichar *result)
 }
 
 static size_t
-decompose_simple(unichar c, UnicodeNormalizeMode mode, unichar *result)
+decompose_simple(uint32_t c, UnicodeNormalizeMode mode, uint32_t *result)
 {
         const char *decomposition = find_decomposition(c,
                                                        (mode == U_NORMALIZE_NFKC ||
@@ -115,13 +115,13 @@ decompose_simple(unichar c, UnicodeNormalizeMode mode, unichar *result)
 }
 
 static inline bool
-unicode_canonical_ordering_swap(unichar *string, size_t offset, int next)
+unicode_canonical_ordering_swap(uint32_t *string, size_t offset, int next)
 {
         size_t initial = offset + 1;
         size_t j = initial;
 
         while (j > 0 && s_combining_class(string[j - 1]) > next) {
-                unichar c = string[j];
+                uint32_t c = string[j];
                 string[j] = string[j - 1];
                 string[j - 1] = c;
                 j--;
@@ -131,7 +131,7 @@ unicode_canonical_ordering_swap(unichar *string, size_t offset, int next)
 }
 
 static inline bool
-unicode_canonical_ordering_reorder(unichar *string, size_t length)
+unicode_canonical_ordering_reorder(uint32_t *string, size_t length)
 {
         bool swapped = false;
 
@@ -150,14 +150,14 @@ unicode_canonical_ordering_reorder(unichar *string, size_t length)
 }
 
 static void
-unicode_canonical_ordering(unichar *string, size_t length)
+unicode_canonical_ordering(uint32_t *string, size_t length)
 {
         while (unicode_canonical_ordering_reorder(string, length))
                 ;
 }
 
 static inline size_t
-decompose_step(unichar c, UnicodeNormalizeMode mode, unichar *result)
+decompose_step(uint32_t c, UnicodeNormalizeMode mode, uint32_t *result)
 {
         return (SBase <= c && c <= SLast) ?
                 decompose_hangul(c, result) :
@@ -166,7 +166,7 @@ decompose_step(unichar c, UnicodeNormalizeMode mode, unichar *result)
 
 static size_t
 decompose_loop(const char *string, size_t length, bool use_length,
-               UnicodeNormalizeMode mode, unichar *result)
+               UnicodeNormalizeMode mode, uint32_t *result)
 {
         size_t n = 0;
         size_t prev_start = 0;
@@ -174,7 +174,7 @@ decompose_loop(const char *string, size_t length, bool use_length,
         const char *p = string;
         const char *end = p + length;
         while (P_WITHIN_STR(p, end, use_length)) {
-                unichar c = u_aref_char(p);
+                uint32_t c = u_aref_char(p);
                 size_t prev_n = n;
 
                 n += decompose_step(c, mode, OFFSET_IF(result, n));
@@ -194,7 +194,7 @@ decompose_loop(const char *string, size_t length, bool use_length,
 }
 
 static inline bool
-combine_hangul(unichar a, unichar b, unichar *result)
+combine_hangul(uint32_t a, uint32_t b, uint32_t *result)
 {
         int LIndex = a - LBase;
         if (0 <= LIndex && LIndex < LCount) {
@@ -220,7 +220,7 @@ combine_hangul(unichar a, unichar b, unichar *result)
 }
 
 static inline uint16_t
-compose_index(unichar c)
+compose_index(uint32_t c)
 {
         unsigned int page = c >> 8;
 
@@ -236,7 +236,7 @@ compose_index(unichar c)
 }
 
 static inline bool
-combine(unichar a, unichar b, unichar *result)
+combine(uint32_t a, uint32_t b, uint32_t *result)
 {
         if (combine_hangul(a, b, result))
                 return true;
@@ -263,7 +263,7 @@ combine(unichar a, unichar b, unichar *result)
 
         if (COMPOSE_FIRST_START <= index_a && index_a < COMPOSE_FIRST_SINGLE_START &&
             COMPOSE_SECOND_START <= index_b && index_b < COMPOSE_SECOND_SINGLE_START) {
-                unichar r = compose_array[index_a - COMPOSE_FIRST_START][index_b - COMPOSE_SECOND_START];
+                uint32_t r = compose_array[index_a - COMPOSE_FIRST_START][index_b - COMPOSE_SECOND_START];
 
                 if (r != 0) {
                         *result = r;
@@ -276,7 +276,7 @@ combine(unichar a, unichar b, unichar *result)
 }
 
 static inline size_t
-compose_loop(unichar *string, size_t length)
+compose_loop(uint32_t *string, size_t length)
 {
         size_t n = length;
         size_t prev_start = 0;
@@ -305,12 +305,12 @@ compose_loop(unichar *string, size_t length)
         return n;
 }
 
-unichar *
+uint32_t *
 _u_normalize_wc(const char *string, size_t length, bool use_length,
                 UnicodeNormalizeMode mode, size_t *new_length)
 {
         size_t n = decompose_loop(string, length, use_length, mode, NULL);
-        unichar *result = ALLOC_N(unichar, n + 1);
+        uint32_t *result = ALLOC_N(uint32_t, n + 1);
         decompose_loop(string, length, use_length, mode, result);
 
         if (mode == U_NORMALIZE_NFC || mode == U_NORMALIZE_NFKC)
@@ -327,7 +327,7 @@ _u_normalize_wc(const char *string, size_t length, bool use_length,
 char *
 u_normalize(const char *string, UnicodeNormalizeMode mode)
 {
-        unichar *wcs = _u_normalize_wc(string, 0, false, mode, NULL);
+        uint32_t *wcs = _u_normalize_wc(string, 0, false, mode, NULL);
         char *u = ucs4_to_u(wcs, NULL, NULL);
 
         free(wcs);
@@ -340,7 +340,7 @@ u_normalize_n(const char *string, size_t length, UnicodeNormalizeMode mode,
               size_t *new_length)
 {
         size_t length_wcs;
-        unichar *wcs = _u_normalize_wc(string, length, true, mode, &length_wcs);
+        uint32_t *wcs = _u_normalize_wc(string, length, true, mode, &length_wcs);
         char *u = ucs4_to_u_n(wcs, length_wcs, NULL, new_length);
 
         free(wcs);

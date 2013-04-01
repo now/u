@@ -2,7 +2,7 @@
 
 class U::Build::Header::Tables::Intervals < U::Build::Header::Table
   def initialize(points, name)
-    super 'static const struct unichar_interval %s[]' % name
+    super 'static const struct uint32_t_interval %s[]' % name
     return if points.empty?
     sorted = points.sort
     first = sorted[0]
@@ -21,16 +21,16 @@ class U::Build::Header::Tables::Intervals < U::Build::Header::Table
 
   def to_s
     '%s%s' % [<<EOH, super]
-struct unichar_interval {
-  unichar first;
-  unichar last;
+struct uint32_t_interval {
+  uint32_t first;
+  uint32_t last;
 };
 
 static int
-unichar_interval_compare(const void *key, const void *element)
+u_char_interval_compare(const void *key, const void *element)
 {
-        unichar c = *(unichar *)key;
-        struct unichar_interval *interval = (struct unichar_interval *)element;
+        uint32_t c = *(uint32_t *)key;
+        struct uint32_t_interval *interval = (struct uint32_t_interval *)element;
 
         if (c < interval->first)
                 return -1;

@@ -21,5 +21,5 @@
 VALUE
 rb_u_string_case_ignorable(VALUE self)
 {
-        return _rb_u_character_test(self, unichar_iscaseignorable);
+        return _rb_u_character_test(self, u_char_iscaseignorable);
 }

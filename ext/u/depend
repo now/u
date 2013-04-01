@@ -223,6 +223,68 @@ u.o: u.c u.h
 u_append.o: u_append.c u.h private.h locale_type.h
 u_aref_char.o: u_aref_char.c u.h utf8.h private.h locale_type.h
 u_byte_length.o: u_byte_length.c u.h private.h locale_type.h
+u_char_combining_class.o: u_char_combining_class.c u.h private.h \
+  locale_type.h data/constants.h combining_class.h
+u_char_digit_value.o: u_char_digit_value.c u.h private.h locale_type.h \
+  data/constants.h attributes.h types.h
+u_char_grapheme_break_type.o: u_char_grapheme_break_type.c u.h private.h \
+  locale_type.h data/constants.h grapheme-break.h
+u_char_isalnum.o: u_char_isalnum.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_isalpha.o: u_char_isalpha.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_isassigned.o: u_char_isassigned.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_iscased.o: u_char_iscased.c u.h private.h locale_type.h \
+  data/constants.h data/cased.h types.h
+u_char_iscaseignorable.o: u_char_iscaseignorable.c u.h private.h \
+  locale_type.h data/constants.h types.h
+u_char_iscntrl.o: u_char_iscntrl.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_isdefined.o: u_char_isdefined.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_isdigit.o: u_char_isdigit.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_isgraph.o: u_char_isgraph.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_islower.o: u_char_islower.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_isnewline.o: u_char_isnewline.c u.h
+u_char_isprint.o: u_char_isprint.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_ispunct.o: u_char_ispunct.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_issoftdotted.o: u_char_issoftdotted.c u.h private.h locale_type.h \
+  data/constants.h data/soft-dotted.h types.h
+u_char_isspace.o: u_char_isspace.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_isupper.o: u_char_isupper.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_isvalid.o: u_char_isvalid.c u.h utf8.h
+u_char_iswide.o: u_char_iswide.c u.h private.h locale_type.h data/wide.h
+u_char_iswide_cjk.o: u_char_iswide_cjk.c u.h private.h locale_type.h \
+  data/wide-cjk.h
+u_char_isxdigit.o: u_char_isxdigit.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_iszerowidth.o: u_char_iszerowidth.c u.h private.h locale_type.h \
+  data/constants.h types.h
+u_char_line_break_type.o: u_char_line_break_type.c u.h data/constants.h \
+  data/line-break.h private.h locale_type.h
+u_char_mirror.o: u_char_mirror.c u.h private.h locale_type.h \
+  data/bidi-mirroring.h
+u_char_script.o: u_char_script.c u.h private.h locale_type.h \
+  data/script.h
+u_char_to_u.o: u_char_to_u.c u.h utf8.h
+u_char_tolower.o: u_char_tolower.c u.h private.h locale_type.h \
+  data/constants.h attributes.h titled.h types.h
+u_char_toupper.o: u_char_toupper.c u.h private.h locale_type.h \
+  data/constants.h attributes.h titled.h types.h
+u_char_type.o: u_char_type.c u.h private.h locale_type.h data/constants.h \
+  types.h
+u_char_width.o: u_char_width.c u.h
+u_char_word_break_type.o: u_char_word_break_type.c u.h private.h \
+  locale_type.h data/constants.h word-break.h
+u_char_xdigit_value.o: u_char_xdigit_value.c u.h private.h locale_type.h
 u_collate.o: u_collate.c u.h utf8.h private.h locale_type.h
 u_copy.o: u_copy.c u.h private.h locale_type.h
 u_downcase.o: u_downcase.c u.h private.h locale_type.h data/constants.h \
@@ -251,69 +313,5 @@ u_width.o: u_width.c u.h private.h locale_type.h
 u_word_breaks.o: u_word_breaks.c u.h private.h locale_type.h \
   data/constants.h word-break.h
 ucs4_to_u.o: ucs4_to_u.c u.h utf8.h private.h locale_type.h
-unichar_combining_class.o: unichar_combining_class.c u.h private.h \
-  locale_type.h data/constants.h combining_class.h
-unichar_digit_value.o: unichar_digit_value.c u.h private.h locale_type.h \
-  data/constants.h attributes.h types.h
-unichar_grapheme_break_type.o: unichar_grapheme_break_type.c u.h \
-  private.h locale_type.h data/constants.h grapheme-break.h
-unichar_isalnum.o: unichar_isalnum.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_isalpha.o: unichar_isalpha.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_isassigned.o: unichar_isassigned.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_iscased.o: unichar_iscased.c u.h private.h locale_type.h \
-  data/constants.h data/cased.h types.h
-unichar_iscaseignorable.o: unichar_iscaseignorable.c u.h private.h \
-  locale_type.h data/constants.h types.h
-unichar_iscntrl.o: unichar_iscntrl.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_isdefined.o: unichar_isdefined.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_isdigit.o: unichar_isdigit.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_isgraph.o: unichar_isgraph.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_islower.o: unichar_islower.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_isnewline.o: unichar_isnewline.c u.h
-unichar_isprint.o: unichar_isprint.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_ispunct.o: unichar_ispunct.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_issoftdotted.o: unichar_issoftdotted.c u.h private.h \
-  locale_type.h data/constants.h data/soft-dotted.h types.h
-unichar_isspace.o: unichar_isspace.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_isupper.o: unichar_isupper.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_isvalid.o: unichar_isvalid.c u.h utf8.h
-unichar_iswide.o: unichar_iswide.c u.h private.h locale_type.h \
-  data/wide.h
-unichar_iswide_cjk.o: unichar_iswide_cjk.c u.h private.h locale_type.h \
-  data/wide-cjk.h
-unichar_isxdigit.o: unichar_isxdigit.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_iszerowidth.o: unichar_iszerowidth.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_line_break_type.o: unichar_line_break_type.c u.h data/constants.h \
-  data/line-break.h private.h locale_type.h
-unichar_mirror.o: unichar_mirror.c u.h private.h locale_type.h \
-  data/bidi-mirroring.h
-unichar_script.o: unichar_script.c u.h private.h locale_type.h \
-  data/script.h
-unichar_to_u.o: unichar_to_u.c u.h utf8.h
-unichar_tolower.o: unichar_tolower.c u.h private.h locale_type.h \
-  data/constants.h attributes.h titled.h types.h
-unichar_toupper.o: unichar_toupper.c u.h private.h locale_type.h \
-  data/constants.h attributes.h titled.h types.h
-unichar_type.o: unichar_type.c u.h private.h locale_type.h \
-  data/constants.h types.h
-unichar_width.o: unichar_width.c u.h
-unichar_word_break_type.o: unichar_word_break_type.c u.h private.h \
-  locale_type.h data/constants.h word-break.h
-unichar_xdigit_value.o: unichar_xdigit_value.c u.h private.h \
-  locale_type.h
 word-break.o: word-break.c u.h private.h locale_type.h data/constants.h \
   data/word-break.h word-break.h

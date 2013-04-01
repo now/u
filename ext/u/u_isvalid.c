@@ -21,8 +21,8 @@
 static const char *
 fast_validate(const char *str)
 {
-	unichar val = 0;
-	unichar min = 0;
+	uint32_t val = 0;
+	uint32_t min = 0;
 	const char *p;
 
 	for (p = str; *p != '\0'; p++) {
@@ -75,8 +75,8 @@ error:
 static const char *
 fast_validate_len(const char *str, size_t max_len)
 {
-	unichar val = 0;
-	unichar min = 0;
+	uint32_t val = 0;
+	uint32_t min = 0;
 	const char *p;
 
 	for (p = str; (size_t)(p - str) < max_len; p++) {

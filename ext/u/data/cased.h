@@ -1,15 +1,15 @@
 /* Automatically generated file */
 
-struct unichar_interval {
-  unichar first;
-  unichar last;
+struct uint32_t_interval {
+  uint32_t first;
+  uint32_t last;
 };
 
 static int
-unichar_interval_compare(const void *key, const void *element)
+u_char_interval_compare(const void *key, const void *element)
 {
-        unichar c = *(unichar *)key;
-        struct unichar_interval *interval = (struct unichar_interval *)element;
+        uint32_t c = *(uint32_t *)key;
+        struct uint32_t_interval *interval = (struct uint32_t_interval *)element;
 
         if (c < interval->first)
                 return -1;
@@ -20,7 +20,7 @@ unichar_interval_compare(const void *key, const void *element)
 }
 
 
-static const struct unichar_interval cased[] = {
+static const struct uint32_t_interval cased[] = {
 	{ 0x00aa, 0x00aa },
 	{ 0x00ba, 0x00ba },
 	{ 0x02b0, 0x02b8 },

@@ -8,20 +8,18 @@
 #define CONST_FUNC
 #endif
 
-typedef uint32_t unichar;
+#define U_CHAR_MAX UINT32_MAX
 
-#define MAXUNICHAR UINT32_MAX
+#define U_CHAR_MAX_BYTE_LENGTH 6
 
-#define MAX_UNICHAR_BYTE_LENGTH 6
+#define U_N_CODEPOINTS (0x10ffff + 1)
 
-#define UNICODE_N_CODEPOINTS            (0x10ffff + 1)
-
-/* unichar return used for representing bad input to a function. */
-#define UTF_BAD_INPUT_UNICHAR		((unichar)-1)
+/* uint32_t return used for representing bad input to a function. */
+#define U_BAD_INPUT_CHAR ((uint32_t)-1)
 
 
-/* unichar return used for representing an incomplete input to a function. */
-#define UTF_INCOMPLETE_INPUT_UNICHAR	((unichar)-2)
+/* uint32_t return used for representing an incomplete input to a function. */
+#define U_INCOMPLETE_INPUT_CHAR ((uint32_t)-2)
 
 
 typedef enum {
@@ -57,43 +55,43 @@ typedef enum {
         U_SEPARATOR_SPACE,
 } UnicodeType;
 
-bool unichar_isalnum(unichar c);
-bool unichar_isalpha(unichar c);
-bool unichar_isassigned(unichar c);
-bool unichar_iscased(unichar c);
-bool unichar_iscaseignorable(unichar c);
-bool unichar_iscntrl(unichar c);
-bool unichar_isdefined(unichar c);
-bool unichar_isdigit(unichar c);
-bool unichar_isgraph(unichar c);
-bool unichar_islower(unichar c);
-bool unichar_isnewline(unichar c);
-bool unichar_isprint(unichar c);
-bool unichar_ispunct(unichar c);
-bool unichar_issoftdotted(unichar c);
-bool unichar_isspace(unichar c);
-bool unichar_istitle(unichar c);
-bool unichar_isupper(unichar c);
-bool unichar_isvalid(unichar c);
-bool unichar_iswide(unichar c);
-bool unichar_iswide_cjk(unichar c);
-bool unichar_isxdigit(unichar c);
-bool unichar_iszerowidth(unichar c);
+bool u_char_isalnum(uint32_t c);
+bool u_char_isalpha(uint32_t c);
+bool u_char_isassigned(uint32_t c);
+bool u_char_iscased(uint32_t c);
+bool u_char_iscaseignorable(uint32_t c);
+bool u_char_iscntrl(uint32_t c);
+bool u_char_isdefined(uint32_t c);
+bool u_char_isdigit(uint32_t c);
+bool u_char_isgraph(uint32_t c);
+bool u_char_islower(uint32_t c);
+bool u_char_isnewline(uint32_t c);
+bool u_char_isprint(uint32_t c);
+bool u_char_ispunct(uint32_t c);
+bool u_char_issoftdotted(uint32_t c);
+bool u_char_isspace(uint32_t c);
+bool u_char_istitle(uint32_t c);
+bool u_char_isupper(uint32_t c);
+bool u_char_isvalid(uint32_t c);
+bool u_char_iswide(uint32_t c);
+bool u_char_iswide_cjk(uint32_t c);
+bool u_char_isxdigit(uint32_t c);
+bool u_char_iszerowidth(uint32_t c);
 
-unichar unichar_toupper(unichar c);
-unichar unichar_tolower(unichar c);
-unichar unichar_totitle(unichar c);
+uint32_t u_char_toupper(uint32_t c);
+uint32_t u_char_tolower(uint32_t c);
+uint32_t u_char_totitle(uint32_t c);
 
-size_t unichar_width(unichar c);
+size_t u_char_width(uint32_t c);
 
-int unichar_digit_value(unichar c);
-int unichar_xdigit_value(unichar c);
+int u_char_digit_value(uint32_t c);
+int u_char_xdigit_value(uint32_t c);
 
-UnicodeType unichar_type(unichar c);
+UnicodeType u_char_type(uint32_t c);
 
-int unichar_combining_class(unichar c) CONST_FUNC;
+int u_char_combining_class(uint32_t c) CONST_FUNC;
 
-bool unichar_mirror(unichar c, unichar *mirrored);
+bool u_char_mirror(uint32_t c, uint32_t *mirrored);
 
 
 typedef enum {
@@ -139,7 +137,7 @@ typedef enum {
         U_LINE_BREAK_UNKNOWN,
 } UnicodeLineBreakType;
 
-UnicodeLineBreakType unichar_line_break_type(unichar c);
+UnicodeLineBreakType u_char_line_break_type(uint32_t c);
 
 typedef enum {
         U_GRAPHEME_BREAK_CONTROL,
@@ -157,7 +155,7 @@ typedef enum {
         U_GRAPHEME_BREAK_V,
 } UnicodeGraphemeBreakType;
 
-UnicodeGraphemeBreakType unichar_grapheme_break_type(unichar c);
+UnicodeGraphemeBreakType u_char_grapheme_break_type(uint32_t c);
 
 typedef enum {
         U_WORD_BREAK_ALETTER,
@@ -176,7 +174,7 @@ typedef enum {
         U_WORD_BREAK_REGIONAL_INDICATOR,
 } UnicodeWordBreakType;
 
-UnicodeWordBreakType unichar_word_break_type(unichar c);
+UnicodeWordBreakType u_char_word_break_type(uint32_t c);
 
 
 typedef enum {
@@ -285,7 +283,7 @@ typedef enum {
         U_SCRIPT_MIAO,
 } UnicodeScript;
 
-UnicodeScript unichar_script(unichar c);
+UnicodeScript u_char_script(uint32_t c);
 
 typedef enum {
 	U_NORMALIZE_DEFAULT,
@@ -323,10 +321,10 @@ char *u_upcase_in_locale(const char *string, const char *locale);
 char *u_upcase_in_locale_n(const char *string, size_t length,
                            const char *locale, size_t *new_length);
 
-unichar u_aref_char(const char *str);
-unichar u_aref_char_n(const char *str, size_t max);
-unichar u_aref_char_validated(const char *str);
-unichar u_aref_char_validated_n(const char *str, size_t max);
+uint32_t u_aref_char(const char *str);
+uint32_t u_aref_char_n(const char *str, size_t max);
+uint32_t u_aref_char_validated(const char *str);
+uint32_t u_aref_char_validated_n(const char *str, size_t max);
 
 extern const char * const u_skip_lengths;
 
@@ -352,13 +350,13 @@ int u_collate_n(const char *a, size_t a_len, const char *b, size_t b_len);
 char *u_collate_key(const char *str);
 char *u_collate_key_n(const char *str, size_t len, size_t *new_length);
 
-size_t u_char_index(const char *str, unichar c);
-size_t u_char_index_n(const char *str, unichar c, size_t len);
+size_t u_char_index(const char *str, uint32_t c);
+size_t u_char_index_n(const char *str, uint32_t c, size_t len);
 size_t u_index(const char *haystack, const char *needle);
 size_t u_index_n(const char *haystack, const char *needle, size_t len);
 
-size_t u_char_rindex(const char *str, unichar c);
-size_t u_char_rindex_n(const char *str, unichar c, size_t len);
+size_t u_char_rindex(const char *str, uint32_t c);
+size_t u_char_rindex_n(const char *str, uint32_t c, size_t len);
 size_t u_rindex(const char *haystack, const char *needle);
 size_t u_rindex_n(const char *haystack, const char *needle, size_t len);
 
@@ -385,8 +383,8 @@ typedef void (*UnicodeBreakFn)(const char *, void *);
 void u_word_breaks(const char *string, size_t n, UnicodeBreakFn fn, void *closure);
 void u_grapheme_breaks(const char *string, size_t n, UnicodeBreakFn fn, void *closure);
 
-int unichar_to_u(unichar c, char *result);
-char *ucs4_to_u(unichar *str, size_t *items_read, size_t *items_written);
-char *ucs4_to_u_n(unichar *str, size_t len, size_t *items_read, size_t *items_written);
+int u_char_to_u(uint32_t c, char *result);
+char *ucs4_to_u(uint32_t *str, size_t *items_read, size_t *items_written);
+char *ucs4_to_u_n(uint32_t *str, size_t len, size_t *items_read, size_t *items_written);
 
 #endif /* U_H */

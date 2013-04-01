@@ -12,7 +12,7 @@
 
 
 static inline bool
-casefold_table_lookup(unichar c, char *result, size_t *length)
+casefold_table_lookup(uint32_t c, char *result, size_t *length)
 {
         size_t index;
         if (!unicode_table_lookup(casefold_table, c, &index))
@@ -34,10 +34,10 @@ foldcase_loop(const char *string, size_t length, bool use_length, char *result)
         const char *p = string;
         const char *end = p + length;
         while (P_WITHIN_STR(p, end, use_length)) {
-		unichar c = u_aref_char(p);
+		uint32_t c = u_aref_char(p);
                 if (!casefold_table_lookup(c, OFFSET_IF(result, n), &n))
-                        n += unichar_to_u(unichar_tolower(c),
-                                          OFFSET_IF(result, n));
+                        n += u_char_to_u(u_char_tolower(c),
+                                         OFFSET_IF(result, n));
 
                 p = u_next(p);
 	}

@@ -12,5 +12,5 @@
 VALUE
 rb_u_string_zero_width(VALUE self)
 {
-        return _rb_u_character_test(self, unichar_iszerowidth);
+        return _rb_u_character_test(self, u_char_iszerowidth);
 }

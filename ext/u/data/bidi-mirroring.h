@@ -3,8 +3,8 @@
 
 
 static const struct {
-	unichar ch;
-	unichar mirrored_ch;
+	uint32_t ch;
+	uint32_t mirrored_ch;
 } bidi_mirroring_table[] = {
 	{ 0x0028, 0x0029 },
 	{ 0x0029, 0x0028 },

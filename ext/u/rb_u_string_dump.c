@@ -44,10 +44,10 @@ rb_u_string_dump_hash(VALUE buffer, unsigned char c, const char *p, const char *
 static inline bool
 rb_u_string_dump_ascii_printable(VALUE buffer, unsigned char c)
 {
-        if (c > 0x7f || !unichar_isprint(c))
+        if (c > 0x7f || !u_char_isprint(c))
                 return false;
 
-        rb_u_buffer_append_unichar(buffer, c);
+        rb_u_buffer_append_char(buffer, c);
 
         return true;
 }
@@ -55,10 +55,10 @@ rb_u_string_dump_ascii_printable(VALUE buffer, unsigned char c)
 static inline bool
 rb_u_string_dump_codepoint(VALUE buffer, const char **p, const char *end)
 {
-        unichar c = u_aref_char_n(*p, end - *p);
+        uint32_t c = u_aref_char_n(*p, end - *p);
 
-        if (c == UTF_INCOMPLETE_INPUT_UNICHAR ||
-            c == UTF_BAD_INPUT_UNICHAR)
+        if (c == U_INCOMPLETE_INPUT_CHAR ||
+            c == U_BAD_INPUT_CHAR)
                 return false;
 
         char escaped[3 + sizeof(c) * CHAR_BIT + 2 + 1];

@@ -4,7 +4,7 @@
 
 
 static const struct {
-	unichar ch;
+	uint32_t ch;
 	uint16_t canon_offset;
 	uint16_t compat_offset;
 } decomp_table[] = {

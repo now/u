@@ -29,17 +29,17 @@ need_m_to_n_arguments(int argc, int m, int n)
                            argc, m, n);
 }
 
-unichar
+uint32_t
 _rb_u_aref_char_validated(const char *str, const char *end)
 {
         if (str >= end)
                 rb_u_raise(rb_eArgError, "String is empty");
 
-        unichar c = u_aref_char_validated_n(str, end - str);
+        uint32_t c = u_aref_char_validated_n(str, end - str);
         switch (c) {
-        case UTF_BAD_INPUT_UNICHAR:
+        case U_BAD_INPUT_CHAR:
                 rb_u_raise(rb_eArgError, "input isn’t valid UTF-8");
-        case UTF_INCOMPLETE_INPUT_UNICHAR:
+        case U_INCOMPLETE_INPUT_CHAR:
                 rb_u_raise(rb_eArgError,
                            "input contains an incomplete UTF-8-encoded character");
         default:
@@ -66,12 +66,12 @@ rb_u_next_validated(const char *p, const char *end)
 }
 
 int
-rb_unichar_to_u(unichar c, char *result)
+rb_u_char_to_u(uint32_t c, char *result)
 {
-        if (!unichar_isvalid(c))
-                rb_u_raise(rb_eArgError, "not a Unicode character: %d", c);
+        if (!u_char_isvalid(c))
+                rb_u_raise(rb_eArgError, "not a Unicode character: %#04x", c);
 
-        return unichar_to_u(c, result);
+        return u_char_to_u(c, result);
 }
 
 void
@@ -86,7 +86,7 @@ rb_u_validate(const char *string, long length)
 }
 
 VALUE
-_rb_u_character_test(VALUE self, bool (*test)(unichar))
+_rb_u_character_test(VALUE self, bool (*test)(uint32_t))
 {
         const UString *string = RVAL2USTRING(self);
 

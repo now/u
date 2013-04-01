@@ -20,8 +20,8 @@ u_collate(const char *a, const char *b)
 	assert(a != NULL);
 	assert(b != NULL);
 
-	unichar *a_norm = _u_normalize_wc(a, 0, false, U_NORMALIZE_ALL_COMPOSE, NULL);
-	unichar *b_norm = _u_normalize_wc(b, 0, false, U_NORMALIZE_ALL_COMPOSE, NULL);
+	uint32_t *a_norm = _u_normalize_wc(a, 0, false, U_NORMALIZE_ALL_COMPOSE, NULL);
+	uint32_t *b_norm = _u_normalize_wc(b, 0, false, U_NORMALIZE_ALL_COMPOSE, NULL);
 
 	int result = wcscoll((wchar_t *)a_norm, (wchar_t *)b_norm);
 
@@ -36,21 +36,21 @@ int
 u_collate_n(const char *a, size_t a_len, const char *b, size_t b_len)
 {
         size_t a_norm_length;
-	unichar * const a_norm = _u_normalize_wc(a, a_len, true,
-                                                 U_NORMALIZE_ALL_COMPOSE,
-                                                 &a_norm_length);
+	uint32_t * const a_norm = _u_normalize_wc(a, a_len, true,
+                                                U_NORMALIZE_ALL_COMPOSE,
+                                                &a_norm_length);
 
         size_t b_norm_length;
-	unichar * const b_norm = _u_normalize_wc(b, b_len, true,
-                                                 U_NORMALIZE_ALL_COMPOSE,
-                                                 &b_norm_length);
+	uint32_t * const b_norm = _u_normalize_wc(b, b_len, true,
+                                                U_NORMALIZE_ALL_COMPOSE,
+                                                &b_norm_length);
 
         int result = 0;
 
-        unichar *a_p = a_norm;
-        unichar *a_end = a_norm + a_norm_length;
-        unichar *b_p = b_norm;
-        unichar *b_end = b_norm + b_norm_length;
+        uint32_t *a_p = a_norm;
+        uint32_t *a_end = a_norm + a_norm_length;
+        uint32_t *b_p = b_norm;
+        uint32_t *b_end = b_norm + b_norm_length;
         while (a_p <= a_end && b_p <= b_end) {
                 result = wcscoll((wchar_t *)a_p, (wchar_t *)b_p);
                 if (result != 0)
@@ -68,7 +68,7 @@ u_collate_n(const char *a, size_t a_len, const char *b, size_t b_len)
 /* {{{1
  * We need UTF-8 encoding of numbers to encode the weights if
  * we are using wcsxfrm. However, we aren't encoding Unicode
- * characters, so we can't simply use unichar_to_utf.
+ * characters, so we can't simply use u_char_to_utf.
  *
  * The following routine is taken (with modification) from GNU
  * libc's strxfrm routine:
@@ -119,12 +119,12 @@ utf_collate_key_impl(const char *str, size_t len, bool use_len, size_t *new_leng
 	assert(str != NULL);
 
         size_t norm_length;
-	unichar *str_norm = _u_normalize_wc(str, len, use_len,
-                                            U_NORMALIZE_ALL_COMPOSE,
-                                            &norm_length);
-        const unichar *p = str_norm;
-        const unichar *end = str_norm + norm_length;
-        unichar *q = str_norm;
+	uint32_t *str_norm = _u_normalize_wc(str, len, use_len,
+                                           U_NORMALIZE_ALL_COMPOSE,
+                                           &norm_length);
+        const uint32_t *p = str_norm;
+        const uint32_t *end = str_norm + norm_length;
+        uint32_t *q = str_norm;
         while (p < end) {
                 if (*p != '\0')
                         *q++ = *p;

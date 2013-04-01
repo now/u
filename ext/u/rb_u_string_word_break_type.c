@@ -86,10 +86,10 @@ rb_u_string_word_break_type(VALUE self)
         const UString *string = RVAL2USTRING(self);
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
-        UnicodeWordBreakType current = unichar_word_break_type(u_aref_char_validated_n(p, end - p));
+        UnicodeWordBreakType current = u_char_word_break_type(u_aref_char_validated_n(p, end - p));
         p = u_next(p);
         while (p < end) {
-                UnicodeWordBreakType type = unichar_word_break_type(u_aref_char_validated_n(p, end - p));
+                UnicodeWordBreakType type = u_char_word_break_type(u_aref_char_validated_n(p, end - p));
                 if (type != current)
                         rb_u_raise(rb_eArgError,
                                    "string consists of more than one word break type: :%s+, :%s",

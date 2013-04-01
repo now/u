@@ -5,17 +5,17 @@ HIDDEN void need_at_least_n_arguments(int argc, int n);
 
 HIDDEN void need_m_to_n_arguments(int argc, int m, int n);
 
-HIDDEN unichar _rb_u_aref_char_validated(const char *str, const char *end);
+HIDDEN uint32_t _rb_u_aref_char_validated(const char *str, const char *end);
 
 HIDDEN char *rb_u_prev_validated(const char *begin, const char *p);
 
 HIDDEN char *rb_u_next_validated(const char *p, const char *end);
 
-HIDDEN int rb_unichar_to_u(unichar c, char *result);
+HIDDEN int rb_u_char_to_u(uint32_t c, char *result);
 
 HIDDEN void rb_u_validate(const char *string, long length);
 
-HIDDEN VALUE _rb_u_character_test(VALUE string, bool (*test)(unichar));
+HIDDEN VALUE _rb_u_character_test(VALUE string, bool (*test)(uint32_t));
 
 HIDDEN VALUE _rb_u_string_test(VALUE self,
                                char *(convert)(const char *, size_t, size_t *));

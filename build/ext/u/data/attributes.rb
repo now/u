@@ -5,7 +5,7 @@ require 'u/build'
 class Attributes
   def initialize(data, special_casing, io = $stdout)
     U::Build::Header.new(io) do
-      io.puts U::Build::Header::Tables::Split.new(data, 'unichar', 'attr'){ |i|
+      io.puts U::Build::Header::Tables::Split.new(data, 'uint32_t', 'attr'){ |i|
         special_casing.include?(i) ?
           '0x%07x' % (0x1000000 + special_casing[i].offset) :
           '0x%04x' % (data[i].value or 0)

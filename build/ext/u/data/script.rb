@@ -59,7 +59,7 @@ private
   class Table < U::Build::Header::Table
     def initialize(scripts)
       super "static const struct {
-\tunichar start;
+\tuint32_t start;
 \tuint16_t chars;
 \tuint16_t script;
 } script_table[]"

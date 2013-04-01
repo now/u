@@ -11,8 +11,8 @@ VALUE rb_u_buffer_append_printf(VALUE self, size_t needed,
 VALUE rb_u_buffer_append(VALUE self, const char *str, long length);
 VALUE rb_u_buffer_append_format(int argc, const VALUE *argv, VALUE self, VALUE format);
 VALUE rb_u_buffer_append_format_m(int argc, const VALUE *argv, VALUE self);
-VALUE rb_u_buffer_append_unichar(VALUE self, unichar c);
-VALUE rb_u_buffer_append_unichar_n(VALUE self, unichar c, long n);
+VALUE rb_u_buffer_append_char(VALUE self, uint32_t c);
+VALUE rb_u_buffer_append_char_n(VALUE self, uint32_t c, long n);
 
 VALUE rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_buffer_eql(VALUE self, VALUE rbother);

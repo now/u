@@ -41,10 +41,10 @@ _utf_compute(unsigned char c, int *mask, int *len)
  * Private function used to retrieve a UTF-32 character from an UTF-8 character
  * sequence given a mask and length previously retrieved with _utf_compute().
  */
-static inline unichar
+static inline uint32_t
 _utf_get(const char *str, int mask, int len)
 {
-	unichar c = (unsigned char)str[0] & mask;
+	uint32_t c = (unsigned char)str[0] & mask;
 
 	for (int i = 1; i < len; i++) {
 		unsigned char ch = ((const unsigned char *)str)[i];
@@ -52,7 +52,7 @@ _utf_get(const char *str, int mask, int len)
 		if (CONT_X(ch)) {
 			c = ADD_X(c, ch);
 		} else {
-			c = UTF_BAD_INPUT_UNICHAR;
+			c = U_BAD_INPUT_CHAR;
 			break;
 		}
 	}
@@ -64,7 +64,7 @@ _utf_get(const char *str, int mask, int len)
 /* {{{1
  * Retrieve a UTF-32 character from a UTF-8 character sequence.
  */
-unichar
+uint32_t
 u_aref_char(const char *str)
 {
 	int mask;
@@ -72,27 +72,27 @@ u_aref_char(const char *str)
 
 	_utf_compute(*str, &mask, &len);
 
-	return (len > -1) ? _utf_get(str, mask, len) : UTF_BAD_INPUT_UNICHAR;
+	return (len > -1) ? _utf_get(str, mask, len) : U_BAD_INPUT_CHAR;
 }
 
 
 /* {{{1
  * TODO
  */
-unichar
+uint32_t
 u_aref_char_n(const char *str, size_t max)
 {
         if (max == 0)
-                return UTF_INCOMPLETE_INPUT_UNICHAR;
+                return U_INCOMPLETE_INPUT_CHAR;
 
 	size_t len;
-	unichar c = (unsigned char)*str;
+	uint32_t c = (unsigned char)*str;
 
 	/* TODO: _utf_compute() here */
 	if (c < 0x80) {
 		return c;
 	} else if (c < 0xc0) {
-		return UTF_BAD_INPUT_UNICHAR;
+		return U_BAD_INPUT_CHAR;
 	} else if (c < 0xe0) {
 		len = 2;
 		c &= 0x1f;
@@ -109,28 +109,28 @@ u_aref_char_n(const char *str, size_t max)
 		len = 6;
 		c &= 0x01;
 	} else {
-		return UTF_BAD_INPUT_UNICHAR;
+		return U_BAD_INPUT_CHAR;
 	}
 
 	if (len > max) {
 		for (size_t i = 1; i < max; i++) {
 			if (!CONT_X(str[i]))
-				return UTF_BAD_INPUT_UNICHAR;
+				return U_BAD_INPUT_CHAR;
 		}
 
-		return UTF_INCOMPLETE_INPUT_UNICHAR;
+		return U_INCOMPLETE_INPUT_CHAR;
 	}
 
 	for (size_t i = 1; i < len; i++) {
 		unsigned char ch = ((const unsigned char *)str)[i];
 
 		if (!CONT_X(ch))
-			return (ch != '\0') ? UTF_BAD_INPUT_UNICHAR : UTF_INCOMPLETE_INPUT_UNICHAR;
+			return (ch != '\0') ? U_BAD_INPUT_CHAR : U_INCOMPLETE_INPUT_CHAR;
 
 		c = ADD_X(c, ch);
 	}
 
-	return (_utf8_length(c) == len) ? c : UTF_BAD_INPUT_UNICHAR;
+	return (_utf8_length(c) == len) ? c : U_BAD_INPUT_CHAR;
 }
 
 
@@ -139,32 +139,30 @@ u_aref_char_n(const char *str, size_t max)
  * does additional checking while converitng, such as not overruning a maximum
  * length and checks for incomplete, invalid or out-of-range characters.
  */
-unichar
+uint32_t
 u_aref_char_validated(const char *str)
 {
-	unichar result = u_aref_char(str);
+	uint32_t result = u_aref_char(str);
 
-	if (result & 0x80000000) {
+	if (result & 0x80000000)
 		return result;
-	} else if (!unichar_isvalid(result)) {
-		return UTF_BAD_INPUT_UNICHAR;
-	} else {
+	else if (!u_char_isvalid(result))
+		return U_BAD_INPUT_CHAR;
+	else
 		return result;
-	}
 }
 
 
 /* {{{1 */
-unichar
+uint32_t
 u_aref_char_validated_n(const char *str, size_t max)
 {
-	unichar result = u_aref_char_n(str, max);
+	uint32_t result = u_aref_char_n(str, max);
 
-	if (result & 0x80000000) {
+	if (result & 0x80000000)
 		return result;
-	} else if (!unichar_isvalid(result)) {
-		return UTF_BAD_INPUT_UNICHAR;
-	} else {
+	else if (!u_char_isvalid(result))
+		return U_BAD_INPUT_CHAR;
+	else
 		return result;
-	}
 }

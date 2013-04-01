@@ -54,7 +54,7 @@ tr_next_char(struct tr *t)
                  * check the offsets here.  Perhaps TR_READ_ANOTHER should also
                  * have advanced t->p one more step. */
                 if (next != NULL) {
-                        unichar max = u_aref_char(next);
+                        uint32_t max = u_aref_char(next);
 
                         if (max < t->now) {
                                 t->p = next;
@@ -93,7 +93,7 @@ tr_next(struct tr *t)
 }
 
 static void
-tr_table_set(struct tr_table *table, bool *buffer, unichar c, bool value)
+tr_table_set(struct tr_table *table, bool *buffer, uint32_t c, bool value)
 {
         if (c < lengthof(table->continuous)) {
                 buffer[c] = value;
@@ -153,7 +153,7 @@ tr_table_initialize_from_strings(struct tr_table *table, int argc, VALUE *argv)
 }
 
 bool
-tr_table_lookup(struct tr_table *table, unichar c)
+tr_table_lookup(struct tr_table *table, uint32_t c)
 {
         if (c < lengthof(table->continuous))
                 return table->continuous[c];

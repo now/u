@@ -15,7 +15,8 @@
 LocaleType
 _u_locale_type(void)
 {
-        return _u_locale_type_from_string(setlocale(LC_CTYPE, NULL));
+        const char *locale = setlocale(LC_CTYPE, NULL);
+        return locale == NULL ? LOCALE_NORMAL : _u_locale_type_from_string(locale);
 }
 
 LocaleType

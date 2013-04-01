@@ -17,7 +17,7 @@
  * is capitalized.  (Complicated huh?)
  */
 bool
-unichar_istitle(unichar c)
+u_char_istitle(uint32_t c)
 {
         size_t index;
 
@@ -28,8 +28,8 @@ unichar_istitle(unichar c)
 /* {{{1
  * Convert ‘c’ to its titlecase representation (if any).
  */
-unichar
-unichar_totitle(unichar c)
+uint32_t
+u_char_totitle(uint32_t c)
 {
 	for (size_t i = 0; i < lengthof(title_table); i++)
                 if (title_table[i].ch == c ||
@@ -38,14 +38,14 @@ unichar_totitle(unichar c)
 			return title_table[i].ch;
 
         if (s_type(c) == U_LETTER_LOWERCASE)
-                return unichar_toupper(c);
+                return u_char_toupper(c);
 
         return c;
 }
 
 
-unichar
-_u_titlecase_table_lookup(unichar c, bool want_upper)
+uint32_t
+_u_titlecase_table_lookup(uint32_t c, bool want_upper)
 {
         size_t index;
 

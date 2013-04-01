@@ -254,7 +254,7 @@ rb_u_string_script(VALUE self)
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                UnicodeScript script = unichar_script(u_aref_char_validated_n(p, end - p));
+                UnicodeScript script = u_char_script(u_aref_char_validated_n(p, end - p));
 
                 if (current == U_SCRIPT_UNKNOWN)
                         current = script;

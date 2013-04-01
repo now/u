@@ -3,8 +3,8 @@
 
 struct tr {
         bool inside_range;
-        unichar now;
-        unichar max;
+        uint32_t now;
+        uint32_t max;
         const char *p;
         const char *end;
 };
@@ -29,6 +29,6 @@ HIDDEN void tr_table_initialize(struct tr_table *table, VALUE rbstring);
 HIDDEN void tr_table_initialize_from_strings(struct tr_table *table,
                                              int argc,
                                              VALUE *argv);
-HIDDEN bool tr_table_lookup(struct tr_table *table, unichar c);
+HIDDEN bool tr_table_lookup(struct tr_table *table, uint32_t c);
 
 #endif /* RB_U_STRING_INTERNAL_TR_H */

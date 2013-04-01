@@ -10,13 +10,13 @@
 
 /* Lookup C in the sorted TABLE using binary search.  TABLE consists of N
  * entries, where each entry is SIZEOF_ENTRY bytes in size and the first
- * component is a unichar of size SIZEOF_CHAR.  If C is found in TABLE, its
+ * component is a uint32_t of size SIZEOF_CHAR.  If C is found in TABLE, its
  * index is stored in INDEX and true is returned.  Otherwise, false is returned
  * and INDEX is left untouched. */
 bool
-binary_search_unicode_table(const void *table, size_t n, size_t sizeof_entry, size_t sizeof_char, unichar c, size_t *index)
+binary_search_unicode_table(const void *table, size_t n, size_t sizeof_entry, size_t sizeof_char, uint32_t c, size_t *index)
 {
-#define ENTRY(index) (*(unichar *)((const char *)table + ((index) * sizeof_entry)) & char_mask)
+#define ENTRY(index) (*(uint32_t *)((const char *)table + ((index) * sizeof_entry)) & char_mask)
 
 	size_t begin = 0;
         size_t end = n - 1;
@@ -26,9 +26,9 @@ binary_search_unicode_table(const void *table, size_t n, size_t sizeof_entry, si
          * character.  The casefold table, for example, uses uint16_t-sized
          * characters.  To only get the interesting part of our table entry
          * we’ll have to mask the retrieved value. */
-        unichar char_mask = sizeof_char < sizeof(unichar) ?
-                ((unichar)1 << (CHAR_BIT * sizeof_char)) - 1 :
-                (unichar)-1;
+        uint32_t char_mask = sizeof_char < sizeof(uint32_t) ?
+                ((uint32_t)1 << (CHAR_BIT * sizeof_char)) - 1 :
+                (uint32_t)-1;
 
         /* Drop out early if we know for certain that C can’t be in the
          * decomposition table. */
@@ -38,7 +38,7 @@ binary_search_unicode_table(const void *table, size_t n, size_t sizeof_entry, si
         while (begin <= end) {
                 middle = binary_search_middle_of(begin, end);
 
-                unichar probe = ENTRY(middle);
+                uint32_t probe = ENTRY(middle);
                 if (c < probe)
                         end = middle - 1;
                 else if (c > probe)

@@ -52,14 +52,14 @@ HIDDEN bool binary_search_unicode_table(const void *table,
                                         size_t n,
                                         size_t sizeof_entry,
                                         size_t sizeof_char,
-                                        unichar c,
+                                        uint32_t c,
                                         size_t *index);
 
-HIDDEN unichar *_u_normalize_wc(const char *string,
-                                size_t length,
-                                bool use_length,
-                                UnicodeNormalizeMode mode,
-                                size_t *new_length);
+HIDDEN uint32_t *_u_normalize_wc(const char *string,
+                               size_t length,
+                               bool use_length,
+                               UnicodeNormalizeMode mode,
+                               size_t *new_length);
 
 #include "locale_type.h"
 

@@ -270,7 +270,7 @@ private
     def initialize(singletons, name)
       super 'static const uint16_t %s[][2]' % name
       singletons.each do |singleton|
-        @declaration = 'static const unichar %s[][2]' % name if singleton.second > 0xffff or singleton.code > 0xffff
+        @declaration = 'static const uint32_t %s[][2]' % name if singleton.second > 0xffff or singleton.code > 0xffff
         self << U::Build::Header::Table::Row.new(*[singleton.second, singleton.code].map{ |c| '%#06x' % c })
       end
     end
@@ -286,7 +286,7 @@ private
           row <<
             if reversals.include? i, j
               raise RuntimeError,
-                'compose_array table field too short; upgrade to unichar to fit values beyond 0xffff: %04X' %
+                'compose_array table field too short; upgrade to uint32_t to fit values beyond 0xffff: %04X' %
                   reversals[i, j] if
                     reversals[i, j] > 0xffff
               '%#06x' % reversals[i, j]

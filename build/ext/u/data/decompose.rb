@@ -21,7 +21,7 @@ private
   class DecompositionTable < U::Build::Header::Table
     def initialize(data)
       super "static const struct {
-\tunichar ch;
+\tuint32_t ch;
 \tuint16_t canon_offset;
 \tuint16_t compat_offset;
 } decomp_table[]"

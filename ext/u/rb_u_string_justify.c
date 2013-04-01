@@ -14,7 +14,7 @@ rb_u_string_justify_one_side(char *p, const UString *padding, long padding_width
         const char *q = padding_str;
         while (i < n) {
                 // TODO Verify u_aref_char/u_next
-                i += unichar_width(u_aref_char(q));
+                i += u_char_width(u_aref_char(q));
                 q = u_next(q);
         }
         memcpy(p, padding_str, q - padding_str);
@@ -32,7 +32,7 @@ rounding_size(const UString *padding, long padding_width, long n)
         long i = 0;
         while (i < r && q < end) {
                 // TODO Verify u_aref_char/u_next
-		i += unichar_width(u_aref_char(q));
+		i += u_char_width(u_aref_char(q));
                 q = u_next(q);
         }
         // NOTE I think i ≮ r is guaranteed, but I can’t seem to prove it, so

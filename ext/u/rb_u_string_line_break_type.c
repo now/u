@@ -116,7 +116,7 @@ rb_u_string_line_break_type(VALUE self)
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                UnicodeLineBreakType type = unichar_line_break_type(u_aref_char_validated_n(p, end - p));
+                UnicodeLineBreakType type = u_char_line_break_type(u_aref_char_validated_n(p, end - p));
 
                 if (current == U_LINE_BREAK_UNKNOWN)
                         current = type;

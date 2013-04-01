@@ -4,7 +4,7 @@ HIDDEN extern const int16_t *_u_word_break_property_table_part2;
 
 
 static inline UnicodeWordBreakType
-s_word_break_type(unichar c)
+s_word_break_type(uint32_t c)
 {
         int16_t index;
 

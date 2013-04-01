@@ -14,8 +14,8 @@ private
   class BidiMirroringTable < U::Build::Header::Table
     def initialize(bidi_mirroring)
       super "static const struct {
-\tunichar ch;
-\tunichar mirrored_ch;
+\tuint32_t ch;
+\tuint32_t mirrored_ch;
 } bidi_mirroring_table[]"
       bidi_mirroring.each do |bidi_mirror|
         self << U::Build::Header::Table::Row.new('%#06x' % bidi_mirror.char, '%#06x' % bidi_mirror.mirrored)

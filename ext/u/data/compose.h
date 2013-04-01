@@ -582,7 +582,7 @@ static const int16_t compose_table[COMPOSE_TABLE_LAST + 1] = {
 };
 
 
-static const unichar compose_first_single[][2] = {
+static const uint32_t compose_first_single[][2] = {
 	{ 0x0338, 0x226e },
 	{ 0x0338, 0x2260 },
 	{ 0x0338, 0x226f },

@@ -129,18 +129,18 @@ rb_u_buffer_append(VALUE self, const char *str, long length)
 }
 
 VALUE
-rb_u_buffer_append_unichar(VALUE self, unichar c)
+rb_u_buffer_append_char(VALUE self, uint32_t c)
 {
         UBuffer *buffer = RVAL2UBUFFER(self);
 
-        u_buffer_maybe_expand(buffer, MAX_UNICHAR_BYTE_LENGTH);
-        buffer->length += unichar_to_u(c, buffer->c + buffer->length);
+        u_buffer_maybe_expand(buffer, U_CHAR_MAX_BYTE_LENGTH);
+        buffer->length += u_char_to_u(c, buffer->c + buffer->length);
 
         return self;
 }
 
 VALUE
-rb_u_buffer_append_unichar_n(VALUE self, unichar c, long n)
+rb_u_buffer_append_char_n(VALUE self, uint32_t c, long n)
 {
         if (n < 1)
                 return self;
@@ -154,8 +154,8 @@ rb_u_buffer_append_unichar_n(VALUE self, unichar c, long n)
                 return self;
         }
 
-        char buf[MAX_UNICHAR_BYTE_LENGTH];
-        int length = unichar_to_u(c, buf);
+        char buf[U_CHAR_MAX_BYTE_LENGTH];
+        int length = u_char_to_u(c, buf);
         u_buffer_maybe_expand(buffer, length * n);
         for (int i = 0; i < n; i++)
                 memcpy(buffer->c + buffer->length + length * i, buf, length);
@@ -251,7 +251,7 @@ rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
 
                         rb_u_buffer_append(self, buffer->c, buffer->length);
                 } else if (FIXNUM_P(argv[i]) || TYPE(argv[i]) == T_BIGNUM) {
-                        unichar c = NUM2UINT(argv[i]);
+                        uint32_t c = NUM2UINT(argv[i]);
 
 /* TODO: This depends on an experimental API.  Modify this once the API is
  * stable. */
@@ -267,12 +267,12 @@ rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
                         }
 #endif
 
-                        if (!unichar_isvalid(c))
+                        if (!u_char_isvalid(c))
                                 rb_u_raise(rb_eRangeError,
                                            "invalid Unicode character: %u",
                                            c);
 
-                        rb_u_buffer_append_unichar(self, c);
+                        rb_u_buffer_append_char(self, c);
                 } else {
                         const UString *string = RVAL2USTRING_ANY(argv[i]);
 

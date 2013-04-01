@@ -61,7 +61,7 @@ enum {
  * of a given Unicode character (UTF-32).
  */
 static inline unsigned short
-_utf8_length(const unichar c)
+_utf8_length(const uint32_t c)
 {
 	if (c < UNI_LEN1)
 		return 1;

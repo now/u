@@ -8,7 +8,7 @@ HIDDEN extern const int16_t *_u_combining_class_table_part2;
 
 
 static inline int
-s_combining_class(unichar c)
+s_combining_class(uint32_t c)
 {
         int16_t index;
 

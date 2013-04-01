@@ -33,7 +33,7 @@ rb_u_string_each_line_separator(VALUE self, const UString *separator)
         const UString *string = RVAL2USTRING(self);
 
         long separator_length = USTRING_LENGTH(separator);
-        unichar first = (separator_length == 0) ?
+        uint32_t first = (separator_length == 0) ?
                 '\n' : _rb_u_aref_char_validated(USTRING_STR(separator), USTRING_END(separator));
 
         const char *begin = USTRING_STR(string);
@@ -42,7 +42,7 @@ rb_u_string_each_line_separator(VALUE self, const UString *separator)
         const char *end = USTRING_END(string);
 
         while (p < end) {
-                unichar c = _rb_u_aref_char_validated(p, end);
+                uint32_t c = _rb_u_aref_char_validated(p, end);
 
 again:
                 if (separator_length == 0 && c == first) {

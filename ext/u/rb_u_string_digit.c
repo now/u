@@ -6,5 +6,5 @@
 VALUE
 rb_u_string_digit(VALUE self)
 {
-        return _rb_u_character_test(self, unichar_isdigit);
+        return _rb_u_character_test(self, u_char_isdigit);
 }

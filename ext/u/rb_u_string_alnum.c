@@ -6,5 +6,5 @@
 VALUE
 rb_u_string_alnum(VALUE self)
 {
-        return _rb_u_character_test(self, unichar_isalnum);
+        return _rb_u_character_test(self, u_char_isalnum);
 }

@@ -8,13 +8,13 @@ mirror_loop(const char *string, size_t length, bool use_length, char *result)
         const char *p = string;
         const char *end = p + length;
         while (P_WITHIN_STR(p, end, use_length)) {
-                unichar c = u_aref_char(p);
-                unichar mirrored;
+                uint32_t c = u_aref_char(p);
+                uint32_t mirrored;
 
-                if (!unichar_mirror(c, &mirrored))
+                if (!u_char_mirror(c, &mirrored))
                         mirrored = c;
 
-                n += unichar_to_u(mirrored, OFFSET_IF(result, n));
+                n += u_char_to_u(mirrored, OFFSET_IF(result, n));
 
                 p = u_next(p);
         }

@@ -115,7 +115,7 @@ rb_u_string_to_inum_base_bit_length(const char *s, int base)
 
 static bool
 rb_u_string_to_inum_num_separator(const char *str, const char *s, bool verify,
-                                  unichar c, bool *previous_was_separator)
+                                  uint32_t c, bool *previous_was_separator)
 {
         if (c != '_') {
                 *previous_was_separator = false;
@@ -137,36 +137,36 @@ rb_u_string_to_inum_num_separator(const char *str, const char *s, bool verify,
         return true;
 }
 
-#define UNICHAR_FULLWIDTH_A     0xff21
-#define UNICHAR_FULLWIDTH_Z     0xff3a
-#define UNICHAR_FULLWIDTH_a     0xff41
-#define UNICHAR_FULLWIDTH_z     0xff5a
+#define FULLWIDTH_A ((uint32_t)0xff21)
+#define FULLWIDTH_Z ((uint32_t)0xff3a)
+#define FULLWIDTH_a ((uint32_t)0xff41)
+#define FULLWIDTH_z ((uint32_t)0xff5a)
 
 static int
-unichar_zdigit_value(unichar c)
+u_char_zdigit_value(uint32_t c)
 {
 	if (c >= 'a' && c <= 'z')
 		return c - 'a' + 10;
 	else if (c >= 'A' && c <= 'Z')
 		return c - 'A' + 10;
-        else if (c >= UNICHAR_FULLWIDTH_a && c <= UNICHAR_FULLWIDTH_z)
-                return c - UNICHAR_FULLWIDTH_a + 10;
-        else if (c >= UNICHAR_FULLWIDTH_A && c <= UNICHAR_FULLWIDTH_Z)
-                return c - UNICHAR_FULLWIDTH_A + 10;
+        else if (c >= FULLWIDTH_a && c <= FULLWIDTH_z)
+                return c - FULLWIDTH_a + 10;
+        else if (c >= FULLWIDTH_A && c <= FULLWIDTH_Z)
+                return c - FULLWIDTH_A + 10;
 	else
-		return unichar_digit_value(c);
+		return u_char_digit_value(c);
 }
 
 static bool
-rb_u_string_to_inum_digit_value(const char *str, const char *s, unichar c,
+rb_u_string_to_inum_digit_value(const char *str, const char *s, uint32_t c,
                                 int base, bool verify, int *digit_value)
 {
         /* If we stumble upon a space, return false so that we may end our
          * processing and skip over any trailing white-space. */
-        if (unichar_isspace(c))
+        if (u_char_isspace(c))
                 return false;
 
-        int value = unichar_zdigit_value(c);
+        int value = u_char_zdigit_value(c);
 
         if (value == -1) {
                 if (!verify)
@@ -198,7 +198,7 @@ rb_u_string_to_inum_as_fix(const char *str, const char *s, int sign, int base,
 
         bool previous_was_separator = false;
         while (*s != '\0') {
-                unichar c = u_aref_char(s);
+                uint32_t c = u_aref_char(s);
                 s = u_next(s);
 
                 if (rb_u_string_to_inum_num_separator(str, s, verify, c, &previous_was_separator))
@@ -212,7 +212,7 @@ rb_u_string_to_inum_as_fix(const char *str, const char *s, int sign, int base,
         }
 
         if (verify) {
-                while (*s != '\0' && unichar_isspace(u_aref_char(s)))
+                while (*s != '\0' && u_char_isspace(u_aref_char(s)))
                         s = u_next(s);
                 if (*s != '\0')
                         rb_u_raise(rb_eArgError,
@@ -241,7 +241,7 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
         const char *s = str;
 
         /* Skip any leading whitespace. */
-        while (unichar_isspace(u_aref_char(s)))
+        while (u_char_isspace(u_aref_char(s)))
                 s = u_next(s);
 
         /* Figure out what sign this number uses. */
@@ -289,7 +289,7 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
 
         bool previous_was_separator = false;
         while (true) {
-                unichar c = u_aref_char(s);
+                uint32_t c = u_aref_char(s);
                 s = u_next(s);
 
                 if (rb_u_string_to_inum_num_separator(str, s, verify, c, &previous_was_separator))

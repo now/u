@@ -219,6 +219,40 @@ module U
               u_append.c
               u_aref_char.c
               u_byte_length.c
+              u_char_combining_class.c
+              u_char_digit_value.c
+              u_char_grapheme_break_type.c
+              u_char_isalnum.c
+              u_char_isalpha.c
+              u_char_isassigned.c
+              u_char_iscased.c
+              u_char_iscaseignorable.c
+              u_char_iscntrl.c
+              u_char_isdefined.c
+              u_char_isdigit.c
+              u_char_isgraph.c
+              u_char_islower.c
+              u_char_isnewline.c
+              u_char_isprint.c
+              u_char_ispunct.c
+              u_char_issoftdotted.c
+              u_char_isspace.c
+              u_char_isupper.c
+              u_char_isvalid.c
+              u_char_iswide.c
+              u_char_iswide_cjk.c
+              u_char_isxdigit.c
+              u_char_iszerowidth.c
+              u_char_line_break_type.c
+              u_char_mirror.c
+              u_char_script.c
+              u_char_to_u.c
+              u_char_tolower.c
+              u_char_toupper.c
+              u_char_type.c
+              u_char_xdigit_value.c
+              u_char_word_break_type.c
+              u_char_width.c
               u_collate.c
               u_copy.c
               u_downcase.c
@@ -241,40 +275,6 @@ module U
               u_width.c
               u_word_breaks.c
               ucs4_to_u.c
-              unichar_combining_class.c
-              unichar_digit_value.c
-              unichar_grapheme_break_type.c
-              unichar_isalnum.c
-              unichar_isalpha.c
-              unichar_isassigned.c
-              unichar_iscased.c
-              unichar_iscaseignorable.c
-              unichar_iscntrl.c
-              unichar_isdefined.c
-              unichar_isdigit.c
-              unichar_isgraph.c
-              unichar_islower.c
-              unichar_isnewline.c
-              unichar_isprint.c
-              unichar_ispunct.c
-              unichar_issoftdotted.c
-              unichar_isspace.c
-              unichar_isupper.c
-              unichar_isvalid.c
-              unichar_iswide.c
-              unichar_iswide_cjk.c
-              unichar_isxdigit.c
-              unichar_iszerowidth.c
-              unichar_line_break_type.c
-              unichar_mirror.c
-              unichar_script.c
-              unichar_to_u.c
-              unichar_tolower.c
-              unichar_toupper.c
-              unichar_type.c
-              unichar_xdigit_value.c
-              unichar_word_break_type.c
-              unichar_width.c
               utf8.h
               word-break.c
               word-break.h'

@@ -21,7 +21,7 @@ rb_u_string_combining_class(VALUE self)
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                int combining_class = unichar_combining_class(u_aref_char_validated_n(p, end - p));
+                int combining_class = u_char_combining_class(u_aref_char_validated_n(p, end - p));
 
                 if (current == -1)
                         current = combining_class;

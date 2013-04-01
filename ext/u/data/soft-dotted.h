@@ -1,15 +1,15 @@
 /* Automatically generated file */
 
-struct unichar_interval {
-  unichar first;
-  unichar last;
+struct uint32_t_interval {
+  uint32_t first;
+  uint32_t last;
 };
 
 static int
-unichar_interval_compare(const void *key, const void *element)
+u_char_interval_compare(const void *key, const void *element)
 {
-        unichar c = *(unichar *)key;
-        struct unichar_interval *interval = (struct unichar_interval *)element;
+        uint32_t c = *(uint32_t *)key;
+        struct uint32_t_interval *interval = (struct uint32_t_interval *)element;
 
         if (c < interval->first)
                 return -1;
@@ -20,7 +20,7 @@ unichar_interval_compare(const void *key, const void *element)
 }
 
 
-static const struct unichar_interval soft_dotted[] = {
+static const struct uint32_t_interval soft_dotted[] = {
 	{ 0x0069, 0x006a },
 	{ 0x012f, 0x012f },
 	{ 0x0249, 0x0249 },
