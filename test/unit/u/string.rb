@@ -136,6 +136,9 @@ Expectations do
   expect :open_punctuation do '('.u.line_break end
   expect :close_parenthesis do ')'.u.line_break end
 
+  expect :cr do "\r".u.grapheme_break end
+  expect :other do 'a'.u.grapheme_break end
+
   expect 4 do 'äbc'.u.bytesize end
   expect 9 do "äbc\0dëf".u.bytesize end
 

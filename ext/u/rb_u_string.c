@@ -252,9 +252,9 @@ rb_u_string_dup(VALUE self)
  * ordering.
  *
  * Related to the property-checking interrogators are {#combining_class},
- * {#general_category}, {#line_break}, {#script}, and {#word_break}, which
- * return the value of the Unicode property in question, the general category
- * being the one often interrogated.
+ * {#general_category}, {#grapheme_break}, {#line_break}, {#script}, and
+ * {#word_break}, which return the value of the Unicode property in question,
+ * the general category being the one often interrogated.
  *
  * There are a couple of other “interrogators” in {#bytesize}, {#length},
  * {#size}, {#width} that return integer properties of the U::String as a
@@ -371,6 +371,7 @@ Init_u_string(VALUE mU)
 
         rb_define_method(rb_cUString, "combining_class", rb_u_string_combining_class, 0); /* in ext/u/rb_u_string_combining_class.c */
         rb_define_method(rb_cUString, "general_category", rb_u_string_general_category, 0); /* in ext/u/rb_u_string_general_category.c */
+        rb_define_method(rb_cUString, "grapheme_break", rb_u_string_grapheme_break, 0); /* in ext/u/rb_u_string_grapheme_break.c */
         rb_define_method(rb_cUString, "line_break", rb_u_string_line_break, 0); /* in ext/u/rb_u_string_line_break.c */
         rb_define_method(rb_cUString, "script", rb_u_string_script, 0); /* in ext/u/rb_u_string_script.c */
         rb_define_method(rb_cUString, "word_break", rb_u_string_word_break, 0); /* in ext/u/rb_u_string_word_break.c */

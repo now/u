@@ -157,6 +157,7 @@ module U
               rb_u_string_general_category.c
               rb_u_string_getbyte.c
               rb_u_string_graph.c
+              rb_u_string_grapheme_break.c
               rb_u_string_gsub.c
               rb_u_string_hash.c
               rb_u_string_hex.c
