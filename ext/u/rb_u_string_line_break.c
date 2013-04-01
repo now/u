@@ -9,7 +9,7 @@
         }
 
 static VALUE
-break_to_symbol(UnicodeLineBreak value)
+break_to_symbol(enum u_line_break value)
 {
         switch (value) {
         BREAK2ID(MANDATORY, mandatory)

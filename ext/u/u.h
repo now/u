@@ -99,7 +99,7 @@ U_CONST int u_char_combining_class(uint32_t c);
 bool u_char_mirror(uint32_t c, uint32_t *mirrored);
 
 
-typedef enum {
+enum u_line_break {
         U_LINE_BREAK_MANDATORY,
         U_LINE_BREAK_CARRIAGE_RETURN,
         U_LINE_BREAK_LINE_FEED,
@@ -140,9 +140,9 @@ typedef enum {
         U_LINE_BREAK_REGIONAL_INDICATOR,
         U_LINE_BREAK_COMPLEX_CONTEXT_DEPENDENT,
         U_LINE_BREAK_UNKNOWN,
-} UnicodeLineBreak;
+};
 
-U_CONST UnicodeLineBreak u_char_line_break(uint32_t c);
+U_CONST enum u_line_break u_char_line_break(uint32_t c);
 
 typedef enum {
         U_GRAPHEME_BREAK_CONTROL,
