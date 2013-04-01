@@ -14,8 +14,8 @@ rb_u_string_eql(VALUE self, VALUE rbother)
         if (!RTEST(rb_obj_is_kind_of(rbother, rb_cUString)))
                 return Qfalse;
 
-        const UString *string = RVAL2USTRING(self);
-        const UString *other = RVAL2USTRING(rbother);
+        const struct rb_u_string *string = RVAL2USTRING(self);
+        const struct rb_u_string *other = RVAL2USTRING(rbother);
 
         const char *p = USTRING_STR(string);
         const char *q = USTRING_STR(other);

@@ -7,7 +7,7 @@
 VALUE
 rb_u_string_strip(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         const char *begin = USTRING_STR(string);
         if (begin == NULL)

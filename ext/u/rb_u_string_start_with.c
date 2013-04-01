@@ -7,7 +7,7 @@
 VALUE
 rb_u_string_start_with(int argc, VALUE *argv, VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         const char *p = USTRING_STR(string);
         long p_length = USTRING_LENGTH(string);
 
@@ -16,7 +16,7 @@ rb_u_string_start_with(int argc, VALUE *argv, VALUE self)
                 if (NIL_P(tmp))
                         continue;
 
-                const UString *other = RVAL2USTRING_ANY(tmp);
+                const struct rb_u_string *other = RVAL2USTRING_ANY(tmp);
                 const char *q = USTRING_STR(other);
                 long q_length = USTRING_LENGTH(other);
 

@@ -2,7 +2,7 @@
 #include "rb_u_string_internal_tr.h"
 
 static long
-rb_u_string_delete_loop(const UString *string, struct tr_table *table,
+rb_u_string_delete_loop(const struct rb_u_string *string, struct tr_table *table,
                         char *result)
 {
         long count = 0;
@@ -48,7 +48,7 @@ rb_u_string_delete_loop(const UString *string, struct tr_table *table,
 VALUE
 rb_u_string_delete(int argc, VALUE *argv, VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         need_at_least_n_arguments(argc, 1);
 

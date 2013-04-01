@@ -338,7 +338,7 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
 VALUE
 rb_u_string_to_inum(VALUE self, int base, bool verify)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         const char *s = USTRING_STR(string);
         if (verify && (s == NULL || memchr(s, '\0', USTRING_LENGTH(string))))

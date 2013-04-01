@@ -192,7 +192,7 @@ static VALUE
 tr_trans_do(VALUE self, struct tr_table *translation,
             uint32_t (*replace)(uint32_t, void *), void *closure, bool squeeze)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         const char *begin = USTRING_STR(string);
         const char *end = USTRING_END(string);
@@ -216,9 +216,9 @@ tr_trans_do(VALUE self, struct tr_table *translation,
 static VALUE
 tr_trans(VALUE self, VALUE rbfrom, VALUE rbto, bool squeeze)
 {
-        const UString *string = RVAL2USTRING(self);
-        const UString *from = RVAL2USTRING_ANY(rbfrom);
-        const UString *to = RVAL2USTRING_ANY(rbto);
+        const struct rb_u_string *string = RVAL2USTRING(self);
+        const struct rb_u_string *from = RVAL2USTRING_ANY(rbfrom);
+        const struct rb_u_string *to = RVAL2USTRING_ANY(rbto);
 
         if (USTRING_STR(string) == NULL || USTRING_LENGTH(string) == 0)
                 return self;

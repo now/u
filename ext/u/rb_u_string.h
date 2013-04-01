@@ -2,11 +2,9 @@
 #define RB_U_STRING_H
 
 
-typedef struct _UString UString;
-
 /* TODO: Move this to rb_u_string.c and turn USTRING_STR() into
  * rb_u_string_c_str() and USTRING_LENGTH() into rb_u_string_c_length() */
-struct _UString {
+struct rb_u_string {
         VALUE rb;
         const char *c;
         long length;
@@ -14,7 +12,7 @@ struct _UString {
 
 
 #define RVAL2USTRING(object) \
-        (Check_Type(object, T_DATA), (UString *)DATA_PTR(object))
+        (Check_Type(object, T_DATA), (struct rb_u_string *)DATA_PTR(object))
 
 #define RVAL2USTRING_ANY(value) \
         (rb_obj_is_kind_of((value), rb_cUString) ? \
@@ -25,7 +23,7 @@ struct _UString {
         Data_Wrap_Struct(rb_cUString, rb_u_string_mark, rb_u_string_free, string)
 
 #define USTRING_LOCAL(arb, ac, alength) \
-        (&(UString){ .rb = (arb), .c = (ac), .length = (alength) })
+        (&(struct rb_u_string){ .rb = (arb), .c = (ac), .length = (alength) })
 
 /* TODO: Call this USTRING_BEGIN() instead */
 #define USTRING_STR(string) \
@@ -38,7 +36,7 @@ struct _UString {
         (NIL_P((string)->rb) ? (string)->c + (string)->length : RSTRING_END(string->rb))
 
 static inline const char *
-rb_u_string_begin_from_offset(const UString *string, long offset)
+rb_u_string_begin_from_offset(const struct rb_u_string *string, long offset)
 {
         return u_offset_to_pointer_n(offset >= 0 ?
                                         USTRING_STR(string) :
@@ -63,7 +61,7 @@ VALUE rb_u_string_check_type(VALUE str);
 VALUE rb_u_string_validate_type(VALUE str);
 VALUE rb_u_string_object_as_string(VALUE object);
 
-const char *rb_u_string_begin_from_offset(const UString *string, long offset);
+const char *rb_u_string_begin_from_offset(const struct rb_u_string *string, long offset);
 
 /* TODO: Rename sub. */
 /* TODO: Move to rb_private.h. */

@@ -8,8 +8,8 @@
 VALUE
 rb_u_string_plus(VALUE self, VALUE rbother)
 {
-        const UString *string = RVAL2USTRING(self);
-        const UString *other = RVAL2USTRING_ANY(rbother);
+        const struct rb_u_string *string = RVAL2USTRING(self);
+        const struct rb_u_string *other = RVAL2USTRING_ANY(rbother);
 
         long string_length = USTRING_LENGTH(string);
         long other_length = USTRING_LENGTH(other);

@@ -136,7 +136,7 @@ rb_u_string_gsub(int argc, VALUE *argv, VALUE self)
                 if (OBJ_TAINTED(result))
                         tainted = true;
 
-                const UString *value = RVAL2USTRING_ANY(result);
+                const struct rb_u_string *value = RVAL2USTRING_ANY(result);
 
                 rb_str_buf_cat(substituted, p, registers->beg[0] - (p - base));
                 rb_str_buf_cat(substituted, USTRING_STR(value), USTRING_LENGTH(value));

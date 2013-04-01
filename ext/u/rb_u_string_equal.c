@@ -17,8 +17,8 @@ rb_u_string_equal(VALUE self, VALUE rbother)
         if (!rb_respond_to(rbother, rb_intern("to_str")))
                 return Qfalse;
 
-        const UString *string = RVAL2USTRING(self);
-        const UString *other = RVAL2USTRING_ANY(rbother);
+        const struct rb_u_string *string = RVAL2USTRING(self);
+        const struct rb_u_string *other = RVAL2USTRING_ANY(rbother);
 
         const char *p = USTRING_STR(string);
         const char *q = USTRING_STR(other);

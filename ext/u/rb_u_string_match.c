@@ -18,7 +18,7 @@ rb_u_string_match(VALUE self, VALUE other)
                 rb_u_raise(rb_eTypeError, "type mismatch: String given");
                 break;
         case T_REGEXP: {
-                const UString *string = RVAL2USTRING(self);
+                const struct rb_u_string *string = RVAL2USTRING(self);
 
                 /* TODO: This needs to be made more efficient. */
                 long index = rb_reg_search(other, rb_str_to_str(self), 0, 0);

@@ -19,7 +19,7 @@
 VALUE
 rb_u_string_count(int argc, VALUE *argv, VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         need_at_least_n_arguments(argc, 1);
 

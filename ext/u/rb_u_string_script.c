@@ -249,7 +249,7 @@ rb_u_string_script(VALUE self)
 {
         UnicodeScript current = U_SCRIPT_UNKNOWN;
 
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);

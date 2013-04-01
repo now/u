@@ -3,8 +3,8 @@
 long
 rb_u_string_rindex(VALUE self, VALUE rbsubstring, long offset)
 {
-        const UString *string = RVAL2USTRING(self);
-        const UString *substring = RVAL2USTRING_ANY(rbsubstring);
+        const struct rb_u_string *string = RVAL2USTRING(self);
+        const struct rb_u_string *substring = RVAL2USTRING_ANY(rbsubstring);
 
         if (USTRING_LENGTH(string) < USTRING_LENGTH(substring))
                 return -1;
@@ -47,7 +47,7 @@ rb_u_string_rindex(VALUE self, VALUE rbsubstring, long offset)
 VALUE
 rb_u_string_rindex_m(int argc, VALUE *argv, VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         VALUE sub, rboffset;
         long offset;
@@ -77,7 +77,7 @@ rb_u_string_rindex_m(int argc, VALUE *argv, VALUE self)
                 offset = u_length_n(USTRING_STR(string), USTRING_LENGTH(string));
         }
 
-        /* TODO: Adjust this to be able to deal with UString in a fast way as
+        /* TODO: Adjust this to be able to deal with struct rb_u_string in a fast way as
          * well. */
         switch (TYPE(sub)) {
         case T_REGEXP:

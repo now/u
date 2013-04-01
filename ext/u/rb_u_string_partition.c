@@ -13,8 +13,8 @@ rb_u_string_partition_failure(VALUE self)
 static VALUE
 rb_u_string_partition_success(VALUE self, VALUE rbseparator, long offset)
 {
-        const UString *string = RVAL2USTRING(self);
-        const UString *separator = RVAL2USTRING_ANY(rbseparator);
+        const struct rb_u_string *string = RVAL2USTRING(self);
+        const struct rb_u_string *separator = RVAL2USTRING_ANY(rbseparator);
 
         long after = offset + USTRING_LENGTH(separator);
 

@@ -5,7 +5,7 @@
 VALUE
 rb_u_string_empty(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         return (USTRING_LENGTH(string) == 0) ? Qtrue : Qfalse;
 }

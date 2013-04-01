@@ -8,7 +8,7 @@
 VALUE
 rb_u_string_b(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         VALUE result = rb_str_new(USTRING_STR(string), USTRING_LENGTH(string));
 #ifdef HAVE_RUBY_ENCODING_H
         rb_enc_associate(result, rb_ascii8bit_encoding());

@@ -3,7 +3,7 @@
 static VALUE
 rb_u_string_byte_substr(VALUE self, long offset, long length)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         long n = USTRING_LENGTH(string);
 
         if (offset > n || length < 0)
@@ -38,7 +38,7 @@ rb_u_string_byteslice_num(VALUE self, long offset)
 static VALUE
 rb_u_string_byteslice_default(VALUE self, VALUE index)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         long n_bytes = USTRING_LENGTH(string);
 
         long begin, length;

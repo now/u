@@ -5,7 +5,7 @@
 long
 rb_u_string_index_regexp(VALUE self, const char *begin, VALUE regex, bool reverse)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         VALUE rbstring = rb_str_to_str(self);
 
         const char *base = USTRING_STR(string);
@@ -25,8 +25,8 @@ rb_u_string_index_regexp(VALUE self, const char *begin, VALUE regex, bool revers
 long
 rb_u_string_index(VALUE self, VALUE rbsubstring, long offset)
 {
-        const UString *string = RVAL2USTRING(self);
-        const UString *substring = RVAL2USTRING_ANY(rbsubstring);
+        const struct rb_u_string *string = RVAL2USTRING(self);
+        const struct rb_u_string *substring = RVAL2USTRING_ANY(rbsubstring);
 
         const char *begin = rb_u_string_begin_from_offset(string, offset);
         if (begin == NULL)
@@ -75,7 +75,7 @@ rb_u_string_index_m(int argc, VALUE *argv, VALUE self)
         if (rb_scan_args(argc, argv, "11", &sub, &rboffset) == 2)
                 offset = NUM2LONG(rboffset);
 
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         const char *begin = rb_u_string_begin_from_offset(string, offset);
         if (begin == NULL) {
@@ -85,7 +85,7 @@ rb_u_string_index_m(int argc, VALUE *argv, VALUE self)
                 return Qnil;
         }
 
-        /* TODO: Adjust this to be able to deal with UString in a fast way as
+        /* TODO: Adjust this to be able to deal with struct rb_u_string in a fast way as
          * well. */
         switch (TYPE(sub)) {
         case T_REGEXP:

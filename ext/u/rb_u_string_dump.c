@@ -122,7 +122,7 @@ rb_u_string_dump_hex(VALUE buffer, unsigned char c)
 VALUE
 rb_u_string_dump(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
 

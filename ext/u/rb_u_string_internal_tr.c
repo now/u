@@ -107,7 +107,7 @@ tr_table_set(struct tr_table *table, bool *buffer, uint32_t c, bool value)
 }
 
 static void
-tr_table_add(struct tr_table *table, const UString *string)
+tr_table_add(struct tr_table *table, const struct rb_u_string *string)
 {
         struct tr tr;
         tr_init(&tr, USTRING_STR(string), USTRING_END(string));
@@ -129,7 +129,7 @@ tr_table_add(struct tr_table *table, const UString *string)
 void
 tr_table_initialize(struct tr_table *table, VALUE rbstring)
 {
-        const UString *string = RVAL2USTRING_ANY(rbstring);
+        const struct rb_u_string *string = RVAL2USTRING_ANY(rbstring);
 
         struct tr tr;
         tr_init(&tr, USTRING_STR(string), USTRING_END(string));

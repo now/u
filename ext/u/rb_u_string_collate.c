@@ -16,8 +16,8 @@
 VALUE
 rb_u_string_collate(VALUE self, VALUE rbother)
 {
-        const UString *string = RVAL2USTRING(self);
-        const UString *other = RVAL2USTRING_ANY(rbother);
+        const struct rb_u_string *string = RVAL2USTRING(self);
+        const struct rb_u_string *other = RVAL2USTRING_ANY(rbother);
 
         return INT2FIX(u_collate_n(USTRING_STR(string), USTRING_LENGTH(string),
                                    USTRING_STR(other), USTRING_LENGTH(other)));

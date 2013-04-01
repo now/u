@@ -15,7 +15,7 @@
 VALUE
 rb_u_string_chop(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         if (USTRING_LENGTH(string) == 0)
                 return self;

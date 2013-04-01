@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
 static char *
-rb_u_string_justify_one_side(char *p, const UString *padding, long padding_width, long n)
+rb_u_string_justify_one_side(char *p, const struct rb_u_string *padding, long padding_width, long n)
 {
         const char *padding_str = USTRING_STR(padding);
         long padding_size = USTRING_LENGTH(padding);
@@ -24,7 +24,7 @@ rb_u_string_justify_one_side(char *p, const UString *padding, long padding_width
 }
 
 static long
-rounding_size(const UString *padding, long padding_width, long n)
+rounding_size(const struct rb_u_string *padding, long padding_width, long n)
 {
         const char *padding_str = USTRING_STR(padding);
         const char *q = padding_str, *end = padding_str + USTRING_LENGTH(padding);
@@ -50,7 +50,7 @@ rounding_size(const UString *padding, long padding_width, long n)
 
 static long
 rb_u_string_justified_size(long string_size,
-                           const UString *padding, long padding_width,
+                           const struct rb_u_string *padding, long padding_width,
                            long left_n, long right_n)
 {
         long size;
@@ -68,8 +68,8 @@ rb_u_string_justified_size(long string_size,
 
 static VALUE
 rb_u_string_justify_impl(VALUE self,
-                         const UString *string, long string_width,
-                         const UString *padding, long padding_width,
+                         const struct rb_u_string *string, long string_width,
+                         const struct rb_u_string *padding, long padding_width,
                          long width, char jflag)
 {
         long n = width - string_width;
@@ -94,10 +94,10 @@ rb_u_string_justify_impl(VALUE self,
 static VALUE
 rb_u_string_justify(int argc, VALUE *argv, VALUE self, char jflag)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         VALUE rbwidth, rbpadding;
-        const UString *padding = USTRING_LOCAL(Qnil, " ", 1);
+        const struct rb_u_string *padding = USTRING_LOCAL(Qnil, " ", 1);
         long padding_width = 1;
         if (rb_scan_args(argc, argv, "11", &rbwidth, &rbpadding) == 2) {
                 padding = RVAL2USTRING_ANY(rbpadding);

@@ -474,7 +474,7 @@ directive_character(UNUSED(uint32_t directive), int flags, int width, UNUSED(int
         int length;
 
         if (!NIL_P(tmp)) {
-                const UString *string = RVAL2USTRING_ANY(tmp);
+                const struct rb_u_string *string = RVAL2USTRING_ANY(tmp);
                 p = USTRING_STR(string);
                 c = _rb_u_aref_char_validated(p, USTRING_END(string));
                 length = (int)(u_next(p) - p);
@@ -502,7 +502,7 @@ directive_string(UNUSED(uint32_t directive), int flags, int width, int precision
         if (OBJ_TAINTED(str))
                 OBJ_TAINT(result);
 
-        const UString *string = RVAL2USTRING_ANY(str);
+        const struct rb_u_string *string = RVAL2USTRING_ANY(str);
         const char *p = USTRING_STR(string);
         long length = USTRING_LENGTH(string);
 
@@ -1084,7 +1084,7 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
 VALUE
 rb_u_buffer_append_format(int argc, const VALUE *argv, VALUE self, VALUE format)
 {
-        const UString *string = RVAL2USTRING_ANY(format);
+        const struct rb_u_string *string = RVAL2USTRING_ANY(format);
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
 

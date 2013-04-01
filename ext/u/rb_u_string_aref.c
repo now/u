@@ -7,7 +7,7 @@ rb_u_string_substr_impl(VALUE self, long offset, long len, bool nil_on_empty)
         if (len < 0)
                 return Qnil;
 
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         const char *begin = rb_u_string_begin_from_offset(string, offset);
         if (begin == NULL)
@@ -54,7 +54,7 @@ rb_u_string_aref_num(VALUE self, long offset)
 static VALUE
 rb_u_string_aref_default(VALUE self, VALUE index)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         long n_chars = u_length_n(USTRING_STR(string), USTRING_LENGTH(string));
 
         long begin, length;

@@ -3,7 +3,7 @@
 static VALUE
 rb_u_string_each_line_default(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         const char *begin = USTRING_STR(string);
         const char *base = begin;
@@ -28,9 +28,9 @@ rb_u_string_each_line_default(VALUE self)
 }
 
 static VALUE
-rb_u_string_each_line_separator(VALUE self, const UString *separator)
+rb_u_string_each_line_separator(VALUE self, const struct rb_u_string *separator)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         long separator_length = USTRING_LENGTH(separator);
         uint32_t first = (separator_length == 0) ?
@@ -113,7 +113,7 @@ rb_u_string_each_line(int argc, VALUE *argv, VALUE self)
                 return self;
         }
 
-        const UString *separator = RVAL2USTRING_ANY(rs);
+        const struct rb_u_string *separator = RVAL2USTRING_ANY(rs);
         if (rs == rb_default_rs)
                 return rb_u_string_each_line_default(self);
 

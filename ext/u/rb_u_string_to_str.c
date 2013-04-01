@@ -5,7 +5,7 @@
 VALUE
 rb_u_string_to_str(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         VALUE result = NIL_P(string->rb) ?
                 rb_u_str_new(USTRING_STR(string), USTRING_LENGTH(string)) :

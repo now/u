@@ -88,7 +88,7 @@ rb_u_validate(const char *string, long length)
 VALUE
 _rb_u_character_test(VALUE self, bool (*test)(uint32_t))
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
@@ -106,7 +106,7 @@ VALUE
 _rb_u_string_test(VALUE self,
                   char *(convert)(const char *, size_t, size_t *))
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         size_t nfd_length;
         char *nfd = u_normalize_n(USTRING_STR(string),
@@ -137,7 +137,7 @@ _rb_u_string_test_in_locale(int argc, VALUE *argv, VALUE self,
         if (rb_scan_args(argc, argv, "01", &rblocale) == 1)
                 locale = StringValuePtr(rblocale);
 
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         size_t nfd_length;
         char *nfd = u_normalize_n(USTRING_STR(string),
@@ -171,7 +171,7 @@ _rb_u_string_case_in_locale(int argc, VALUE *argv, VALUE self,
         if (rb_scan_args(argc, argv, "01", &rblocale) == 1)
                 locale = StringValuePtr(rblocale);
 
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         size_t length;
         char *cased = case_in_locale_n(USTRING_STR(string),
@@ -186,7 +186,7 @@ VALUE
 _rb_u_string_property(VALUE self, const char *name, int unknown,
                       int property(uint32_t), VALUE tosym(int))
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         if (p == end)

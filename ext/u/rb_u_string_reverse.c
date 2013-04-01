@@ -9,7 +9,7 @@
 VALUE
 rb_u_string_reverse(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         long length = USTRING_LENGTH(string);
 
         char *reversed = u_reverse_n(USTRING_STR(string), length);

@@ -81,7 +81,7 @@ symbol_to_mode(VALUE symbol)
 VALUE
 rb_u_string_normalize(int argc, VALUE *argv, VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         VALUE rbmode;
         UnicodeNormalizeMode mode = U_NORMALIZE_DEFAULT;

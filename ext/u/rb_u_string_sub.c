@@ -119,7 +119,7 @@ rb_u_string_sub(int argc, VALUE *argv, VALUE self)
         if (OBJ_UNTRUSTED(result))
                 untrusted = true;
 
-        const UString *value = RVAL2USTRING_ANY(result);
+        const struct rb_u_string *value = RVAL2USTRING_ANY(result);
 
         size_t length = registers->beg[0] +
                 USTRING_LENGTH(value) +

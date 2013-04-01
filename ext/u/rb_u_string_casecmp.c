@@ -15,8 +15,8 @@
 VALUE
 rb_u_string_casecmp(VALUE self, VALUE rbother)
 {
-        const UString *string = RVAL2USTRING(self);
-        const UString *other = RVAL2USTRING_ANY(rbother);
+        const struct rb_u_string *string = RVAL2USTRING(self);
+        const struct rb_u_string *other = RVAL2USTRING_ANY(rbother);
 
         size_t folded_length;
         char *folded = u_foldcase_n(USTRING_STR(string),

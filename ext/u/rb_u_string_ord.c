@@ -4,7 +4,7 @@
 VALUE
 rb_u_string_ord(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         uint32_t c = _rb_u_aref_char_validated(USTRING_STR(string),
                                               USTRING_END(string));
 

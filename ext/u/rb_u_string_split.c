@@ -18,7 +18,7 @@ rb_u_string_split_trim(VALUE result, bool limit_given, int limit)
 static VALUE
 rb_u_string_split_rest(VALUE self, long offset, bool limit_given, int limit, VALUE result)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         long length = USTRING_LENGTH(string);
 
         if (length > 0 && (limit_given || length > offset || limit < 0))
@@ -37,7 +37,7 @@ rb_u_string_split_awk(VALUE self, bool limit_given, int limit)
 {
         VALUE result = rb_ary_new();
 
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         const char *begin = USTRING_STR(string);
         const char *p = begin;
         const char *end = USTRING_END(string);
@@ -67,8 +67,8 @@ rb_u_string_split_awk(VALUE self, bool limit_given, int limit)
 static VALUE
 rb_u_string_split_string(VALUE self, VALUE rbseparator, bool limit_given, int limit)
 {
-        const UString *string = RVAL2USTRING(self);
-        const UString *separator = RVAL2USTRING_ANY(rbseparator);
+        const struct rb_u_string *string = RVAL2USTRING(self);
+        const struct rb_u_string *separator = RVAL2USTRING_ANY(rbseparator);
 
         const char *begin = USTRING_STR(string);
         const char *p = begin;
@@ -200,7 +200,7 @@ rb_u_string_split_m(int argc, VALUE *argv, VALUE self)
         if (rb_scan_args(argc, argv, "02", &rbpattern, &rblimit) == 2)
                 limit = NUM2INT(rblimit);
 
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         if (limit == 1) {
                 if (USTRING_LENGTH(string) == 0)
@@ -222,7 +222,7 @@ rb_u_string_split_m(int argc, VALUE *argv, VALUE self)
                                                  limit_given,
                                                  limit);
 
-        const UString *pattern = RVAL2USTRING_ANY(rbpattern);
+        const struct rb_u_string *pattern = RVAL2USTRING_ANY(rbpattern);
         const char *p = USTRING_STR(pattern);
         long length = USTRING_LENGTH(pattern);
 

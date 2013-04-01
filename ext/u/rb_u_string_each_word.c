@@ -40,7 +40,7 @@ rb_u_string_each_word(VALUE self)
 {
         RETURN_ENUMERATOR(self, 0, NULL);
 
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         size_t length = end - p;

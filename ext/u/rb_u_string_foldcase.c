@@ -5,7 +5,7 @@
 VALUE
 rb_u_string_foldcase(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         size_t length;
         char *folded = u_foldcase_n(USTRING_STR(string),

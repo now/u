@@ -126,7 +126,7 @@ rb_u_string_inspect_default(uint32_t c, VALUE result)
 VALUE
 rb_u_string_inspect(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         VALUE result = rb_u_str_buf_new(0);
         rb_str_buf_cat2(result, "\"");

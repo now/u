@@ -272,7 +272,7 @@ rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
 
                         rb_u_buffer_append_char(self, c);
                 } else {
-                        const UString *string = RVAL2USTRING_ANY(argv[i]);
+                        const struct rb_u_string *string = RVAL2USTRING_ANY(argv[i]);
 
                         rb_u_buffer_append(self,
                                            USTRING_STR(string),

@@ -55,7 +55,7 @@ u_mirror_n(const char *string, size_t length, size_t *new_length)
 VALUE
 rb_u_string_mirror(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         size_t length;
         char *mirrored = u_mirror_n(USTRING_STR(string),

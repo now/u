@@ -7,7 +7,7 @@
 VALUE
 rb_u_string_collate_key(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         size_t length;
         char *collate_key = u_collate_key_n(USTRING_STR(string),

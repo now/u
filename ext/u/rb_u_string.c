@@ -16,13 +16,13 @@
 VALUE rb_cUString;
 
 static void
-rb_u_string_mark(const UString *string)
+rb_u_string_mark(const struct rb_u_string *string)
 {
         rb_gc_mark(string->rb);
 }
 
 static void
-rb_u_string_free(UString *string)
+rb_u_string_free(struct rb_u_string *string)
 {
         free((char *)string->c);
         free(string);
@@ -31,7 +31,7 @@ rb_u_string_free(UString *string)
 static VALUE
 rb_u_string_set_rb(VALUE self, VALUE rb)
 {
-        UString *string = RVAL2USTRING(self);
+        struct rb_u_string *string = RVAL2USTRING(self);
         if (NIL_P(rb)) {
                 string->rb = rb;
                 return self;
@@ -47,7 +47,7 @@ rb_u_string_set_rb(VALUE self, VALUE rb)
 static VALUE
 rb_u_string_create(VALUE rb, const char *str, long length)
 {
-        UString *string = ALLOC(UString);
+        struct rb_u_string *string = ALLOC(struct rb_u_string);
         string->c = str;
         string->length = length;
         VALUE result = USTRING2RVAL(string);
@@ -98,7 +98,7 @@ rb_u_string_new_rb(VALUE str)
 VALUE
 rb_u_string_new_subsequence(VALUE self, long begin, long length)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         /* TODO: Create a subsequence of self, starting at begin and running
          * through length bytes.  The returned value should be infected. */
         return rb_u_string_new_c(self, USTRING_STR(string) + begin, length);
@@ -177,8 +177,8 @@ rb_u_string_initialize(int argc, VALUE *argv, VALUE self)
 static VALUE
 rb_u_string_initialize_copy(VALUE self, VALUE rboriginal)
 {
-        UString *string = RVAL2USTRING(self);
-        const UString *original = RVAL2USTRING(rboriginal);
+        struct rb_u_string *string = RVAL2USTRING(self);
+        const struct rb_u_string *original = RVAL2USTRING(rboriginal);
 
         if (string == original)
                 return self;
@@ -195,7 +195,7 @@ rb_u_string_initialize_copy(VALUE self, VALUE rboriginal)
 VALUE
 rb_u_string_dup(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         VALUE result = rb_u_string_create(string->rb, string->c, string->length);
         OBJ_INFECT(result, self);

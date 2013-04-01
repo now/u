@@ -3,7 +3,7 @@
 static VALUE
 rb_u_string_chomp_default(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         const char *begin = USTRING_STR(string);
         const char *end = USTRING_END(string);
@@ -28,7 +28,7 @@ rb_u_string_chomp_default(VALUE self)
 static VALUE
 rb_u_string_chomp_newlines(VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         const char *begin = USTRING_STR(string);
         const char *end = USTRING_END(string);
 
@@ -73,7 +73,7 @@ rb_u_string_chomp_newlines(VALUE self)
 VALUE
 rb_u_string_chomp(int argc, VALUE *argv, VALUE self)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
 
         long length = USTRING_LENGTH(string);
         if (length == 0)
@@ -90,7 +90,7 @@ rb_u_string_chomp(int argc, VALUE *argv, VALUE self)
         if (NIL_P(rs))
                 return self;
 
-        const UString *separator = RVAL2USTRING_ANY(rs);
+        const struct rb_u_string *separator = RVAL2USTRING_ANY(rs);
 
         long separator_length = USTRING_LENGTH(separator);
         if (separator_length == 0)

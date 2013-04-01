@@ -8,7 +8,7 @@
 VALUE
 rb_u_string_getbyte(VALUE self, VALUE rbindex)
 {
-        const UString *string = RVAL2USTRING(self);
+        const struct rb_u_string *string = RVAL2USTRING(self);
         long index = NUM2LONG(rbindex);
 
         if (index < 0)
