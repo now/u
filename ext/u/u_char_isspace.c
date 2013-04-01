@@ -6,7 +6,7 @@
 #include "private.h"
 
 #include "data/constants.h"
-#include "types.h"
+#include "general-category.h"
 
 
 /* {{{1
@@ -23,9 +23,9 @@ u_char_isspace(uint32_t c)
 	case '\f':
 		return true;
 	default:
-                return IS(s_type(c),
-                          OR(U_SEPARATOR_SPACE,
-                             OR(U_SEPARATOR_LINE,
-                                OR(U_SEPARATOR_PARAGRAPH, 0)))) ? true : false;
+                return IS(s_general_category(c),
+                          OR(U_GENERAL_CATEGORY_SEPARATOR_SPACE,
+                             OR(U_GENERAL_CATEGORY_SEPARATOR_LINE,
+                                OR(U_GENERAL_CATEGORY_SEPARATOR_PARAGRAPH, 0)))) ? true : false;
 	}
 }

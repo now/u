@@ -10,7 +10,7 @@
 #include "data/constants.h"
 #include "data/soft-dotted.h"
 
-#include "types.h"
+#include "general-category.h"
 
 bool
 u_char_issoftdotted(uint32_t c)

@@ -10,8 +10,8 @@
 
 #include "data/constants.h"
 #include "attributes.h"
+#include "general-category.h"
 #include "titled.h"
-#include "types.h"
 
 #include "locale_type.h"
 
@@ -197,16 +197,16 @@ downcase_turkic_dot_above(const char *string, const char *p, char *result)
 }
 
 static inline size_t
-downcase_simple(uint32_t c, int type, char *result)
+downcase_simple(uint32_t c, UnicodeGeneralCategory category, char *result)
 {
 	uint32_t tv = s_attribute(c);
 
 	if (tv >= UNICODE_SPECIAL_CASE_TABLE_START)
                 return _u_special_case_output(result,
                                               tv - UNICODE_SPECIAL_CASE_TABLE_START,
-                                              type, false);
+                                              category, false);
 
-        if (type == U_LETTER_TITLECASE) {
+        if (category == U_GENERAL_CATEGORY_LETTER_TITLECASE) {
                 uint32_t tu = _u_titlecase_table_lookup(c, false);
                 if (tu != c)
                         return u_char_to_u(tu, result);
@@ -245,9 +245,10 @@ _u_downcase_step(const char *string, const char *p, const char *end, bool use_en
                 }
         }
 
-        int type = s_type(c);
-        if (IS(type, OR(U_LETTER_UPPERCASE, OR(U_LETTER_TITLECASE, 0))))
-                return downcase_simple(c, type, result);
+        UnicodeGeneralCategory category = s_general_category(c);
+        if (IS(category, OR(U_GENERAL_CATEGORY_LETTER_UPPERCASE,
+                            OR(U_GENERAL_CATEGORY_LETTER_TITLECASE, 0))))
+                return downcase_simple(c, category, result);
 
         size_t length = u_next(p) - p;
 

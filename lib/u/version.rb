@@ -90,15 +90,17 @@ module U
               data/compose.h
               data/constants.h
               data/decompose.h
+              data/general-category.h
               data/grapheme-break.h
               data/line-break.h
               data/script.h
               data/soft-dotted.h
               data/title-table.h
-              data/types.h
               data/wide-cjk.h
               data/wide.h
               data/word-break.h
+              general-category.c
+              general-category.h
               grapheme-break.c
               grapheme-break.h
               locale_type.c
@@ -126,7 +128,6 @@ module U
               rb_u_string_case_ignorable.c
               rb_u_string_casecmp.c
               rb_u_string_cased.c
-              rb_u_string_category.c
               rb_u_string_chomp.c
               rb_u_string_chop.c
               rb_u_string_chr.c
@@ -153,6 +154,7 @@ module U
               rb_u_string_foldcase.c
               rb_u_string_folded.c
               rb_u_string_format.c
+              rb_u_string_general_category.c
               rb_u_string_getbyte.c
               rb_u_string_graph.c
               rb_u_string_gsub.c
@@ -212,13 +214,12 @@ module U
               rb_u_string_zero_width.c
               titled.c
               titled.h
-              types.c
-              types.h
               u.c
               u.h
               u_append.c
               u_aref_char.c
               u_byte_length.c
+              u_char_general_category.c
               u_char_combining_class.c
               u_char_digit_value.c
               u_char_grapheme_break_type.c
@@ -249,7 +250,6 @@ module U
               u_char_to_u.c
               u_char_tolower.c
               u_char_toupper.c
-              u_char_type.c
               u_char_xdigit_value.c
               u_char_word_break_type.c
               u_char_width.c
@@ -290,12 +290,12 @@ module U
               build/ext/u/data/compose.rb
               build/ext/u/data/constants.rb
               build/ext/u/data/decompose.rb
+              build/ext/u/data/general-category.rb
               build/ext/u/data/grapheme-word-break.rb
               build/ext/u/data/marshalled.rb
               build/ext/u/data/script.rb
               build/ext/u/data/soft-dotted.rb
               build/ext/u/data/title-table.rb
-              build/ext/u/data/types.rb
               build/ext/u/data/wide.rb
               build/lib/u/build.rb
               build/lib/u/build/data.rb

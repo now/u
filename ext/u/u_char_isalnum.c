@@ -6,7 +6,7 @@
 #include "private.h"
 
 #include "data/constants.h"
-#include "types.h"
+#include "general-category.h"
 
 
 /* {{{1
@@ -15,7 +15,7 @@
 bool
 u_char_isalnum(uint32_t c)
 {
-	int type = s_type(c);
+	UnicodeGeneralCategory category = s_general_category(c);
 
-	return s_isdigit(type) || s_isalpha(type);
+	return s_isdigit(category) || s_isalpha(category);
 }

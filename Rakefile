@@ -203,8 +203,8 @@ data_header 'ext/u/data/soft-dotted.h' => %w[build/ext/u/data/soft-dotted.rb
 data_header 'ext/u/data/title-table.h' => %w[build/ext/u/data/title-table.rb
                                              build/data/UnicodeData.marshalled]
 
-data_header 'ext/u/data/types.h' => %w[build/ext/u/data/types.rb
-                                       build/data/UnicodeData.marshalled]
+data_header 'ext/u/data/general-category.h' => %w[build/ext/u/data/general-category.rb
+                                                  build/data/UnicodeData.marshalled]
 
 data_header 'ext/u/data/wide.h' => %w[build/ext/u/data/wide.rb
                                       build/data/DerivedEastAsianWidth.txt] do |t|

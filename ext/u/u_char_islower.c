@@ -6,7 +6,7 @@
 #include "private.h"
 
 #include "data/constants.h"
-#include "types.h"
+#include "general-category.h"
 
 
 /* {{{1
@@ -15,5 +15,5 @@
 bool
 u_char_islower(uint32_t c)
 {
-	return s_type(c) == U_LETTER_LOWERCASE;
+	return s_general_category(c) == U_GENERAL_CATEGORY_LETTER_LOWERCASE;
 }

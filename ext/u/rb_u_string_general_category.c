@@ -1,7 +1,7 @@
 #include "rb_includes.h"
 
-#define TYPE2ID(type, symbol) \
-        case U_##type: { \
+#define CATEGORY2ID(type, symbol) \
+        case U_GENERAL_CATEGORY_##type: { \
                 static ID id_##symbol; \
                 if (id_##symbol == 0) \
                         id_##symbol = rb_intern(#symbol); \
@@ -9,41 +9,41 @@
         }
 
 static VALUE
-type_to_symbol(UnicodeType type)
+category_to_symbol(UnicodeGeneralCategory category)
 {
-        switch (type) {
-        TYPE2ID(OTHER_CONTROL, other_control)
-        TYPE2ID(OTHER_FORMAT, other_format)
-        TYPE2ID(OTHER_NOT_ASSIGNED, other_not_assigned)
-        TYPE2ID(OTHER_PRIVATE_USE, other_private_use)
-        TYPE2ID(OTHER_SURROGATE, other_surrogate)
-        TYPE2ID(LETTER_LOWERCASE, letter_lowercase)
-        TYPE2ID(LETTER_MODIFIER, letter_modifier)
-        TYPE2ID(LETTER_OTHER, letter_other)
-        TYPE2ID(LETTER_TITLECASE, letter_titlecase)
-        TYPE2ID(LETTER_UPPERCASE, letter_uppercase)
-        TYPE2ID(MARK_SPACING_COMBINING, mark_spacing_combining)
-        TYPE2ID(MARK_ENCLOSING, mark_enclosing)
-        TYPE2ID(MARK_NON_SPACING, mark_non_spacing)
-        TYPE2ID(NUMBER_DECIMAL, number_decimal)
-        TYPE2ID(NUMBER_LETTER, number_letter)
-        TYPE2ID(NUMBER_OTHER, number_other)
-        TYPE2ID(PUNCTUATION_CONNECTOR, punctuation_connector)
-        TYPE2ID(PUNCTUATION_DASH, punctuation_dash)
-        TYPE2ID(PUNCTUATION_CLOSE, punctuation_close)
-        TYPE2ID(PUNCTUATION_FINAL_QUOTE, punctuation_final_quote)
-        TYPE2ID(PUNCTUATION_INITIAL_QUOTE, punctuation_initial_quote)
-        TYPE2ID(PUNCTUATION_OTHER, punctuation_other)
-        TYPE2ID(PUNCTUATION_OPEN, punctuation_open)
-        TYPE2ID(SYMBOL_CURRENCY, symbol_currency)
-        TYPE2ID(SYMBOL_MODIFIER, symbol_modifier)
-        TYPE2ID(SYMBOL_MATH, symbol_math)
-        TYPE2ID(SYMBOL_OTHER, symbol_other)
-        TYPE2ID(SEPARATOR_LINE, separator_line)
-        TYPE2ID(SEPARATOR_PARAGRAPH, separator_paragraph)
-        TYPE2ID(SEPARATOR_SPACE, separator_space)
+        switch (category) {
+        CATEGORY2ID(OTHER_CONTROL, other_control)
+        CATEGORY2ID(OTHER_FORMAT, other_format)
+        CATEGORY2ID(OTHER_NOT_ASSIGNED, other_not_assigned)
+        CATEGORY2ID(OTHER_PRIVATE_USE, other_private_use)
+        CATEGORY2ID(OTHER_SURROGATE, other_surrogate)
+        CATEGORY2ID(LETTER_LOWERCASE, letter_lowercase)
+        CATEGORY2ID(LETTER_MODIFIER, letter_modifier)
+        CATEGORY2ID(LETTER_OTHER, letter_other)
+        CATEGORY2ID(LETTER_TITLECASE, letter_titlecase)
+        CATEGORY2ID(LETTER_UPPERCASE, letter_uppercase)
+        CATEGORY2ID(MARK_SPACING_COMBINING, mark_spacing_combining)
+        CATEGORY2ID(MARK_ENCLOSING, mark_enclosing)
+        CATEGORY2ID(MARK_NON_SPACING, mark_non_spacing)
+        CATEGORY2ID(NUMBER_DECIMAL, number_decimal)
+        CATEGORY2ID(NUMBER_LETTER, number_letter)
+        CATEGORY2ID(NUMBER_OTHER, number_other)
+        CATEGORY2ID(PUNCTUATION_CONNECTOR, punctuation_connector)
+        CATEGORY2ID(PUNCTUATION_DASH, punctuation_dash)
+        CATEGORY2ID(PUNCTUATION_CLOSE, punctuation_close)
+        CATEGORY2ID(PUNCTUATION_FINAL_QUOTE, punctuation_final_quote)
+        CATEGORY2ID(PUNCTUATION_INITIAL_QUOTE, punctuation_initial_quote)
+        CATEGORY2ID(PUNCTUATION_OTHER, punctuation_other)
+        CATEGORY2ID(PUNCTUATION_OPEN, punctuation_open)
+        CATEGORY2ID(SYMBOL_CURRENCY, symbol_currency)
+        CATEGORY2ID(SYMBOL_MODIFIER, symbol_modifier)
+        CATEGORY2ID(SYMBOL_MATH, symbol_math)
+        CATEGORY2ID(SYMBOL_OTHER, symbol_other)
+        CATEGORY2ID(SEPARATOR_LINE, separator_line)
+        CATEGORY2ID(SEPARATOR_PARAGRAPH, separator_paragraph)
+        CATEGORY2ID(SEPARATOR_SPACE, separator_space)
         default:
-                rb_u_raise(rb_eNotImpError, "unknown type: %d", type);
+                rb_u_raise(rb_eNotImpError, "unknown general category: %d", category);
         }
 }
 
@@ -101,27 +101,27 @@ type_to_symbol(UnicodeType type)
  * @see http://www.unicode.org/notes/tn36/
  *   Unicode Technical Note #36: A Categorization of Unicode Characters */
 VALUE
-rb_u_string_category(VALUE self)
+rb_u_string_general_category(VALUE self)
 {
-        UnicodeType current = (UnicodeType)-1;
+        UnicodeGeneralCategory current = (UnicodeGeneralCategory)-1;
 
         const UString *string = RVAL2USTRING(self);
 
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                UnicodeType type = u_char_type(u_aref_char_validated_n(p, end - p));
+                UnicodeGeneralCategory category = u_char_general_category(u_aref_char_validated_n(p, end - p));
 
-                if (current == (UnicodeType)-1)
-                        current = type;
-                else if (type != current)
+                if (current == (UnicodeGeneralCategory)-1)
+                        current = category;
+                else if (category != current)
                         rb_u_raise(rb_eArgError,
-                                   "string consists of more than one type: :%s+, :%s",
-                                   rb_id2name(SYM2ID(type_to_symbol(current))),
-                                   rb_id2name(SYM2ID(type_to_symbol(type))));
+                                   "string consists of characters from more than one general category: :%s+, :%s",
+                                   rb_id2name(SYM2ID(category_to_symbol(current))),
+                                   rb_id2name(SYM2ID(category_to_symbol(category))));
 
                 p = u_next(p);
         }
 
-        return type_to_symbol(current);
+        return category_to_symbol(current);
 }

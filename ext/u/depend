@@ -2,6 +2,8 @@ attributes.o: attributes.c u.h private.h locale_type.h data/constants.h \
   data/attributes.h attributes.h
 combining_class.o: combining_class.c u.h private.h locale_type.h \
   data/constants.h data/combining-class.h combining_class.h
+general-category.o: general-category.c u.h private.h locale_type.h \
+  data/constants.h data/general-category.h general-category.h
 grapheme-break.o: grapheme-break.c u.h private.h locale_type.h \
   data/constants.h data/grapheme-break.h grapheme-break.h
 locale_type.o: locale_type.c u.h private.h locale_type.h
@@ -37,8 +39,6 @@ rb_u_string_casecmp.o: rb_u_string_casecmp.c rb_includes.h extconf.h u.h \
   private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_cased.o: rb_u_string_cased.c rb_includes.h extconf.h u.h \
   private.h locale_type.h rb_private.h rb_u_string.h
-rb_u_string_category.o: rb_u_string_category.c rb_includes.h extconf.h \
-  u.h private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_chomp.o: rb_u_string_chomp.c rb_includes.h extconf.h u.h \
   private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_chop.o: rb_u_string_chop.c rb_includes.h extconf.h u.h \
@@ -96,6 +96,9 @@ rb_u_string_folded.o: rb_u_string_folded.c rb_includes.h extconf.h u.h \
 rb_u_string_format.o: rb_u_string_format.c rb_includes.h extconf.h u.h \
   private.h locale_type.h rb_private.h rb_u_string.h rb_u_buffer.h \
   rb_u_string_to_inum.h
+rb_u_string_general_category.o: rb_u_string_general_category.c \
+  rb_includes.h extconf.h u.h private.h locale_type.h rb_private.h \
+  rb_u_string.h
 rb_u_string_getbyte.o: rb_u_string_getbyte.c rb_includes.h extconf.h u.h \
   private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_graph.o: rb_u_string_graph.c rb_includes.h extconf.h u.h \
@@ -216,9 +219,7 @@ rb_u_string_xdigit.o: rb_u_string_xdigit.c rb_includes.h extconf.h u.h \
 rb_u_string_zero_width.o: rb_u_string_zero_width.c rb_includes.h \
   extconf.h u.h private.h locale_type.h rb_private.h rb_u_string.h
 titled.o: titled.c u.h private.h locale_type.h data/constants.h \
-  data/title-table.h titled.h types.h
-types.o: types.c u.h private.h locale_type.h data/constants.h \
-  data/types.h types.h
+  data/title-table.h general-category.h titled.h
 u.o: u.c u.h
 u_append.o: u_append.c u.h private.h locale_type.h
 u_aref_char.o: u_aref_char.c u.h utf8.h private.h locale_type.h
@@ -226,48 +227,50 @@ u_byte_length.o: u_byte_length.c u.h private.h locale_type.h
 u_char_combining_class.o: u_char_combining_class.c u.h private.h \
   locale_type.h data/constants.h combining_class.h
 u_char_digit_value.o: u_char_digit_value.c u.h private.h locale_type.h \
-  data/constants.h attributes.h types.h
+  data/constants.h attributes.h general-category.h
+u_char_general_category.o: u_char_general_category.c u.h private.h \
+  locale_type.h data/constants.h general-category.h
 u_char_grapheme_break_type.o: u_char_grapheme_break_type.c u.h private.h \
   locale_type.h data/constants.h grapheme-break.h
 u_char_isalnum.o: u_char_isalnum.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_isalpha.o: u_char_isalpha.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_isassigned.o: u_char_isassigned.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_iscased.o: u_char_iscased.c u.h private.h locale_type.h \
-  data/constants.h data/cased.h types.h
+  data/constants.h data/cased.h general-category.h
 u_char_iscaseignorable.o: u_char_iscaseignorable.c u.h private.h \
-  locale_type.h data/constants.h types.h
+  locale_type.h data/constants.h general-category.h
 u_char_iscntrl.o: u_char_iscntrl.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_isdefined.o: u_char_isdefined.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_isdigit.o: u_char_isdigit.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_isgraph.o: u_char_isgraph.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_islower.o: u_char_islower.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_isnewline.o: u_char_isnewline.c u.h
 u_char_isprint.o: u_char_isprint.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_ispunct.o: u_char_ispunct.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_issoftdotted.o: u_char_issoftdotted.c u.h private.h locale_type.h \
-  data/constants.h data/soft-dotted.h types.h
+  data/constants.h data/soft-dotted.h general-category.h
 u_char_isspace.o: u_char_isspace.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_isupper.o: u_char_isupper.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_isvalid.o: u_char_isvalid.c u.h utf8.h
 u_char_iswide.o: u_char_iswide.c u.h private.h locale_type.h data/wide.h
 u_char_iswide_cjk.o: u_char_iswide_cjk.c u.h private.h locale_type.h \
   data/wide-cjk.h
 u_char_isxdigit.o: u_char_isxdigit.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_iszerowidth.o: u_char_iszerowidth.c u.h private.h locale_type.h \
-  data/constants.h types.h
+  data/constants.h general-category.h
 u_char_line_break_type.o: u_char_line_break_type.c u.h data/constants.h \
   data/line-break.h private.h locale_type.h
 u_char_mirror.o: u_char_mirror.c u.h private.h locale_type.h \
@@ -276,11 +279,9 @@ u_char_script.o: u_char_script.c u.h private.h locale_type.h \
   data/script.h
 u_char_to_u.o: u_char_to_u.c u.h utf8.h
 u_char_tolower.o: u_char_tolower.c u.h private.h locale_type.h \
-  data/constants.h attributes.h titled.h types.h
+  data/constants.h attributes.h titled.h general-category.h
 u_char_toupper.o: u_char_toupper.c u.h private.h locale_type.h \
-  data/constants.h attributes.h titled.h types.h
-u_char_type.o: u_char_type.c u.h private.h locale_type.h data/constants.h \
-  types.h
+  data/constants.h attributes.h titled.h general-category.h
 u_char_width.o: u_char_width.c u.h
 u_char_word_break_type.o: u_char_word_break_type.c u.h private.h \
   locale_type.h data/constants.h word-break.h
@@ -288,7 +289,7 @@ u_char_xdigit_value.o: u_char_xdigit_value.c u.h private.h locale_type.h
 u_collate.o: u_collate.c u.h utf8.h private.h locale_type.h
 u_copy.o: u_copy.c u.h private.h locale_type.h
 u_downcase.o: u_downcase.c u.h private.h locale_type.h data/constants.h \
-  attributes.h titled.h types.h
+  attributes.h general-category.h titled.h
 u_foldcase.o: u_foldcase.c u.h private.h locale_type.h \
   data/case-folding.h
 u_grapheme_breaks.o: u_grapheme_breaks.c u.h private.h locale_type.h \
@@ -308,7 +309,7 @@ u_reverse.o: u_reverse.c u.h private.h locale_type.h
 u_rindex.o: u_rindex.c u.h private.h locale_type.h
 u_titlecase.o: u_titlecase.c u.h private.h locale_type.h
 u_upcase.o: u_upcase.c u.h private.h locale_type.h data/constants.h \
-  attributes.h titled.h types.h
+  attributes.h general-category.h titled.h
 u_width.o: u_width.c u.h private.h locale_type.h
 u_word_breaks.o: u_word_breaks.c u.h private.h locale_type.h \
   data/constants.h word-break.h

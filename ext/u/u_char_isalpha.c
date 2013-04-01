@@ -6,7 +6,7 @@
 #include "private.h"
 
 #include "data/constants.h"
-#include "types.h"
+#include "general-category.h"
 
 
 /* {{{1
@@ -15,5 +15,5 @@
 bool
 u_char_isalpha(uint32_t c)
 {
-	return s_isalpha(s_type(c));
+	return s_isalpha(s_general_category(c));
 }

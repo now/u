@@ -8,8 +8,8 @@
 #include "data/constants.h"
 #include "data/title-table.h"
 
+#include "general-category.h"
 #include "titled.h"
-#include "types.h"
 
 /* {{{1
  * Determine whether ‘c’ is a titlecase letter, such as the slavic digraph Ǳ,
@@ -37,7 +37,7 @@ u_char_totitle(uint32_t c)
                     title_table[i].lower == c)
 			return title_table[i].ch;
 
-        if (s_type(c) == U_LETTER_LOWERCASE)
+        if (s_general_category(c) == U_GENERAL_CATEGORY_LETTER_LOWERCASE)
                 return u_char_toupper(c);
 
         return c;

@@ -6,7 +6,7 @@
 #include "private.h"
 
 #include "data/constants.h"
-#include "types.h"
+#include "general-category.h"
 
 
 /* {{{1
@@ -16,10 +16,10 @@
 bool
 u_char_isgraph(uint32_t c)
 {
-        return !IS(s_type(c),
-                   OR(U_OTHER_CONTROL,
-                      OR(U_OTHER_FORMAT,
-                         OR(U_OTHER_NOT_ASSIGNED,
-                            OR(U_OTHER_SURROGATE,
-                               OR(U_SEPARATOR_SPACE, 0))))));
+        return !IS(s_general_category(c),
+                   OR(U_GENERAL_CATEGORY_OTHER_CONTROL,
+                      OR(U_GENERAL_CATEGORY_OTHER_FORMAT,
+                         OR(U_GENERAL_CATEGORY_OTHER_NOT_ASSIGNED,
+                            OR(U_GENERAL_CATEGORY_OTHER_SURROGATE,
+                               OR(U_GENERAL_CATEGORY_SEPARATOR_SPACE, 0))))));
 }

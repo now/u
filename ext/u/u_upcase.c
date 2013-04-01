@@ -9,8 +9,8 @@
 
 #include "data/constants.h"
 #include "attributes.h"
+#include "general-category.h"
 #include "titled.h"
-#include "types.h"
 
 #include "locale_type.h"
 
@@ -34,7 +34,7 @@ output_marks(const char **p, const char *end, bool use_end, char *result)
         while (P_WITHIN_STR(q, end, use_end)) {
 		uint32_t c = u_aref_char(q);
 
-                if (!s_ismark(s_type(c)))
+                if (!s_ismark(s_general_category(c)))
                         break;
 
                 length += u_char_to_u(c, OFFSET_IF(result, length));
@@ -69,16 +69,16 @@ is_after_soft_dotted(const char *string, const char *p)
 }
 
 static inline size_t
-upcase_simple(uint32_t c, int type, char *result, bool title)
+upcase_simple(uint32_t c, UnicodeGeneralCategory category, char *result, bool title)
 {
 	uint32_t tv = s_attribute(c);
 
 	if (tv >= UNICODE_SPECIAL_CASE_TABLE_START)
                 return _u_special_case_output(result,
                                               tv - UNICODE_SPECIAL_CASE_TABLE_START,
-                                              type, title);
+                                              category, title);
 
-        if (type == U_LETTER_TITLECASE) {
+        if (category == U_GENERAL_CATEGORY_LETTER_TITLECASE) {
                 uint32_t tu = _u_titlecase_table_lookup(c, true);
                 if (tu != c)
                         return u_char_to_u(tu, result);
@@ -112,10 +112,11 @@ _u_upcase_step(const char *string, const char **p, const char *end, bool use_end
         if (locale_type == LOCALE_TURKIC && c == LATIN_SMALL_LETTER_I)
                 return u_char_to_u(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE, result);
 
-        int type = s_type(c);
-        if (IS(type, OR(U_LETTER_LOWERCASE, OR(U_LETTER_TITLECASE, 0))))
-                return upcase_simple(c, type, result,
-                                     title || type != U_LETTER_LOWERCASE);
+        UnicodeGeneralCategory category = s_general_category(c);
+        if (IS(category, OR(U_GENERAL_CATEGORY_LETTER_LOWERCASE,
+                            OR(U_GENERAL_CATEGORY_LETTER_TITLECASE, 0))))
+                return upcase_simple(c, category, result,
+                                     title || category != U_GENERAL_CATEGORY_LETTER_LOWERCASE);
 
         size_t length = u_next(*p) - *p;
 

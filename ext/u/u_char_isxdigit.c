@@ -6,7 +6,7 @@
 #include "private.h"
 
 #include "data/constants.h"
-#include "types.h"
+#include "general-category.h"
 
 
 #define FULLWIDTH_A ((uint32_t)0xff21)
@@ -26,5 +26,5 @@ u_char_isxdigit(uint32_t c)
 		(c >= 'A' && c <= 'F') ||
                 (c >= FULLWIDTH_a && c <= FULLWIDTH_f) ||
                 (c >= FULLWIDTH_A && c <= FULLWIDTH_F) ||
-                (s_type(c) == U_NUMBER_DECIMAL));
+                (s_general_category(c) == U_GENERAL_CATEGORY_NUMBER_DECIMAL));
 }

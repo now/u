@@ -6,7 +6,7 @@
 #include "private.h"
 
 #include "data/constants.h"
-#include "types.h"
+#include "general-category.h"
 
 
 /* {{{1
@@ -15,5 +15,5 @@
 bool
 u_char_isupper(uint32_t c)
 {
-	return s_type(c) == U_LETTER_UPPERCASE;
+	return s_general_category(c) == U_GENERAL_CATEGORY_LETTER_UPPERCASE;
 }

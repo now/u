@@ -8,7 +8,7 @@
 #include "data/constants.h"
 #include "attributes.h"
 #include "titled.h"
-#include "types.h"
+#include "general-category.h"
 
 
 /* {{{1
@@ -17,12 +17,12 @@
 uint32_t
 u_char_tolower(uint32_t c)
 {
-	int type = s_type(c);
+	UnicodeGeneralCategory category = s_general_category(c);
 
-	if (type == U_LETTER_UPPERCASE)
+	if (category == U_GENERAL_CATEGORY_LETTER_UPPERCASE)
                 return _u_special_case_table_lookup(c);
 
-        if (type == U_LETTER_TITLECASE)
+        if (category == U_GENERAL_CATEGORY_LETTER_TITLECASE)
                 return _u_titlecase_table_lookup(c, false);
 
         return c;

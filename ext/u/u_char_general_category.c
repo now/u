@@ -6,14 +6,14 @@
 #include "private.h"
 
 #include "data/constants.h"
-#include "types.h"
+#include "general-category.h"
 
 
 /* {{{1
  * Determine the Unicode character type of ‘c’.
  */
-UnicodeType
-u_char_type(uint32_t c)
+UnicodeGeneralCategory
+u_char_general_category(uint32_t c)
 {
-	return s_type(c);
+	return s_general_category(c);
 }

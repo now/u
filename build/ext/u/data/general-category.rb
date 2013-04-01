@@ -2,11 +2,11 @@
 
 require 'u/build'
 
-class Types
+class Category
   def initialize(data, io = $stdout)
     U::Build::Header.new(io) do
-      io.puts U::Build::Header::Tables::Split.new(data, 'char', 'type'){ |i|
-        'U_%s' % Mappings[data[i].type]
+      io.puts U::Build::Header::Tables::Split.new(data, 'uint8_t', 'general_category'){ |i|
+        'U_GENERAL_CATEGORY_%s' % Mappings[data[i].type]
       }
     end
   end
@@ -51,11 +51,11 @@ private
     class << self
       def [](value)
         Mappings[value] or
-          raise 'unknown Category property value: %s; the Unicode standard has changed' %
+          raise 'unknown General_Category property value: %s; the Unicode standard has changed' %
             value
       end
     end
   end
 end
 
-Types.new(Marshal.load(File.open(ARGV[0], 'rb', &:read)))
+Category.new(Marshal.load(File.open(ARGV[0], 'rb', &:read)))
