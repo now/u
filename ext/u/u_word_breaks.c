@@ -45,7 +45,7 @@ static const uint8_t wb_dfa[][U_WORD_BREAK_REGIONAL_INDICATOR + 1] = {
 #undef K
 
 void
-u_word_breaks(const char *string, size_t n, UnicodeBreakFn fn, void *closure)
+u_word_breaks(const char *string, size_t n, u_break_fn fn, void *closure)
 {
         const char *p = string;
         const char *end = p + n;

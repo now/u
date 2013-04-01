@@ -38,7 +38,7 @@ static const uint8_t gb_dfa[][U_GRAPHEME_BREAK_V + 1] = {
 #undef K
 
 void
-u_grapheme_breaks(const char *string, size_t n, UnicodeBreakFn fn, void *closure)
+u_grapheme_breaks(const char *string, size_t n, u_break_fn fn, void *closure)
 {
         const char *p = string;
         const char *end = p + n;

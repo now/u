@@ -46,7 +46,7 @@ rb_u_string_each_word(VALUE self)
         size_t length = end - p;
         rb_u_validate(p, length);
         struct closure closure = { self, p };
-        u_word_breaks(p, length, (UnicodeBreakFn)each, &closure);
+        u_word_breaks(p, length, (u_break_fn)each, &closure);
         if (closure.previous != end)
                 yield(end, &closure);
         return self;
