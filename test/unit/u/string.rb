@@ -97,7 +97,7 @@ Expectations do
   expect TypeError do 'abc'.u =~ 'abc'.u end
   expect 10 do 'FëëFiëFöö-Fum'.u =~ /Fum$/u end
   expect nil do 'FëëFiëFöö-Fum'.u =~ /FUM$/u end
-  expect 'fööbar' do 'föö'.u =~ Object.new.tap{ |o| stub(o).=~{ |t| t + 'bar'.u } } end
+  expect 'fööbar' do 'föö'.u =~ stub(:=~ => proc{ |t| t + 'bar'.u }) end
 
   expect 'a' do 'abc'.u.match(/a/)[0] end
   expect nil do 'abc'.u.match(/d/) end
