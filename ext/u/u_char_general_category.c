@@ -12,7 +12,7 @@
 /* {{{1
  * Determine the Unicode character type of ‘c’.
  */
-UnicodeGeneralCategory
+enum u_general_category
 u_char_general_category(uint32_t c)
 {
 	return s_general_category(c);

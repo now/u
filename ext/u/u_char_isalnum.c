@@ -15,7 +15,7 @@
 bool
 u_char_isalnum(uint32_t c)
 {
-	UnicodeGeneralCategory category = s_general_category(c);
+	enum u_general_category category = s_general_category(c);
 
 	return s_isdigit(category) || s_isalpha(category);
 }

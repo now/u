@@ -69,7 +69,7 @@ is_after_soft_dotted(const char *string, const char *p)
 }
 
 static inline size_t
-upcase_simple(uint32_t c, UnicodeGeneralCategory category, char *result, bool title)
+upcase_simple(uint32_t c, enum u_general_category category, char *result, bool title)
 {
 	uint32_t tv = s_attribute(c);
 
@@ -112,7 +112,7 @@ _u_upcase_step(const char *string, const char **p, const char *end, bool use_end
         if (locale == LOCALE_TURKIC && c == LATIN_SMALL_LETTER_I)
                 return u_char_to_u(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE, result);
 
-        UnicodeGeneralCategory category = s_general_category(c);
+        enum u_general_category category = s_general_category(c);
         if (IS(category, OR(U_GENERAL_CATEGORY_LETTER_LOWERCASE,
                             OR(U_GENERAL_CATEGORY_LETTER_TITLECASE, 0))))
                 return upcase_simple(c, category, result,

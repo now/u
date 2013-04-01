@@ -9,7 +9,7 @@
         }
 
 static VALUE
-category_to_symbol(UnicodeGeneralCategory category)
+category_to_symbol(enum u_general_category category)
 {
         switch (category) {
         CATEGORY2ID(OTHER_CONTROL, other_control)
@@ -103,25 +103,7 @@ category_to_symbol(UnicodeGeneralCategory category)
 VALUE
 rb_u_string_general_category(VALUE self)
 {
-        UnicodeGeneralCategory current = (UnicodeGeneralCategory)-1;
-
-        const struct rb_u_string *string = RVAL2USTRING(self);
-
-        const char *p = USTRING_STR(string);
-        const char *end = USTRING_END(string);
-        while (p < end) {
-                UnicodeGeneralCategory category = u_char_general_category(u_aref_char_validated_n(p, end - p));
-
-                if (current == (UnicodeGeneralCategory)-1)
-                        current = category;
-                else if (category != current)
-                        rb_u_raise(rb_eArgError,
-                                   "string consists of characters from more than one general category: :%s+, :%s",
-                                   rb_id2name(SYM2ID(category_to_symbol(current))),
-                                   rb_id2name(SYM2ID(category_to_symbol(category))));
-
-                p = u_next(p);
-        }
-
-        return category_to_symbol(current);
+        return _rb_u_string_property(self, "general category", U_GENERAL_CATEGORY_OTHER_NOT_ASSIGNED,
+                                     (int (*)(uint32_t))u_char_general_category,
+                                     (VALUE (*)(int))category_to_symbol);
 }

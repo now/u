@@ -17,7 +17,7 @@
 uint32_t
 u_char_tolower(uint32_t c)
 {
-	UnicodeGeneralCategory category = s_general_category(c);
+	enum u_general_category category = s_general_category(c);
 
 	if (category == U_GENERAL_CATEGORY_LETTER_UPPERCASE)
                 return _u_special_case_table_lookup(c);

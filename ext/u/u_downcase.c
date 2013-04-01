@@ -197,7 +197,7 @@ downcase_turkic_dot_above(const char *string, const char *p, char *result)
 }
 
 static inline size_t
-downcase_simple(uint32_t c, UnicodeGeneralCategory category, char *result)
+downcase_simple(uint32_t c, enum u_general_category category, char *result)
 {
 	uint32_t tv = s_attribute(c);
 
@@ -245,7 +245,7 @@ _u_downcase_step(const char *string, const char *p, const char *end, bool use_en
                 }
         }
 
-        UnicodeGeneralCategory category = s_general_category(c);
+        enum u_general_category category = s_general_category(c);
         if (IS(category, OR(U_GENERAL_CATEGORY_LETTER_UPPERCASE,
                             OR(U_GENERAL_CATEGORY_LETTER_TITLECASE, 0))))
                 return downcase_simple(c, category, result);

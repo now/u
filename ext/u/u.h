@@ -27,7 +27,7 @@
 #define U_INCOMPLETE_INPUT_CHAR ((uint32_t)-2)
 
 
-typedef enum {
+enum u_general_category {
         U_GENERAL_CATEGORY_OTHER_CONTROL,
         U_GENERAL_CATEGORY_OTHER_FORMAT,
         U_GENERAL_CATEGORY_OTHER_NOT_ASSIGNED,
@@ -58,7 +58,7 @@ typedef enum {
         U_GENERAL_CATEGORY_SEPARATOR_LINE,
         U_GENERAL_CATEGORY_SEPARATOR_PARAGRAPH,
         U_GENERAL_CATEGORY_SEPARATOR_SPACE,
-} UnicodeGeneralCategory;
+};
 
 U_CONST bool u_char_isalnum(uint32_t c);
 U_CONST bool u_char_isalpha(uint32_t c);
@@ -92,7 +92,7 @@ U_CONST size_t u_char_width(uint32_t c);
 U_CONST int u_char_digit_value(uint32_t c);
 U_CONST int u_char_xdigit_value(uint32_t c);
 
-U_CONST UnicodeGeneralCategory u_char_general_category(uint32_t c);
+U_CONST enum u_general_category u_char_general_category(uint32_t c);
 
 U_CONST int u_char_combining_class(uint32_t c);
 
