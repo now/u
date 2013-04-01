@@ -80,7 +80,8 @@ int
 main(void)
 {
         struct re_registers *registers = RMATCH_REGS(Qnil);
-        registers = registers;
+        struct re_registers *registers2 = registers;
+        registers = registers2;
         return 0;
 }
 EOC
