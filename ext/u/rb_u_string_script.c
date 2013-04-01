@@ -247,25 +247,7 @@ script_to_symbol(UnicodeScript script)
 VALUE
 rb_u_string_script(VALUE self)
 {
-        UnicodeScript current = U_SCRIPT_UNKNOWN;
-
-        const struct rb_u_string *string = RVAL2USTRING(self);
-
-        const char *p = USTRING_STR(string);
-        const char *end = USTRING_END(string);
-        while (p < end) {
-                UnicodeScript script = u_char_script(u_aref_char_validated_n(p, end - p));
-
-                if (current == U_SCRIPT_UNKNOWN)
-                        current = script;
-                else if (script != current)
-                        rb_u_raise(rb_eArgError,
-                                   "string consists of more than one script: :%s+, :%s",
-                                   rb_id2name(SYM2ID(script_to_symbol(current))),
-                                   rb_id2name(SYM2ID(script_to_symbol(script))));
-
-                p = u_next(p);
-        }
-
-        return script_to_symbol(current);
+        return _rb_u_string_property(self, "script", U_SCRIPT_UNKNOWN,
+                                     (int (*)(uint32_t))u_char_script,
+                                     (VALUE (*)(int))script_to_symbol);
 }
