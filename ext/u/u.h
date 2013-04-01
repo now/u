@@ -2,10 +2,15 @@
 #define U_H
 
 #if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
-#define CONST_FUNC                              \
-          __attribute__((__const__))
+#  define U_CONST __attribute__((__const__))
 #else
-#define CONST_FUNC
+#  define U_CONST
+#endif
+
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 96)
+#  define U_PURE __attribute__((__pure__))
+#else
+#  define U_PURE
 #endif
 
 #define U_CHAR_MAX UINT32_MAX
@@ -55,41 +60,41 @@ typedef enum {
         U_GENERAL_CATEGORY_SEPARATOR_SPACE,
 } UnicodeGeneralCategory;
 
-bool u_char_isalnum(uint32_t c);
-bool u_char_isalpha(uint32_t c);
-bool u_char_isassigned(uint32_t c);
-bool u_char_iscased(uint32_t c);
-bool u_char_iscaseignorable(uint32_t c);
-bool u_char_iscntrl(uint32_t c);
-bool u_char_isdefined(uint32_t c);
-bool u_char_isdigit(uint32_t c);
-bool u_char_isgraph(uint32_t c);
-bool u_char_islower(uint32_t c);
-bool u_char_isnewline(uint32_t c);
-bool u_char_isprint(uint32_t c);
-bool u_char_ispunct(uint32_t c);
-bool u_char_issoftdotted(uint32_t c);
-bool u_char_isspace(uint32_t c);
-bool u_char_istitle(uint32_t c);
-bool u_char_isupper(uint32_t c);
-bool u_char_isvalid(uint32_t c);
-bool u_char_iswide(uint32_t c);
-bool u_char_iswide_cjk(uint32_t c);
-bool u_char_isxdigit(uint32_t c);
-bool u_char_iszerowidth(uint32_t c);
+U_CONST bool u_char_isalnum(uint32_t c);
+U_CONST bool u_char_isalpha(uint32_t c);
+U_CONST bool u_char_isassigned(uint32_t c);
+U_CONST bool u_char_iscased(uint32_t c);
+U_CONST bool u_char_iscaseignorable(uint32_t c);
+U_CONST bool u_char_iscntrl(uint32_t c);
+U_CONST bool u_char_isdefined(uint32_t c);
+U_CONST bool u_char_isdigit(uint32_t c);
+U_CONST bool u_char_isgraph(uint32_t c);
+U_CONST bool u_char_islower(uint32_t c);
+U_CONST bool u_char_isnewline(uint32_t c);
+U_CONST bool u_char_isprint(uint32_t c);
+U_CONST bool u_char_ispunct(uint32_t c);
+U_CONST bool u_char_issoftdotted(uint32_t c);
+U_CONST bool u_char_isspace(uint32_t c);
+U_CONST bool u_char_istitle(uint32_t c);
+U_CONST bool u_char_isupper(uint32_t c);
+U_CONST bool u_char_isvalid(uint32_t c);
+U_CONST bool u_char_iswide(uint32_t c);
+U_CONST bool u_char_iswide_cjk(uint32_t c);
+U_CONST bool u_char_isxdigit(uint32_t c);
+U_CONST bool u_char_iszerowidth(uint32_t c);
 
-uint32_t u_char_toupper(uint32_t c);
-uint32_t u_char_tolower(uint32_t c);
-uint32_t u_char_totitle(uint32_t c);
+U_CONST uint32_t u_char_toupper(uint32_t c);
+U_CONST uint32_t u_char_tolower(uint32_t c);
+U_CONST uint32_t u_char_totitle(uint32_t c);
 
-size_t u_char_width(uint32_t c);
+U_CONST size_t u_char_width(uint32_t c);
 
-int u_char_digit_value(uint32_t c);
-int u_char_xdigit_value(uint32_t c);
+U_CONST int u_char_digit_value(uint32_t c);
+U_CONST int u_char_xdigit_value(uint32_t c);
 
-UnicodeGeneralCategory u_char_general_category(uint32_t c);
+U_CONST UnicodeGeneralCategory u_char_general_category(uint32_t c);
 
-int u_char_combining_class(uint32_t c) CONST_FUNC;
+U_CONST int u_char_combining_class(uint32_t c);
 
 bool u_char_mirror(uint32_t c, uint32_t *mirrored);
 
@@ -137,7 +142,7 @@ typedef enum {
         U_LINE_BREAK_UNKNOWN,
 } UnicodeLineBreakType;
 
-UnicodeLineBreakType u_char_line_break_type(uint32_t c);
+U_CONST UnicodeLineBreakType u_char_line_break_type(uint32_t c);
 
 typedef enum {
         U_GRAPHEME_BREAK_CONTROL,
@@ -155,7 +160,7 @@ typedef enum {
         U_GRAPHEME_BREAK_V,
 } UnicodeGraphemeBreakType;
 
-UnicodeGraphemeBreakType u_char_grapheme_break_type(uint32_t c);
+U_CONST UnicodeGraphemeBreakType u_char_grapheme_break_type(uint32_t c);
 
 typedef enum {
         U_WORD_BREAK_ALETTER,
@@ -174,7 +179,7 @@ typedef enum {
         U_WORD_BREAK_REGIONAL_INDICATOR,
 } UnicodeWordBreakType;
 
-UnicodeWordBreakType u_char_word_break_type(uint32_t c);
+U_CONST UnicodeWordBreakType u_char_word_break_type(uint32_t c);
 
 
 typedef enum {
@@ -283,7 +288,7 @@ typedef enum {
         U_SCRIPT_MIAO,
 } UnicodeScript;
 
-UnicodeScript u_char_script(uint32_t c);
+U_CONST UnicodeScript u_char_script(uint32_t c);
 
 typedef enum {
 	U_NORMALIZE_DEFAULT,
@@ -321,23 +326,23 @@ char *u_upcase_in_locale(const char *string, const char *locale);
 char *u_upcase_in_locale_n(const char *string, size_t length,
                            const char *locale, size_t *new_length);
 
-uint32_t u_aref_char(const char *str);
-uint32_t u_aref_char_n(const char *str, size_t max);
-uint32_t u_aref_char_validated(const char *str);
-uint32_t u_aref_char_validated_n(const char *str, size_t max);
+U_PURE uint32_t u_aref_char(const char *str);
+U_PURE uint32_t u_aref_char_n(const char *str, size_t max);
+U_PURE uint32_t u_aref_char_validated(const char *str);
+U_PURE uint32_t u_aref_char_validated_n(const char *str, size_t max);
 
 extern const char * const u_skip_lengths;
 
 #define u_next(str) ((str) + u_skip_lengths[*(const unsigned char *)(str)])
-char *u_find_next(const char *p, const char *end);
+U_PURE char *u_find_next(const char *p, const char *end);
 
-char *u_prev(const char *p);
-char *u_find_prev(const char *begin, const char *p);
+U_PURE char *u_prev(const char *p);
+U_PURE char *u_find_prev(const char *begin, const char *p);
 
-char *u_offset_to_pointer(const char *str, long offset);
-char *u_offset_to_pointer_n(const char *str, long offset, size_t n);
+U_PURE char *u_offset_to_pointer(const char *str, long offset);
+U_PURE char *u_offset_to_pointer_n(const char *str, long offset, size_t n);
 
-long u_pointer_to_offset(const char *str, const char *pos);
+U_PURE long u_pointer_to_offset(const char *str, const char *pos);
 
 void u_copy(char *dest, const char *src);
 void u_copy_n(char *dest, const char *src, size_t n);
@@ -345,33 +350,33 @@ void u_copy_n(char *dest, const char *src, size_t n);
 void u_append(char *dest, const char *src);
 void u_append_n(char *dest, const char *src, size_t n);
 
-int u_collate(const char *a, const char *b);
-int u_collate_n(const char *a, size_t a_len, const char *b, size_t b_len);
+U_PURE int u_collate(const char *a, const char *b);
+U_PURE int u_collate_n(const char *a, size_t a_len, const char *b, size_t b_len);
 char *u_collate_key(const char *str);
 char *u_collate_key_n(const char *str, size_t len, size_t *new_length);
 
-size_t u_char_index(const char *str, uint32_t c);
-size_t u_char_index_n(const char *str, uint32_t c, size_t len);
-size_t u_index(const char *haystack, const char *needle);
-size_t u_index_n(const char *haystack, const char *needle, size_t len);
+U_PURE size_t u_char_index(const char *str, uint32_t c);
+U_PURE size_t u_char_index_n(const char *str, uint32_t c, size_t len);
+U_PURE size_t u_index(const char *haystack, const char *needle);
+U_PURE size_t u_index_n(const char *haystack, const char *needle, size_t len);
 
-size_t u_char_rindex(const char *str, uint32_t c);
-size_t u_char_rindex_n(const char *str, uint32_t c, size_t len);
-size_t u_rindex(const char *haystack, const char *needle);
-size_t u_rindex_n(const char *haystack, const char *needle, size_t len);
+U_PURE size_t u_char_rindex(const char *str, uint32_t c);
+U_PURE size_t u_char_rindex_n(const char *str, uint32_t c, size_t len);
+U_PURE size_t u_rindex(const char *haystack, const char *needle);
+U_PURE size_t u_rindex_n(const char *haystack, const char *needle, size_t len);
 
-bool utf_has_prefix(const char *str, const char *prefix);
+U_PURE bool utf_has_prefix(const char *str, const char *prefix);
 
-bool u_is_ascii_only(const char *string);
-bool u_is_ascii_only_n(const char *string, size_t length);
+U_PURE bool u_is_ascii_only(const char *string);
+U_PURE bool u_is_ascii_only_n(const char *string, size_t length);
 
-long u_length(const char *str);
-long u_length_n(const char *str, long len);
+U_PURE long u_length(const char *str);
+U_PURE long u_length_n(const char *str, long len);
 
-size_t u_width(const char *string);
-size_t u_width_n(const char *string, size_t length);
+U_PURE size_t u_width(const char *string);
+U_PURE size_t u_width_n(const char *string, size_t length);
 
-size_t u_byte_length(const char *str);
+U_PURE size_t u_byte_length(const char *str);
 
 char *u_reverse(const char *str);
 char *u_reverse_n(const char *str, size_t len);
