@@ -9,7 +9,7 @@
 #include "data/script.h"
 
 
-static inline UnicodeScript
+static inline enum u_script
 u_char_script_bsearch(uint32_t c)
 {
 	int begin = 0;
@@ -32,7 +32,7 @@ u_char_script_bsearch(uint32_t c)
         return U_SCRIPT_UNKNOWN;
 }
 
-UnicodeScript
+enum u_script
 u_char_script(uint32_t c)
 {
         return c < EASY_SCRIPTS_RANGE ?

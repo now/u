@@ -9,7 +9,7 @@
         }
 
 static VALUE
-script_to_symbol(UnicodeScript script)
+script_to_symbol(enum u_script script)
 {
         switch (script) {
         SCRIPT2ID(COMMON, common)

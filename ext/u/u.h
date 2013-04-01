@@ -182,7 +182,7 @@ enum u_word_break {
 U_CONST enum u_word_break u_char_word_break(uint32_t c);
 
 
-typedef enum {
+enum u_script {
         U_SCRIPT_COMMON,
         U_SCRIPT_INHERITED,
         U_SCRIPT_ARABIC,
@@ -286,9 +286,9 @@ typedef enum {
         U_SCRIPT_SHARADA,
         U_SCRIPT_TAKRI,
         U_SCRIPT_MIAO,
-} UnicodeScript;
+};
 
-U_CONST UnicodeScript u_char_script(uint32_t c);
+U_CONST enum u_script u_char_script(uint32_t c);
 
 typedef enum {
 	U_NORMALIZE_DEFAULT,
