@@ -13,23 +13,21 @@
 #include "rb_u_string.h"
 
 
-#define RVAL2UBUFFER(object) \
-        (Check_Type(object, T_DATA), (UBuffer *)DATA_PTR(object))
+#define RVAL2RBUBUFFER(object) \
+        (Check_Type(object, T_DATA), (struct rb_u_buffer *)DATA_PTR(object))
 
 #define UBUFFER2RVAL(buffer) \
         Data_Wrap_Struct(rb_cUBuffer, NULL, rb_u_buffer_free, buffer)
 
 
-/* TODO: Calling RVAL2UBUFFER costs about 0.02 seconds per 1000000 iterations,
+/* TODO: Calling RVAL2RBUBUFFER costs about 0.02 seconds per 1000000 iterations,
  * so we don’t have to worry about that.  Still, do we provide a u_buffer /and/
  * a rb_u_buffer, or do we only have rb_u_buffer?  The thing that complicates
  * mathers is malloc/realloc.  I guess u_buffer could return NULL or false when
  * malloc/realloc fails and rb_u_buffer can check it.  I also guess that we can
  * extract u_buffer when it proves necessary.
  */
-typedef struct _UBuffer UBuffer;
-
-struct _UBuffer {
+struct rb_u_buffer {
         char *c;
         long length;
         long allocated;
@@ -41,7 +39,7 @@ static VALUE rb_cUBuffer;
 
 
 static void
-rb_u_buffer_free(UBuffer *buffer)
+rb_u_buffer_free(struct rb_u_buffer *buffer)
 {
         free(buffer->c);
         free(buffer);
@@ -61,7 +59,7 @@ nearest_power(long base, long minimum)
 }
 
 static void
-u_buffer_maybe_expand(UBuffer *buffer, long additional)
+u_buffer_maybe_expand(struct rb_u_buffer *buffer, long additional)
 {
         if (buffer->length + additional < buffer->allocated)
                 return;
@@ -76,7 +74,7 @@ u_buffer_maybe_expand(UBuffer *buffer, long additional)
 }
 
 static void
-rb_u_buffer_reset(UBuffer *buffer)
+rb_u_buffer_reset(struct rb_u_buffer *buffer)
 {
         buffer->c = NULL;
         buffer->length = 0;
@@ -89,7 +87,7 @@ rb_u_buffer_reset(UBuffer *buffer)
 static VALUE
 rb_u_buffer_create(long size)
 {
-        UBuffer *buffer = ALLOC(UBuffer);
+        struct rb_u_buffer *buffer = ALLOC(struct rb_u_buffer);
 
         buffer->initially_allocated = size;
 
@@ -119,7 +117,7 @@ rb_u_buffer_new_sized(long size)
 VALUE
 rb_u_buffer_append(VALUE self, const char *str, long length)
 {
-        UBuffer *buffer = RVAL2UBUFFER(self);
+        struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
 
         u_buffer_maybe_expand(buffer, length);
         memcpy(buffer->c + buffer->length, str, length);
@@ -131,7 +129,7 @@ rb_u_buffer_append(VALUE self, const char *str, long length)
 VALUE
 rb_u_buffer_append_char(VALUE self, uint32_t c)
 {
-        UBuffer *buffer = RVAL2UBUFFER(self);
+        struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
 
         u_buffer_maybe_expand(buffer, U_CHAR_MAX_BYTE_LENGTH);
         buffer->length += u_char_to_u(c, buffer->c + buffer->length);
@@ -145,7 +143,7 @@ rb_u_buffer_append_char_n(VALUE self, uint32_t c, long n)
         if (n < 1)
                 return self;
 
-        UBuffer *buffer = RVAL2UBUFFER(self);
+        struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
 
         if (c < 128) {
                 u_buffer_maybe_expand(buffer, n);
@@ -168,7 +166,7 @@ rb_u_buffer_append_char_n(VALUE self, uint32_t c, long n)
 VALUE
 rb_u_buffer_append_printf(VALUE self, size_t needed, const char *format, ...)
 {
-        UBuffer *buffer = RVAL2UBUFFER(self);
+        struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
 
         u_buffer_maybe_expand(buffer, needed);
 
@@ -201,7 +199,7 @@ rb_u_buffer_append_printf(VALUE self, size_t needed, const char *format, ...)
 static VALUE
 rb_u_buffer_initialize(int argc, VALUE *argv, VALUE self)
 {
-        UBuffer *buffer = RVAL2UBUFFER(self);
+        struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
         VALUE rbsize;
 
         rb_scan_args(argc, argv, "01", &rbsize);
@@ -215,8 +213,8 @@ rb_u_buffer_initialize(int argc, VALUE *argv, VALUE self)
 static VALUE
 rb_u_buffer_initialize_copy(VALUE self, VALUE rboriginal)
 {
-        UBuffer *buffer = RVAL2UBUFFER(self);
-        const UBuffer *original = RVAL2UBUFFER(rboriginal);
+        struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
+        const struct rb_u_buffer *original = RVAL2RBUBUFFER(rboriginal);
 
         /* TODO: Can this happen? */
         if (buffer == original)
@@ -247,7 +245,7 @@ rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
 
         for (int i = 0; i < argc; i++)
                 if (RTEST(rb_obj_is_kind_of(argv[i], rb_cUBuffer))) {
-                        const UBuffer *buffer = RVAL2UBUFFER(argv[i]);
+                        const struct rb_u_buffer *buffer = RVAL2RBUBUFFER(argv[i]);
 
                         rb_u_buffer_append(self, buffer->c, buffer->length);
                 } else if (FIXNUM_P(argv[i]) || TYPE(argv[i]) == T_BIGNUM) {
@@ -297,8 +295,8 @@ rb_u_buffer_eql(VALUE self, VALUE rbother)
         if (!RTEST(rb_obj_is_kind_of(rbother, rb_cUBuffer)))
                 return Qfalse;
 
-        const UBuffer *buffer = RVAL2UBUFFER(self);
-        const UBuffer *other = RVAL2UBUFFER(rbother);
+        const struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
+        const struct rb_u_buffer *other = RVAL2RBUBUFFER(rbother);
 
         return buffer->length == other->length &&
                 memcmp(buffer->c, other->c, other->length) == 0 ?
@@ -309,7 +307,7 @@ rb_u_buffer_eql(VALUE self, VALUE rbother)
 VALUE
 rb_u_buffer_hash(VALUE self)
 {
-        const UBuffer *buffer = RVAL2UBUFFER(self);
+        const struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
 
         return INT2FIX(rb_memhash(buffer->c, buffer->length));
 }
@@ -318,7 +316,7 @@ rb_u_buffer_hash(VALUE self)
 VALUE
 rb_u_buffer_to_s(VALUE self)
 {
-        const UBuffer *buffer = RVAL2UBUFFER(self);
+        const struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
 
         VALUE result = rb_u_str_new(buffer->c, buffer->length);
         OBJ_INFECT(result, self);
@@ -329,7 +327,7 @@ rb_u_buffer_to_s(VALUE self)
 VALUE
 rb_u_buffer_to_u(VALUE self)
 {
-        const UBuffer *buffer = RVAL2UBUFFER(self);
+        const struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
 
         return rb_u_string_new_c(self, buffer->c, buffer->length);
 }
@@ -342,7 +340,7 @@ rb_u_buffer_to_u(VALUE self)
 VALUE
 rb_u_buffer_to_u_bang(VALUE self)
 {
-        UBuffer *buffer = RVAL2UBUFFER(self);
+        struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
 
         /* TODO: Really need to lock buffer here. */
         char *c = buffer->c;
