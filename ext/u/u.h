@@ -162,7 +162,7 @@ enum u_grapheme_break {
 
 U_CONST enum u_grapheme_break u_char_grapheme_break(uint32_t c);
 
-typedef enum {
+enum u_word_break {
         U_WORD_BREAK_ALETTER,
         U_WORD_BREAK_CR,
         U_WORD_BREAK_EXTEND,
@@ -177,9 +177,9 @@ typedef enum {
         U_WORD_BREAK_NUMERIC,
         U_WORD_BREAK_OTHER,
         U_WORD_BREAK_REGIONAL_INDICATOR,
-} UnicodeWordBreak;
+};
 
-U_CONST UnicodeWordBreak u_char_word_break(uint32_t c);
+U_CONST enum u_word_break u_char_word_break(uint32_t c);
 
 
 typedef enum {

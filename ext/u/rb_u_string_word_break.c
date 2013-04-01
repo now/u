@@ -9,7 +9,7 @@
         }
 
 static VALUE
-break_to_symbol(UnicodeWordBreak value)
+break_to_symbol(enum u_word_break value)
 {
         switch (value) {
 	BREAK2ID(ALETTER, aletter);

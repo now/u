@@ -3,7 +3,7 @@ HIDDEN extern const int16_t *_u_word_break_property_table_part1;
 HIDDEN extern const int16_t *_u_word_break_property_table_part2;
 
 
-static inline UnicodeWordBreak
+static inline enum u_word_break
 s_word_break(uint32_t c)
 {
         int16_t index;

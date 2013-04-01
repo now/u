@@ -9,7 +9,7 @@
 #include "word-break.h"
 
 
-UnicodeWordBreak
+enum u_word_break
 u_char_word_break(uint32_t c)
 {
 	return s_word_break(c);
