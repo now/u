@@ -123,9 +123,8 @@ rb_u_string_justify.o: rb_u_string_justify.c rb_includes.h extconf.h u.h \
   private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_length.o: rb_u_string_length.c rb_includes.h extconf.h u.h \
   private.h locale_type.h rb_private.h rb_u_string.h
-rb_u_string_line_break_type.o: rb_u_string_line_break_type.c \
-  rb_includes.h extconf.h u.h private.h locale_type.h rb_private.h \
-  rb_u_string.h
+rb_u_string_line_break.o: rb_u_string_line_break.c rb_includes.h \
+  extconf.h u.h private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_lower.o: rb_u_string_lower.c rb_includes.h extconf.h u.h \
   private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_lstrip.o: rb_u_string_lstrip.c rb_includes.h extconf.h u.h \
@@ -211,9 +210,8 @@ rb_u_string_wide_cjk.o: rb_u_string_wide_cjk.c rb_includes.h extconf.h \
   u.h private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_width.o: rb_u_string_width.c rb_includes.h extconf.h u.h \
   private.h locale_type.h rb_private.h rb_u_string.h
-rb_u_string_word_break_type.o: rb_u_string_word_break_type.c \
-  rb_includes.h extconf.h u.h private.h locale_type.h rb_private.h \
-  rb_u_string.h
+rb_u_string_word_break.o: rb_u_string_word_break.c rb_includes.h \
+  extconf.h u.h private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_xdigit.o: rb_u_string_xdigit.c rb_includes.h extconf.h u.h \
   private.h locale_type.h rb_private.h rb_u_string.h
 rb_u_string_zero_width.o: rb_u_string_zero_width.c rb_includes.h \
@@ -230,7 +228,7 @@ u_char_digit_value.o: u_char_digit_value.c u.h private.h locale_type.h \
   data/constants.h attributes.h general-category.h
 u_char_general_category.o: u_char_general_category.c u.h private.h \
   locale_type.h data/constants.h general-category.h
-u_char_grapheme_break_type.o: u_char_grapheme_break_type.c u.h private.h \
+u_char_grapheme_break.o: u_char_grapheme_break.c u.h private.h \
   locale_type.h data/constants.h grapheme-break.h
 u_char_isalnum.o: u_char_isalnum.c u.h private.h locale_type.h \
   data/constants.h general-category.h
@@ -271,7 +269,7 @@ u_char_isxdigit.o: u_char_isxdigit.c u.h private.h locale_type.h \
   data/constants.h general-category.h
 u_char_iszerowidth.o: u_char_iszerowidth.c u.h private.h locale_type.h \
   data/constants.h general-category.h
-u_char_line_break_type.o: u_char_line_break_type.c u.h data/constants.h \
+u_char_line_break.o: u_char_line_break.c u.h data/constants.h \
   data/line-break.h private.h locale_type.h
 u_char_mirror.o: u_char_mirror.c u.h private.h locale_type.h \
   data/bidi-mirroring.h
@@ -283,8 +281,8 @@ u_char_tolower.o: u_char_tolower.c u.h private.h locale_type.h \
 u_char_toupper.o: u_char_toupper.c u.h private.h locale_type.h \
   data/constants.h attributes.h titled.h general-category.h
 u_char_width.o: u_char_width.c u.h
-u_char_word_break_type.o: u_char_word_break_type.c u.h private.h \
-  locale_type.h data/constants.h word-break.h
+u_char_word_break.o: u_char_word_break.c u.h private.h locale_type.h \
+  data/constants.h word-break.h
 u_char_xdigit_value.o: u_char_xdigit_value.c u.h private.h locale_type.h
 u_collate.o: u_collate.c u.h utf8.h private.h locale_type.h
 u_copy.o: u_copy.c u.h private.h locale_type.h

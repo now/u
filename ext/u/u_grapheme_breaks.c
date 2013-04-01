@@ -44,7 +44,7 @@ u_grapheme_breaks(const char *string, size_t n, UnicodeBreakFn fn, void *closure
         const char *end = p + n;
         uint8_t state = 2;
         while (p < end) {
-                state = gb_dfa[state & 0xf][s_grapheme_break_type(u_aref_char(p))];
+                state = gb_dfa[state & 0xf][s_grapheme_break(u_aref_char(p))];
                 if (state >> 4 != 1)
                         fn(p, closure);
                 p = u_next(p);

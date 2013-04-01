@@ -30,6 +30,10 @@ HIDDEN VALUE _rb_u_string_case_in_locale(int argc, VALUE *argv, VALUE self,
                                                                   const char *,
                                                                   size_t *));
 
+HIDDEN VALUE _rb_u_string_property(VALUE self, const char *name,
+                                   int unknown, int property(uint32_t),
+                                   VALUE tosym(int));
+
 HIDDEN VALUE rb_u_pattern_argument(VALUE pattern, bool quote);
 
 HIDDEN long rb_u_string_index_regexp(VALUE self, const char *begin, VALUE regex, bool reverse);

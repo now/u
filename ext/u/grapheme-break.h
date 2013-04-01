@@ -3,8 +3,8 @@ HIDDEN extern const int16_t *_u_grapheme_break_property_table_part1;
 HIDDEN extern const int16_t *_u_grapheme_break_property_table_part2;
 
 
-static inline UnicodeGraphemeBreakType
-s_grapheme_break_type(uint32_t c)
+static inline UnicodeGraphemeBreak
+s_grapheme_break(uint32_t c)
 {
         int16_t index;
 

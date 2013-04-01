@@ -120,7 +120,7 @@ VALUE rb_u_string_index_m(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_include(VALUE self, VALUE other);
 VALUE rb_u_string_inspect(VALUE self);
 VALUE rb_u_string_length(VALUE self);
-VALUE rb_u_string_line_break_type(VALUE self);
+VALUE rb_u_string_line_break(VALUE self);
 VALUE rb_u_string_ljust(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_lower(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_lstrip(VALUE self);
@@ -166,7 +166,7 @@ VALUE rb_u_string_valid_encoding(VALUE self);
 VALUE rb_u_string_wide(VALUE self);
 VALUE rb_u_string_wide_cjk(VALUE self);
 VALUE rb_u_string_width(VALUE self);
-VALUE rb_u_string_word_break_type(VALUE self);
+VALUE rb_u_string_word_break(VALUE self);
 VALUE rb_u_string_xdigit(VALUE self);
 VALUE rb_u_string_zero_width(VALUE self);
 

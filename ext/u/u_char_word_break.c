@@ -9,8 +9,8 @@
 #include "word-break.h"
 
 
-UnicodeWordBreakType
-u_char_word_break_type(uint32_t c)
+UnicodeWordBreak
+u_char_word_break(uint32_t c)
 {
-	return s_word_break_type(c);
+	return s_word_break(c);
 }

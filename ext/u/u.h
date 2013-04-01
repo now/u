@@ -140,9 +140,9 @@ typedef enum {
         U_LINE_BREAK_REGIONAL_INDICATOR,
         U_LINE_BREAK_COMPLEX_CONTEXT_DEPENDENT,
         U_LINE_BREAK_UNKNOWN,
-} UnicodeLineBreakType;
+} UnicodeLineBreak;
 
-U_CONST UnicodeLineBreakType u_char_line_break_type(uint32_t c);
+U_CONST UnicodeLineBreak u_char_line_break(uint32_t c);
 
 typedef enum {
         U_GRAPHEME_BREAK_CONTROL,
@@ -158,9 +158,9 @@ typedef enum {
         U_GRAPHEME_BREAK_SPACINGMARK,
         U_GRAPHEME_BREAK_T,
         U_GRAPHEME_BREAK_V,
-} UnicodeGraphemeBreakType;
+} UnicodeGraphemeBreak;
 
-U_CONST UnicodeGraphemeBreakType u_char_grapheme_break_type(uint32_t c);
+U_CONST UnicodeGraphemeBreak u_char_grapheme_break(uint32_t c);
 
 typedef enum {
         U_WORD_BREAK_ALETTER,
@@ -177,9 +177,9 @@ typedef enum {
         U_WORD_BREAK_NUMERIC,
         U_WORD_BREAK_OTHER,
         U_WORD_BREAK_REGIONAL_INDICATOR,
-} UnicodeWordBreakType;
+} UnicodeWordBreak;
 
-U_CONST UnicodeWordBreakType u_char_word_break_type(uint32_t c);
+U_CONST UnicodeWordBreak u_char_word_break(uint32_t c);
 
 
 typedef enum {

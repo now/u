@@ -167,7 +167,7 @@ module U
               rb_u_string_internal_tr.h
               rb_u_string_justify.c
               rb_u_string_length.c
-              rb_u_string_line_break_type.c
+              rb_u_string_line_break.c
               rb_u_string_lower.c
               rb_u_string_lstrip.c
               rb_u_string_match.c
@@ -209,7 +209,7 @@ module U
               rb_u_string_wide.c
               rb_u_string_wide_cjk.c
               rb_u_string_width.c
-              rb_u_string_word_break_type.c
+              rb_u_string_word_break.c
               rb_u_string_xdigit.c
               rb_u_string_zero_width.c
               titled.c
@@ -222,7 +222,7 @@ module U
               u_char_general_category.c
               u_char_combining_class.c
               u_char_digit_value.c
-              u_char_grapheme_break_type.c
+              u_char_grapheme_break.c
               u_char_isalnum.c
               u_char_isalpha.c
               u_char_isassigned.c
@@ -244,14 +244,14 @@ module U
               u_char_iswide_cjk.c
               u_char_isxdigit.c
               u_char_iszerowidth.c
-              u_char_line_break_type.c
+              u_char_line_break.c
               u_char_mirror.c
               u_char_script.c
               u_char_to_u.c
               u_char_tolower.c
               u_char_toupper.c
               u_char_xdigit_value.c
-              u_char_word_break_type.c
+              u_char_word_break.c
               u_char_width.c
               u_collate.c
               u_copy.c

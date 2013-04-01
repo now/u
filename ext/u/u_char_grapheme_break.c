@@ -9,8 +9,8 @@
 #include "grapheme-break.h"
 
 
-UnicodeGraphemeBreakType
-u_char_grapheme_break_type(uint32_t c)
+UnicodeGraphemeBreak
+u_char_grapheme_break(uint32_t c)
 {
-	return s_grapheme_break_type(c);
+	return s_grapheme_break(c);
 }

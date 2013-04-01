@@ -10,8 +10,8 @@
 /* Figure out what break type the Unicode character ‘c’ possesses, if any.
  * This information is used for finding word and line boundaries, which is
  * useful when displaying Unicode text on screen. */
-UnicodeLineBreakType
-u_char_line_break_type(uint32_t c)
+UnicodeLineBreak
+u_char_line_break(uint32_t c)
 {
         int16_t index;
 

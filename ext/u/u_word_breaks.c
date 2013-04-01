@@ -52,7 +52,7 @@ u_word_breaks(const char *string, size_t n, UnicodeBreakFn fn, void *closure)
         const char *s = NULL;
         uint8_t state = 2;
         while (p < end) {
-                state = wb_dfa[state & 0xf][s_word_break_type(u_aref_char(p))];
+                state = wb_dfa[state & 0xf][s_word_break(u_aref_char(p))];
                 switch (state >> 4) {
                 case 1:
                         break;

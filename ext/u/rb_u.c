@@ -182,6 +182,30 @@ _rb_u_string_case_in_locale(int argc, VALUE *argv, VALUE self,
         return rb_u_string_new_c_own(self, cased, length);
 }
 
+VALUE
+_rb_u_string_property(VALUE self, const char *name, int unknown,
+                      int property(uint32_t), VALUE tosym(int))
+{
+        const UString *string = RVAL2USTRING(self);
+        const char *p = USTRING_STR(string);
+        const char *end = USTRING_END(string);
+        if (p == end)
+                return unknown;
+        int first = property(u_aref_char_validated_n(p, end - p));
+        p = u_next(p);
+        while (p < end) {
+                int value = property(u_aref_char_validated_n(p, end - p));
+                if (value != first)
+                        rb_u_raise(rb_eArgError,
+                                   "string consists of characters with different %s values: :%s+, :%s",
+                                   name,
+                                   rb_id2name(SYM2ID(tosym(first))),
+                                   rb_id2name(SYM2ID(tosym(value))));
+                p = u_next(p);
+        }
+        return tosym(first);
+}
+
 void Init_u(void);
 void
 Init_u(void)
