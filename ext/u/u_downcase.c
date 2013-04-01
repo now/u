@@ -217,21 +217,21 @@ downcase_simple(uint32_t c, UnicodeGeneralCategory category, char *result)
 
 size_t
 _u_downcase_step(const char *string, const char *p, const char *end, bool use_end,
-                 LocaleType locale_type, char *result)
+                 enum locale locale, char *result)
 {
         uint32_t c = u_aref_char(p);
 
         if (c == GREEK_CAPITAL_LETTER_SIGMA)
                 return downcase_sigma(string, p, end, use_end, result);
 
-        if (locale_type == LOCALE_LITHUANIAN) {
+        if (locale == LOCALE_LITHUANIAN) {
                 size_t length;
 
                 if (downcase_lithuanian(c, p, end, use_end, result, &length))
                         return length;
         }
 
-        if (locale_type == LOCALE_TURKIC) {
+        if (locale == LOCALE_TURKIC) {
                 switch (c) {
                 case LATIN_CAPITAL_LETTER_I:
                         return downcase_turkic_i(p, end, use_end, result);
@@ -260,14 +260,14 @@ _u_downcase_step(const char *string, const char *p, const char *end, bool use_en
 
 static size_t
 downcase_loop(const char *string, size_t length, bool use_length,
-              LocaleType locale_type, char *result)
+              enum locale locale, char *result)
 {
 	size_t n = 0;
 
 	const char *p = string;
         const char *end = string + length;
         while (P_WITHIN_STR(p, end, use_length)) {
-                n += _u_downcase_step(string, p, end, use_length, locale_type,
+                n += _u_downcase_step(string, p, end, use_length, locale,
                                       OFFSET_IF(result, n));
 
                 p = u_next(p);
@@ -282,11 +282,11 @@ u_downcase_in_locale_impl(const char *string, size_t length, bool use_length,
 {
 	assert(string != NULL);
 
-	LocaleType locale_type = _u_locale_type_from_string(locale);
+	enum locale elocale = _u_locale_from_string(locale);
 
-	size_t n = downcase_loop(string, length, use_length, locale_type, NULL);
+	size_t n = downcase_loop(string, length, use_length, elocale, NULL);
 	char *result = ALLOC_N(char, n + 1);
-	downcase_loop(string, length, use_length, locale_type, result);
+	downcase_loop(string, length, use_length, elocale, result);
 	result[n] = '\0';
 
         if (new_length != NULL)

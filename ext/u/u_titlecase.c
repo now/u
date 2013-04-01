@@ -18,7 +18,7 @@
 struct titlecase_closure {
         const char *string;
         const char *previous;
-        LocaleType locale_type;
+        enum locale locale;
         size_t n;
         char *result;
 };
@@ -35,9 +35,9 @@ titlecase_step(const char *p, struct titlecase_closure *closure)
         if (t == p)
                 return;
         closure->n += _u_upcase_step(closure->string, &t, p, true,
-                                     closure->locale_type, true,
+                                     closure->locale, true,
                                      OFFSET_IF(closure->result, closure->n));
-        if (t + 1 < p && closure->locale_type == LOCALE_DUTCH &&
+        if (t + 1 < p && closure->locale == LOCALE_DUTCH &&
             (*t == LATIN_CAPITAL_LETTER_I || *t == LATIN_SMALL_LETTER_I) &&
             (*(t + 1) == LATIN_CAPITAL_LETTER_J || *(t + 1) == LATIN_SMALL_LETTER_J)) {
                 if (closure->result != NULL)
@@ -48,7 +48,7 @@ titlecase_step(const char *p, struct titlecase_closure *closure)
         t = u_next(t);
         while (t < p) {
                 closure->n += _u_downcase_step(closure->string, t, p, true,
-                                               closure->locale_type,
+                                               closure->locale,
                                                OFFSET_IF(closure->result,
                                                          closure->n));
                 t = u_next(t);
@@ -65,10 +65,10 @@ titlecase_word_break(const char *p, struct titlecase_closure *closure)
 
 static size_t
 titlecase_loop(const char *string, size_t length, bool use_length,
-               LocaleType locale_type, char *result)
+               enum locale locale, char *result)
 {
         const char *end = string + (use_length ? length : strlen(string));
-        struct titlecase_closure closure = { string, string, locale_type, 0, result };
+        struct titlecase_closure closure = { string, string, locale, 0, result };
         u_word_breaks(string, length, (UnicodeBreakFn)titlecase_word_break, &closure);
         if (closure.previous != end)
                 titlecase_step(end, &closure);
@@ -81,11 +81,11 @@ u_titlecase_in_locale_impl(const char *string, size_t length, bool use_length,
 {
 	assert(string != NULL);
 
-	LocaleType locale_type = _u_locale_type_from_string(locale);
+	enum locale elocale = _u_locale_from_string(locale);
 
-        size_t n = titlecase_loop(string, length, use_length, locale_type, NULL);
+        size_t n = titlecase_loop(string, length, use_length, elocale, NULL);
 	char *result = ALLOC_N(char, n + 1);
-	titlecase_loop(string, length, use_length, locale_type, result);
+	titlecase_loop(string, length, use_length, elocale, result);
 	result[n] = '\0';
 
         if (new_length != NULL)

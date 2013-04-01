@@ -89,7 +89,7 @@ upcase_simple(uint32_t c, UnicodeGeneralCategory category, char *result, bool ti
 
 size_t
 _u_upcase_step(const char *string, const char **p, const char *end, bool use_end,
-               LocaleType locale_type, bool title, char *result)
+               enum locale locale, bool title, char *result)
 {
         uint32_t c = u_aref_char(*p);
 
@@ -104,12 +104,12 @@ _u_upcase_step(const char *string, const char **p, const char *end, bool use_end
                                             OFFSET_IF(result, length));
         }
 
-        if (locale_type == LOCALE_LITHUANIAN &&
+        if (locale == LOCALE_LITHUANIAN &&
             c == COMBINING_DOT_ABOVE &&
             is_after_soft_dotted(string, *p))
                 return 0;
 
-        if (locale_type == LOCALE_TURKIC && c == LATIN_SMALL_LETTER_I)
+        if (locale == LOCALE_TURKIC && c == LATIN_SMALL_LETTER_I)
                 return u_char_to_u(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE, result);
 
         UnicodeGeneralCategory category = s_general_category(c);
@@ -128,14 +128,14 @@ _u_upcase_step(const char *string, const char **p, const char *end, bool use_end
 
 static size_t
 upcase_loop(const char *string, size_t length, bool use_length,
-            LocaleType locale_type, char *result)
+            enum locale locale, char *result)
 {
 	size_t n = 0;
 
 	const char *p = string;
         const char *end = p + length;
         while (P_WITHIN_STR(p, end, use_length)) {
-                n += _u_upcase_step(string, &p, end, use_length, locale_type,
+                n += _u_upcase_step(string, &p, end, use_length, locale,
                                     false, OFFSET_IF(result, n));
 
                 p = u_next(p);
@@ -150,11 +150,11 @@ u_upcase_in_locale_impl(const char *string, size_t length, bool use_length,
 {
 	assert(string != NULL);
 
-	LocaleType locale_type = _u_locale_type_from_string(locale);
+	enum locale elocale = _u_locale_from_string(locale);
 
-	size_t n = upcase_loop(string, length, use_length, locale_type, NULL);
+	size_t n = upcase_loop(string, length, use_length, elocale, NULL);
 	char *result = ALLOC_N(char, n + 1);
-	upcase_loop(string, length, use_length, locale_type, result);
+	upcase_loop(string, length, use_length, elocale, result);
 	result[n] = '\0';
 
         if (new_length != NULL)

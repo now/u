@@ -6,16 +6,16 @@
  * LocaleType: This ‹enum› is used for dealing with different locales for
  * turning strings into uppercase or lowercase.
  */
-typedef enum {
+enum locale {
 	LOCALE_NORMAL,
 	LOCALE_TURKIC,
 	LOCALE_LITHUANIAN,
         LOCALE_DUTCH,
-} LocaleType;
+};
 
 
-HIDDEN LocaleType _u_locale_type(void);
-HIDDEN LocaleType _u_locale_type_from_string(const char *locale);
+HIDDEN enum locale _u_locale(void);
+HIDDEN enum locale _u_locale_from_string(const char *locale);
 
 
 #endif /* LOCALE_TYPE_H */

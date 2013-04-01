@@ -12,18 +12,18 @@
 /* {{{1
  * Retrieve the locale type from the environment (LC_CTYPE).
  */
-LocaleType
-_u_locale_type(void)
+enum locale
+_u_locale(void)
 {
         const char *locale = setlocale(LC_CTYPE, NULL);
-        return locale == NULL ? LOCALE_NORMAL : _u_locale_type_from_string(locale);
+        return locale == NULL ? LOCALE_NORMAL : _u_locale_from_string(locale);
 }
 
-LocaleType
-_u_locale_type_from_string(const char *locale)
+enum locale
+_u_locale_from_string(const char *locale)
 {
         if (locale == NULL)
-                return _u_locale_type();
+                return _u_locale();
 
         if (locale[0] == '\0')
                 return LOCALE_NORMAL;
