@@ -58,7 +58,7 @@ HIDDEN bool binary_search_unicode_table(const void *table,
 HIDDEN uint32_t *_u_normalize_wc(const char *string,
                                size_t length,
                                bool use_length,
-                               UnicodeNormalizeMode mode,
+                               enum u_normalize_mode mode,
                                size_t *new_length);
 
 #include "locale_type.h"

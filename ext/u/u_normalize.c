@@ -95,7 +95,7 @@ decomposition_to_wc(const char *decomposition, uint32_t *result)
 }
 
 static size_t
-decompose_simple(uint32_t c, UnicodeNormalizeMode mode, uint32_t *result)
+decompose_simple(uint32_t c, enum u_normalize_mode mode, uint32_t *result)
 {
         const char *decomposition = find_decomposition(c,
                                                        (mode == U_NORMALIZE_NFKC ||
@@ -157,7 +157,7 @@ unicode_canonical_ordering(uint32_t *string, size_t length)
 }
 
 static inline size_t
-decompose_step(uint32_t c, UnicodeNormalizeMode mode, uint32_t *result)
+decompose_step(uint32_t c, enum u_normalize_mode mode, uint32_t *result)
 {
         return (SBase <= c && c <= SLast) ?
                 decompose_hangul(c, result) :
@@ -166,7 +166,7 @@ decompose_step(uint32_t c, UnicodeNormalizeMode mode, uint32_t *result)
 
 static size_t
 decompose_loop(const char *string, size_t length, bool use_length,
-               UnicodeNormalizeMode mode, uint32_t *result)
+               enum u_normalize_mode mode, uint32_t *result)
 {
         size_t n = 0;
         size_t prev_start = 0;
@@ -307,7 +307,7 @@ compose_loop(uint32_t *string, size_t length)
 
 uint32_t *
 _u_normalize_wc(const char *string, size_t length, bool use_length,
-                UnicodeNormalizeMode mode, size_t *new_length)
+                enum u_normalize_mode mode, size_t *new_length)
 {
         size_t n = decompose_loop(string, length, use_length, mode, NULL);
         uint32_t *result = ALLOC_N(uint32_t, n + 1);
@@ -325,7 +325,7 @@ _u_normalize_wc(const char *string, size_t length, bool use_length,
 }
 
 char *
-u_normalize(const char *string, UnicodeNormalizeMode mode)
+u_normalize(const char *string, enum u_normalize_mode mode)
 {
         uint32_t *wcs = _u_normalize_wc(string, 0, false, mode, NULL);
         char *u = ucs4_to_u(wcs, NULL, NULL);
@@ -336,7 +336,7 @@ u_normalize(const char *string, UnicodeNormalizeMode mode)
 }
 
 char *
-u_normalize_n(const char *string, size_t length, UnicodeNormalizeMode mode,
+u_normalize_n(const char *string, size_t length, enum u_normalize_mode mode,
               size_t *new_length)
 {
         size_t length_wcs;

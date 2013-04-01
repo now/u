@@ -290,7 +290,7 @@ enum u_script {
 
 U_CONST enum u_script u_char_script(uint32_t c);
 
-typedef enum {
+enum u_normalize_mode {
 	U_NORMALIZE_DEFAULT,
 	U_NORMALIZE_NFD = U_NORMALIZE_DEFAULT,
 	U_NORMALIZE_DEFAULT_COMPOSE,
@@ -299,11 +299,11 @@ typedef enum {
 	U_NORMALIZE_NFKD = U_NORMALIZE_ALL,
 	U_NORMALIZE_ALL_COMPOSE,
 	U_NORMALIZE_NFKC = U_NORMALIZE_ALL_COMPOSE
-} UnicodeNormalizeMode;
+};
 
-char *u_normalize(const char *string, UnicodeNormalizeMode mode);
+char *u_normalize(const char *string, enum u_normalize_mode mode);
 char *u_normalize_n(const char *string, size_t length,
-                    UnicodeNormalizeMode mode, size_t *new_length);
+                    enum u_normalize_mode mode, size_t *new_length);
 
 char *u_downcase(const char *string);
 char *u_downcase_n(const char *string, size_t length, size_t *new_length);

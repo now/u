@@ -8,7 +8,7 @@
                 return mode;                            \
 } while (0)
 
-static UnicodeNormalizeMode
+static enum u_normalize_mode
 symbol_to_mode(VALUE symbol)
 {
         if (!SYMBOL_P(symbol)) {
@@ -84,7 +84,7 @@ rb_u_string_normalize(int argc, VALUE *argv, VALUE self)
         const struct rb_u_string *string = RVAL2USTRING(self);
 
         VALUE rbmode;
-        UnicodeNormalizeMode mode = U_NORMALIZE_DEFAULT;
+        enum u_normalize_mode mode = U_NORMALIZE_DEFAULT;
         if (rb_scan_args(argc, argv, "01", &rbmode) == 1)
                 mode = symbol_to_mode(rbmode);
 
