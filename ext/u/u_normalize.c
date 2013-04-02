@@ -89,7 +89,7 @@ decomposition_to_wc(const char *decomposition, uint32_t *result)
         size_t i = 0;
 
         for (const char *p = decomposition; *p != '\0'; p = u_next(p))
-                result[i++] = u_aref_char(p);
+                result[i++] = u_dref(p);
 
         return i;
 }
@@ -174,7 +174,7 @@ decompose_loop(const char *string, size_t length, bool use_length,
         const char *p = string;
         const char *end = p + length;
         while (P_WITHIN_STR(p, end, use_length)) {
-                uint32_t c = u_aref_char(p);
+                uint32_t c = u_dref(p);
                 size_t prev_n = n;
 
                 n += decompose_step(c, mode, OFFSET_IF(result, n));

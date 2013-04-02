@@ -41,7 +41,7 @@ is_final_sigma(const char *string, const char *p, const char *end, bool use_end)
                 return false;
 
         for (const char *q = u_next(p); P_WITHIN_STR(q, end, use_end); q = u_next(q)) {
-                uint32_t c = u_aref_char(q);
+                uint32_t c = u_dref(q);
 
                 if (u_char_iscaseignorable(c))
                         continue;
@@ -53,7 +53,7 @@ is_final_sigma(const char *string, const char *p, const char *end, bool use_end)
         }
 
         for (const char *r = u_prev(p); r > string; r = u_prev(r)) {
-                uint32_t c = u_aref_char(r);
+                uint32_t c = u_dref(r);
 
                 if (u_char_iscaseignorable(c))
                         continue;
@@ -64,7 +64,7 @@ is_final_sigma(const char *string, const char *p, const char *end, bool use_end)
                 return false;
         }
 
-        return u_char_iscased(u_aref_char(string));
+        return u_char_iscased(u_dref(string));
 }
 
 static inline size_t
@@ -80,7 +80,7 @@ static inline bool
 has_more_above(const char *string, const char *end, bool use_end)
 {
 	for (const char *p = u_next(string); P_WITHIN_STR(p, end, use_end); p = u_next(p)) {
-		int c_class = u_char_combining_class(u_aref_char(p));
+		int c_class = u_char_combining_class(u_dref(p));
 
 		if (c_class == CANONICAL_COMBINING_CLASS_ABOVE)
 			return true;
@@ -139,12 +139,12 @@ static inline bool
 is_before_dot(const char *p, const char *end, bool use_end)
 {
 	for (const char *q = u_next(p); P_WITHIN_STR(q, end, use_end); q = u_next(q)) {
-                uint32_t c = u_aref_char(q);
+                uint32_t c = u_dref(q);
 
                 if (c == COMBINING_DOT_ABOVE)
                         return true;
 
-		int c_class = u_char_combining_class(u_aref_char(p));
+		int c_class = u_char_combining_class(u_dref(p));
                 if (c_class == CANONICAL_COMBINING_CLASS_ABOVE ||
                     c_class == CANONICAL_COMBINING_CLASS_NOT_REORDERED)
                         return false;
@@ -169,18 +169,18 @@ is_after_i(const char *string, const char *p)
                 return false;
 
         for (const char *q = u_prev(p); q > string; q = u_prev(q)) {
-                uint32_t c = u_aref_char(q);
+                uint32_t c = u_dref(q);
 
                 if (c == LATIN_CAPITAL_LETTER_I)
                         return true;
 
-		int c_class = u_char_combining_class(u_aref_char(p));
+		int c_class = u_char_combining_class(u_dref(p));
                 if (c_class == CANONICAL_COMBINING_CLASS_ABOVE ||
                     c_class == CANONICAL_COMBINING_CLASS_NOT_REORDERED)
                         return false;
 	}
 
-        return u_aref_char(string) == LATIN_CAPITAL_LETTER_I;
+        return u_dref(string) == LATIN_CAPITAL_LETTER_I;
 }
 
 static inline size_t
@@ -216,7 +216,7 @@ size_t
 _u_downcase_step(const char *string, const char *p, const char *end, bool use_end,
                  enum locale locale, char *result)
 {
-        uint32_t c = u_aref_char(p);
+        uint32_t c = u_dref(p);
 
         if (c == GREEK_CAPITAL_LETTER_SIGMA)
                 return downcase_sigma(string, p, end, use_end, result);

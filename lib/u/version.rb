@@ -216,7 +216,6 @@ module U
               u.c
               u.h
               u_append.c
-              u_aref_char.c
               u_char_general_category.c
               u_char_combining_class.c
               u_char_digit_value.c
@@ -255,6 +254,7 @@ module U
               u_collation_key.c
               u_copy.c
               u_downcase.c
+              u_dref.c
               u_foldcase.c
               u_grapheme_breaks.c
               u_has_prefix.c

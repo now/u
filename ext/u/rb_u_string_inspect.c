@@ -36,7 +36,7 @@ rb_u_string_inspect_hash_char(const char *p, const char *end, VALUE result)
                 return end;
         }
 
-        uint32_t c = u_aref_char(next);
+        uint32_t c = u_dref(next);
         switch (c) {
         case U_BAD_INPUT_CHAR:
                 rb_str_buf_cat2(result, "#");
@@ -133,7 +133,7 @@ rb_u_string_inspect(VALUE self)
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                uint32_t c = u_aref_char(p);
+                uint32_t c = u_dref(p);
                 switch (c) {
                 case U_BAD_INPUT_CHAR:
                         p = rb_u_string_inspect_bad_input(p, end, result);

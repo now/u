@@ -17,7 +17,7 @@ rb_u_string_rstrip(VALUE self)
         const char *p = end;
         while (p > begin) {
                 const char *prev = rb_u_prev_validated(begin, p);
-                uint32_t c = u_aref_char(prev);
+                uint32_t c = u_dref(prev);
 
                 if (c != '\0' && !u_char_isspace(c))
                         break;

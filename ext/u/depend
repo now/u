@@ -216,7 +216,6 @@ titled.o: titled.c u.h private.h u_locale.h data/constants.h \
   data/title-table.h general-category.h titled.h
 u.o: u.c u.h
 u_append.o: u_append.c u.h private.h u_locale.h
-u_aref_char.o: u_aref_char.c u.h utf8.h private.h u_locale.h
 u_char_combining_class.o: u_char_combining_class.c u.h private.h \
   u_locale.h data/constants.h combining_class.h
 u_char_digit_value.o: u_char_digit_value.c u.h private.h u_locale.h \
@@ -283,6 +282,7 @@ u_collation_key.o: u_collation_key.c u.h utf8.h private.h u_locale.h
 u_copy.o: u_copy.c u.h private.h u_locale.h
 u_downcase.o: u_downcase.c u.h private.h u_locale.h data/constants.h \
   attributes.h general-category.h titled.h
+u_dref.o: u_dref.c u.h utf8.h private.h u_locale.h
 u_foldcase.o: u_foldcase.c u.h private.h u_locale.h data/case-folding.h
 u_grapheme_breaks.o: u_grapheme_breaks.c u.h private.h u_locale.h \
   data/constants.h grapheme-break.h

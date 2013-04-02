@@ -16,9 +16,9 @@ rb_u_string_chomp_default(VALUE self)
                 const char *last_but_one = u_find_prev(begin, last);
 
                 /* TODO: We can use *last_but_one here. */
-                if (last_but_one != NULL && u_aref_char(last_but_one) == '\r')
+                if (last_but_one != NULL && u_dref(last_but_one) == '\r')
                         last = last_but_one;
-        } else if (!u_char_isnewline(u_aref_char(last))) {
+        } else if (!u_char_isnewline(u_dref(last))) {
                 return self;
         }
 
@@ -35,7 +35,7 @@ rb_u_string_chomp_newlines(VALUE self)
         const char *last = end;
         while (last > begin) {
                 const char *last_but_one = u_find_prev(begin, last);
-                if (last == NULL || !u_char_isnewline(u_aref_char(last_but_one)))
+                if (last == NULL || !u_char_isnewline(u_dref(last_but_one)))
                         break;
                 last = last_but_one;
         }

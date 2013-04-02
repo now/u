@@ -323,11 +323,6 @@ char *u_upcase_in_locale(const char *string, const char *locale);
 char *u_upcase_in_locale_n(const char *string, size_t n, const char *locale,
                            size_t *new_n);
 
-U_PURE uint32_t u_aref_char(const char *str);
-U_PURE uint32_t u_aref_char_n(const char *str, size_t max);
-U_PURE uint32_t u_aref_char_validated(const char *str);
-U_PURE uint32_t u_aref_char_validated_n(const char *str, size_t max);
-
 extern const char * const u_skip_lengths;
 
 #define u_next(str) ((str) + u_skip_lengths[*(const unsigned char *)(str)])
@@ -335,6 +330,29 @@ U_PURE char *u_find_next(const char *p, const char *end);
 
 U_PURE char *u_prev(const char *p);
 U_PURE char *u_find_prev(const char *begin, const char *p);
+
+U_PURE uint32_t u_dref(const char *string);
+U_PURE uint32_t u_dref_n(const char *string, size_t n);
+U_PURE uint32_t u_dref_validated(const char *string);
+U_PURE uint32_t u_dref_validated_n(const char *string, size_t n);
+
+static inline uint32_t
+u_lref(const char *u, size_t *n)
+{
+        uint32_t c = u_dref(u);
+        *n = u_next(u) - u;
+        return c;
+}
+
+static inline uint32_t
+u_iref(const char *u, size_t *n)
+{
+        if (*(const unsigned char *)u < 0x80) {
+                *n = 1;
+                return *u;
+        } else
+                return u_lref(u, n);
+}
 
 U_PURE char *u_offset_to_pointer(const char *str, long offset);
 U_PURE char *u_offset_to_pointer_n(const char *str, long offset, size_t n);

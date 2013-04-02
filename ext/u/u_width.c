@@ -17,7 +17,7 @@ u_width_impl(const char *string, size_t n, bool use_n)
         const char *p = string;
         const char *end = p + n;
         while (P_WITHIN_STR(p, end, use_n)) {
-		width += u_char_width(u_aref_char(p));
+		width += u_char_width(u_dref(p));
                 p = u_next(p);
         }
 

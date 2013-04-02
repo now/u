@@ -55,7 +55,7 @@ rb_u_string_dump_ascii_printable(VALUE buffer, unsigned char c)
 static inline bool
 rb_u_string_dump_codepoint(VALUE buffer, const char **p, const char *end)
 {
-        uint32_t c = u_aref_char_n(*p, end - *p);
+        uint32_t c = u_dref_n(*p, end - *p);
 
         if (c == U_INCOMPLETE_INPUT_CHAR ||
             c == U_BAD_INPUT_CHAR)

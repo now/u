@@ -201,7 +201,7 @@ rb_u_string_to_inum_as_fix(const char *str, const char *s, int sign, int base,
 
         bool previous_was_separator = false;
         while (*s != '\0') {
-                uint32_t c = u_aref_char(s);
+                uint32_t c = u_dref(s);
                 s = u_next(s);
 
                 if (rb_u_string_to_inum_num_separator(str, s, verify, c, &previous_was_separator))
@@ -215,7 +215,7 @@ rb_u_string_to_inum_as_fix(const char *str, const char *s, int sign, int base,
         }
 
         if (verify) {
-                while (*s != '\0' && u_char_isspace(u_aref_char(s)))
+                while (*s != '\0' && u_char_isspace(u_dref(s)))
                         s = u_next(s);
                 if (*s != '\0')
                         rb_u_raise(rb_eArgError,
@@ -244,7 +244,7 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
         const char *s = str;
 
         /* Skip any leading whitespace. */
-        while (u_char_isspace(u_aref_char(s)))
+        while (u_char_isspace(u_dref(s)))
                 s = u_next(s);
 
         /* Figure out what sign this number uses. */
@@ -292,7 +292,7 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
 
         bool previous_was_separator = false;
         while (true) {
-                uint32_t c = u_aref_char(s);
+                uint32_t c = u_dref(s);
                 s = u_next(s);
 
                 if (rb_u_string_to_inum_num_separator(str, s, verify, c, &previous_was_separator))

@@ -107,7 +107,7 @@ tr_trans_real_squeeze(const char *str, const char *end,
 
         uint32_t prev_c = U_N_CODEPOINTS;
         while (p < end) {
-                uint32_t c0 = u_aref_char(p);
+                uint32_t c0 = u_dref(p);
 
                 const char *prev = p;
                 p = u_next(p);
@@ -148,7 +148,7 @@ tr_trans_real_standard(const char *str, const char *end,
         const char *p = str;
 
         while (p < end) {
-                uint32_t c = u_aref_char(p);
+                uint32_t c = u_dref(p);
 
                 const char *prev = p;
                 p = u_next(p);

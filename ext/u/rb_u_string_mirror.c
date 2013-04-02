@@ -8,7 +8,7 @@ mirror_loop(const char *string, size_t length, bool use_length, char *result)
         const char *p = string;
         const char *end = p + length;
         while (P_WITHIN_STR(p, end, use_length)) {
-                uint32_t c = u_aref_char(p);
+                uint32_t c = u_dref(p);
                 uint32_t mirrored;
 
                 if (!u_char_mirror(c, &mirrored))

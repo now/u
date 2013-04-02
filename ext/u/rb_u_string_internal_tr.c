@@ -54,7 +54,7 @@ tr_next_char(struct tr *t)
                  * check the offsets here.  Perhaps TR_READ_ANOTHER should also
                  * have advanced t->p one more step. */
                 if (next != NULL) {
-                        uint32_t max = u_aref_char(next);
+                        uint32_t max = u_dref(next);
 
                         if (max < t->now) {
                                 t->p = next;

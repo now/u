@@ -115,7 +115,7 @@ directive_parse_int(const char **p, const char *end, const char *type)
 
                 int m = 10 * n + u_char_digit_value(c);
                 if (m / 10 != n) {
-                        while (q < end && u_char_isdigit(u_aref_char_validated_n(q, end - q)))
+                        while (q < end && u_char_isdigit(u_dref_validated_n(q, end - q)))
                                 q = u_next(q);
                         /* TODO: Test this. */
                         rb_u_raise(rb_eArgError,
@@ -511,7 +511,7 @@ directive_string(UNUSED(uint32_t directive), int flags, int width, int precision
                 const char *q = p, *end = p + length;
                 while (i < precision && q < end) {
                         // TODO Verify u_aref_char/u_next
-                        i += (int)u_char_width(u_aref_char(q));
+                        i += (int)u_char_width(u_dref(q));
                         q = u_next(q);
                 }
                 length = q - p;

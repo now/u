@@ -35,7 +35,7 @@ _rb_u_aref_char_validated(const char *str, const char *end)
         if (str >= end)
                 rb_u_raise(rb_eArgError, "String is empty");
 
-        uint32_t c = u_aref_char_validated_n(str, end - str);
+        uint32_t c = u_dref_validated_n(str, end - str);
         switch (c) {
         case U_BAD_INPUT_CHAR:
                 rb_u_raise(rb_eArgError, "input isn’t valid UTF-8");
@@ -191,10 +191,10 @@ _rb_u_string_property(VALUE self, const char *name, int unknown,
         const char *end = USTRING_END(string);
         if (p == end)
                 return unknown;
-        int first = property(u_aref_char_validated_n(p, end - p));
+        int first = property(u_dref_validated_n(p, end - p));
         p = u_next(p);
         while (p < end) {
-                int value = property(u_aref_char_validated_n(p, end - p));
+                int value = property(u_dref_validated_n(p, end - p));
                 if (value != first)
                         rb_u_raise(rb_eArgError,
                                    "string consists of characters with different %s values: :%s+, :%s",

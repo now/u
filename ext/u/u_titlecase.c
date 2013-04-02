@@ -25,7 +25,7 @@ static void
 titlecase_step(const char *p, struct titlecase_closure *closure)
 {
         const char *t = closure->previous;
-        while (t < p && !u_char_iscased(u_aref_char(t)))
+        while (t < p && !u_char_iscased(u_dref(t)))
                 t = u_next(t);
         if (closure->result != NULL)
                 memcpy(closure->result + closure->n, closure->previous, t - closure->previous);

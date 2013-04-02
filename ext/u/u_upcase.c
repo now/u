@@ -29,7 +29,7 @@ output_marks(const char **p, const char *end, bool use_end, char *result)
 
         const char *q = u_next(*p);
         while (P_WITHIN_STR(q, end, use_end)) {
-		uint32_t c = u_aref_char(q);
+		uint32_t c = u_dref(q);
 
                 if (!s_ismark(s_general_category(c)))
                         break;
@@ -51,18 +51,18 @@ is_after_soft_dotted(const char *string, const char *p)
                 return false;
 
         for (const char *q = u_prev(p); q > string; q = u_prev(q)) {
-                uint32_t c = u_aref_char(q);
+                uint32_t c = u_dref(q);
 
                 if (u_char_issoftdotted(c))
                         return true;
 
-		int c_class = u_char_combining_class(u_aref_char(p));
+		int c_class = u_char_combining_class(u_dref(p));
                 if (c_class == CANONICAL_COMBINING_CLASS_ABOVE ||
                     c_class == CANONICAL_COMBINING_CLASS_NOT_REORDERED)
                         return false;
 	}
 
-        return u_char_issoftdotted(u_aref_char(string));
+        return u_char_issoftdotted(u_dref(string));
 }
 
 static inline size_t
@@ -88,7 +88,7 @@ size_t
 _u_upcase_step(const char *string, const char **p, const char *end, bool use_end,
                enum locale locale, bool title, char *result)
 {
-        uint32_t c = u_aref_char(*p);
+        uint32_t c = u_dref(*p);
 
         if (!title && c == COMBINING_GREEK_YPOGEGRAMMENI) {
                 /* When COMBINING GREEK YPOGEGRAMMENI (U+0345) is uppercased or

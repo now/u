@@ -25,8 +25,8 @@ _u_special_case_table_lookup(uint32_t c)
         uint32_t tv = s_attribute(c);
 
         if (tv >= UNICODE_SPECIAL_CASE_TABLE_START)
-                tv = u_aref_char(_u_special_case_table +
-                                 tv - UNICODE_SPECIAL_CASE_TABLE_START);
+                tv = u_dref(_u_special_case_table +
+                            tv - UNICODE_SPECIAL_CASE_TABLE_START);
 
         if (tv == '\0')
                 return c;
