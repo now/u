@@ -9,12 +9,12 @@
 /* {{{1
  * Retrieve the number of UTF-8 encoded Unicode characters in ‘str’.
  */
-long
-u_length(const char *str)
+size_t
+u_n_chars(const char *str)
 {
         assert(str != NULL);
 
-        long n = 0;
+        size_t n = 0;
         const char *p = str;
         while (*p != '\0') {
                 n++;
@@ -29,15 +29,15 @@ u_length(const char *str)
  * Retrieve the number of UTF-8 encoded Unicode characters in ‘str’, examining
  * ‘len’ bytes.
  */
-long
-u_length_n(const char *str, long n)
+size_t
+u_n_chars_n(const char *str, size_t n)
 {
         assert(str != NULL || n == 0);
 
         if (n == 0)
                 return 0;
 
-        long m = 0;
+        size_t m = 0;
         const char *p = str;
         const char *end = str + n;
         while (p < end) {
@@ -47,7 +47,7 @@ u_length_n(const char *str, long n)
 
         /* This makes sure that we don’t count incomplete characters.  It won’t
          * save us from illegal UTF-8-sequences, however. */
-        if (p > end)
+        if (p > end && m > 0)
                 m--;
 
         return m;

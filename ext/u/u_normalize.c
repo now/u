@@ -111,7 +111,7 @@ decompose_simple(uint32_t c, enum u_normalize_mode mode, uint32_t *result)
         if (result != NULL)
                 return decomposition_to_wc(decomposition, result);
 
-        return u_length(decomposition);
+        return u_n_chars(decomposition);
 }
 
 static inline bool
@@ -328,7 +328,7 @@ char *
 u_normalize(const char *string, enum u_normalize_mode mode)
 {
         uint32_t *wcs = _u_normalize_wc(string, 0, false, mode, NULL);
-        char *u = ucs4_to_u(wcs, NULL, NULL);
+        char *u = u_ucs4_to_u(wcs, NULL, NULL);
 
         free(wcs);
 
@@ -341,7 +341,7 @@ u_normalize_n(const char *string, size_t n, enum u_normalize_mode mode,
 {
         size_t n_wcs;
         uint32_t *wcs = _u_normalize_wc(string, n, true, mode, &n_wcs);
-        char *u = ucs4_to_u_n(wcs, n_wcs, NULL, new_n);
+        char *u = u_ucs4_to_u_n(wcs, n_wcs, NULL, new_n);
 
         free(wcs);
 

@@ -21,7 +21,7 @@ casefold_table_lookup(uint32_t c, char *result, size_t *n)
         char const *folded = casefold_table[index].data;
         if (result != NULL)
                 strcpy(result, folded);
-        *n += u_byte_length(folded);
+        *n += u_n_bytes(folded);
 
         return true;
 }

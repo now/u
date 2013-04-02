@@ -47,12 +47,12 @@ _u_special_case_output(char *buf, int offset, int type, bool upper)
 		p = u_next(p);
 
 	if (upper)
-		p += u_byte_length(p) + 1;
+		p += u_n_bytes(p) + 1;
 
-	size_t len = u_byte_length(p);
+	size_t n = u_n_bytes(p);
 
 	if (buf != NULL)
-		memcpy(buf, p, len);
+		memcpy(buf, p, n);
 
-	return len;
+	return n;
 }

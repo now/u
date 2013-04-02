@@ -13,7 +13,7 @@ static char *
 u_reverse_impl(const char *str, size_t n, bool use_n)
 {
 	if (!use_n)
-		n = u_byte_length(str);
+		n = u_n_bytes(str);
 
 	char *result = malloc(sizeof(char) * (n + 1));
 	char *r = result + n;

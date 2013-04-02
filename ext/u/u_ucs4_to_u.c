@@ -11,8 +11,8 @@
  * The real implementation of ucs4_to_utf8() and ucs4_to_utf8_n() below.
  */
 static char *
-ucs4_to_u_n_impl(uint32_t *str, size_t n, bool use_n,
-		 size_t *items_read, size_t *items_written)
+u_ucs4_to_u_n_impl(uint32_t *str, size_t n, bool use_n,
+                   size_t *items_read, size_t *items_written)
 {
 	size_t result_n = 0;
 	char *result = NULL, *p;
@@ -52,9 +52,9 @@ ucs4_to_u_n_impl(uint32_t *str, size_t n, bool use_n,
  * ‘items_written’ respectivelly.
  */
 char *
-ucs4_to_u(uint32_t *str, size_t *items_read, size_t *items_written)
+u_ucs4_to_u(uint32_t *str, size_t *items_read, size_t *items_written)
 {
-	return ucs4_to_u_n_impl(str, 0, false, items_read, items_written);
+	return u_ucs4_to_u_n_impl(str, 0, false, items_read, items_written);
 }
 
 /* {{{1
@@ -63,7 +63,7 @@ ucs4_to_u(uint32_t *str, size_t *items_read, size_t *items_written)
  * ‘items_written’ respectivelly.  Examine at most ‘len’ characters from ‘str’.
  */
 char *
-ucs4_to_u_n(uint32_t *str, size_t n, size_t *items_read, size_t *items_written)
+u_ucs4_to_u_n(uint32_t *str, size_t n, size_t *items_read, size_t *items_written)
 {
-	return ucs4_to_u_n_impl(str, n, true, items_read, items_written);
+	return u_ucs4_to_u_n_impl(str, n, true, items_read, items_written);
 }

@@ -249,11 +249,11 @@ tr_trans(VALUE self, VALUE rbfrom, VALUE rbto, bool squeeze)
          * to translate to, not simply a check whether to include it or not. */
         struct tr_trans_closure trans_closure;
 
-        struct tr_range from_ranges[u_length_n(USTRING_STR(from), USTRING_LENGTH(from))];
+        struct tr_range from_ranges[u_n_chars_n(USTRING_STR(from), USTRING_LENGTH(from))];
         trans_closure.from = from_ranges;
         trans_closure.n_from = tr_ranges_setup(&tr_from, from_ranges);
 
-        struct tr_range to_ranges[u_length_n(USTRING_STR(to), USTRING_LENGTH(to))];
+        struct tr_range to_ranges[u_n_chars_n(USTRING_STR(to), USTRING_LENGTH(to))];
         trans_closure.to = to_ranges;
         trans_closure.n_to = tr_ranges_setup(&tr_to, to_ranges);
 

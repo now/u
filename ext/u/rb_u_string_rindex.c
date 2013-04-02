@@ -55,7 +55,7 @@ rb_u_string_rindex_m(int argc, VALUE *argv, VALUE self)
                 offset = NUM2LONG(rboffset);
         else
                 /* TODO: Why not simply use -1?  Benchmark which is faster. */
-                offset = u_length_n(USTRING_STR(string), USTRING_LENGTH(string));
+                offset = u_n_chars_n(USTRING_STR(string), USTRING_LENGTH(string));
 
         const char *begin = rb_u_string_begin_from_offset(string, offset);
         const char *end = USTRING_END(string);
@@ -74,7 +74,7 @@ rb_u_string_rindex_m(int argc, VALUE *argv, VALUE self)
                  * rb_u_string_index_regexp_pointer() and rb_u_string_rindex_pointer(),
                  * so that one can pass a pointer to start at immediately
                  * instead of an offset that gets calculated into a pointer. */
-                offset = u_length_n(USTRING_STR(string), USTRING_LENGTH(string));
+                offset = u_n_chars_n(USTRING_STR(string), USTRING_LENGTH(string));
         }
 
         /* TODO: Adjust this to be able to deal with struct rb_u_string in a fast way as

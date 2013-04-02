@@ -367,13 +367,13 @@ U_PURE bool u_has_prefix(const char *str, const char *prefix);
 U_PURE bool u_is_ascii_only(const char *string);
 U_PURE bool u_is_ascii_only_n(const char *string, size_t n);
 
-U_PURE long u_length(const char *str);
-U_PURE long u_length_n(const char *str, long n);
+U_PURE size_t u_n_chars(const char *str);
+U_PURE size_t u_n_chars_n(const char *str, size_t n);
 
 U_PURE size_t u_width(const char *string);
 U_PURE size_t u_width_n(const char *string, size_t n);
 
-U_PURE size_t u_byte_length(const char *str);
+U_PURE size_t u_n_bytes(const char *str);
 
 char *u_reverse(const char *str);
 char *u_reverse_n(const char *str, size_t n);
@@ -386,5 +386,6 @@ void u_word_breaks(const char *string, size_t n, u_break_fn fn, void *closure);
 void u_grapheme_breaks(const char *string, size_t n, u_break_fn fn, void *closure);
 
 int u_char_to_u(uint32_t c, char *result);
-char *ucs4_to_u(uint32_t *str, size_t *items_read, size_t *items_written);
-char *ucs4_to_u_n(uint32_t *str, size_t n, size_t *items_read, size_t *items_written);
+char *u_ucs4_to_u(uint32_t *str, size_t *items_read, size_t *items_written);
+char *u_ucs4_to_u_n(uint32_t *str, size_t n, size_t *items_read,
+                    size_t *items_written);

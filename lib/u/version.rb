@@ -217,7 +217,6 @@ module U
               u.h
               u_append.c
               u_aref_char.c
-              u_byte_length.c
               u_char_general_category.c
               u_char_combining_class.c
               u_char_digit_value.c
@@ -262,9 +261,10 @@ module U
               u_index.c
               u_is_ascii_only.c
               u_isvalid.c
-              u_length.c
               u_locale.c
               u_locale.h
+              u_n_bytes.c
+              u_n_chars.c
               u_next.c
               u_normalize.c
               u_offset_to_pointer.c
@@ -273,10 +273,10 @@ module U
               u_reverse.c
               u_rindex.c
               u_titlecase.c
+              u_ucs4_to_u.c
               u_upcase.c
               u_width.c
               u_word_breaks.c
-              ucs4_to_u.c
               utf8.h
               word-break.c
               word-break.h'

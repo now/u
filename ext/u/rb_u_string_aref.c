@@ -55,7 +55,7 @@ static VALUE
 rb_u_string_aref_default(VALUE self, VALUE index)
 {
         const struct rb_u_string *string = RVAL2USTRING(self);
-        long n_chars = u_length_n(USTRING_STR(string), USTRING_LENGTH(string));
+        long n_chars = u_n_chars_n(USTRING_STR(string), USTRING_LENGTH(string));
 
         long begin, length;
         switch (rb_range_beg_len(index, &begin, &length, n_chars, 0)) {

@@ -110,7 +110,7 @@ rb_u_string_to_inum_base_bit_length(const char *s, int base)
                 bit_length = 6;
         }
 
-        return bit_length * u_length(s);
+        return bit_length * u_n_chars(s);
 }
 
 static bool

@@ -52,8 +52,8 @@ rb_u_string_rpartition_string(VALUE self, VALUE rbseparator)
 
         long offset = rb_u_string_rindex(self,
                                          validated,
-                                         u_length_n(begin,
-                                                    USTRING_LENGTH(string)));
+                                         u_n_chars_n(begin,
+                                                     USTRING_LENGTH(string)));
         if (offset < 0)
                 return rb_u_string_rpartition_failure(self);
 
