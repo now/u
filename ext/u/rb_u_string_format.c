@@ -19,13 +19,13 @@ enum directive_flags {
         DIRECTIVE_FLAGS_PLUS = 4,
         DIRECTIVE_FLAGS_MINUS = 8,
         DIRECTIVE_FLAGS_ZERO = 16,
-        DIRECTIVE_FLAGS_NUMBER =
+        DIRECTIVE_FLAGS_DECIMAL =
                 DIRECTIVE_FLAGS_SPACE |
                 DIRECTIVE_FLAGS_PLUS |
                 DIRECTIVE_FLAGS_MINUS |
                 DIRECTIVE_FLAGS_ZERO,
-        DIRECTIVE_FLAGS_DECIMAL =
-                DIRECTIVE_FLAGS_NUMBER |
+        DIRECTIVE_FLAGS_NUMBER =
+                DIRECTIVE_FLAGS_DECIMAL |
                 DIRECTIVE_FLAGS_SHARP
 };
 
@@ -1036,21 +1036,21 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
                 { 'c', DIRECTIVE_FLAGS_MINUS, true, false, directive_character },
                 { 's', DIRECTIVE_FLAGS_MINUS, true, true, directive_string },
                 { 'p', DIRECTIVE_FLAGS_MINUS, true, true, directive_inspect },
-                { 'd', DIRECTIVE_FLAGS_NUMBER, true, true, directive_integer },
-                { 'i', DIRECTIVE_FLAGS_NUMBER, true, true, directive_integer },
-                { 'u', DIRECTIVE_FLAGS_NUMBER, true, true, directive_integer },
-                { 'o', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_octal },
-                { 'x', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_hexadecimal },
-                { 'X', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_hexadecimal },
-                { 'b', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_binary },
-                { 'B', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_binary },
-                { 'f', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float },
-                { 'g', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float },
-                { 'G', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float },
-                { 'e', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float },
-                { 'E', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float },
-                { 'a', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float },
-                { 'A', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_float }
+                { 'd', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_integer },
+                { 'i', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_integer },
+                { 'u', DIRECTIVE_FLAGS_DECIMAL, true, true, directive_integer },
+                { 'o', DIRECTIVE_FLAGS_NUMBER, true, true, directive_octal },
+                { 'x', DIRECTIVE_FLAGS_NUMBER, true, true, directive_hexadecimal },
+                { 'X', DIRECTIVE_FLAGS_NUMBER, true, true, directive_hexadecimal },
+                { 'b', DIRECTIVE_FLAGS_NUMBER, true, true, directive_binary },
+                { 'B', DIRECTIVE_FLAGS_NUMBER, true, true, directive_binary },
+                { 'f', DIRECTIVE_FLAGS_NUMBER, true, true, directive_float },
+                { 'g', DIRECTIVE_FLAGS_NUMBER, true, true, directive_float },
+                { 'G', DIRECTIVE_FLAGS_NUMBER, true, true, directive_float },
+                { 'e', DIRECTIVE_FLAGS_NUMBER, true, true, directive_float },
+                { 'E', DIRECTIVE_FLAGS_NUMBER, true, true, directive_float },
+                { 'a', DIRECTIVE_FLAGS_NUMBER, true, true, directive_float },
+                { 'A', DIRECTIVE_FLAGS_NUMBER, true, true, directive_float }
         };
 
         for (size_t i = 0; i < lengthof(directives); i++)
