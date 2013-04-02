@@ -5,14 +5,14 @@
  * @note Use the collation key when comparing U::Strings to each other
  *   repeatedly, as occurs when, for example, sorting a list of U::Strings. */
 VALUE
-rb_u_string_collate_key(VALUE self)
+rb_u_string_collation_key(VALUE self)
 {
         const struct rb_u_string *string = RVAL2USTRING(self);
 
         size_t length;
-        char *collate_key = u_collate_key_n(USTRING_STR(string),
-                                            USTRING_LENGTH(string),
-                                            &length);
+        char *collation_key = u_collation_key_n(USTRING_STR(string),
+                                                USTRING_LENGTH(string),
+                                                &length);
 
-        return rb_u_string_new_c_own(self, collate_key, length);
+        return rb_u_string_new_c_own(self, collation_key, length);
 }

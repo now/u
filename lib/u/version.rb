@@ -131,7 +131,7 @@ module U
               rb_u_string_chr.c
               rb_u_string_cntrl.c
               rb_u_string_collate.c
-              rb_u_string_collate_key.c
+              rb_u_string_collation_key.c
               rb_u_string_combining_class.c
               rb_u_string_count.c
               rb_u_string_defined.c
@@ -253,6 +253,7 @@ module U
               u_char_word_break.c
               u_char_width.c
               u_collate.c
+              u_collation_key.c
               u_copy.c
               u_downcase.c
               u_foldcase.c

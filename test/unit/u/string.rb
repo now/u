@@ -1483,11 +1483,11 @@ Expectations do
   expect true do [0x200b, 0x1160].pack('U*').u.zero_width? end
   expect false do 'a'.u.zero_width? end
 
-  expect ''.u do "\0".u.collate_key end
-  expect 'äbcdëf'.u do 'äbcdëf'.u.collate_key end
-  expect 'äbcdëf'.u do "äbc\0dëf".u.collate_key end
-  expect result.tainted? do ''.u.taint.collate_key end
-  expect result.untrusted? do ''.u.untrust.collate_key end
+  expect ''.u do "\0".u.collation_key end
+  expect 'äbcdëf'.u do 'äbcdëf'.u.collation_key end
+  expect 'äbcdëf'.u do "äbc\0dëf".u.collation_key end
+  expect result.tainted? do ''.u.taint.collation_key end
+  expect result.untrusted? do ''.u.untrust.collation_key end
 
   if defined? ::Encoding
     expect Encoding::ASCII_8BIT do ''.u.b.encoding end
