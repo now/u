@@ -365,7 +365,7 @@ U_PURE size_t u_char_rindex_n(const char *str, uint32_t c, size_t len);
 U_PURE size_t u_rindex(const char *haystack, const char *needle);
 U_PURE size_t u_rindex_n(const char *haystack, const char *needle, size_t len);
 
-U_PURE bool utf_has_prefix(const char *str, const char *prefix);
+U_PURE bool u_has_prefix(const char *str, const char *prefix);
 
 U_PURE bool u_is_ascii_only(const char *string);
 U_PURE bool u_is_ascii_only_n(const char *string, size_t length);

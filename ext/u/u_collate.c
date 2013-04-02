@@ -77,7 +77,7 @@ u_collate_n(const char *a, size_t a_len, const char *b, size_t b_len)
  * Written by Ulrich Drepper <drepper@cygnus.com>, 1995.
  */
 static inline int
-_utf_encode(char *buf, wchar_t c)
+utf8_encode(char *buf, wchar_t c)
 {
 	int retval;
 
@@ -114,7 +114,7 @@ _utf_encode(char *buf, wchar_t c)
  * collation keys using str_compare().
  */
 static char *
-utf_collate_key_impl(const char *str, size_t len, bool use_len, size_t *new_length)
+u_collate_key_impl(const char *str, size_t len, bool use_len, size_t *new_length)
 {
 	assert(str != NULL);
 
@@ -138,12 +138,12 @@ utf_collate_key_impl(const char *str, size_t len, bool use_len, size_t *new_leng
 
 	int result_len = 0;
 	for (size_t i = 0; i < xfrm_len; i++)
-		result_len += _utf_encode(NULL, result_wc[i]);
+		result_len += utf8_encode(NULL, result_wc[i]);
 
 	char *result = malloc(sizeof(char) * (result_len + 1));
 	result_len = 0;
 	for (size_t i = 0; i < xfrm_len; i++)
-		result_len += _utf_encode(result + result_len, result_wc[i]);
+		result_len += utf8_encode(result + result_len, result_wc[i]);
 	result[result_len] = '\0';
 
 	free(str_norm);
@@ -162,7 +162,7 @@ utf_collate_key_impl(const char *str, size_t len, bool use_len, size_t *new_leng
 char *
 u_collate_key(const char *str)
 {
-	return utf_collate_key_impl(str, 0, false, NULL);
+	return u_collate_key_impl(str, 0, false, NULL);
 }
 
 
@@ -173,5 +173,5 @@ u_collate_key(const char *str)
 char *
 u_collate_key_n(const char *str, size_t len, size_t *new_length)
 {
-	return utf_collate_key_impl(str, len, true, new_length);
+	return u_collate_key_impl(str, len, true, new_length);
 }

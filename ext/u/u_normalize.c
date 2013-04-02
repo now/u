@@ -115,7 +115,7 @@ decompose_simple(uint32_t c, enum u_normalize_mode mode, uint32_t *result)
 }
 
 static inline bool
-unicode_canonical_ordering_swap(uint32_t *string, size_t offset, int next)
+canonical_ordering_swap(uint32_t *string, size_t offset, int next)
 {
         size_t initial = offset + 1;
         size_t j = initial;
@@ -131,7 +131,7 @@ unicode_canonical_ordering_swap(uint32_t *string, size_t offset, int next)
 }
 
 static inline bool
-unicode_canonical_ordering_reorder(uint32_t *string, size_t length)
+canonical_ordering_reorder(uint32_t *string, size_t length)
 {
         bool swapped = false;
 
@@ -140,7 +140,7 @@ unicode_canonical_ordering_reorder(uint32_t *string, size_t length)
                 int next = s_combining_class(string[i + 1]);
 
                 if (next != 0 && prev > next) {
-                        if (unicode_canonical_ordering_swap(string, i, next))
+                        if (canonical_ordering_swap(string, i, next))
                                 swapped = true;
                 } else
                         prev = next;
@@ -150,9 +150,9 @@ unicode_canonical_ordering_reorder(uint32_t *string, size_t length)
 }
 
 static void
-unicode_canonical_ordering(uint32_t *string, size_t length)
+canonical_ordering(uint32_t *string, size_t length)
 {
-        while (unicode_canonical_ordering_reorder(string, length))
+        while (canonical_ordering_reorder(string, length))
                 ;
 }
 
@@ -180,7 +180,7 @@ decompose_loop(const char *string, size_t length, bool use_length,
                 n += decompose_step(c, mode, OFFSET_IF(result, n));
 
                 if (result != NULL && n > 0 && s_combining_class(result[prev_n]) == 0) {
-                        unicode_canonical_ordering(result + prev_start, n - prev_start);
+                        canonical_ordering(result + prev_start, n - prev_start);
                         prev_start = prev_n;
                 }
 
@@ -188,7 +188,7 @@ decompose_loop(const char *string, size_t length, bool use_length,
         }
 
         if (result != NULL && n > 0)
-                unicode_canonical_ordering(result + prev_start, n - prev_start);
+                canonical_ordering(result + prev_start, n - prev_start);
 
         return n;
 }
