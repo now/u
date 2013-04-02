@@ -124,38 +124,34 @@ _u_upcase_step(const char *string, const char **p, const char *end, bool use_end
 }
 
 static size_t
-upcase_loop(const char *string, size_t length, bool use_length,
+upcase_loop(const char *string, const char *end, bool use_end,
             enum locale locale, char *result)
 {
 	size_t n = 0;
 
-	const char *p = string;
-        const char *end = p + length;
-        while (P_WITHIN_STR(p, end, use_length)) {
-                n += _u_upcase_step(string, &p, end, use_length, locale,
+	for (const char *p = string; P_WITHIN_STR(p, end, use_end); p = u_next(p))
+                n += _u_upcase_step(string, &p, end, use_end, locale,
                                     false, OFFSET_IF(result, n));
-
-                p = u_next(p);
-	}
 
 	return n;
 }
 
 static char *
-u_upcase_in_locale_impl(const char *string, size_t length, bool use_length,
-                        const char *locale, size_t *new_length)
+u_upcase_in_locale_impl(const char *string, size_t n, bool use_n,
+                        const char *locale, size_t *new_n)
 {
 	assert(string != NULL);
 
 	enum locale elocale = _u_locale_from_string(locale);
 
-	size_t n = upcase_loop(string, length, use_length, elocale, NULL);
-	char *result = ALLOC_N(char, n + 1);
-	upcase_loop(string, length, use_length, elocale, result);
-	result[n] = '\0';
+        const char *end = string + n;
+	size_t m = upcase_loop(string, end, use_n, elocale, NULL);
+	char *result = ALLOC_N(char, m + 1);
+	upcase_loop(string, end, use_n, elocale, result);
+	result[m] = '\0';
 
-        if (new_length != NULL)
-                *new_length = n;
+        if (new_n != NULL)
+                *new_n = m;
 
 	return result;
 }
@@ -167,9 +163,9 @@ u_upcase(const char *string)
 }
 
 char *
-u_upcase_n(const char *string, size_t length, size_t *new_length)
+u_upcase_n(const char *string, size_t n, size_t *new_n)
 {
-	return u_upcase_in_locale_impl(string, length, true, NULL, new_length);
+	return u_upcase_in_locale_impl(string, n, true, NULL, new_n);
 }
 
 char *
@@ -179,8 +175,8 @@ u_upcase_in_locale(const char *string, const char *locale)
 }
 
 char *
-u_upcase_in_locale_n(const char *string, size_t length, const char *locale,
-                     size_t *new_length)
+u_upcase_in_locale_n(const char *string, size_t n, const char *locale,
+                     size_t *new_n)
 {
-	return u_upcase_in_locale_impl(string, length, true, locale, new_length);
+	return u_upcase_in_locale_impl(string, n, true, locale, new_n);
 }

@@ -336,12 +336,12 @@ u_normalize(const char *string, enum u_normalize_mode mode)
 }
 
 char *
-u_normalize_n(const char *string, size_t length, enum u_normalize_mode mode,
-              size_t *new_length)
+u_normalize_n(const char *string, size_t n, enum u_normalize_mode mode,
+              size_t *new_n)
 {
-        size_t length_wcs;
-        uint32_t *wcs = _u_normalize_wc(string, length, true, mode, &length_wcs);
-        char *u = ucs4_to_u_n(wcs, length_wcs, NULL, new_length);
+        size_t n_wcs;
+        uint32_t *wcs = _u_normalize_wc(string, n, true, mode, &n_wcs);
+        char *u = ucs4_to_u_n(wcs, n_wcs, NULL, new_n);
 
         free(wcs);
 

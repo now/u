@@ -62,32 +62,33 @@ titlecase_word_break(const char *p, struct titlecase_closure *closure)
 }
 
 static size_t
-titlecase_loop(const char *string, size_t length, bool use_length,
-               enum locale locale, char *result)
+titlecase_loop(const char *string, size_t n, enum locale locale, char *result)
 {
-        const char *end = string + (use_length ? length : strlen(string));
+        const char *end = string + n;
         struct titlecase_closure closure = { string, string, locale, 0, result };
-        u_word_breaks(string, length, (u_break_fn)titlecase_word_break, &closure);
+        u_word_breaks(string, n, (u_break_fn)titlecase_word_break, &closure);
         if (closure.previous != end)
                 titlecase_step(end, &closure);
         return closure.n;
 }
 
 static char *
-u_titlecase_in_locale_impl(const char *string, size_t length, bool use_length,
-                           const char *locale, size_t *new_length)
+u_titlecase_in_locale_impl(const char *string, size_t n, bool use_n,
+                           const char *locale, size_t *new_n)
 {
 	assert(string != NULL);
 
 	enum locale elocale = _u_locale_from_string(locale);
 
-        size_t n = titlecase_loop(string, length, use_length, elocale, NULL);
-	char *result = ALLOC_N(char, n + 1);
-	titlecase_loop(string, length, use_length, elocale, result);
-	result[n] = '\0';
+        if (!use_n)
+                n = strlen(string);
+        size_t m = titlecase_loop(string, n, elocale, NULL);
+	char *result = ALLOC_N(char, m + 1);
+	titlecase_loop(string, n, elocale, result);
+	result[m] = '\0';
 
-        if (new_length != NULL)
-                *new_length = n;
+        if (new_n != NULL)
+                *new_n = m;
 
 	return result;
 }
@@ -99,9 +100,9 @@ u_titlecase(const char *string)
 }
 
 char *
-u_titlecase_n(const char *string, size_t length, size_t *new_length)
+u_titlecase_n(const char *string, size_t n, size_t *new_n)
 {
-	return u_titlecase_in_locale_impl(string, length, true, NULL, new_length);
+	return u_titlecase_in_locale_impl(string, n, true, NULL, new_n);
 }
 
 char *
@@ -111,8 +112,8 @@ u_titlecase_in_locale(const char *string, const char *locale)
 }
 
 char *
-u_titlecase_in_locale_n(const char *string, size_t length, const char *locale,
-                        size_t *new_length)
+u_titlecase_in_locale_n(const char *string, size_t n, const char *locale,
+                        size_t *new_n)
 {
-        return u_titlecase_in_locale_impl(string, length, true, locale, new_length);
+        return u_titlecase_in_locale_impl(string, n, true, locale, new_n);
 }

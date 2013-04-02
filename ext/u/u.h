@@ -299,29 +299,29 @@ enum u_normalize_mode {
 };
 
 char *u_normalize(const char *string, enum u_normalize_mode mode);
-char *u_normalize_n(const char *string, size_t length,
-                    enum u_normalize_mode mode, size_t *new_length);
+char *u_normalize_n(const char *string, size_t n,
+                    enum u_normalize_mode mode, size_t *new_n);
 
 char *u_downcase(const char *string);
-char *u_downcase_n(const char *string, size_t length, size_t *new_length);
+char *u_downcase_n(const char *string, size_t n, size_t *new_n);
 char *u_downcase_in_locale(const char *string, const char *locale);
-char *u_downcase_in_locale_n(const char *string, size_t length,
-                             const char *locale, size_t *new_length);
+char *u_downcase_in_locale_n(const char *string, size_t n, const char *locale,
+                             size_t *new_n);
 
 char *u_foldcase(const char *string);
-char *u_foldcase_n(const char *string, size_t length, size_t *new_length);
+char *u_foldcase_n(const char *string, size_t n, size_t *new_n);
 
 char *u_titlecase(const char *string);
-char *u_titlecase_n(const char *string, size_t length, size_t *new_length);
+char *u_titlecase_n(const char *string, size_t n, size_t *new_n);
 char *u_titlecase_in_locale(const char *string, const char *locale);
-char *u_titlecase_in_locale_n(const char *string, size_t length,
-                              const char *locale, size_t *new_length);
+char *u_titlecase_in_locale_n(const char *string, size_t n, const char *locale,
+                              size_t *new_n);
 
 char *u_upcase(const char *string);
-char *u_upcase_n(const char *string, size_t length, size_t *new_length);
+char *u_upcase_n(const char *string, size_t n, size_t *new_n);
 char *u_upcase_in_locale(const char *string, const char *locale);
-char *u_upcase_in_locale_n(const char *string, size_t length,
-                           const char *locale, size_t *new_length);
+char *u_upcase_in_locale_n(const char *string, size_t n, const char *locale,
+                           size_t *new_n);
 
 U_PURE uint32_t u_aref_char(const char *str);
 U_PURE uint32_t u_aref_char_n(const char *str, size_t max);
