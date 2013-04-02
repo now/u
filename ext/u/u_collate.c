@@ -37,13 +37,13 @@ u_collate_n(const char *a, size_t a_n, const char *b, size_t b_n)
 {
         size_t a_norm_n;
 	uint32_t * const a_norm = _u_normalize_wc(a, a_n, true,
-                                                U_NORMALIZE_ALL_COMPOSE,
-                                                &a_norm_n);
+                                                  U_NORMALIZE_ALL_COMPOSE,
+                                                  &a_norm_n);
 
         size_t b_norm_n;
 	uint32_t * const b_norm = _u_normalize_wc(b, b_n, true,
-                                                U_NORMALIZE_ALL_COMPOSE,
-                                                &b_norm_n);
+                                                  U_NORMALIZE_ALL_COMPOSE,
+                                                  &b_norm_n);
 
         int result = 0;
 
