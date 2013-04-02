@@ -1,6 +1,3 @@
-#ifndef U_H
-#define U_H
-
 #if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
 #  define U_CONST __attribute__((__const__))
 #else
@@ -391,5 +388,3 @@ void u_grapheme_breaks(const char *string, size_t n, u_break_fn fn, void *closur
 int u_char_to_u(uint32_t c, char *result);
 char *ucs4_to_u(uint32_t *str, size_t *items_read, size_t *items_written);
 char *ucs4_to_u_n(uint32_t *str, size_t len, size_t *items_read, size_t *items_written);
-
-#endif /* U_H */

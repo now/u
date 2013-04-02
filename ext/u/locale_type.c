@@ -6,9 +6,6 @@
 #include "u.h"
 #include "private.h"
 
-#include "locale_type.h"
-
-
 /* {{{1
  * Retrieve the locale type from the environment (LC_CTYPE).
  */

@@ -1,7 +1,3 @@
-#ifndef UTF8_H
-#define UTF8_H
-
-
 #define UNICODE_ISVALID(char)				\
 	((char) < 0x110000 &&				\
 	 (((char) & 0xffffff800) != 0xd800) &&		\
@@ -76,7 +72,3 @@ _utf8_length(const uint32_t c)
 	else
 		return 6;
 }
-
-
-
-#endif /* UTF8_H */

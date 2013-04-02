@@ -12,9 +12,6 @@
 #include "general-category.h"
 #include "titled.h"
 
-#include "locale_type.h"
-
-
 #define LATIN_SMALL_LETTER_I ((uint32_t)0x0069)
 #define LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE ((uint32_t)0x0130)
 #define COMBINING_DOT_ABOVE ((uint32_t)0x0307)

@@ -1,7 +1,3 @@
-#ifndef COMBINING_CLASS_H
-#define COMBINING_CLASS_H
-
-
 HIDDEN extern const uint8_t (*_u_combining_class_data)[256];
 HIDDEN extern const int16_t *_u_combining_class_table_part1;
 HIDDEN extern const int16_t *_u_combining_class_table_part2;
@@ -24,6 +20,3 @@ s_combining_class(uint32_t c)
 
         return _u_combining_class_data[index][c & 0xff];
 }
-
-
-#endif /* COMBINING_CLASS_H */

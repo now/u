@@ -1,7 +1,3 @@
-#ifndef TYPES_H
-#define TYPES_H
-
-
 #define IS(type, class) (((unsigned int)1 << (type)) & (class))
 #define OR(type, rest)  (((unsigned int)1 << (type)) | (rest))
 
@@ -60,6 +56,3 @@ s_ismark(int category)
                      OR(U_GENERAL_CATEGORY_MARK_SPACING_COMBINING,
                         OR(U_GENERAL_CATEGORY_MARK_ENCLOSING, 0))));
 }
-
-
-#endif /* TYPES_H */

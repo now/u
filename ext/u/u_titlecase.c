@@ -8,8 +8,6 @@
 #include "u.h"
 #include "private.h"
 
-#include "locale_type.h"
-
 #define LATIN_CAPITAL_LETTER_I ((uint32_t)0x0049)
 #define LATIN_CAPITAL_LETTER_J ((uint32_t)0x004a)
 #define LATIN_SMALL_LETTER_I ((uint32_t)0x0069)

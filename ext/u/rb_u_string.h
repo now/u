@@ -1,7 +1,3 @@
-#ifndef RB_U_STRING_H
-#define RB_U_STRING_H
-
-
 /* TODO: Move this to rb_u_string.c and turn USTRING_STR() into
  * rb_u_string_c_str() and USTRING_LENGTH() into rb_u_string_c_length() */
 struct rb_u_string {
@@ -171,6 +167,3 @@ VALUE rb_u_string_zero_width(VALUE self);
 
 
 void Init_u_string(VALUE mU);
-
-
-#endif

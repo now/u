@@ -1,7 +1,3 @@
-#ifndef LOCALE_TYPE_H
-#define LOCALE_TYPE_H
-
-
 /* {{{1
  * LocaleType: This ‹enum› is used for dealing with different locales for
  * turning strings into uppercase or lowercase.
@@ -16,6 +12,3 @@ enum locale {
 
 HIDDEN enum locale _u_locale(void);
 HIDDEN enum locale _u_locale_from_string(const char *locale);
-
-
-#endif /* LOCALE_TYPE_H */

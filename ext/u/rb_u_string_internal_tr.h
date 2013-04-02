@@ -1,6 +1,3 @@
-#ifndef RB_U_STRING_INTERNAL_TR_H
-#define RB_U_STRING_INTERNAL_TR_H
-
 struct tr {
         bool inside_range;
         uint32_t now;
@@ -30,5 +27,3 @@ HIDDEN void tr_table_initialize_from_strings(struct tr_table *table,
                                              int argc,
                                              VALUE *argv);
 HIDDEN bool tr_table_lookup(struct tr_table *table, uint32_t c);
-
-#endif /* RB_U_STRING_INTERNAL_TR_H */

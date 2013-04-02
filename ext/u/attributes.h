@@ -1,7 +1,3 @@
-#ifndef ATTRIBUTES_H
-#define ATTRIBUTES_H
-
-
 HIDDEN extern const uint32_t (*_u_attr_data)[256];
 HIDDEN extern const int16_t *_u_attr_table_part1;
 HIDDEN extern const int16_t *_u_attr_table_part2;
@@ -27,6 +23,3 @@ s_attribute(uint32_t c)
 
 uint32_t _u_special_case_table_lookup(uint32_t c);
 size_t _u_special_case_output(char *buf, int offset, int type, bool upper);
-
-
-#endif /* ATTRIBUTES_H */

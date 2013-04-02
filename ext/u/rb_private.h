@@ -1,6 +1,3 @@
-#ifndef RB_PRIVATE_H
-#define RB_PRIVATE_H
-
 HIDDEN void need_at_least_n_arguments(int argc, int n);
 
 HIDDEN void need_m_to_n_arguments(int argc, int m, int n);
@@ -48,5 +45,3 @@ HIDDEN NORETURN(void rb_u_raise(VALUE exception, const char *format, ...)) PRINT
 
 HIDDEN VALUE rb_u_str_new(const char *string, long length);
 HIDDEN VALUE rb_u_str_buf_new(long length);
-
-#endif /* RB_PRIVATE_H */

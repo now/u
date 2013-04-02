@@ -1,7 +1,3 @@
-#ifndef RB_U_RE_H
-#define RB_U_RE_H
-
-
 #ifdef HAVE_RUBY_RE_H
 #  include <ruby/re.h>
 #else
@@ -17,6 +13,3 @@
 
 HIDDEN VALUE rb_u_pattern_argument(VALUE pattern, bool quote);
 HIDDEN VALUE rb_u_pattern_match_reference(VALUE reference);
-
-
-#endif

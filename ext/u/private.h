@@ -1,6 +1,3 @@
-#ifndef PRIVATE_H
-#define PRIVATE_H
-
 #define P_WITHIN_STR(p, end, use_end) \
         ((use_end) ? (p) < (end) : *(p) != '\0')
 
@@ -70,5 +67,3 @@ HIDDEN size_t _u_downcase_step(const char *string, const char *p,
 HIDDEN size_t _u_upcase_step(const char *string, const char **p,
                              const char *end, bool use_end,
                              enum locale locale, bool title, char *result);
-
-#endif /* PRIVATE_H */
