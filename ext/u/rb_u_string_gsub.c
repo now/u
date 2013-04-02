@@ -110,7 +110,6 @@ rb_u_string_gsub(int argc, VALUE *argv, VALUE self)
                 struct re_registers *registers = RMATCH_REGS(match);
                 VALUE result;
 
-                /* TODO: Refactor this. */
                 if (use_block || !NIL_P(replacements)) {
                         if (use_block) {
                                 VALUE ustr = rb_u_string_new_rb(rb_reg_nth_match(0, match));

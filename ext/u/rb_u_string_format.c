@@ -12,7 +12,7 @@
 #include "rb_u_buffer.h"
 #include "rb_u_string_to_inum.h"
 
-enum DirectiveFlags {
+enum directive_flags {
         DIRECTIVE_FLAGS_NONE = 0,
         DIRECTIVE_FLAGS_SPACE = 1,
         DIRECTIVE_FLAGS_SHARP = 2,
@@ -117,7 +117,6 @@ directive_parse_int(const char **p, const char *end, const char *type)
                 if (m / 10 != n) {
                         while (q < end && u_char_isdigit(u_dref_validated_n(q, end - q)))
                                 q = u_next(q);
-                        /* TODO: Test this. */
                         rb_u_raise(rb_eArgError,
                                    "%s too large: %*s > %d",
                                    type, (int)(q - *p), *p, INT_MAX);
@@ -341,7 +340,7 @@ setup_argument:
 static int
 directive_width(const char **p, const char *end,
                 struct format_arguments *arguments,
-                int *flags)
+                enum directive_flags *flags)
 {
         if (*p == end)
                 return 0;
@@ -510,8 +509,7 @@ directive_string(UNUSED(uint32_t directive), int flags, int width, int precision
                 int i = 0;
                 const char *q = p, *end = p + length;
                 while (i < precision && q < end) {
-                        // TODO Verify u_aref_char/u_next
-                        i += (int)u_char_width(u_dref(q));
+                        i += (int)u_char_width(_rb_u_aref_char_validated(q, end));
                         q = u_next(q);
                 }
                 length = q - p;
@@ -657,7 +655,6 @@ directive_number_bignum_signed(uint32_t directive, int flags, VALUE argument,
         if (directive_number_sign(directive, *digits[0] == '-', flags, sign))
                 (*digits)++;
 
-        /* TODO: Why aren’t we passing around width and precision as longs? */
         return rb_long2int(RSTRING_END(*str) - *digits);
 }
 
@@ -997,8 +994,7 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
 {
         VALUE argument = Qundef;
         bool argument_to_s = false;
-        /* TODO: Use DirectiveFlags instead of int. */
-        int flags = directive_flags(p, end, arguments, &argument, &argument_to_s);
+        enum directive_flags flags = directive_flags(p, end, arguments, &argument, &argument_to_s);
         if (argument_to_s) {
                 directive_validate_flags('s', flags, DIRECTIVE_FLAGS_MINUS);
                 directive_string('s', flags, 0, 0, argument, result);
@@ -1030,7 +1026,6 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
                 break;
         }
 
-        /* TODO: Should MINUS be legal without a width? */
         static struct {
                 uint32_t c;
                 int flags;
@@ -1742,7 +1737,6 @@ rb_u_string_format(int argc, const VALUE *argv, VALUE self)
 VALUE
 rb_u_string_format_m(VALUE self, VALUE argument)
 {
-        /* TODO: Why volatile? */
         volatile VALUE tmp = rb_check_array_type(argument);
 
         if (!NIL_P(tmp))

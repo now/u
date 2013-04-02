@@ -20,7 +20,6 @@ rb_u_string_match(VALUE self, VALUE other)
         case T_REGEXP: {
                 const struct rb_u_string *string = RVAL2USTRING(self);
 
-                /* TODO: This needs to be made more efficient. */
                 long index = rb_reg_search(other, rb_str_to_str(self), 0, 0);
                 if (index < 0)
                         return Qnil;

@@ -15,8 +15,7 @@ rb_u_string_chomp_default(VALUE self)
         if (_rb_u_aref_char_validated(last, end) == '\n') {
                 const char *last_but_one = u_find_prev(begin, last);
 
-                /* TODO: We can use *last_but_one here. */
-                if (last_but_one != NULL && u_dref(last_but_one) == '\r')
+                if (last_but_one != NULL && *last_but_one == '\r')
                         last = last_but_one;
         } else if (!u_char_isnewline(u_dref(last))) {
                 return self;
@@ -111,8 +110,5 @@ rb_u_string_chomp(int argc, VALUE *argv, VALUE self)
                        separator_length) != 0))
                 return self;
 
-        /* TODO: It would be nice to share the underlying char * in this case.
-         * This would require reference counting. Call the function
-         * rb_u_string_new_ref(). */
         return rb_u_string_new_c(self, USTRING_STR(string), length - separator_length);
 }

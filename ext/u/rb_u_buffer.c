@@ -20,13 +20,6 @@
         Data_Wrap_Struct(rb_cUBuffer, NULL, rb_u_buffer_free, buffer)
 
 
-/* TODO: Calling RVAL2RBUBUFFER costs about 0.02 seconds per 1000000 iterations,
- * so we don’t have to worry about that.  Still, do we provide a u_buffer /and/
- * a rb_u_buffer, or do we only have rb_u_buffer?  The thing that complicates
- * mathers is malloc/realloc.  I guess u_buffer could return NULL or false when
- * malloc/realloc fails and rb_u_buffer can check it.  I also guess that we can
- * extract u_buffer when it proves necessary.
- */
 struct rb_u_buffer {
         char *c;
         long length;
@@ -216,7 +209,6 @@ rb_u_buffer_initialize_copy(VALUE self, VALUE rboriginal)
         struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
         const struct rb_u_buffer *original = RVAL2RBUBUFFER(rboriginal);
 
-        /* TODO: Can this happen? */
         if (buffer == original)
                 return self;
 
@@ -342,7 +334,6 @@ rb_u_buffer_to_u_bang(VALUE self)
 {
         struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
 
-        /* TODO: Really need to lock buffer here. */
         char *c = buffer->c;
         long length = buffer->length;
         rb_u_buffer_reset(buffer);

@@ -99,8 +99,6 @@ VALUE
 rb_u_string_new_subsequence(VALUE self, long begin, long length)
 {
         const struct rb_u_string *string = RVAL2USTRING(self);
-        /* TODO: Create a subsequence of self, starting at begin and running
-         * through length bytes.  The returned value should be infected. */
         return rb_u_string_new_c(self, USTRING_STR(string) + begin, length);
 }
 

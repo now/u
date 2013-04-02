@@ -85,8 +85,6 @@ rb_u_string_index_m(int argc, VALUE *argv, VALUE self)
                 return Qnil;
         }
 
-        /* TODO: Adjust this to be able to deal with struct rb_u_string in a fast way as
-         * well. */
         switch (TYPE(sub)) {
         case T_REGEXP:
                 offset = rb_u_string_index_regexp(self, begin, sub, false);

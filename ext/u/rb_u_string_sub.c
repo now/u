@@ -95,7 +95,6 @@ rb_u_string_sub(int argc, VALUE *argv, VALUE self)
         VALUE match = rb_backref_get();
         struct re_registers *registers = RMATCH_REGS(match);
         VALUE result;
-        /* TODO: Refactor this. */
         if (use_block || !NIL_P(replacements)) {
                 if (use_block) {
                         VALUE ustr = rb_u_string_new_rb(rb_reg_nth_match(0, match));

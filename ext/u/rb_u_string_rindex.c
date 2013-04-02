@@ -77,8 +77,6 @@ rb_u_string_rindex_m(int argc, VALUE *argv, VALUE self)
                 offset = u_n_chars_n(USTRING_STR(string), USTRING_LENGTH(string));
         }
 
-        /* TODO: Adjust this to be able to deal with struct rb_u_string in a fast way as
-         * well. */
         switch (TYPE(sub)) {
         case T_REGEXP:
                 /* TODO: What’s this first test for, exactly? */

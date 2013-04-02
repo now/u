@@ -40,8 +40,6 @@ rb_u_string_subpat(VALUE self, VALUE re, VALUE reference)
 
         VALUE match = rb_u_pattern_match_reference(reference);
 
-        /* TODO: If this pattern appears in the future, add
-         * rb_u_string_new_rb_nilable. */
         return NIL_P(match) ? Qnil : rb_u_string_new_rb(match);
 }
 

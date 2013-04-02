@@ -30,8 +30,7 @@ rb_u_string_chop(VALUE self)
         if (_rb_u_aref_char_validated(last, end) == '\n') {
                 const char *last_but_one = u_find_prev(begin, last);
 
-                /* TODO: Can use *last_but_one here. */
-                if (last_but_one != NULL && u_dref(last_but_one) == '\r')
+                if (last_but_one != NULL && *last_but_one == '\r')
                         last = last_but_one;
         }
 

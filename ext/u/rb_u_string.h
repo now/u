@@ -59,7 +59,6 @@ VALUE rb_u_string_object_as_string(VALUE object);
 
 const char *rb_u_string_begin_from_offset(const struct rb_u_string *string, long offset);
 
-/* TODO: Rename sub. */
 /* TODO: Move to rb_private.h. */
 long rb_u_string_index(VALUE self, VALUE sub, long offset);
 long rb_u_string_rindex(VALUE self, VALUE rbsubstring, long offset);
