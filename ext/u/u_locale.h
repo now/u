@@ -10,5 +10,5 @@ enum locale {
 };
 
 
-HIDDEN enum locale _u_locale(void);
-HIDDEN enum locale _u_locale_from_string(const char *locale);
+enum locale _u_locale(void);
+enum locale _u_locale_from_string(const char *locale);

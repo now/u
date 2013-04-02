@@ -1,6 +1,6 @@
-HIDDEN extern const uint8_t (*_u_grapheme_break_property_data)[256];
-HIDDEN extern const int16_t *_u_grapheme_break_property_table_part1;
-HIDDEN extern const int16_t *_u_grapheme_break_property_table_part2;
+extern const uint8_t (*_u_grapheme_break_property_data)[256];
+extern const int16_t *_u_grapheme_break_property_table_part1;
+extern const int16_t *_u_grapheme_break_property_table_part2;
 
 
 static inline enum u_grapheme_break

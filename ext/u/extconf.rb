@@ -4,9 +4,11 @@ $CFLAGS = $CFLAGS.sub('$(cflags) ', '')
 $CFLAGS += ' ' + ENV['CFLAGS'] if ENV['CFLAGS']
 
 def try_compiler_option(opt, &block)
+  result = false
   checking_for "#{opt} option to compiler" do
-    $CFLAGS += " #{opt}" if try_compile '', opt, &block
+    $CFLAGS += " #{opt}" if result = try_compile('', opt, &block)
   end
+  result
 end
 
 try_compiler_option '-std=c99'
@@ -41,20 +43,9 @@ try_compiler_option '-Wunsafe-loop-optimizations'
 try_compiler_option '-Wwrite-strings'
 try_compiler_option '-Wshorten-64-to-32'
 
-checking_for 'GNUC visibility attribute' do
-  $defs.push('-DHAVE_GNUC_VISIBILITY') if try_compile <<EOC, '-Werror'
-void f_hidden(void);
-void __attribute__((visibility("hidden")))
-f_hidden(void)
-{
-}
-int main(void)
-{
-  f_hidden();
-  return 0;
-}
-EOC
-end
+try_compiler_option '-fvisibility=hidden'
+
+$defs.push '-DU_COMPILATION'
 
 have_header 'assert.h'
 have_header 'limits.h'

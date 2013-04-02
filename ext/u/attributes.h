@@ -1,7 +1,7 @@
-HIDDEN extern const uint32_t (*_u_attr_data)[256];
-HIDDEN extern const int16_t *_u_attr_table_part1;
-HIDDEN extern const int16_t *_u_attr_table_part2;
-HIDDEN extern const char *_u_special_case_table;
+extern const uint32_t (*_u_attr_data)[256];
+extern const int16_t *_u_attr_table_part1;
+extern const int16_t *_u_attr_table_part2;
+extern const char *_u_special_case_table;
 
 
 /* This function may only be called if C has been verified to be of a

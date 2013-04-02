@@ -206,7 +206,7 @@ _rb_u_string_property(VALUE self, const char *name, int unknown,
         return tosym(first);
 }
 
-void Init_u(void);
+U_EXTERN void Init_u(void);
 void
 Init_u(void)
 {
