@@ -30,25 +30,25 @@ u_length(const char *str)
  * ‘len’ bytes.
  */
 long
-u_length_n(const char *str, long len)
+u_length_n(const char *str, long n)
 {
-        assert(str != NULL || len == 0);
+        assert(str != NULL || n == 0);
 
-        if (len == 0)
+        if (n == 0)
                 return 0;
 
-        long n = 0;
+        long m = 0;
         const char *p = str;
-        const char *end = str + len;
+        const char *end = str + n;
         while (p < end) {
-                n++;
+                m++;
                 p = u_next(p);
         }
 
         /* This makes sure that we don’t count incomplete characters.  It won’t
          * save us from illegal UTF-8-sequences, however. */
         if (p > end)
-                n--;
+                m--;
 
-        return n;
+        return m;
 }

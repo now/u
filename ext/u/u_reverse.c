@@ -10,13 +10,13 @@
  * The real implementation of utf_reverse() and utf_reverse_n() below.
  */
 static char *
-u_reverse_impl(const char *str, size_t len, bool use_len)
+u_reverse_impl(const char *str, size_t n, bool use_n)
 {
-	if (!use_len)
-		len = u_byte_length(str);
+	if (!use_n)
+		n = u_byte_length(str);
 
-	char *result = malloc(sizeof(char) * (len + 1));
-	char *r = result + len;
+	char *result = malloc(sizeof(char) * (n + 1));
+	char *r = result + n;
 	const char *p = str;
         while (r > result) {
 		uint8_t skip = u_skip_lengths[*(unsigned char *)p];
@@ -24,7 +24,7 @@ u_reverse_impl(const char *str, size_t len, bool use_len)
 		for (char *m = r; skip > 0; skip--)
 			*m++ = *p++;
 	}
-	result[len] = 0;
+	result[n] = 0;
 
 	return result;
 }
@@ -45,7 +45,7 @@ u_reverse(const char *str)
  * of it.
  */
 char *
-u_reverse_n(const char *str, size_t len)
+u_reverse_n(const char *str, size_t n)
 {
-	return u_reverse_impl(str, len, true);
+	return u_reverse_impl(str, n, true);
 }

@@ -11,29 +11,29 @@
  * ‘haystack_len’.
  */
 static size_t
-str_index_n(const char *haystack, const char *needle, size_t haystack_len)
+str_index_n(const char *haystack, const char *needle, size_t haystack_n)
 {
 	assert(haystack != NULL);
 	assert(needle != NULL);
 
-	size_t needle_len = strlen(needle);
+	size_t needle_n = strlen(needle);
 
-	if (needle_len == 0)
+	if (needle_n == 0)
 		return 0;
 
-	if (haystack_len < needle_len)
+	if (haystack_n < needle_n)
 		return -1;
 
-	const char *end = haystack + haystack_len - needle_len;
+	const char *end = haystack + haystack_n - needle_n;
 	for (const char *p = haystack; *p != '\0' && p <= end; p++) {
 		size_t i;
 
-		for (i = 0; i < needle_len; i++) {
+		for (i = 0; i < needle_n; i++) {
 			if (p[i] != needle[i])
 				break;
 		}
 
-		if (i == needle_len)
+		if (i == needle_n)
 			return p - haystack;
 	}
 
@@ -61,13 +61,13 @@ u_char_index(const char *str, uint32_t c)
  * doesn't exist, going over at most ‘len’ bytes in ‘str’.
  */
 size_t
-u_char_index_n(const char *str, uint32_t c, size_t len)
+u_char_index_n(const char *str, uint32_t c, size_t n)
 {
 	char ch[7];
 
 	ch[u_char_to_u(c, ch)] = '\0';
 
-	return str_index_n(str, ch, len);
+	return str_index_n(str, ch, n);
 }
 
 
@@ -87,7 +87,7 @@ u_index(const char *haystack, const char *needle)
  * -1 if it doesn't exist, going over at most ‘len’ bytes in ‘haystack’.
  */
 size_t
-u_index_n(const char *haystack, const char *needle, size_t len)
+u_index_n(const char *haystack, const char *needle, size_t n)
 {
-	return str_index_n(haystack, needle, len);
+	return str_index_n(haystack, needle, n);
 }

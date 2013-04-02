@@ -353,30 +353,30 @@ char *u_collation_key(const char *str);
 char *u_collation_key_n(const char *str, size_t n, size_t *new_n);
 
 U_PURE size_t u_char_index(const char *str, uint32_t c);
-U_PURE size_t u_char_index_n(const char *str, uint32_t c, size_t len);
+U_PURE size_t u_char_index_n(const char *str, uint32_t c, size_t n);
 U_PURE size_t u_index(const char *haystack, const char *needle);
-U_PURE size_t u_index_n(const char *haystack, const char *needle, size_t len);
+U_PURE size_t u_index_n(const char *haystack, const char *needle, size_t n);
 
 U_PURE size_t u_char_rindex(const char *str, uint32_t c);
-U_PURE size_t u_char_rindex_n(const char *str, uint32_t c, size_t len);
+U_PURE size_t u_char_rindex_n(const char *str, uint32_t c, size_t n);
 U_PURE size_t u_rindex(const char *haystack, const char *needle);
-U_PURE size_t u_rindex_n(const char *haystack, const char *needle, size_t len);
+U_PURE size_t u_rindex_n(const char *haystack, const char *needle, size_t n);
 
 U_PURE bool u_has_prefix(const char *str, const char *prefix);
 
 U_PURE bool u_is_ascii_only(const char *string);
-U_PURE bool u_is_ascii_only_n(const char *string, size_t length);
+U_PURE bool u_is_ascii_only_n(const char *string, size_t n);
 
 U_PURE long u_length(const char *str);
-U_PURE long u_length_n(const char *str, long len);
+U_PURE long u_length_n(const char *str, long n);
 
 U_PURE size_t u_width(const char *string);
-U_PURE size_t u_width_n(const char *string, size_t length);
+U_PURE size_t u_width_n(const char *string, size_t n);
 
 U_PURE size_t u_byte_length(const char *str);
 
 char *u_reverse(const char *str);
-char *u_reverse_n(const char *str, size_t len);
+char *u_reverse_n(const char *str, size_t n);
 
 bool u_isvalid(const char *str);
 bool u_isvalid_n(const char *str, size_t max, const char **end);
@@ -387,4 +387,4 @@ void u_grapheme_breaks(const char *string, size_t n, u_break_fn fn, void *closur
 
 int u_char_to_u(uint32_t c, char *result);
 char *ucs4_to_u(uint32_t *str, size_t *items_read, size_t *items_written);
-char *ucs4_to_u_n(uint32_t *str, size_t len, size_t *items_read, size_t *items_written);
+char *ucs4_to_u_n(uint32_t *str, size_t n, size_t *items_read, size_t *items_written);
