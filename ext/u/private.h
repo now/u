@@ -58,7 +58,7 @@ HIDDEN uint32_t *_u_normalize_wc(const char *string,
                                enum u_normalize_mode mode,
                                size_t *new_length);
 
-#include "locale_type.h"
+#include "u_locale.h"
 
 HIDDEN size_t _u_downcase_step(const char *string, const char *p,
                                const char *end, bool use_end,

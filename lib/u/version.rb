@@ -103,8 +103,6 @@ module U
               general-category.h
               grapheme-break.c
               grapheme-break.h
-              locale_type.c
-              locale_type.h
               private.c
               private.h
               rb_includes.h
@@ -264,6 +262,8 @@ module U
               u_is_ascii_only.c
               u_isvalid.c
               u_length.c
+              u_locale.c
+              u_locale.h
               u_next.c
               u_normalize.c
               u_offset_to_pointer.c
