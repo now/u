@@ -101,9 +101,6 @@ end
 
 have_var 'rb_eKeyError', 'ruby.h'
 
-$INSTALLFILES ||= []
-$INSTALLFILES << ['u.h', '$(RUBYARCHDIR)', 'lib']
-
 create_header
 create_makefile 'u/u'
 File.open('Makefile', 'ab') do |f|
