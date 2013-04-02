@@ -33,24 +33,24 @@ u_collate(const char *a, const char *b)
 
 
 int
-u_collate_n(const char *a, size_t a_len, const char *b, size_t b_len)
+u_collate_n(const char *a, size_t a_n, const char *b, size_t b_n)
 {
-        size_t a_norm_length;
-	uint32_t * const a_norm = _u_normalize_wc(a, a_len, true,
+        size_t a_norm_n;
+	uint32_t * const a_norm = _u_normalize_wc(a, a_n, true,
                                                 U_NORMALIZE_ALL_COMPOSE,
-                                                &a_norm_length);
+                                                &a_norm_n);
 
-        size_t b_norm_length;
-	uint32_t * const b_norm = _u_normalize_wc(b, b_len, true,
+        size_t b_norm_n;
+	uint32_t * const b_norm = _u_normalize_wc(b, b_n, true,
                                                 U_NORMALIZE_ALL_COMPOSE,
-                                                &b_norm_length);
+                                                &b_norm_n);
 
         int result = 0;
 
         uint32_t *a_p = a_norm;
-        uint32_t *a_end = a_norm + a_norm_length;
+        uint32_t *a_end = a_norm + a_norm_n;
         uint32_t *b_p = b_norm;
-        uint32_t *b_end = b_norm + b_norm_length;
+        uint32_t *b_end = b_norm + b_norm_n;
         while (a_p <= a_end && b_p <= b_end) {
                 result = wcscoll((wchar_t *)a_p, (wchar_t *)b_p);
                 if (result != 0)
@@ -114,16 +114,16 @@ utf8_encode(char *buf, wchar_t c)
  * collation keys using str_compare().
  */
 static char *
-u_collate_key_impl(const char *str, size_t len, bool use_len, size_t *new_length)
+u_collate_key_impl(const char *str, size_t n, bool use_n, size_t *new_n)
 {
 	assert(str != NULL);
 
-        size_t norm_length;
-	uint32_t *str_norm = _u_normalize_wc(str, len, use_len,
-                                           U_NORMALIZE_ALL_COMPOSE,
-                                           &norm_length);
+        size_t norm_n;
+	uint32_t *str_norm = _u_normalize_wc(str, n, use_n,
+                                             U_NORMALIZE_ALL_COMPOSE,
+                                             &norm_n);
         const uint32_t *p = str_norm;
-        const uint32_t *end = str_norm + norm_length;
+        const uint32_t *end = str_norm + norm_n;
         uint32_t *q = str_norm;
         while (p < end) {
                 if (*p != '\0')
@@ -132,24 +132,24 @@ u_collate_key_impl(const char *str, size_t len, bool use_len, size_t *new_length
         }
         *q = '\0';
 
-	size_t xfrm_len = wcsxfrm(NULL, (wchar_t *)str_norm, 0);
-	wchar_t result_wc[xfrm_len + 1];
-	wcsxfrm(result_wc, (wchar_t *)str_norm, xfrm_len + 1);
+	size_t xfrm_n = wcsxfrm(NULL, (wchar_t *)str_norm, 0);
+	wchar_t result_wc[xfrm_n + 1];
+	wcsxfrm(result_wc, (wchar_t *)str_norm, xfrm_n + 1);
 
-	int result_len = 0;
-	for (size_t i = 0; i < xfrm_len; i++)
-		result_len += utf8_encode(NULL, result_wc[i]);
+	int result_n = 0;
+	for (size_t i = 0; i < xfrm_n; i++)
+		result_n += utf8_encode(NULL, result_wc[i]);
 
-	char *result = malloc(sizeof(char) * (result_len + 1));
-	result_len = 0;
-	for (size_t i = 0; i < xfrm_len; i++)
-		result_len += utf8_encode(result + result_len, result_wc[i]);
-	result[result_len] = '\0';
+	char *result = malloc(sizeof(char) * (result_n + 1));
+	result_n = 0;
+	for (size_t i = 0; i < xfrm_n; i++)
+		result_n += utf8_encode(result + result_n, result_wc[i]);
+	result[result_n] = '\0';
 
 	free(str_norm);
 
-        if (new_length != NULL)
-                *new_length = result_len;
+        if (new_n != NULL)
+                *new_n = result_n;
 
 	return result;
 }
@@ -171,7 +171,7 @@ u_collate_key(const char *str)
  * compared with other collation keys using str_compare().
  */
 char *
-u_collate_key_n(const char *str, size_t len, size_t *new_length)
+u_collate_key_n(const char *str, size_t n, size_t *new_n)
 {
-	return u_collate_key_impl(str, len, true, new_length);
+	return u_collate_key_impl(str, n, true, new_n);
 }
