@@ -1,10 +1,3 @@
-#define UNICODE_ISVALID(char)				\
-	((char) < 0x110000 &&				\
-	 (((char) & 0xffffff800) != 0xd800) &&		\
-	 ((char) < 0xfdd0 || (char) > 0xfdef) &&	\
-	 ((char) & 0xfffe) != 0xfffe)
-
-
 /* {{{1
  * These are a couple of constants we use for dealing with the bit-twiddling
  * necessary when dealing with UTF-8 character sequences.
@@ -40,12 +33,6 @@ enum {
  * Determine whether ‘p’ is part of a UTF-8 multi-byte sequence.
  */
 #define CONT_X(p)	((((unsigned char)p) & TEST_X) == OCT_X)
-
-/* {{{1
- * Add the bits from ‘p’ to ‘c’, which is first shifted right to make room for
- * the additional bits.
- */
-#define ADD_X(c, p)	(((c) << BIT_X) | (((unsigned char)p) & MASK_X))
 
 /* {{{1
  * Put bits from ‘c’ into ‘p’ and shift them off of ‘c’ afterwards.
