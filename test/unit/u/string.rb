@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 
 Expectations do
+  expect ''.u do U::String.new end
+  expect ''.u do U::String.new(nil) end
+  expect '' do U::String.new(nil).to_str end
+  expect 'äbc' do U::String.new('äbc').to_str end
+  if defined? Encoding
+    expect 'äbc' do U::String.new('äbc'.encode(Encoding::ISO8859_1)).to_str end
+    expect Encoding::UndefinedConversionError do U::String.new('äbc'.encode(Encoding::ASCII_8BIT)) end
+  end
+
   expect true do 'äbc'.u.valid_encoding? end
   expect true do "äbc\0def".u.valid_encoding? end
   expect false do "\xc3bc".u.valid_encoding? end
@@ -1361,12 +1370,12 @@ Expectations do
 
   expect String do ''.u.to_str end
   expect '' do ''.u.to_str end
-  if defined? ::Encoding
+  if defined? Encoding
     expect Encoding::UTF_8 do ''.u.to_str.encoding end
     expect Encoding::UTF_8 do ''.encode(Encoding::ASCII).u.to_str.encoding end
   end
 
-  if defined? ::Encoding
+  if defined? Encoding
     expect Encoding::ASCII_8BIT do ''.u.b.encoding end
   end
 
