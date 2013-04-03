@@ -47,6 +47,31 @@ rb_u_raise(VALUE exception, const char *format, ...)
         rb_exc_raise(rb_exc_new3(exception, message));
 }
 
+void
+rb_u_raise_errno(VALUE exception, int number, const char *format, ...)
+{
+        va_list args;
+        VALUE message;
+
+        va_start(args, format);
+#ifdef HAVE_RUBY_ENCODING_H
+        message = rb_enc_vsprintf(rb_utf8_encoding(), format, args);
+#else
+        message = rb_vsprintf(format, args);
+#endif
+        va_end(args);
+
+        VALUE error = rb_str_new2(strerror(number));
+#ifdef HAVE_RUBY_ENCODING_H
+        rb_enc_associate(error, rb_locale_encoding());
+        error = rb_str_encode(error, rb_enc_from_encoding(rb_utf8_encoding()), 0, Qnil);
+#endif
+
+        rb_exc_raise(rb_exc_new3(exception,
+                                 rb_str_append(rb_str_append(message, rb_str_new2(": ")),
+                                               error)));
+}
+
 VALUE
 rb_u_str_new(const char *string, long length)
 {

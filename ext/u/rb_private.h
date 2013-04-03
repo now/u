@@ -42,6 +42,7 @@ int rb_memhash(const char *string, long length);
 long rb_u_memsearch(const void *a, long a_n, const void *b, long b_n);
 
 NORETURN(void rb_u_raise(VALUE exception, const char *format, ...)) PRINTF(2, 3);
+NORETURN(void rb_u_raise_errno(VALUE exception, int number, const char *format, ...)) PRINTF(3, 4);
 
 VALUE rb_u_str_new(const char *string, long length);
 VALUE rb_u_str_buf_new(long length);

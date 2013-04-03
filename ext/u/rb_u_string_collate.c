@@ -1,4 +1,5 @@
 #include "rb_includes.h"
+#include <errno.h>
 
 /* @overload <=>(other)
  *
@@ -19,6 +20,10 @@ rb_u_string_collate(VALUE self, VALUE rbother)
         const struct rb_u_string *string = RVAL2USTRING(self);
         const struct rb_u_string *other = RVAL2USTRING_ANY(rbother);
 
-        return INT2FIX(u_collate_n(USTRING_STR(string), USTRING_LENGTH(string),
-                                   USTRING_STR(other), USTRING_LENGTH(other)));
+        errno = 0;
+        int r = u_collate_n(USTRING_STR(string), USTRING_LENGTH(string),
+                            USTRING_STR(other), USTRING_LENGTH(other));
+        if (errno != 0)
+                rb_u_raise_errno(rb_eSystemCallError, errno, "can’t collate strings");
+        return INT2FIX(r);
 }
