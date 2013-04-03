@@ -57,8 +57,7 @@ rb_u_string_dump_codepoint(VALUE buffer, const char **p, const char *end)
 {
         uint32_t c = u_dref_n(*p, end - *p);
 
-        if (c == U_INCOMPLETE_INPUT_CHAR ||
-            c == U_BAD_INPUT_CHAR)
+        if (c == U_INCOMPLETE_INPUT_CHAR || c == U_BAD_INPUT_CHAR)
                 return false;
 
         char escaped[3 + sizeof(c) * CHAR_BIT + 2 + 1];

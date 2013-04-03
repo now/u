@@ -1241,11 +1241,25 @@ Expectations do
   expect result.tainted? do '%p'.u % ['abc'.taint] end
   expect result.not.untrusted? do '%p'.u % ['abc'.untrust] end
 
-  expect '"\xC3bc\u{e4}bc".u'.u do "\xC3bcäbc".u.dump end
+  expect '"abc".u'.u do "abc".u.dump end
+  expect '"\u{e4}bc".u'.u do "äbc".u.dump end
+  expect '"\xC3".u'.u do "\xC3".u.dump end
   expect '"\"\\\\\n\r\t\f\v\b\a\e".u'.u do "\"\\\n\r\t\f\v\b\a\e".u.dump end
   expect '"\#$\#@\#{}".u'.u do '#$#@#{}'.u.dump end
   expect result.tainted? do ''.u.taint.dump end
   expect result.untrusted? do ''.u.untrust.dump end
+
+  expect '"abc".u'.u do "abc".u.inspect end
+  expect '"äbc".u'.u do "äbc".u.inspect end
+  expect '"\xC3".u'.u do "\xC3".u.inspect end
+  expect result.not.print? do [0x007F].pack('U').u end
+  expect '"\u007F".u'.u do [0x007F].pack('U').u.inspect end
+  expect result.not.print? do [0x110BD].pack('U').u end
+  expect '"\u{110BD}".u'.u do [0x110BD].pack('U').u.inspect end
+  expect '"\"\\\\\n\r\t\f\v\b\a\e".u'.u do "\"\\\n\r\t\f\v\b\a\e".u.inspect end
+  expect '"\#$\#@\#{}".u'.u do '#$#@#{}'.u.inspect end
+  expect result.tainted? do ''.u.taint.inspect end
+  expect result.untrusted? do ''.u.untrust.inspect end
 
   expect true do 'hëllö'.u.hash == 'hëllö'.u.hash end
   expect false do 'hëllö'.u.hash == 'hëlLÖ'.u.hash end

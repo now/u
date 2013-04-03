@@ -135,6 +135,7 @@ rb_u_string_inspect(VALUE self)
         while (p < end) {
                 uint32_t c = u_dref(p);
                 switch (c) {
+                case U_INCOMPLETE_INPUT_CHAR:
                 case U_BAD_INPUT_CHAR:
                         p = rb_u_string_inspect_bad_input(p, end, result);
                         continue;
