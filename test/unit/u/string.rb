@@ -382,6 +382,8 @@ Expectations do
 
   expect [0x0068, 0x00eb, 0x006c, 0x006c, 0x00f6] do 'hëllö'.u.codepoints.to_a end
 
+  expect ['h'.u, 'ë'.u.normalize(:nfd), 'l'.u, 'l'.u, 'ö'.u.normalize(:nfd)] do 'hëllö'.u.normalize(:nfd).grapheme_clusters.to_a end
+
   expect ["hello\n".u, 'world'.u] do with_global(:$/, "\n"){ "hello\nworld".u.lines.to_a } end
   expect ["hello\n\n\n".u, 'world'.u] do "hello\n\n\nworld".u.lines('').to_a end
   expect ['hello!'.u, 'world'.u] do with_global(:$/, '!'){ 'hello!world'.u.lines.to_a } end
@@ -390,6 +392,8 @@ Expectations do
   expect ["hello\0".u, 'world'.u] do "hello\0world".u.lines("\0").to_a end
   expect result.tainted? do 'a'.u.taint.lines.first end
   expect result.untrusted? do 'a'.u.untrust.lines.first end
+
+  expect ['hello'.u, ' '.u, 'world'.u] do 'hello world'.u.words.to_a end
 
   expect nil do ''.u[0, -2] end
   expect nil do ''.u[0, -1] end
@@ -1395,4 +1399,6 @@ Expectations do
 
   expect :koala do 'koala'.u.intern end
   expect :'köälä' do 'köälä'.u.intern end
+
+  expect ''.u do |o| o.u end
 end
