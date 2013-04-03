@@ -9,6 +9,13 @@ Expectations do
     expect 'äbc' do U::String.new('äbc'.encode(Encoding::ISO8859_1)).to_str end
     expect Encoding::UndefinedConversionError do U::String.new('äbc'.encode(Encoding::ASCII_8BIT)) end
   end
+  expect result.tainted? do 'u'.taint.u end
+  expect result.untrusted? do 'u'.untrust.u end
+
+  expect ''.u do ''.u.dup end
+  expect false do a = ''.u; a.dup.object_id == a.object_id end
+  expect result.tainted? do 'u'.u.taint.dup end
+  expect result.untrusted? do 'u'.u.untrust.dup end
 
   expect true do 'äbc'.u.valid_encoding? end
   expect true do "äbc\0def".u.valid_encoding? end
