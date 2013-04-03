@@ -33,7 +33,7 @@ uint32_t
 _rb_u_dref(const char *str, const char *end)
 {
         if (str >= end)
-                rb_u_raise(rb_eArgError, "String is empty");
+                rb_u_raise(rb_eArgError, "string is empty");
 
         uint32_t c = u_dref_validated_n(str, end - str);
         switch (c) {
