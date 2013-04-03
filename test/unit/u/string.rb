@@ -1242,6 +1242,8 @@ Expectations do
   expect result.not.untrusted? do '%p'.u % ['abc'.untrust] end
 
   expect '"\xC3bc\u{e4}bc".u'.u do "\xC3bcäbc".u.dump end
+  expect '"\"\\\\\n\r\t\f\v\b\a\e".u'.u do "\"\\\n\r\t\f\v\b\a\e".u.dump end
+  expect '"\#$\#@\#{}".u'.u do '#$#@#{}'.u.dump end
   expect result.tainted? do ''.u.taint.dump end
   expect result.untrusted? do ''.u.untrust.dump end
 
