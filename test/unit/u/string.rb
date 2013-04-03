@@ -120,6 +120,8 @@ Expectations do
   expect true do 'I'.u.upper?('lt') end
   expect true do 'I'.u.upper?('tr') end
 
+  expect true do ''.u.valid? end
+
   expect true do ''.u.wide? end
   expect true do '豈'.u.wide? end
   expect true do '豈豈'.u.wide? end
