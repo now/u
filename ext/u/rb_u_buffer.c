@@ -240,6 +240,7 @@ rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
                         const struct rb_u_buffer *buffer = RVAL2RBUBUFFER(argv[i]);
 
                         rb_u_buffer_append(self, buffer->c, buffer->length);
+                        OBJ_INFECT(self, argv[i]);
                 } else if (FIXNUM_P(argv[i]) || TYPE(argv[i]) == T_BIGNUM) {
                         uint32_t c = NUM2UINT(argv[i]);
 
@@ -269,6 +270,7 @@ rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
                         rb_u_buffer_append(self,
                                            USTRING_STR(string),
                                            USTRING_LENGTH(string));
+                        OBJ_INFECT(self, argv[i]);
                 }
 
         return self;
