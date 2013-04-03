@@ -141,6 +141,10 @@ Expectations do
   expect true do [0x200b, 0x1160].pack('U*').u.zero_width? end
   expect false do 'a'.u.zero_width? end
 
+  expect result.not.eql?('abc') do 'abc'.u end
+  expect result.not.eql?('äbc'.u) do 'äbc'.u.normalize(:nfd) end
+  expect result.eql?('äbc'.u) do 'äbc'.u.normalize(:nfd).normalize(:nfc) end
+
   expect TypeError do 'abc'.u =~ 'abc' end
   expect TypeError do 'abc'.u =~ 'abc'.u end
   expect 10 do 'FëëFiëFöö-Fum'.u =~ /Fum$/u end
