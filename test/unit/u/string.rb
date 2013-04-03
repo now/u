@@ -1347,6 +1347,13 @@ Expectations do
   expect 1 do '1_z'.u.to_i(10) end
   expect 1 do '١'.u.to_i end
 
+  expect String do ''.u.to_str end
+  expect '' do ''.u.to_str end
+  if defined? ::Encoding
+    expect Encoding::UTF_8 do ''.u.to_str.encoding end
+    expect Encoding::UTF_8 do ''.encode(Encoding::ASCII).u.to_str.encoding end
+  end
+
   if defined? ::Encoding
     expect Encoding::ASCII_8BIT do ''.u.b.encoding end
   end
