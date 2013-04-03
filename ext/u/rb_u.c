@@ -30,7 +30,7 @@ need_m_to_n_arguments(int argc, int m, int n)
 }
 
 uint32_t
-_rb_u_aref_char_validated(const char *str, const char *end)
+_rb_u_dref(const char *str, const char *end)
 {
         if (str >= end)
                 rb_u_raise(rb_eArgError, "String is empty");
@@ -93,7 +93,7 @@ _rb_u_character_test(VALUE self, bool (*test)(uint32_t))
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                if (!test(_rb_u_aref_char_validated(p, end)))
+                if (!test(_rb_u_dref(p, end)))
                         return Qfalse;
 
                 p = u_next(p);

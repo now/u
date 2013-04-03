@@ -32,7 +32,7 @@ rb_u_string_count(int argc, VALUE *argv, VALUE self)
         long count = 0;
         const char *end = USTRING_END(string);
         for (char const *p = USTRING_STR(string); p < end; p = u_next(p))
-                if (tr_table_lookup(&table, _rb_u_aref_char_validated(p, end)))
+                if (tr_table_lookup(&table, _rb_u_dref(p, end)))
                         count++;
 
         return LONG2NUM(count);

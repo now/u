@@ -26,7 +26,7 @@ tr_next_char(struct tr *t)
         if (t->p == t->end)
                 return TR_FINISHED;
 
-        if (_rb_u_aref_char_validated(t->p, t->end) == '\\') {
+        if (_rb_u_dref(t->p, t->end) == '\\') {
                 const char *next = u_find_next(t->p, t->end);
 
                 if (next == NULL) {
@@ -38,7 +38,7 @@ tr_next_char(struct tr *t)
                 t->p = next;
         }
 
-        t->now = _rb_u_aref_char_validated(t->p, t->end);
+        t->now = _rb_u_dref(t->p, t->end);
 
         const char *next = u_find_next(t->p, t->end);
         if (next == NULL) {
@@ -47,7 +47,7 @@ tr_next_char(struct tr *t)
         }
         t->p = next;
 
-        if (_rb_u_aref_char_validated(t->p, t->end) == '-') {
+        if (_rb_u_dref(t->p, t->end) == '-') {
                 next = u_find_next(t->p, t->end);
                 /* TODO: Make this simpler.  Perhaps we don’t need
                  * TR_READ_ANOTHER, as we advance it here ourselves.  I got to

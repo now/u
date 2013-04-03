@@ -19,7 +19,7 @@ rb_u_string_each_codepoint(VALUE self)
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                rb_yield(UINT2NUM(_rb_u_aref_char_validated(p, end)));
+                rb_yield(UINT2NUM(_rb_u_dref(p, end)));
 
                 p = u_next(p);
         }

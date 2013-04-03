@@ -104,7 +104,7 @@ directive_parse_int(const char **p, const char *end, const char *type)
         int n = 0;
 
         while (q < end) {
-                uint32_t c = _rb_u_aref_char_validated(q, end);
+                uint32_t c = _rb_u_dref(q, end);
 
                 if (!u_char_isdigit(c)) {
                         *p = q;
@@ -265,7 +265,7 @@ directive_flags(const char **p, const char *end,
         ID argument_id = 0;
 
         while (*p < end) {
-                uint32_t c = _rb_u_aref_char_validated(*p, end);
+                uint32_t c = _rb_u_dref(*p, end);
 
                 int flag;
 
@@ -345,7 +345,7 @@ directive_width(const char **p, const char *end,
         if (*p == end)
                 return 0;
 
-        uint32_t c = _rb_u_aref_char_validated(*p, end);
+        uint32_t c = _rb_u_dref(*p, end);
 
         if (c != '*')
                 return directive_parse_int(p, end, "field width");
@@ -373,7 +373,7 @@ directive_precision(const char **p, const char *end)
         if (*p == end)
                 return -1;
 
-        uint32_t c = _rb_u_aref_char_validated(*p, end);
+        uint32_t c = _rb_u_dref(*p, end);
 
         if (c != '.')
                 return -1;
@@ -475,7 +475,7 @@ directive_character(UNUSED(uint32_t directive), int flags, int width, UNUSED(int
         if (!NIL_P(tmp)) {
                 const struct rb_u_string *string = RVAL2USTRING_ANY(tmp);
                 p = USTRING_STR(string);
-                c = _rb_u_aref_char_validated(p, USTRING_END(string));
+                c = _rb_u_dref(p, USTRING_END(string));
                 length = (int)(u_next(p) - p);
         } else {
                 char buf[U_CHAR_MAX_BYTE_LENGTH];
@@ -509,7 +509,7 @@ directive_string(UNUSED(uint32_t directive), int flags, int width, int precision
                 int i = 0;
                 const char *q = p, *end = p + length;
                 while (i < precision && q < end) {
-                        i += (int)u_char_width(_rb_u_aref_char_validated(q, end));
+                        i += (int)u_char_width(_rb_u_dref(q, end));
                         q = u_next(q);
                 }
                 length = q - p;
@@ -1007,7 +1007,7 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
 
         uint32_t c = '\0';
         if (*p < end) {
-                c = _rb_u_aref_char_validated(*p, end);
+                c = _rb_u_dref(*p, end);
                 *p = u_next(*p);
         }
         switch (c) {

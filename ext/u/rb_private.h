@@ -2,7 +2,7 @@ void need_at_least_n_arguments(int argc, int n);
 
 void need_m_to_n_arguments(int argc, int m, int n);
 
-uint32_t _rb_u_aref_char_validated(const char *str, const char *end);
+uint32_t _rb_u_dref(const char *str, const char *end);
 
 char *rb_u_prev_validated(const char *begin, const char *p);
 

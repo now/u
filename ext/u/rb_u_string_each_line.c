@@ -34,7 +34,7 @@ rb_u_string_each_line_separator(VALUE self, const struct rb_u_string *separator)
 
         long separator_length = USTRING_LENGTH(separator);
         uint32_t first = (separator_length == 0) ?
-                '\n' : _rb_u_aref_char_validated(USTRING_STR(separator), USTRING_END(separator));
+                '\n' : _rb_u_dref(USTRING_STR(separator), USTRING_END(separator));
 
         const char *begin = USTRING_STR(string);
         const char *base = begin;
@@ -42,19 +42,19 @@ rb_u_string_each_line_separator(VALUE self, const struct rb_u_string *separator)
         const char *end = USTRING_END(string);
 
         while (p < end) {
-                uint32_t c = _rb_u_aref_char_validated(p, end);
+                uint32_t c = _rb_u_dref(p, end);
 
 again:
                 if (separator_length == 0 && c == first) {
                         p = u_next(p);
                         if (p < end) {
-                                c = _rb_u_aref_char_validated(p, end);
+                                c = _rb_u_dref(p, end);
 
                                 if (c != first)
                                         goto again;
                         }
                         while (p < end) {
-                                if (_rb_u_aref_char_validated(p, end) != first)
+                                if (_rb_u_dref(p, end) != first)
                                         break;
 
                                 p = u_next(p);

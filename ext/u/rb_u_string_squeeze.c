@@ -13,7 +13,7 @@ rb_u_string_squeeze_loop(const struct rb_u_string *string, struct tr_table *tabl
         uint32_t previous = U_N_CODEPOINTS;
         char *base = result;
         while (p < end) {
-                uint32_t c = _rb_u_aref_char_validated(p, end);
+                uint32_t c = _rb_u_dref(p, end);
                 const char *next = u_next(p);
 
                 if (c != previous ||

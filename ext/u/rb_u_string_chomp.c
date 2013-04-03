@@ -12,7 +12,7 @@ rb_u_string_chomp_default(VALUE self)
         if (last == NULL)
                 return self;
 
-        if (_rb_u_aref_char_validated(last, end) == '\n') {
+        if (_rb_u_dref(last, end) == '\n') {
                 const char *last_but_one = u_find_prev(begin, last);
 
                 if (last_but_one != NULL && *last_but_one == '\r')

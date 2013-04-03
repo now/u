@@ -15,7 +15,7 @@ rb_u_string_strip(VALUE self)
 
         const char *end = USTRING_END(string);
         const char *s = begin;
-        while (s < end && u_char_isspace(_rb_u_aref_char_validated(s, end)))
+        while (s < end && u_char_isspace(_rb_u_dref(s, end)))
                 s = u_next(s);
 
         const char *t = end;

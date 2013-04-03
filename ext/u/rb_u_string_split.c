@@ -43,7 +43,7 @@ rb_u_string_split_awk(VALUE self, bool limit_given, int limit)
         const char *end = USTRING_END(string);
         int i = 1;
         while (p < end) {
-                while (p < end && u_char_isspace(_rb_u_aref_char_validated(p, end)))
+                while (p < end && u_char_isspace(_rb_u_dref(p, end)))
                         p = u_next(p);
 
                 if (p == end || (limit_given && i >= limit))
@@ -51,7 +51,7 @@ rb_u_string_split_awk(VALUE self, bool limit_given, int limit)
                 i++;
 
                 const char *q = p;
-                while (q < end && !u_char_isspace(_rb_u_aref_char_validated(q, end)))
+                while (q < end && !u_char_isspace(_rb_u_dref(q, end)))
                         q = u_next(q);
 
                 rb_ary_push(result,
