@@ -707,6 +707,18 @@ Expectations do
   expect result.not.tainted? do 'abc'.u.tr('a', 'b'.taint) end
   expect result.not.untrusted? do 'abc'.u.tr('a', 'b'.untrust) end
 
+  expect 'hïpö' do 'hëllö'.u.tr_s('ël', 'ïp') end
+  expect '*ë*ö' do 'hëllö'.u.tr_s('^aëiöu', '*') end
+  expect 'hal' do 'ibm'.u.tr_s('b-z', 'a-z') end
+  expect 'hal' do 'hal'.u.tr_s('a-z', 'a-z') end
+  expect true do a = 'hal'.u; a.tr_s('a-z', 'a-z').object_id == a.object_id end
+  expect result.tainted? do 'abc'.u.taint.tr_s('a', 'b') end
+  expect result.untrusted? do 'abc'.u.untrust.tr_s('a', 'b') end
+  expect result.not.tainted? do 'abc'.u.tr_s('a'.taint, 'b') end
+  expect result.not.untrusted? do 'abc'.u.tr_s('a'.untrust, 'b') end
+  expect result.not.tainted? do 'abc'.u.tr_s('a', 'b'.taint) end
+  expect result.not.untrusted? do 'abc'.u.tr_s('a', 'b'.untrust) end
+
   expect ['hë'.u, 'l'.u, 'lö'.u] do 'hëllö'.u.partition(/l/u) end
   expect ['hë'.u, 'l'.u, 'lö'.u] do 'hëllö'.u.partition('l'.u) end
   expect ['hë'.u, 'l'.u, 'lö'.u] do 'hëllö'.u.partition('l') end
