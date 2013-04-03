@@ -625,6 +625,44 @@ Expectations do
   expect result.tainted? do 'a'.u.taint.center(3, ' '.taint) end
   expect result.untrusted? do 'a'.u.untrust.center(3, ' '.untrust) end
 
+  expect 'hëllö'.u do 'hëllö'.u.ljust(4) end
+  expect 'hëllö      '.u do 'hëllö'.u.ljust(11) end
+  expect 'ababababab'.u do ''.u.ljust(10, 'ab') end
+  expect 'abababababa'.u do ''.u.ljust(11, 'ab') end
+  expect '3ああ'.u do '3'.u.ljust(5, 'あ') end
+  expect ArgumentError.new('zero-width padding') do '3'.u.ljust(2, '') end
+  expect ArgumentError.new('padding is too wide to complete rounding (2 > 1)') do '3'.u.ljust(5, 'あ ') end
+  expect '3あ あ'.u do '3'.u.ljust(6, 'あ ') end
+  expect '3あ あ '.u do '3'.u.ljust(7, 'あ ') end
+  expect ArgumentError.new('padding is too wide to complete rounding (2 > 1)') do '3'.u.ljust(4, 'あ') end
+  expect result.tainted? do 'a'.u.taint.ljust(1) end
+  expect result.untrusted? do 'a'.u.untrust.ljust(1) end
+  expect result.tainted? do 'a'.u.taint.ljust(3) end
+  expect result.untrusted? do 'a'.u.untrust.ljust(3) end
+  expect result.not.tainted? do 'a'.u.ljust(1, ' '.taint) end
+  expect result.not.untrusted? do 'a'.u.ljust(1, ' '.untrust) end
+  expect result.tainted? do 'a'.u.taint.ljust(3, ' '.taint) end
+  expect result.untrusted? do 'a'.u.untrust.ljust(3, ' '.untrust) end
+
+  expect 'hëllö'.u do 'hëllö'.u.rjust(4) end
+  expect '      hëllö'.u do 'hëllö'.u.rjust(11) end
+  expect 'ababababab'.u do ''.u.rjust(10, 'ab') end
+  expect 'abababababa'.u do ''.u.rjust(11, 'ab') end
+  expect 'ああ3'.u do '3'.u.rjust(5, 'あ') end
+  expect ArgumentError.new('zero-width padding') do '3'.u.rjust(2, '') end
+  expect ArgumentError.new('padding is too wide to complete rounding (2 > 1)') do '3'.u.rjust(5, 'あ ') end
+  expect 'あ あ3'.u do '3'.u.rjust(6, 'あ ') end
+  expect 'あ あ 3'.u do '3'.u.rjust(7, 'あ ') end
+  expect ArgumentError.new('padding is too wide to complete rounding (2 > 1)') do '3'.u.rjust(4, 'あ') end
+  expect result.tainted? do 'a'.u.taint.rjust(1) end
+  expect result.untrusted? do 'a'.u.untrust.rjust(1) end
+  expect result.tainted? do 'a'.u.taint.rjust(3) end
+  expect result.untrusted? do 'a'.u.untrust.rjust(3) end
+  expect result.not.tainted? do 'a'.u.rjust(1, ' '.taint) end
+  expect result.not.untrusted? do 'a'.u.rjust(1, ' '.untrust) end
+  expect result.tainted? do 'a'.u.taint.rjust(3, ' '.taint) end
+  expect result.untrusted? do 'a'.u.untrust.rjust(3, ' '.untrust) end
+
   expect 5 do 'hëllö wörld'.u.count('lö') end
   expect 3 do 'hëllö wörld'.u.count('l', 'lö') end
   expect 2 do 'hëllö wörld'.u.count('lö', 'ö') end
