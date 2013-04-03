@@ -358,10 +358,10 @@ Init_u_buffer(VALUE mU)
         rb_define_method(rb_cUBuffer, "append", rb_u_buffer_append_m, -1);
         rb_define_alias(rb_cUBuffer, "<<", "append");
         rb_define_method(rb_cUBuffer, "append_format", rb_u_buffer_append_format_m, -1); /* in ext/u/rb_u_string_format.c */
-        rb_define_method(rb_cUBuffer, "==", rb_u_buffer_eql, 1);
-        rb_define_alias(rb_cUBuffer, "eql?", "==");
-        rb_define_method(rb_cUBuffer, "hash", rb_u_buffer_hash, 0);
         rb_define_method(rb_cUBuffer, "to_s", rb_u_buffer_to_s, 0);
         rb_define_method(rb_cUBuffer, "to_u", rb_u_buffer_to_u, 0);
         rb_define_method(rb_cUBuffer, "to_u!", rb_u_buffer_to_u_bang, 0);
+        rb_define_method(rb_cUBuffer, "==", rb_u_buffer_eql, 1);
+        rb_define_alias(rb_cUBuffer, "eql?", "==");
+        rb_define_method(rb_cUBuffer, "hash", rb_u_buffer_hash, 0);
 }
