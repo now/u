@@ -9,9 +9,7 @@
  *
  * @return [Integer]
  * @see http://www.unicode.org/reports/tr11/
- *   Unicode Standard Annex #11: East Asian Width
- * @see #wide?
- * @see #wide_cjk? */
+ *   Unicode Standard Annex #11: East Asian Width */
 VALUE
 rb_u_string_width(VALUE self)
 {

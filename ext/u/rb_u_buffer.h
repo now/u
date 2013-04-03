@@ -11,10 +11,14 @@ VALUE rb_u_buffer_append_char(VALUE self, uint32_t c);
 VALUE rb_u_buffer_append_char_n(VALUE self, uint32_t c, long n);
 
 VALUE rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self);
+VALUE rb_u_buffer_bytesize(VALUE self);
 VALUE rb_u_buffer_eql(VALUE self, VALUE rbother);
 VALUE rb_u_buffer_hash(VALUE self);
+VALUE rb_u_buffer_inspect(VALUE self);
+VALUE rb_u_buffer_length(VALUE self);
 VALUE rb_u_buffer_to_s(VALUE self);
 VALUE rb_u_buffer_to_u(VALUE self);
 VALUE rb_u_buffer_to_u_bang(VALUE self);
+VALUE rb_u_buffer_width(VALUE self);
 
 void Init_u_buffer(VALUE mU);

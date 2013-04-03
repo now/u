@@ -24,6 +24,11 @@ Expectations do
   expect '#<U::Buffer äbcdëfwvxÿz>' do U::Buffer.new.append('äbcdëfwvxÿz'.u).inspect end
   expect '#<U::Buffer äbcdë…wvxÿz>' do U::Buffer.new.append('äbcdëfgwvxÿz'.u).inspect end
 
+  expect 3 do U::Buffer.new.append('äbc'.u).length end
+  expect 3 do U::Buffer.new.append('äbc'.u).size end
+  expect 4 do U::Buffer.new.append('äbc'.u).bytesize end
+  expect 4 do U::Buffer.new.append('あbc'.u).width end
+
   expect result.tainted? do U::Buffer.new.taint.to_s end
   expect result.tainted? do U::Buffer.new.taint.to_u end
 end

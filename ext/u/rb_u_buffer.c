@@ -274,6 +274,80 @@ rb_u_buffer_append_m(int argc, VALUE *argv, VALUE self)
         return self;
 }
 
+/* @return [U::String] A UTF-8-encoded string of the receiver’s content */
+VALUE
+rb_u_buffer_to_u(VALUE self)
+{
+        const struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
+
+        return rb_u_string_new_c(self, buffer->c, buffer->length);
+}
+
+/* @return [U::String] The UTF-8-encoded string of the receiver’s content after
+ *   clearing it from the receiver
+ * @note This method differs from {#to_u} in that it doesn’t copy the result,
+ *   so it’s generally faster; call it when you’re done building your
+ *   {U::String}. */
+VALUE
+rb_u_buffer_to_u_bang(VALUE self)
+{
+        struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
+
+        char *c = buffer->c;
+        long length = buffer->length;
+        rb_u_buffer_reset(buffer);
+
+        REALLOC_N(c, char, length + 1);
+        c[length] = '\0';
+
+        return rb_u_string_new_c_own(self, c, length);
+}
+
+/* @return [String] A UTF-8-encoded string of the receiver’s content */
+VALUE
+rb_u_buffer_to_s(VALUE self)
+{
+        const struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
+
+        VALUE result = rb_u_str_new(buffer->c, buffer->length);
+        OBJ_INFECT(result, self);
+        return result;
+}
+
+/* @return [Integer] The number of characters in the receiver */
+VALUE
+rb_u_buffer_length(VALUE self)
+{
+        const struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
+        return UINT2NUM(u_n_chars_n(buffer->c, buffer->length));
+}
+
+/* @return [Integer] The number of bytes required to represent the receiver */
+VALUE
+rb_u_buffer_bytesize(VALUE self)
+{
+        const struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
+        return UINT2NUM(buffer->length);
+}
+
+/* Returns the width of the receiver.  The width is defined as the sum of the
+ * number of “cells” on a terminal or similar cell-based display that the
+ * characters in the string will require.
+ *
+ * Characters that are {U::String#wide?} have a width of 2.  Characters that
+ * are {U::String#zero_width?} have a width of 0.  Other characters have a
+ * width of 1.
+ *
+ * @return [Integer]
+ * @see http://www.unicode.org/reports/tr11/
+ *   Unicode Standard Annex #11: East Asian Width */
+VALUE
+rb_u_buffer_width(VALUE self)
+{
+        const struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
+        return UINT2NUM(u_width_n(buffer->c, buffer->length));
+}
+
 /* @overload ==(other)
  *   @param [U::Buffer] other
  *   @return [Boolean] True if the receiver’s class and content equal those of
@@ -304,46 +378,6 @@ rb_u_buffer_hash(VALUE self)
         return INT2FIX(rb_memhash(buffer->c, buffer->length));
 }
 
-/* @return [String] A UTF-8 encoded string of the receiver’s content */
-VALUE
-rb_u_buffer_to_s(VALUE self)
-{
-        const struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
-
-        VALUE result = rb_u_str_new(buffer->c, buffer->length);
-        OBJ_INFECT(result, self);
-        return result;
-}
-
-/* @return [U::String] A UTF-8 encoded string of the receiver’s content */
-VALUE
-rb_u_buffer_to_u(VALUE self)
-{
-        const struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
-
-        return rb_u_string_new_c(self, buffer->c, buffer->length);
-}
-
-/* @return [U::String] The UTF-8 encoded string of the receiver’s content after
- *   clearing it from the receiver
- * @note This method differs from {#to_u} in that it doesn’t copy the result,
- *   so it’s generally faster; call it when you’re done building your
- *   {U::String}. */
-VALUE
-rb_u_buffer_to_u_bang(VALUE self)
-{
-        struct rb_u_buffer *buffer = RVAL2RBUBUFFER(self);
-
-        char *c = buffer->c;
-        long length = buffer->length;
-        rb_u_buffer_reset(buffer);
-
-        REALLOC_N(c, char, length + 1);
-        c[length] = '\0';
-
-        return rb_u_string_new_c_own(self, c, length);
-}
-
 /* Document-class: U::Buffer
  *
  * A buffer for building {U::String}s. */
@@ -355,12 +389,20 @@ Init_u_buffer(VALUE mU)
         rb_define_alloc_func(rb_cUBuffer, rb_u_buffer_alloc);
         rb_define_private_method(rb_cUBuffer, "initialize", rb_u_buffer_initialize, -1);
         rb_define_private_method(rb_cUBuffer, "initialize_copy", rb_u_buffer_initialize_copy, 1);
+
         rb_define_method(rb_cUBuffer, "append", rb_u_buffer_append_m, -1);
         rb_define_alias(rb_cUBuffer, "<<", "append");
         rb_define_method(rb_cUBuffer, "append_format", rb_u_buffer_append_format_m, -1); /* in ext/u/rb_u_string_format.c */
-        rb_define_method(rb_cUBuffer, "to_s", rb_u_buffer_to_s, 0);
+
         rb_define_method(rb_cUBuffer, "to_u", rb_u_buffer_to_u, 0);
         rb_define_method(rb_cUBuffer, "to_u!", rb_u_buffer_to_u_bang, 0);
+        rb_define_method(rb_cUBuffer, "to_s", rb_u_buffer_to_s, 0);
+
+        rb_define_method(rb_cUBuffer, "length", rb_u_buffer_length, 0);
+        rb_define_alias(rb_cUBuffer, "size", "length");
+        rb_define_method(rb_cUBuffer, "bytesize", rb_u_buffer_bytesize, 0);
+        rb_define_method(rb_cUBuffer, "width", rb_u_buffer_width, 0);
+
         rb_define_method(rb_cUBuffer, "==", rb_u_buffer_eql, 1);
         rb_define_alias(rb_cUBuffer, "eql?", "==");
         rb_define_method(rb_cUBuffer, "hash", rb_u_buffer_hash, 0);
