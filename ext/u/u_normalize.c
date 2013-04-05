@@ -60,27 +60,22 @@ decompose_hangul(uint32_t s, uint32_t *result)
         return 3;
 }
 
-static inline const char *
-find_decomposition(uint32_t c, bool compat)
+static const char *
+compatible(size_t index)
 {
-        size_t index;
-        if (!unicode_table_lookup(decomp_table, c, &index))
-                return NULL;
+        uint16_t offset = decomp_table[index].compat_offset;
+        return &decomp_expansion_string[offset == UNICODE_NOT_PRESENT_OFFSET ?
+                                        decomp_table[index].canon_offset :
+                                        offset];
+}
 
-        int offset;
-        if (compat) {
-                offset = decomp_table[index].compat_offset;
-                if (offset == UNICODE_NOT_PRESENT_OFFSET)
-                        offset = decomp_table[index].canon_offset;
-                /* Either .compat_offset or .canon_offset can be missing, but
-                 * not both. */
-        } else {
-                offset = decomp_table[index].canon_offset;
-                if (offset == UNICODE_NOT_PRESENT_OFFSET)
-                        return NULL;
-        }
-
-        return &decomp_expansion_string[offset];
+static const char *
+canonical(size_t index)
+{
+        uint16_t offset = decomp_table[index].canon_offset;
+        return offset == UNICODE_NOT_PRESENT_OFFSET ?
+                NULL :
+                &decomp_expansion_string[offset];
 }
 
 static inline size_t
@@ -95,13 +90,12 @@ decomposition_to_wc(const char *decomposition, uint32_t *result)
 }
 
 static size_t
-decompose_simple(uint32_t c, enum u_normalize_mode mode, uint32_t *result)
+decompose_simple(uint32_t c, const char *(*decompose)(size_t), uint32_t *result)
 {
-        const char *decomposition = find_decomposition(c,
-                                                       (mode == U_NORMALIZE_NFKC ||
-                                                        mode == U_NORMALIZE_NFKD));
-
-        if (decomposition == NULL) {
+        size_t index;
+        const char *decomposition;
+        if (!unicode_table_lookup(decomp_table, c, &index) ||
+            (decomposition = decompose(index)) == NULL) {
                 if (result != NULL)
                         result[0] = c;
 
@@ -115,22 +109,22 @@ decompose_simple(uint32_t c, enum u_normalize_mode mode, uint32_t *result)
 }
 
 static inline size_t
-decompose_step(uint32_t c, enum u_normalize_mode mode, uint32_t *result)
+decompose_step(uint32_t c, const char *(*decompose)(size_t), uint32_t *result)
 {
         return (SBase <= c && c <= SLast) ?
                 decompose_hangul(c, result) :
-                decompose_simple(c, mode, result);
+                decompose_simple(c, decompose, result);
 }
 
 static size_t
 decompose_loop(const char *string, size_t length, bool use_length,
-               enum u_normalize_mode mode, uint32_t *result)
+               const char *(*decompose)(size_t), uint32_t *result)
 {
         size_t n = 0;
         const char *p = string;
         const char *end = p + length;
         while (P_WITHIN_STR(p, end, use_length)) {
-                n += decompose_step(u_dref(p), mode, OFFSET_IF(result, n));
+                n += decompose_step(u_dref(p), decompose, OFFSET_IF(result, n));
                 p = u_next(p);
         }
         return n;
@@ -294,9 +288,12 @@ uint32_t *
 _u_normalize_wc(const char *string, size_t length, bool use_length,
                 enum u_normalize_mode mode, size_t *new_length)
 {
-        size_t n = decompose_loop(string, length, use_length, mode, NULL);
+        const char *(*decompose)(size_t) =
+                (mode == U_NORMALIZE_NFKC || mode == U_NORMALIZE_NFKD) ?
+                compatible : canonical;
+        size_t n = decompose_loop(string, length, use_length, decompose, NULL);
         uint32_t *result = ALLOC_N(uint32_t, n + 1);
-        decompose_loop(string, length, use_length, mode, result);
+        decompose_loop(string, length, use_length, decompose, result);
         if (n > 0)
                 canonical_ordering(result, n);
 
