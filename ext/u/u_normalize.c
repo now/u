@@ -114,6 +114,28 @@ decompose_simple(uint32_t c, enum u_normalize_mode mode, uint32_t *result)
         return u_n_chars(decomposition);
 }
 
+static inline size_t
+decompose_step(uint32_t c, enum u_normalize_mode mode, uint32_t *result)
+{
+        return (SBase <= c && c <= SLast) ?
+                decompose_hangul(c, result) :
+                decompose_simple(c, mode, result);
+}
+
+static size_t
+decompose_loop(const char *string, size_t length, bool use_length,
+               enum u_normalize_mode mode, uint32_t *result)
+{
+        size_t n = 0;
+        const char *p = string;
+        const char *end = p + length;
+        while (P_WITHIN_STR(p, end, use_length)) {
+                n += decompose_step(u_dref(p), mode, OFFSET_IF(result, n));
+                p = u_next(p);
+        }
+        return n;
+}
+
 static inline bool
 canonical_ordering_swap(uint32_t *string, size_t offset, int next)
 {
@@ -154,28 +176,6 @@ canonical_ordering(uint32_t *string, size_t length)
 {
         while (canonical_ordering_reorder(string, length))
                 ;
-}
-
-static inline size_t
-decompose_step(uint32_t c, enum u_normalize_mode mode, uint32_t *result)
-{
-        return (SBase <= c && c <= SLast) ?
-                decompose_hangul(c, result) :
-                decompose_simple(c, mode, result);
-}
-
-static size_t
-decompose_loop(const char *string, size_t length, bool use_length,
-               enum u_normalize_mode mode, uint32_t *result)
-{
-        size_t n = 0;
-        const char *p = string;
-        const char *end = p + length;
-        while (P_WITHIN_STR(p, end, use_length)) {
-                n += decompose_step(u_dref(p), mode, OFFSET_IF(result, n));
-                p = u_next(p);
-        }
-        return n;
 }
 
 static inline bool
