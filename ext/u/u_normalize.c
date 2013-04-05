@@ -169,27 +169,12 @@ decompose_loop(const char *string, size_t length, bool use_length,
                enum u_normalize_mode mode, uint32_t *result)
 {
         size_t n = 0;
-        size_t prev_start = 0;
-
         const char *p = string;
         const char *end = p + length;
         while (P_WITHIN_STR(p, end, use_length)) {
-                uint32_t c = u_dref(p);
-                size_t prev_n = n;
-
-                n += decompose_step(c, mode, OFFSET_IF(result, n));
-
-                if (result != NULL && n > 0 && s_combining_class(result[prev_n]) == 0) {
-                        canonical_ordering(result + prev_start, n - prev_start);
-                        prev_start = prev_n;
-                }
-
+                n += decompose_step(u_dref(p), mode, OFFSET_IF(result, n));
                 p = u_next(p);
         }
-
-        if (result != NULL && n > 0)
-                canonical_ordering(result + prev_start, n - prev_start);
-
         return n;
 }
 
@@ -312,6 +297,8 @@ _u_normalize_wc(const char *string, size_t length, bool use_length,
         size_t n = decompose_loop(string, length, use_length, mode, NULL);
         uint32_t *result = ALLOC_N(uint32_t, n + 1);
         decompose_loop(string, length, use_length, mode, result);
+        if (n > 0)
+                canonical_ordering(result, n);
 
         if (mode == U_NORMALIZE_NFC || mode == U_NORMALIZE_NFKC)
                 n = compose_loop(result, n);
