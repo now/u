@@ -81,6 +81,8 @@ Inventory::Rake::Tasks.unless_installing_dependencies do
   end
 
   Inventory::Rake::Tasks::Compile.new
+
+  Lookout::Rake::Tasks::Test.new :name => :'test:normalize', :files => %w[test/unit/normalize.rb]
 end
 
 # TODO: Move to U::Version::Unicode
@@ -232,7 +234,8 @@ task :test => %w[test/unit/case.rb
                  test/unit/foldcase.rb
                  test/unit/graphemebreak.rb
                  test/unit/wordbreak.rb]
-               # test/unit/normalize.rb
+
+task :'test:normalize' => %w[test/unit/normalize.rb]
 
 file 'test/unit/case.rb' => %w[build/test/unit/case.rb
                                build/data/SpecialCasing.txt

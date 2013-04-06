@@ -15,5 +15,5 @@ mkmf.log
 /ext/u/Makefile
 /ext/u/u.bundle.dSYM/
 /packages
-/test/normalize.rb
+/test/unit/normalize.rb
 /tests/data
