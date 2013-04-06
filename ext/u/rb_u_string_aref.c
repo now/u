@@ -38,7 +38,7 @@ rb_u_string_subpat(VALUE self, VALUE re, VALUE reference)
         if (rb_reg_search(re, StringValue(self), 0, 0) < 0)
                 return Qnil;
 
-        VALUE match = rb_u_pattern_match_reference(reference);
+        volatile VALUE match = rb_u_pattern_match_reference(reference);
 
         return NIL_P(match) ? Qnil : rb_u_string_new_rb(match);
 }

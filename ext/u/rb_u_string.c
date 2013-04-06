@@ -48,10 +48,10 @@ static VALUE
 rb_u_string_create(VALUE rb, const char *str, long length)
 {
         struct rb_u_string *string = ALLOC(struct rb_u_string);
+        string->rb = Qnil;
         string->c = str;
         string->length = length;
-        VALUE result = USTRING2RVAL(string);
-        return rb_u_string_set_rb(result, rb);
+        return rb_u_string_set_rb(USTRING2RVAL(string), rb);
 }
 
 static VALUE
