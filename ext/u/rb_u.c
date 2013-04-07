@@ -108,6 +108,8 @@ _rb_u_string_test(VALUE self,
 {
         const struct rb_u_string *string = RVAL2USTRING(self);
 
+        rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
+
         size_t nfd_length;
         char *nfd = u_normalize_n(USTRING_STR(string),
                                   USTRING_LENGTH(string),
@@ -138,6 +140,8 @@ _rb_u_string_test_in_locale(int argc, VALUE *argv, VALUE self,
                 locale = StringValuePtr(rblocale);
 
         const struct rb_u_string *string = RVAL2USTRING(self);
+
+        rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
 
         size_t nfd_length;
         char *nfd = u_normalize_n(USTRING_STR(string),
@@ -172,6 +176,8 @@ _rb_u_string_case_in_locale(int argc, VALUE *argv, VALUE self,
                 locale = StringValuePtr(rblocale);
 
         const struct rb_u_string *string = RVAL2USTRING(self);
+
+        rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
 
         size_t length;
         char *cased = case_in_locale_n(USTRING_STR(string),
