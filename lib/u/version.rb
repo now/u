@@ -218,9 +218,10 @@ module U
               u.c
               u.h
               u_append.c
-              u_char_general_category.c
+              u_char_downcase.c
               u_char_combining_class.c
               u_char_digit_value.c
+              u_char_general_category.c
               u_char_grapheme_break.c
               u_char_isalnum.c
               u_char_isalpha.c
@@ -247,8 +248,7 @@ module U
               u_char_mirror.c
               u_char_script.c
               u_char_to_u.c
-              u_char_tolower.c
-              u_char_toupper.c
+              u_char_upcase.c
               u_char_xdigit_value.c
               u_char_word_break.c
               u_char_width.c

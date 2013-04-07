@@ -80,9 +80,9 @@ U_CONST bool u_char_iswide_cjk(uint32_t c);
 U_CONST bool u_char_isxdigit(uint32_t c);
 U_CONST bool u_char_iszerowidth(uint32_t c);
 
-U_CONST uint32_t u_char_toupper(uint32_t c);
-U_CONST uint32_t u_char_tolower(uint32_t c);
-U_CONST uint32_t u_char_totitle(uint32_t c);
+U_CONST uint32_t u_char_downcase(uint32_t c);
+U_CONST uint32_t u_char_titlecase(uint32_t c);
+U_CONST uint32_t u_char_upcase(uint32_t c);
 
 U_CONST size_t u_char_width(uint32_t c);
 

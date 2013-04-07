@@ -34,7 +34,7 @@ foldcase_loop(const char *string, const char *end, bool use_end, char *result)
         for (const char *p = string; P_WITHIN_STR(p, end, use_end); p = u_next(p)) {
 		uint32_t c = u_dref(p);
                 if (!casefold_table_lookup(c, OFFSET_IF(result, n), &n))
-                        n += u_char_to_u(u_char_tolower(c), OFFSET_IF(result, n));
+                        n += u_char_to_u(u_char_downcase(c), OFFSET_IF(result, n));
 	}
 
         return n;

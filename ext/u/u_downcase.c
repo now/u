@@ -92,7 +92,7 @@ downcase_lithuanian(uint32_t c, const char *p, const char *end, bool use_end,
         case LATIN_CAPITAL_LETTER_I_WITH_OGONEK:
                 if (!has_more_above(p, end, use_end))
                         return false;
-                return downcase_lithuanian_i(u_char_tolower(c), '\0', output);
+                return downcase_lithuanian_i(u_char_downcase(c), '\0', output);
         case LATIN_CAPITAL_LETTER_I_WITH_GRAVE:
                 return downcase_lithuanian_i(LATIN_SMALL_LETTER_I,
                                              COMBINING_GRAVE_ACCENT, output);

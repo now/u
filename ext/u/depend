@@ -212,6 +212,8 @@ u_char_combining_class.o: u_char_combining_class.c u.h private.h \
   data/constants.h combining_class.h
 u_char_digit_value.o: u_char_digit_value.c u.h private.h data/constants.h \
   attributes.h general-category.h
+u_char_downcase.o: u_char_downcase.c u.h private.h data/constants.h \
+  attributes.h titled.h general-category.h
 u_char_general_category.o: u_char_general_category.c u.h private.h \
   data/constants.h general-category.h
 u_char_grapheme_break.o: u_char_grapheme_break.c u.h private.h \
@@ -259,9 +261,7 @@ u_char_line_break.o: u_char_line_break.c u.h data/constants.h \
 u_char_mirror.o: u_char_mirror.c u.h private.h data/bidi-mirroring.h
 u_char_script.o: u_char_script.c u.h private.h data/script.h
 u_char_to_u.o: u_char_to_u.c u.h utf8.h
-u_char_tolower.o: u_char_tolower.c u.h private.h data/constants.h \
-  attributes.h titled.h general-category.h
-u_char_toupper.o: u_char_toupper.c u.h private.h data/constants.h \
+u_char_upcase.o: u_char_upcase.c u.h private.h data/constants.h \
   attributes.h titled.h general-category.h
 u_char_width.o: u_char_width.c u.h
 u_char_word_break.o: u_char_word_break.c u.h private.h data/constants.h \

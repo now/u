@@ -859,7 +859,7 @@ directive_hexadecimal(uint32_t directive, int flags, int width, int precision, V
 
         if (directive == 'X')
                 for (char *p = (char *)digits; *p != '\0'; p++)
-                        *p = u_char_toupper(*p);
+                        *p = u_char_upcase(*p);
 
         directive_unsigned_number_output(directive, flags, width, precision, prefix, digits, length, result);
 }

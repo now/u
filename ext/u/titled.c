@@ -29,7 +29,7 @@ u_char_istitle(uint32_t c)
  * Convert ‘c’ to its titlecase representation (if any).
  */
 uint32_t
-u_char_totitle(uint32_t c)
+u_char_titlecase(uint32_t c)
 {
 	for (size_t i = 0; i < lengthof(title_table); i++)
                 if (title_table[i].ch == c ||
@@ -38,7 +38,7 @@ u_char_totitle(uint32_t c)
 			return title_table[i].ch;
 
         if (s_general_category(c) == U_GENERAL_CATEGORY_LETTER_LOWERCASE)
-                return u_char_toupper(c);
+                return u_char_upcase(c);
 
         return c;
 }

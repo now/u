@@ -12,15 +12,14 @@
 
 
 uint32_t
-u_char_toupper(uint32_t c)
+u_char_upcase(uint32_t c)
 {
-	enum u_general_category category = s_general_category(c);
-
-	if (category == U_GENERAL_CATEGORY_LETTER_LOWERCASE)
+	switch (s_general_category(c)) {
+        case U_GENERAL_CATEGORY_LETTER_LOWERCASE:
                 return _u_special_case_table_lookup(c);
-
-        if (category == U_GENERAL_CATEGORY_LETTER_TITLECASE)
+        case U_GENERAL_CATEGORY_LETTER_TITLECASE:
                 return _u_titlecase_table_lookup(c, true);
-
-        return c;
+        default:
+                return c;
+        }
 }
