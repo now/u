@@ -1,24 +1,9 @@
 #include "rb_includes.h"
 
-struct closure {
-        VALUE self;
-        const char *previous;
-};
-
-static inline void
-yield(const char *p, struct closure *closure)
-{
-        rb_yield(rb_u_string_new_c(closure->self,
-                                   closure->previous,
-                                   p - closure->previous));
-}
-
 static void
-each(const char *p, struct closure *closure)
+each(const char *p, size_t n, VALUE *self)
 {
-        if (p != closure->previous)
-                yield(p, closure);
-        closure->previous = p;
+        rb_yield(rb_u_string_new_c(*self, p, n));
 }
 
 /* @overload each_word{ |word| … }
@@ -42,12 +27,8 @@ rb_u_string_each_word(VALUE self)
 
         const struct rb_u_string *string = RVAL2USTRING(self);
         const char *p = USTRING_STR(string);
-        const char *end = USTRING_END(string);
-        size_t length = end - p;
+        size_t length = USTRING_LENGTH(string);
         rb_u_validate(p, length);
-        struct closure closure = { self, p };
-        u_word_breaks(p, length, (u_break_fn)each, &closure);
-        if (closure.previous != end)
-                yield(end, &closure);
+        u_words(p, length, (u_substring_fn)each, &self);
         return self;
 }

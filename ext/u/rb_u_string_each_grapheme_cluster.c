@@ -1,24 +1,9 @@
 #include "rb_includes.h"
 
-struct closure {
-        VALUE self;
-        const char *previous;
-};
-
-static inline void
-yield(const char *p, struct closure *closure)
-{
-        rb_yield(rb_u_string_new_c(closure->self,
-                                   closure->previous,
-                                   p - closure->previous));
-}
-
 static void
-each(const char *p, struct closure *closure)
+each(const char *p, size_t n, VALUE *self)
 {
-        if (p != closure->previous)
-                yield(p, closure);
-        closure->previous = p;
+        rb_yield(rb_u_string_new_c(*self, p, n));
 }
 
 /* @overload each_grapheme_cluster{ |cluster| … }
@@ -46,9 +31,6 @@ rb_u_string_each_grapheme_cluster(VALUE self)
         const char *end = USTRING_END(string);
         size_t length = end - p;
         rb_u_validate(p, length);
-        struct closure closure = { self, p };
-        u_grapheme_breaks(p, length, (u_break_fn)each, &closure);
-        if (closure.previous != end)
-                yield(end, &closure);
+        u_grapheme_clusters(p, length, (u_substring_fn)each, &self);
         return self;
 }

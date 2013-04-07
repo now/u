@@ -38,15 +38,21 @@ static const uint8_t gb_dfa[][U_GRAPHEME_BREAK_V + 1] = {
 #undef K
 
 void
-u_grapheme_breaks(const char *string, size_t n, u_break_fn fn, void *closure)
+u_grapheme_clusters(const char *string, size_t n, u_substring_fn fn, void *closure)
 {
         const char *p = string;
+        const char *q = p;
         const char *end = p + n;
         uint8_t state = 2;
-        while (p < end) {
-                state = gb_dfa[state & 0xf][s_grapheme_break(u_dref(p))];
-                if (state >> 4 != 1)
-                        fn(p, closure);
-                p = u_next(p);
+        while (q < end) {
+                state = gb_dfa[state & 0xf][s_grapheme_break(u_dref(q))];
+                if (state >> 4 != 1) {
+                        if (p < q)
+                                fn(p, q - p, closure);
+                        p = q;
+                }
+                q = u_next(q);
         }
+        if (p < q)
+                fn(p, q - p, closure);
 }

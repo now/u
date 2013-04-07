@@ -404,9 +404,10 @@ char *u_reverse_n(const char *str, size_t n);
 bool u_isvalid(const char *str);
 bool u_isvalid_n(const char *str, size_t max, const char **end);
 
-typedef void (*u_break_fn)(const char *, void *);
-void u_word_breaks(const char *string, size_t n, u_break_fn fn, void *closure);
-void u_grapheme_breaks(const char *string, size_t n, u_break_fn fn, void *closure);
+typedef void (*u_substring_fn)(const char *, size_t, void *);
+void u_words(const char *string, size_t n, u_substring_fn fn, void *closure);
+void u_grapheme_clusters(const char *string, size_t n, u_substring_fn fn,
+                         void *closure);
 
 int u_char_to_u(uint32_t c, char *result);
 char *u_ucs4_to_u(uint32_t *str, size_t *items_read, size_t *items_written);

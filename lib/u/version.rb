@@ -258,7 +258,7 @@ module U
               u_downcase.c
               u_dref.c
               u_foldcase.c
-              u_grapheme_breaks.c
+              u_grapheme_clusters.c
               u_has_prefix.c
               u_index.c
               u_is_ascii_only.c
@@ -278,7 +278,7 @@ module U
               u_ucs4_to_u.c
               u_upcase.c
               u_width.c
-              u_word_breaks.c
+              u_words.c
               utf8.h
               word-break.c
               word-break.h'

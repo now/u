@@ -45,32 +45,40 @@ static const uint8_t wb_dfa[][U_WORD_BREAK_REGIONAL_INDICATOR + 1] = {
 #undef K
 
 void
-u_word_breaks(const char *string, size_t n, u_break_fn fn, void *closure)
+u_words(const char *string, size_t n, u_substring_fn fn, void *closure)
 {
         const char *p = string;
+        const char *q = p;
         const char *end = p + n;
         const char *s = NULL;
         uint8_t state = 2;
-        while (p < end) {
-                state = wb_dfa[state & 0xf][s_word_break(u_dref(p))];
+        while (q < end) {
+                state = wb_dfa[state & 0xf][s_word_break(u_dref(q))];
                 switch (state >> 4) {
                 case 1:
                         break;
                 case 2:
-                        s = p;
+                        s = q;
                         break;
                 case 3:
                         s = NULL;
                         break;
                 default:
                         if (s != NULL) {
-                                fn(s, closure);
+                                fn(p, s - p, closure);
+                                p = s;
                                 s = NULL;
                         }
-                        fn(p, closure);
+                        if (p < q)
+                                fn(p, q - p, closure);
+                        p = q;
                 }
-                p = u_next(p);
+                q = u_next(q);
         }
-        if (s != NULL)
-                fn(s, closure);
+        if (s != NULL) {
+                fn(p, s - p, closure);
+                p = s;
+        }
+        if (p < q)
+                fn(p, q - p, closure);
 }
