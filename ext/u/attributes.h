@@ -22,4 +22,5 @@ s_attribute(uint32_t c)
 }
 
 uint32_t _u_special_case_table_lookup(uint32_t c);
-size_t _u_special_case_output(char *buf, int offset, int type, bool upper);
+const char *_u_special_case(uint32_t v, enum u_general_category category,
+                            bool upper);

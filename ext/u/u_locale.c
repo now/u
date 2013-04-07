@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include "u.h"
+#include "u_locale.h"
 #include "private.h"
 
 /* {{{1

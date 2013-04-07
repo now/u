@@ -91,6 +91,11 @@ U_CONST int u_char_xdigit_value(uint32_t c);
 
 U_CONST enum u_general_category u_char_general_category(uint32_t c);
 
+enum u_canonical_combining_class {
+        U_CANONICAL_COMBINING_CLASS_NOT_REORDERED = 0,
+        U_CANONICAL_COMBINING_CLASS_ABOVE = 230,
+};
+
 U_CONST int u_char_combining_class(uint32_t c);
 
 bool u_char_mirror(uint32_t c, uint32_t *mirrored);

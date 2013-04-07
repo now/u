@@ -38,21 +38,11 @@ _u_special_case_table_lookup(uint32_t c)
 /* {{{1
  * Output titlecases where appropriate.
  */
-size_t
-_u_special_case_output(char *buf, int offset, int type, bool upper)
+const char *
+_u_special_case(uint32_t v, enum u_general_category category, bool upper)
 {
-	const char *p = _u_special_case_table + offset;
-
-	if (type != U_GENERAL_CATEGORY_LETTER_TITLECASE)
+	const char *p = _u_special_case_table + v - UNICODE_SPECIAL_CASE_TABLE_START;
+	if (category != U_GENERAL_CATEGORY_LETTER_TITLECASE)
 		p = u_next(p);
-
-	if (upper)
-		p += u_n_bytes(p) + 1;
-
-	size_t n = u_n_bytes(p);
-
-	if (buf != NULL)
-		memcpy(buf, p, n);
-
-	return n;
+        return upper ? p + u_n_bytes(p) + 1 : p;
 }

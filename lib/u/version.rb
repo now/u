@@ -80,6 +80,7 @@ module U
          def sources
            %w'attributes.c
               attributes.h
+              case.h
               combining_class.c
               combining_class.h
               data/attributes.h
@@ -103,6 +104,7 @@ module U
               general-category.h
               grapheme-break.c
               grapheme-break.h
+              output.h
               private.c
               private.h
               rb_includes.h

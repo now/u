@@ -12,6 +12,9 @@
 #include "attributes.h"
 #include "general-category.h"
 #include "titled.h"
+#include "output.h"
+#include "u_locale.h"
+#include "case.h"
 
 #define LATIN_CAPITAL_LETTER_I ((uint32_t)0x0049)
 #define LATIN_CAPITAL_LETTER_J ((uint32_t)0x004a)
@@ -30,109 +33,78 @@
 #define GREEK_SMALL_LETTER_FINAL_SIGMA ((uint32_t)0x03c2)
 #define GREEK_SMALL_LETTER_SIGMA ((uint32_t)0x03c3)
 
-#define CANONICAL_COMBINING_CLASS_ABOVE 230
-#define CANONICAL_COMBINING_CLASS_NOT_REORDERED 0
-
 
 static inline bool
 is_final_sigma(const char *string, const char *p, const char *end, bool use_end)
 {
         if (p == string)
                 return false;
-
         for (const char *q = u_next(p); P_WITHIN_STR(q, end, use_end); q = u_next(q)) {
                 uint32_t c = u_dref(q);
-
                 if (u_char_iscaseignorable(c))
                         continue;
-
                 if (u_char_iscased(c))
                         return false;
-
                 break;
         }
-
         for (const char *r = u_prev(p); r > string; r = u_prev(r)) {
                 uint32_t c = u_dref(r);
-
                 if (u_char_iscaseignorable(c))
                         continue;
-
                 if (u_char_iscased(c))
                         return true;
-
                 return false;
         }
-
         return u_char_iscased(u_dref(string));
-}
-
-static inline size_t
-downcase_sigma(const char *string, const char *p, const char *end, bool use_end, char *result)
-{
-        return u_char_to_u(is_final_sigma(string, p, end, use_end) ?
-                                GREEK_SMALL_LETTER_FINAL_SIGMA :
-                                GREEK_SMALL_LETTER_SIGMA,
-                            result);
 }
 
 static inline bool
 has_more_above(const char *string, const char *end, bool use_end)
 {
 	for (const char *p = u_next(string); P_WITHIN_STR(p, end, use_end); p = u_next(p)) {
-		int c_class = u_char_combining_class(u_dref(p));
-
-		if (c_class == CANONICAL_COMBINING_CLASS_ABOVE)
+		switch (u_char_combining_class(u_dref(p))) {
+                case U_CANONICAL_COMBINING_CLASS_ABOVE:
 			return true;
-
-		if (c_class == CANONICAL_COMBINING_CLASS_NOT_REORDERED)
+                case U_CANONICAL_COMBINING_CLASS_NOT_REORDERED:
 			return false;
+                }
 	}
-
 	return false;
 }
 
-static size_t
-downcase_lithuianian_i(uint32_t base, uint32_t combiner, char *result)
+static bool
+downcase_lithuanian_i(uint32_t c, uint32_t combiner, struct output *output)
 {
-        size_t length = u_char_to_u(base, result);
-        length += u_char_to_u(COMBINING_DOT_ABOVE, OFFSET_IF(result, length));
+        output_char(output, c);
+        output_char(output, COMBINING_DOT_ABOVE);
         if (combiner != '\0')
-                length += u_char_to_u(combiner, OFFSET_IF(result, length));
-
-        return length;
+                output_char(output, combiner);
+        return true;
 }
 
 static inline bool
-downcase_lithuanian(uint32_t c, const char *p, const char *end, bool use_end, char *result, size_t *length)
+downcase_lithuanian(uint32_t c, const char *p, const char *end, bool use_end,
+                    struct output *output)
 {
-        uint32_t base = LATIN_SMALL_LETTER_I;
-        uint32_t combiner = '\0';
-
         switch (c) {
         case LATIN_CAPITAL_LETTER_I:
         case LATIN_CAPITAL_LETTER_J:
         case LATIN_CAPITAL_LETTER_I_WITH_OGONEK:
                 if (!has_more_above(p, end, use_end))
                         return false;
-
-                base = u_char_tolower(c);
-                break;
+                return downcase_lithuanian_i(u_char_tolower(c), '\0', output);
         case LATIN_CAPITAL_LETTER_I_WITH_GRAVE:
-                combiner = COMBINING_GRAVE_ACCENT;
-                break;
+                return downcase_lithuanian_i(LATIN_SMALL_LETTER_I,
+                                             COMBINING_GRAVE_ACCENT, output);
         case LATIN_CAPITAL_LETTER_I_WITH_ACUTE:
-                combiner = COMBINING_ACUTE_ACCENT;
-                break;
+                return downcase_lithuanian_i(LATIN_SMALL_LETTER_I,
+                                             COMBINING_ACUTE_ACCENT, output);
         case LATIN_CAPITAL_LETTER_I_WITH_TILDE:
-                combiner = COMBINING_TILDE;
-                break;
+                return downcase_lithuanian_i(LATIN_SMALL_LETTER_I,
+                                             COMBINING_TILDE, output);
         default:
                 return false;
         }
-
-        *length = downcase_lithuianian_i(base, combiner, result);
-        return true;
 }
 
 static inline bool
@@ -140,132 +112,79 @@ is_before_dot(const char *p, const char *end, bool use_end)
 {
 	for (const char *q = u_next(p); P_WITHIN_STR(q, end, use_end); q = u_next(q)) {
                 uint32_t c = u_dref(q);
-
                 if (c == COMBINING_DOT_ABOVE)
                         return true;
-
-		int c_class = u_char_combining_class(u_dref(p));
-                if (c_class == CANONICAL_COMBINING_CLASS_ABOVE ||
-                    c_class == CANONICAL_COMBINING_CLASS_NOT_REORDERED)
+                switch (u_char_combining_class(u_dref(p))) {
+                case U_CANONICAL_COMBINING_CLASS_ABOVE:
+                case U_CANONICAL_COMBINING_CLASS_NOT_REORDERED:
                         return false;
+                }
 	}
-
         return false;
 }
 
-static inline size_t
-downcase_turkic_i(const char *p, const char *end, bool use_end, char *result)
+static bool
+is_i(uint32_t c)
 {
-        return u_char_to_u(is_before_dot(p, end, use_end) ?
-                                LATIN_SMALL_LETTER_I :
-                                LATIN_SMALL_LETTER_DOTLESS_I,
-                           result);
+        return c == LATIN_CAPITAL_LETTER_I;
 }
 
 static inline bool
-is_after_i(const char *string, const char *p)
+downcase_turkic(uint32_t c, const char *string, const char *p,
+                const char *end, bool use_end, struct output *output)
 {
-        if (p == string)
+        switch (c) {
+        case LATIN_CAPITAL_LETTER_I:
+                output_char(output,
+                            is_before_dot(p, end, use_end) ?
+                            LATIN_SMALL_LETTER_I :
+                            LATIN_SMALL_LETTER_DOTLESS_I);
+                return true;
+        case LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE:
+                case_simple(LATIN_CAPITAL_LETTER_I,
+                            U_GENERAL_CATEGORY_LETTER_UPPERCASE,
+                            false, false, output);
+                return true;
+        case COMBINING_DOT_ABOVE:
+                if (!is_after(string, p, is_i))
+                        output_char(output, COMBINING_DOT_ABOVE);
+                return true;
+        default:
                 return false;
-
-        for (const char *q = u_prev(p); q > string; q = u_prev(q)) {
-                uint32_t c = u_dref(q);
-
-                if (c == LATIN_CAPITAL_LETTER_I)
-                        return true;
-
-		int c_class = u_char_combining_class(u_dref(p));
-                if (c_class == CANONICAL_COMBINING_CLASS_ABOVE ||
-                    c_class == CANONICAL_COMBINING_CLASS_NOT_REORDERED)
-                        return false;
-	}
-
-        return u_dref(string) == LATIN_CAPITAL_LETTER_I;
-}
-
-static inline size_t
-downcase_turkic_dot_above(const char *string, const char *p, char *result)
-{
-        if (is_after_i(string, p))
-                return 0;
-
-        /* TODO: Try to use the memcpy() below here instead. */
-        return u_char_to_u(COMBINING_DOT_ABOVE, result);
-}
-
-static inline size_t
-downcase_simple(uint32_t c, enum u_general_category category, char *result)
-{
-	uint32_t tv = s_attribute(c);
-
-	if (tv >= UNICODE_SPECIAL_CASE_TABLE_START)
-                return _u_special_case_output(result,
-                                              tv - UNICODE_SPECIAL_CASE_TABLE_START,
-                                              category, false);
-
-        if (category == U_GENERAL_CATEGORY_LETTER_TITLECASE) {
-                uint32_t tu = _u_titlecase_table_lookup(c, false);
-                if (tu != c)
-                        return u_char_to_u(tu, result);
         }
-
-        return u_char_to_u(tv != '\0' ? tv : c, result);
 }
 
-size_t
+void
 _u_downcase_step(const char *string, const char *p, const char *end, bool use_end,
-                 enum locale locale, char *result)
+                 enum locale locale, struct output *output)
 {
         uint32_t c = u_dref(p);
-
+        enum u_general_category gc;
         if (c == GREEK_CAPITAL_LETTER_SIGMA)
-                return downcase_sigma(string, p, end, use_end, result);
-
-        if (locale == LOCALE_LITHUANIAN) {
-                size_t length;
-
-                if (downcase_lithuanian(c, p, end, use_end, result, &length))
-                        return length;
-        }
-
-        if (locale == LOCALE_TURKIC) {
-                switch (c) {
-                case LATIN_CAPITAL_LETTER_I:
-                        return downcase_turkic_i(p, end, use_end, result);
-                case LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE:
-                        c = LATIN_CAPITAL_LETTER_I;
-                        break;
-                case COMBINING_DOT_ABOVE:
-                        return downcase_turkic_dot_above(string, p, result);
-                default:
-                        break;
-                }
-        }
-
-        enum u_general_category category = s_general_category(c);
-        if (IS(category, OR(U_GENERAL_CATEGORY_LETTER_UPPERCASE,
-                            OR(U_GENERAL_CATEGORY_LETTER_TITLECASE, 0))))
-                return downcase_simple(c, category, result);
-
-        size_t length = u_next(p) - p;
-
-        if (result != NULL)
-                memcpy(result, p, length);
-
-        return length;
+                output_char(output,
+                            is_final_sigma(string, p, end, use_end) ?
+                            GREEK_SMALL_LETTER_FINAL_SIGMA :
+                            GREEK_SMALL_LETTER_SIGMA);
+        else if (locale == LOCALE_LITHUANIAN &&
+                 downcase_lithuanian(c, p, end, use_end, output))
+                ;
+        else if (locale == LOCALE_TURKIC &&
+                 downcase_turkic(c, string, p, end, use_end, output))
+                ;
+        else if (IS(gc = s_general_category(c),
+                    OR(U_GENERAL_CATEGORY_LETTER_UPPERCASE,
+                       OR(U_GENERAL_CATEGORY_LETTER_TITLECASE, 0))))
+                case_simple(c, gc, false, false, output);
+        else
+                output_string(output, p, u_next(p) - p);
 }
 
-static size_t
+static void
 downcase_loop(const char *string, const char *end, bool use_end,
-              enum locale locale, char *result)
+              enum locale locale, struct output *output)
 {
-	size_t n = 0;
-
         for (const char *p = string; P_WITHIN_STR(p, end, use_end); p = u_next(p))
-                n += _u_downcase_step(string, p, end, use_end, locale,
-                                      OFFSET_IF(result, n));
-
-	return n;
+                _u_downcase_step(string, p, end, use_end, locale, output);
 }
 
 static char *
@@ -273,19 +192,13 @@ u_downcase_in_locale_impl(const char *string, size_t n, bool use_n,
                           const char *locale, size_t *new_n)
 {
 	assert(string != NULL);
-
-	enum locale elocale = _u_locale_from_string(locale);
-
+	enum locale l = _u_locale_from_string(locale);
         const char *end = string + n;
-	size_t m = downcase_loop(string, end, use_n, elocale, NULL);
-	char *result = ALLOC_N(char, m + 1);
-	downcase_loop(string, end, use_n, elocale, result);
-	result[m] = '\0';
-
-        if (new_n != NULL)
-                *new_n = m;
-
-	return result;
+        struct output output = OUTPUT_INIT;
+	downcase_loop(string, end, use_n, l, &output);
+        output_alloc(&output);
+	downcase_loop(string, end, use_n, l, &output);
+        return output_finalize(&output, new_n);
 }
 
 char *

@@ -1,312 +1,303 @@
-attributes.o: attributes.c u.h private.h u_locale.h data/constants.h \
+attributes.o: attributes.c u.h private.h data/constants.h \
   data/attributes.h attributes.h
-combining_class.o: combining_class.c u.h private.h u_locale.h \
-  data/constants.h data/combining-class.h combining_class.h
-general-category.o: general-category.c u.h private.h u_locale.h \
-  data/constants.h data/general-category.h general-category.h
-grapheme-break.o: grapheme-break.c u.h private.h u_locale.h \
-  data/constants.h data/grapheme-break.h grapheme-break.h
-private.o: private.c u.h private.h u_locale.h
+combining_class.o: combining_class.c u.h private.h data/constants.h \
+  data/combining-class.h combining_class.h
+general-category.o: general-category.c u.h private.h data/constants.h \
+  data/general-category.h general-category.h
+grapheme-break.o: grapheme-break.c u.h private.h data/constants.h \
+  data/grapheme-break.h grapheme-break.h
+private.o: private.c u.h private.h
 rb_private.o: rb_private.c rb_includes.h extconf.h u.h private.h \
-  u_locale.h rb_private.h rb_u_string.h
-rb_u.o: rb_u.c u.h private.h u_locale.h rb_private.h rb_u_buffer.h \
+  rb_private.h rb_u_string.h
+rb_u.o: rb_u.c u.h private.h rb_private.h rb_u_buffer.h rb_u_string.h
+rb_u_buffer.o: rb_u_buffer.c u.h private.h rb_private.h rb_u_buffer.h \
   rb_u_string.h
-rb_u_buffer.o: rb_u_buffer.c u.h private.h u_locale.h rb_private.h \
-  rb_u_buffer.h rb_u_string.h
-rb_u_re.o: rb_u_re.c u.h private.h u_locale.h rb_private.h rb_u_re.h
-rb_u_string.o: rb_u_string.c u.h private.h u_locale.h rb_private.h \
-  rb_u_string.h
+rb_u_re.o: rb_u_re.c u.h private.h rb_private.h rb_u_re.h
+rb_u_string.o: rb_u_string.c u.h private.h rb_private.h rb_u_string.h
 rb_u_string_alnum.o: rb_u_string_alnum.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_alpha.o: rb_u_string_alpha.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_aref.o: rb_u_string_aref.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h rb_u_re.h
+  private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_ascii_only.o: rb_u_string_ascii_only.c rb_includes.h \
-  extconf.h u.h private.h u_locale.h rb_private.h rb_u_string.h
+  extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_assigned.o: rb_u_string_assigned.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_b.o: rb_u_string_b.c rb_includes.h extconf.h u.h private.h \
-  u_locale.h rb_private.h rb_u_string.h
+  rb_private.h rb_u_string.h
 rb_u_string_bytesize.o: rb_u_string_bytesize.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_byteslice.o: rb_u_string_byteslice.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_case_ignorable.o: rb_u_string_case_ignorable.c rb_includes.h \
-  extconf.h u.h private.h u_locale.h rb_private.h rb_u_string.h
+  extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_casecmp.o: rb_u_string_casecmp.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_cased.o: rb_u_string_cased.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_chomp.o: rb_u_string_chomp.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_chop.o: rb_u_string_chop.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_chr.o: rb_u_string_chr.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_cntrl.o: rb_u_string_cntrl.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_collate.o: rb_u_string_collate.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_collation_key.o: rb_u_string_collation_key.c rb_includes.h \
-  extconf.h u.h private.h u_locale.h rb_private.h rb_u_string.h
+  extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_combining_class.o: rb_u_string_combining_class.c \
-  rb_includes.h extconf.h u.h private.h u_locale.h rb_private.h \
-  rb_u_string.h
+  rb_includes.h extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_count.o: rb_u_string_count.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h \
-  rb_u_string_internal_tr.h
+  private.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
 rb_u_string_defined.o: rb_u_string_defined.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_delete.o: rb_u_string_delete.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h \
-  rb_u_string_internal_tr.h
+  private.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
 rb_u_string_digit.o: rb_u_string_digit.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_downcase.o: rb_u_string_downcase.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_dump.o: rb_u_string_dump.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h rb_u_buffer.h
+  private.h rb_private.h rb_u_string.h rb_u_buffer.h
 rb_u_string_each_byte.o: rb_u_string_each_byte.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_each_char.o: rb_u_string_each_char.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_each_codepoint.o: rb_u_string_each_codepoint.c rb_includes.h \
-  extconf.h u.h private.h u_locale.h rb_private.h rb_u_string.h
+  extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_each_grapheme_cluster.o: rb_u_string_each_grapheme_cluster.c \
-  rb_includes.h extconf.h u.h private.h u_locale.h rb_private.h \
-  rb_u_string.h
+  rb_includes.h extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_each_line.o: rb_u_string_each_line.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_each_word.o: rb_u_string_each_word.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_empty.o: rb_u_string_empty.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_end_with.o: rb_u_string_end_with.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_eql.o: rb_u_string_eql.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_equal.o: rb_u_string_equal.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_foldcase.o: rb_u_string_foldcase.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_folded.o: rb_u_string_folded.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_format.o: rb_u_string_format.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h rb_u_buffer.h \
+  private.h rb_private.h rb_u_string.h rb_u_buffer.h \
   rb_u_string_to_inum.h
 rb_u_string_general_category.o: rb_u_string_general_category.c \
-  rb_includes.h extconf.h u.h private.h u_locale.h rb_private.h \
-  rb_u_string.h
+  rb_includes.h extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_getbyte.o: rb_u_string_getbyte.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_graph.o: rb_u_string_graph.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_grapheme_break.o: rb_u_string_grapheme_break.c rb_includes.h \
-  extconf.h u.h private.h u_locale.h rb_private.h rb_u_string.h
+  extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_gsub.o: rb_u_string_gsub.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h rb_u_re.h
+  private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_hash.o: rb_u_string_hash.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_hex.o: rb_u_string_hex.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
+  private.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
 rb_u_string_include.o: rb_u_string_include.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_index.o: rb_u_string_index.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h rb_u_re.h
+  private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_inspect.o: rb_u_string_inspect.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_internal_tr.o: rb_u_string_internal_tr.c rb_includes.h \
-  extconf.h u.h private.h u_locale.h rb_private.h rb_u_string.h \
+  extconf.h u.h private.h rb_private.h rb_u_string.h \
   rb_u_string_internal_tr.h
 rb_u_string_justify.o: rb_u_string_justify.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_length.o: rb_u_string_length.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_line_break.o: rb_u_string_line_break.c rb_includes.h \
-  extconf.h u.h private.h u_locale.h rb_private.h rb_u_string.h
+  extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_lower.o: rb_u_string_lower.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_lstrip.o: rb_u_string_lstrip.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_match.o: rb_u_string_match.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h rb_u_re.h
+  private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_mirror.o: rb_u_string_mirror.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_newline.o: rb_u_string_newline.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_normalize.o: rb_u_string_normalize.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_oct.o: rb_u_string_oct.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
+  private.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
 rb_u_string_ord.o: rb_u_string_ord.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_partition.o: rb_u_string_partition.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h rb_u_re.h
+  u.h private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_plus.o: rb_u_string_plus.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_print.o: rb_u_string_print.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_punct.o: rb_u_string_punct.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_reverse.o: rb_u_string_reverse.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_rindex.o: rb_u_string_rindex.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_rpartition.o: rb_u_string_rpartition.c rb_includes.h \
-  extconf.h u.h private.h u_locale.h rb_private.h rb_u_string.h rb_u_re.h
+  extconf.h u.h private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_rstrip.o: rb_u_string_rstrip.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_scan.o: rb_u_string_scan.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h rb_u_re.h
+  private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_script.o: rb_u_string_script.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_soft_dotted.o: rb_u_string_soft_dotted.c rb_includes.h \
-  extconf.h u.h private.h u_locale.h rb_private.h rb_u_string.h
+  extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_space.o: rb_u_string_space.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_split.o: rb_u_string_split.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h rb_u_re.h
+  private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_squeeze.o: rb_u_string_squeeze.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h \
-  rb_u_string_internal_tr.h
+  private.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
 rb_u_string_start_with.o: rb_u_string_start_with.c rb_includes.h \
-  extconf.h u.h private.h u_locale.h rb_private.h rb_u_string.h
+  extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_strip.o: rb_u_string_strip.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_sub.o: rb_u_string_sub.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h rb_u_re.h
+  private.h rb_private.h rb_u_string.h rb_u_re.h
 rb_u_string_times.o: rb_u_string_times.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_title.o: rb_u_string_title.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_titlecase.o: rb_u_string_titlecase.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_to_i.o: rb_u_string_to_i.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
+  private.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
 rb_u_string_to_inum.o: rb_u_string_to_inum.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
+  private.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
 rb_u_string_to_str.o: rb_u_string_to_str.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_to_sym.o: rb_u_string_to_sym.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_tr.o: rb_u_string_tr.c rb_includes.h extconf.h u.h private.h \
-  u_locale.h rb_private.h rb_u_string.h rb_u_string_internal_tr.h
+  rb_private.h rb_u_string.h rb_u_string_internal_tr.h
 rb_u_string_upcase.o: rb_u_string_upcase.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_upper.o: rb_u_string_upper.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_valid.o: rb_u_string_valid.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_valid_encoding.o: rb_u_string_valid_encoding.c rb_includes.h \
-  extconf.h u.h private.h u_locale.h rb_private.h rb_u_string.h
+  extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_wide.o: rb_u_string_wide.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_wide_cjk.o: rb_u_string_wide_cjk.c rb_includes.h extconf.h \
-  u.h private.h u_locale.h rb_private.h rb_u_string.h
+  u.h private.h rb_private.h rb_u_string.h
 rb_u_string_width.o: rb_u_string_width.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_word_break.o: rb_u_string_word_break.c rb_includes.h \
-  extconf.h u.h private.h u_locale.h rb_private.h rb_u_string.h
+  extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_xdigit.o: rb_u_string_xdigit.c rb_includes.h extconf.h u.h \
-  private.h u_locale.h rb_private.h rb_u_string.h
+  private.h rb_private.h rb_u_string.h
 rb_u_string_zero_width.o: rb_u_string_zero_width.c rb_includes.h \
-  extconf.h u.h private.h u_locale.h rb_private.h rb_u_string.h
-titled.o: titled.c u.h private.h u_locale.h data/constants.h \
-  data/title-table.h general-category.h titled.h
+  extconf.h u.h private.h rb_private.h rb_u_string.h
+titled.o: titled.c u.h private.h data/constants.h data/title-table.h \
+  general-category.h titled.h
 u.o: u.c u.h
-u_append.o: u_append.c u.h private.h u_locale.h
+u_append.o: u_append.c u.h private.h
 u_char_combining_class.o: u_char_combining_class.c u.h private.h \
-  u_locale.h data/constants.h combining_class.h
-u_char_digit_value.o: u_char_digit_value.c u.h private.h u_locale.h \
-  data/constants.h attributes.h general-category.h
+  data/constants.h combining_class.h
+u_char_digit_value.o: u_char_digit_value.c u.h private.h data/constants.h \
+  attributes.h general-category.h
 u_char_general_category.o: u_char_general_category.c u.h private.h \
-  u_locale.h data/constants.h general-category.h
-u_char_grapheme_break.o: u_char_grapheme_break.c u.h private.h u_locale.h \
+  data/constants.h general-category.h
+u_char_grapheme_break.o: u_char_grapheme_break.c u.h private.h \
   data/constants.h grapheme-break.h
-u_char_isalnum.o: u_char_isalnum.c u.h private.h u_locale.h \
-  data/constants.h general-category.h
-u_char_isalpha.o: u_char_isalpha.c u.h private.h u_locale.h \
-  data/constants.h general-category.h
-u_char_isassigned.o: u_char_isassigned.c u.h private.h u_locale.h \
-  data/constants.h general-category.h
-u_char_iscased.o: u_char_iscased.c u.h private.h u_locale.h \
-  data/constants.h data/cased.h general-category.h
+u_char_isalnum.o: u_char_isalnum.c u.h private.h data/constants.h \
+  general-category.h
+u_char_isalpha.o: u_char_isalpha.c u.h private.h data/constants.h \
+  general-category.h
+u_char_isassigned.o: u_char_isassigned.c u.h private.h data/constants.h \
+  general-category.h
+u_char_iscased.o: u_char_iscased.c u.h private.h data/constants.h \
+  data/cased.h general-category.h
 u_char_iscaseignorable.o: u_char_iscaseignorable.c u.h private.h \
-  u_locale.h data/constants.h general-category.h
-u_char_iscntrl.o: u_char_iscntrl.c u.h private.h u_locale.h \
   data/constants.h general-category.h
-u_char_isdefined.o: u_char_isdefined.c u.h private.h u_locale.h \
-  data/constants.h general-category.h
-u_char_isdigit.o: u_char_isdigit.c u.h private.h u_locale.h \
-  data/constants.h general-category.h
-u_char_isgraph.o: u_char_isgraph.c u.h private.h u_locale.h \
-  data/constants.h general-category.h
-u_char_islower.o: u_char_islower.c u.h private.h u_locale.h \
-  data/constants.h general-category.h
+u_char_iscntrl.o: u_char_iscntrl.c u.h private.h data/constants.h \
+  general-category.h
+u_char_isdefined.o: u_char_isdefined.c u.h private.h data/constants.h \
+  general-category.h
+u_char_isdigit.o: u_char_isdigit.c u.h private.h data/constants.h \
+  general-category.h
+u_char_isgraph.o: u_char_isgraph.c u.h private.h data/constants.h \
+  general-category.h
+u_char_islower.o: u_char_islower.c u.h private.h data/constants.h \
+  general-category.h
 u_char_isnewline.o: u_char_isnewline.c u.h
-u_char_isprint.o: u_char_isprint.c u.h private.h u_locale.h \
-  data/constants.h general-category.h
-u_char_ispunct.o: u_char_ispunct.c u.h private.h u_locale.h \
-  data/constants.h general-category.h
-u_char_issoftdotted.o: u_char_issoftdotted.c u.h private.h u_locale.h \
+u_char_isprint.o: u_char_isprint.c u.h private.h data/constants.h \
+  general-category.h
+u_char_ispunct.o: u_char_ispunct.c u.h private.h data/constants.h \
+  general-category.h
+u_char_issoftdotted.o: u_char_issoftdotted.c u.h private.h \
   data/constants.h data/soft-dotted.h general-category.h
-u_char_isspace.o: u_char_isspace.c u.h private.h u_locale.h \
-  data/constants.h general-category.h
-u_char_isupper.o: u_char_isupper.c u.h private.h u_locale.h \
-  data/constants.h general-category.h
-u_char_isvalid.o: u_char_isvalid.c u.h utf8.h
-u_char_iswide.o: u_char_iswide.c u.h private.h u_locale.h data/wide.h
-u_char_iswide_cjk.o: u_char_iswide_cjk.c u.h private.h u_locale.h \
-  data/wide-cjk.h
-u_char_isxdigit.o: u_char_isxdigit.c u.h private.h u_locale.h \
-  data/constants.h general-category.h
-u_char_iszerowidth.o: u_char_iszerowidth.c u.h private.h u_locale.h \
-  data/constants.h general-category.h
+u_char_isspace.o: u_char_isspace.c u.h private.h data/constants.h \
+  general-category.h
+u_char_isupper.o: u_char_isupper.c u.h private.h data/constants.h \
+  general-category.h
+u_char_isvalid.o: u_char_isvalid.c u.h
+u_char_iswide.o: u_char_iswide.c u.h private.h data/wide.h
+u_char_iswide_cjk.o: u_char_iswide_cjk.c u.h private.h data/wide-cjk.h
+u_char_isxdigit.o: u_char_isxdigit.c u.h private.h data/constants.h \
+  general-category.h
+u_char_iszerowidth.o: u_char_iszerowidth.c u.h private.h data/constants.h \
+  general-category.h
 u_char_line_break.o: u_char_line_break.c u.h data/constants.h \
-  data/line-break.h private.h u_locale.h
-u_char_mirror.o: u_char_mirror.c u.h private.h u_locale.h \
-  data/bidi-mirroring.h
-u_char_script.o: u_char_script.c u.h private.h u_locale.h data/script.h
+  data/line-break.h private.h
+u_char_mirror.o: u_char_mirror.c u.h private.h data/bidi-mirroring.h
+u_char_script.o: u_char_script.c u.h private.h data/script.h
 u_char_to_u.o: u_char_to_u.c u.h utf8.h
-u_char_tolower.o: u_char_tolower.c u.h private.h u_locale.h \
-  data/constants.h attributes.h titled.h general-category.h
-u_char_toupper.o: u_char_toupper.c u.h private.h u_locale.h \
-  data/constants.h attributes.h titled.h general-category.h
+u_char_tolower.o: u_char_tolower.c u.h private.h data/constants.h \
+  attributes.h titled.h general-category.h
+u_char_toupper.o: u_char_toupper.c u.h private.h data/constants.h \
+  attributes.h titled.h general-category.h
 u_char_width.o: u_char_width.c u.h
-u_char_word_break.o: u_char_word_break.c u.h private.h u_locale.h \
-  data/constants.h word-break.h
-u_char_xdigit_value.o: u_char_xdigit_value.c u.h private.h u_locale.h
-u_collate.o: u_collate.c u.h utf8.h private.h u_locale.h
-u_collation_key.o: u_collation_key.c u.h utf8.h private.h u_locale.h
-u_copy.o: u_copy.c u.h private.h u_locale.h
-u_downcase.o: u_downcase.c u.h private.h u_locale.h data/constants.h \
-  attributes.h general-category.h titled.h
-u_dref.o: u_dref.c u.h utf8.h private.h u_locale.h
-u_foldcase.o: u_foldcase.c u.h private.h u_locale.h data/case-folding.h
-u_grapheme_breaks.o: u_grapheme_breaks.c u.h private.h u_locale.h \
-  data/constants.h grapheme-break.h
-u_has_prefix.o: u_has_prefix.c u.h private.h u_locale.h
-u_index.o: u_index.c u.h private.h u_locale.h
-u_is_ascii_only.o: u_is_ascii_only.c u.h private.h u_locale.h
-u_isvalid.o: u_isvalid.c u.h private.h u_locale.h
-u_locale.o: u_locale.c u.h private.h u_locale.h
-u_n_bytes.o: u_n_bytes.c u.h private.h u_locale.h
-u_n_chars.o: u_n_chars.c u.h private.h u_locale.h
-u_next.o: u_next.c u.h private.h u_locale.h utf8.h
-u_normalize.o: u_normalize.c u.h private.h u_locale.h data/constants.h \
+u_char_word_break.o: u_char_word_break.c u.h private.h data/constants.h \
+  word-break.h
+u_char_xdigit_value.o: u_char_xdigit_value.c u.h private.h
+u_collate.o: u_collate.c u.h utf8.h private.h
+u_collation_key.o: u_collation_key.c u.h utf8.h private.h
+u_copy.o: u_copy.c u.h private.h
+u_downcase.o: u_downcase.c u.h private.h data/constants.h attributes.h \
+  general-category.h titled.h output.h u_locale.h case.h
+u_dref.o: u_dref.c u.h utf8.h private.h
+u_foldcase.o: u_foldcase.c u.h private.h data/case-folding.h
+u_grapheme_breaks.o: u_grapheme_breaks.c u.h private.h data/constants.h \
+  grapheme-break.h
+u_has_prefix.o: u_has_prefix.c u.h private.h
+u_index.o: u_index.c u.h private.h
+u_is_ascii_only.o: u_is_ascii_only.c u.h private.h
+u_isvalid.o: u_isvalid.c u.h private.h
+u_locale.o: u_locale.c u.h u_locale.h private.h
+u_n_bytes.o: u_n_bytes.c u.h private.h
+u_n_chars.o: u_n_chars.c u.h private.h
+u_next.o: u_next.c u.h private.h utf8.h
+u_normalize.o: u_normalize.c u.h private.h data/constants.h \
   data/decompose.h data/compose.h combining_class.h
-u_offset_to_pointer.o: u_offset_to_pointer.c u.h private.h u_locale.h
-u_pointer_to_offset.o: u_pointer_to_offset.c u.h private.h u_locale.h
-u_prev.o: u_prev.c u.h private.h u_locale.h utf8.h
-u_reverse.o: u_reverse.c u.h private.h u_locale.h
-u_rindex.o: u_rindex.c u.h private.h u_locale.h
-u_titlecase.o: u_titlecase.c u.h private.h u_locale.h
-u_ucs4_to_u.o: u_ucs4_to_u.c u.h utf8.h private.h u_locale.h
-u_upcase.o: u_upcase.c u.h private.h u_locale.h data/constants.h \
-  attributes.h general-category.h titled.h
-u_width.o: u_width.c u.h private.h u_locale.h
-u_word_breaks.o: u_word_breaks.c u.h private.h u_locale.h \
-  data/constants.h word-break.h
-word-break.o: word-break.c u.h private.h u_locale.h data/constants.h \
+u_offset_to_pointer.o: u_offset_to_pointer.c u.h private.h
+u_pointer_to_offset.o: u_pointer_to_offset.c u.h private.h
+u_prev.o: u_prev.c u.h private.h utf8.h
+u_reverse.o: u_reverse.c u.h private.h
+u_rindex.o: u_rindex.c u.h private.h
+u_titlecase.o: u_titlecase.c u.h private.h data/constants.h attributes.h \
+  titled.h output.h u_locale.h case.h
+u_ucs4_to_u.o: u_ucs4_to_u.c u.h utf8.h private.h
+u_upcase.o: u_upcase.c u.h private.h data/constants.h attributes.h \
+  general-category.h titled.h output.h u_locale.h case.h
+u_width.o: u_width.c u.h private.h
+u_word_breaks.o: u_word_breaks.c u.h private.h data/constants.h \
+  word-break.h
+word-break.o: word-break.c u.h private.h data/constants.h \
   data/word-break.h word-break.h

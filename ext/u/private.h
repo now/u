@@ -62,13 +62,3 @@ uint32_t *_u_normalize_wc(const char *string,
                           bool use_length,
                           enum u_normalize_mode mode,
                           size_t *new_length);
-
-#include "u_locale.h"
-
-size_t _u_downcase_step(const char *string, const char *p,
-                        const char *end, bool use_end,
-                        enum locale locale, char *result);
-
-size_t _u_upcase_step(const char *string, const char **p,
-                      const char *end, bool use_end,
-                      enum locale locale, bool title, char *result);
