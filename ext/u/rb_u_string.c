@@ -362,8 +362,8 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "rindex", rb_u_string_rindex_m, -1); /* in ext/u/rb_u_string_rindex.c */
         rb_define_method(rb_cUString, "start_with?", rb_u_string_start_with, -1); /* in ext/u/rb_u_string_start_with.c */
 
-        rb_define_method(rb_cUString, "<=>", rb_u_string_collate, 1); /* in ext/u/rb_u_string_collate.c */
-        rb_define_method(rb_cUString, "casecmp", rb_u_string_casecmp, 1); /* in ext/u/rb_u_string_casecmp.c */
+        rb_define_method(rb_cUString, "<=>", rb_u_string_collate, -1); /* in ext/u/rb_u_string_collate.c */
+        rb_define_method(rb_cUString, "casecmp", rb_u_string_casecmp, -1); /* in ext/u/rb_u_string_casecmp.c */
         rb_define_method(rb_cUString, "collation_key", rb_u_string_collation_key, 0); /* in ext/u/rb_u_string_collation_key.c */
 
         rb_define_method(rb_cUString, "combining_class", rb_u_string_combining_class, 0); /* in ext/u/rb_u_string_combining_class.c */
