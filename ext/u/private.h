@@ -58,7 +58,7 @@ bool binary_search_unicode_table(const void *table,
                                  size_t *index);
 
 uint32_t *_u_normalize_wc(const char *string,
-                          size_t length,
-                          bool use_length,
+                          size_t n,
+                          bool use_n,
                           enum u_normalize_mode mode,
-                          size_t *new_length);
+                          size_t *new_n);

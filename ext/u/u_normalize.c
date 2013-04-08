@@ -13,6 +13,16 @@
 
 #include "combining_class.h"
 
+static inline size_t
+u_char_to_u_char(uint32_t c, uint32_t *result)
+{
+        if (result != NULL)
+                *result = c;
+        return 1;
+}
+#define UNIT uint32_t
+#define UNIT_TO_U u_char_to_u_char
+#include "output.h"
 
 enum {
         SBase = 0xac00,
@@ -30,34 +40,20 @@ enum {
 
 /* Decompose the character ‘s’ according to the rules outlined in
  * http://www.unicode.org/unicode/reports/tr15/#Hangul. */
-static size_t
-decompose_hangul(uint32_t s, uint32_t *result)
+static inline bool
+decompose_hangul(uint32_t s, struct output *output)
 {
+        if (!(SBase <= s && s <= SLast))
+                return false;
         int SIndex = s - SBase;
-
-        if (SIndex < 0 || SIndex >= SCount) {
-                if (result != NULL)
-                        result[0] = s;
-
-                return 1;
-        }
-
         uint32_t L = LBase + SIndex / NCount;
         uint32_t V = VBase + (SIndex % NCount) / TCount;
         uint32_t T = TBase + SIndex % TCount;
-
-        if (result != NULL) {
-                result[0] = L;
-                result[1] = V;
-        }
-
-        if (T == TBase)
-                return 2;
-
-        if (result != NULL)
-                result[2] = T;
-
-        return 3;
+        output_char(output, L);
+        output_char(output, V);
+        if (T != TBase)
+                output_char(output, T);
+        return true;
 }
 
 static const char *
@@ -78,56 +74,34 @@ canonical(size_t index)
                 &decomp_expansion_string[offset];
 }
 
-static inline size_t
-decomposition_to_wc(const char *decomposition, uint32_t *result)
-{
-        size_t i = 0;
-
-        for (const char *p = decomposition; *p != '\0'; p = u_next(p))
-                result[i++] = u_dref(p);
-
-        return i;
-}
-
-static size_t
-decompose_simple(uint32_t c, const char *(*decompose)(size_t), uint32_t *result)
+static inline void
+decompose_simple(uint32_t c, const char *(*decompose)(size_t),
+                 struct output *output)
 {
         size_t index;
         const char *decomposition;
-        if (!unicode_table_lookup(decomp_table, c, &index) ||
-            (decomposition = decompose(index)) == NULL) {
-                if (result != NULL)
-                        result[0] = c;
-
-                return 1;
-        }
-
-        if (result != NULL)
-                return decomposition_to_wc(decomposition, result);
-
-        return u_n_chars(decomposition);
+        if (unicode_table_lookup(decomp_table, c, &index) &&
+            (decomposition = decompose(index)) != NULL)
+                for (const char *p = decomposition; *p != '\0'; p = u_next(p))
+                        output_char(output, u_dref(p));
+        else
+                output_char(output, c);
 }
 
-static inline size_t
-decompose_step(uint32_t c, const char *(*decompose)(size_t), uint32_t *result)
+static inline void
+decompose_step(uint32_t c, const char *(*decompose)(size_t),
+               struct output *output)
 {
-        return (SBase <= c && c <= SLast) ?
-                decompose_hangul(c, result) :
-                decompose_simple(c, decompose, result);
+        if (!decompose_hangul(c, output))
+                decompose_simple(c, decompose, output);
 }
 
-static size_t
-decompose_loop(const char *string, size_t length, bool use_length,
-               const char *(*decompose)(size_t), uint32_t *result)
+static void
+decompose_loop(const char *string, const char *end, bool use_end,
+               const char *(*decompose)(size_t), struct output *output)
 {
-        size_t n = 0;
-        const char *p = string;
-        const char *end = p + length;
-        while (P_WITHIN_STR(p, end, use_length)) {
-                n += decompose_step(u_dref(p), decompose, OFFSET_IF(result, n));
-                p = u_next(p);
-        }
-        return n;
+        for (const char *p = string; P_WITHIN_STR(p, end, use_end); p = u_next(p))
+                decompose_step(u_dref(p), decompose, output);
 }
 
 static inline bool
@@ -147,12 +121,11 @@ canonical_ordering_swap(uint32_t *string, size_t offset, int next)
 }
 
 static inline bool
-canonical_ordering_reorder(uint32_t *string, size_t length)
+canonical_ordering_reorder(uint32_t *string, size_t n)
 {
         bool swapped = false;
-
         int prev = s_combining_class(string[0]);
-        for (size_t i = 0; i < length - 1; i++) {
+        for (size_t i = 0; i < n - 1; i++) {
                 int next = s_combining_class(string[i + 1]);
 
                 if (next != 0 && prev > next) {
@@ -161,15 +134,15 @@ canonical_ordering_reorder(uint32_t *string, size_t length)
                 } else
                         prev = next;
         }
-
         return swapped;
 }
 
 static void
-canonical_ordering(uint32_t *string, size_t length)
+canonical_ordering(uint32_t *string, size_t n)
 {
-        while (canonical_ordering_reorder(string, length))
-                ;
+        if (n > 0)
+                while (canonical_ordering_reorder(string, n))
+                        ;
 }
 
 static inline bool
@@ -255,57 +228,43 @@ combine(uint32_t a, uint32_t b, uint32_t *result)
 }
 
 static inline size_t
-compose_loop(uint32_t *string, size_t length)
+compose_loop(uint32_t *string, size_t n)
 {
-        size_t n = length;
-        size_t prev_start = 0;
-        int prev_cc = 0;
-
-        for (size_t i = 0; i < length; i++) {
+        if (n == 0)
+                return 0;
+        int pcc = -1;
+        size_t s = 0;
+        size_t t = 1;
+        for (size_t i = 1; i < n; i++) {
                 int cc = s_combining_class(string[i]);
-                size_t j = i - (length - n);
-
-                if (j > 0 &&
-                    (prev_cc == 0 || prev_cc < cc) &&
-                    combine(string[prev_start], string[i], &string[prev_start])) {
-                        n--;
-                        prev_cc = (j + 1 == prev_start) ?
-                                0 :
-                                s_combining_class(string[j - 1]);
-                } else {
-                        if (cc == 0)
-                                prev_start = j;
-
-                        string[j] = string[i];
-                        prev_cc = cc;
-                }
+                if (pcc < cc && combine(string[s], string[i], &string[s]))
+                        continue;
+                else if (cc == 0) {
+                        pcc = -1;
+                        s = t;
+                } else
+                        pcc = cc;
+                string[t++] = string[i];
         }
-
-        return n;
+        return t;
 }
 
 uint32_t *
-_u_normalize_wc(const char *string, size_t length, bool use_length,
-                enum u_normalize_mode mode, size_t *new_length)
+_u_normalize_wc(const char *string, size_t n, bool use_n,
+                enum u_normalize_mode mode, size_t *new_n)
 {
         const char *(*decompose)(size_t) =
                 (mode == U_NORMALIZE_NFKC || mode == U_NORMALIZE_NFKD) ?
                 compatible : canonical;
-        size_t n = decompose_loop(string, length, use_length, decompose, NULL);
-        uint32_t *result = ALLOC_N(uint32_t, n + 1);
-        decompose_loop(string, length, use_length, decompose, result);
-        if (n > 0)
-                canonical_ordering(result, n);
-
+        const char *end = string + n;
+        struct output output = OUTPUT_INIT;
+        decompose_loop(string, end, use_n, decompose, &output);
+        output_alloc(&output);
+        decompose_loop(string, end, use_n, decompose, &output);
+        canonical_ordering(output.result, output.n);
         if (mode == U_NORMALIZE_NFC || mode == U_NORMALIZE_NFKC)
-                n = compose_loop(result, n);
-
-        result[n] = '\0';
-
-        if (new_length != NULL)
-                *new_length = n;
-
-        return result;
+                output.n = compose_loop(output.result, output.n);
+        return output_finalize(&output, new_n);
 }
 
 char *
