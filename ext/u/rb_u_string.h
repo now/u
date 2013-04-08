@@ -80,7 +80,7 @@ VALUE rb_u_string_chop(VALUE self);
 VALUE rb_u_string_chr(VALUE self);
 VALUE rb_u_string_cntrl(VALUE self);
 VALUE rb_u_string_collate(int argc, VALUE *argv, VALUE self);
-VALUE rb_u_string_collation_key(VALUE self);
+VALUE rb_u_string_collation_key(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_combining_class(VALUE self);
 VALUE rb_u_string_count(int argc, VALUE *argv, VALUE self);
 VALUE rb_u_string_defined(VALUE self);

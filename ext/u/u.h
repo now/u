@@ -375,6 +375,8 @@ U_PURE int u_collate_n(const char *a, size_t a_n, const char *b, size_t b_n);
 U_PURE int u_collate_in_locale_n(const char *a, size_t a_n, const char *b, size_t b_n, const char *locale);
 char *u_collation_key(const char *str);
 char *u_collation_key_n(const char *str, size_t n, size_t *new_n);
+char *u_collation_key_in_locale_n(const char *str, size_t n, const char *locale,
+                                  size_t *new_n);
 
 U_PURE size_t u_char_index(const char *str, uint32_t c);
 U_PURE size_t u_char_index_n(const char *str, uint32_t c, size_t n);

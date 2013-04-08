@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <wchar.h>
+#include <xlocale.h>
 
 #include "u.h"
 #include "utf8.h"
@@ -52,13 +53,21 @@ utf8_encode(char *buf, wchar_t c)
 	return retval;
 }
 
+static size_t
+key(wchar_t *result, const wchar_t *string, size_t n, locale_t locale)
+{
+        return locale != NULL ?
+                wcsxfrm_l(result, string, n, locale) :
+                wcsxfrm(result, string, n);
+}
 
 /* {{{1
  * Generate a collation key from a string which can be compared with other
  * collation keys using str_compare().
  */
 static char *
-u_collation_key_impl(const char *str, size_t n, bool use_n, size_t *new_n)
+u_collation_key_impl(const char *str, size_t n, bool use_n, const char *locale,
+                     size_t *new_n)
 {
 	assert(str != NULL);
 
@@ -76,9 +85,13 @@ u_collation_key_impl(const char *str, size_t n, bool use_n, size_t *new_n)
         }
         *q = '\0';
 
-	size_t xfrm_n = wcsxfrm(NULL, (wchar_t *)str_norm, 0);
-	wchar_t result_wc[xfrm_n + 1];
-	wcsxfrm(result_wc, (wchar_t *)str_norm, xfrm_n + 1);
+        locale_t l = NULL;
+        if (locale != NULL)
+                l = newlocale(LC_COLLATE_MASK, locale, NULL);
+
+	size_t xfrm_n = key(NULL, (wchar_t *)str_norm, 0, l);
+	wchar_t *result_wc = malloc(sizeof(wchar_t) * (xfrm_n + 1));
+        key(result_wc, (wchar_t *)str_norm, xfrm_n + 1, l);
 
 	int result_n = 0;
 	for (size_t i = 0; i < xfrm_n; i++)
@@ -90,6 +103,7 @@ u_collation_key_impl(const char *str, size_t n, bool use_n, size_t *new_n)
 		result_n += utf8_encode(result + result_n, result_wc[i]);
 	result[result_n] = '\0';
 
+        free(result_wc);
 	free(str_norm);
 
         if (new_n != NULL)
@@ -106,7 +120,7 @@ u_collation_key_impl(const char *str, size_t n, bool use_n, size_t *new_n)
 char *
 u_collation_key(const char *str)
 {
-	return u_collation_key_impl(str, 0, false, NULL);
+	return u_collation_key_impl(str, 0, false, NULL, NULL);
 }
 
 
@@ -117,5 +131,12 @@ u_collation_key(const char *str)
 char *
 u_collation_key_n(const char *str, size_t n, size_t *new_n)
 {
-	return u_collation_key_impl(str, n, true, new_n);
+	return u_collation_key_impl(str, n, true, NULL, new_n);
+}
+
+char *
+u_collation_key_in_locale_n(const char *str, size_t n, const char *locale,
+                            size_t *new_n)
+{
+        return u_collation_key_impl(str, n, true, locale, new_n);
 }
