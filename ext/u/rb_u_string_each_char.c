@@ -13,6 +13,13 @@ each(VALUE self, struct yield *yield)
         }
 }
 
+UNUSED(static VALUE
+       size(VALUE self, UNUSED(VALUE args)))
+{
+        const struct rb_u_string *string = RVAL2USTRING(self);
+        return UINT2NUM(u_n_chars_n(USTRING_STR(string), USTRING_LENGTH(string)));
+}
+
 /* @overload each_char{ |char| … }
  *
  *   Enumerates the characters in the receiver, each inheriting any taint and
@@ -26,7 +33,7 @@ each(VALUE self, struct yield *yield)
 VALUE
 rb_u_string_each_char(VALUE self)
 {
-        RETURN_ENUMERATOR(self, 0, NULL);
+        RETURN_SIZED_ENUMERATOR(self, 0, NULL, size);
         struct yield y = YIELD_INIT;
         each(self, &y);
         return self;

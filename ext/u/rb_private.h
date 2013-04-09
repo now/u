@@ -39,6 +39,11 @@ long rb_u_string_index_regexp(VALUE self, const char *begin, VALUE regex, bool r
 int rb_memhash(const char *string, long length);
 #endif
 
+#ifndef RETURN_SIZED_ENUMERATOR
+#  define RETURN_SIZED_ENUMERATOR(self, argc, argv, size) \
+        RETURN_ENUMERATOR(self, argc, argv)
+#endif
+
 long rb_u_memsearch(const void *a, long a_n, const void *b, long b_n);
 
 NORETURN(void rb_u_raise(VALUE exception, const char *format, ...)) PRINTF(2, 3);

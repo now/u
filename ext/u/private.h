@@ -22,7 +22,7 @@
 #  define PRINTF(format_index, first_argument_index) \
         __attribute__((format(printf, format_index, first_argument_index)))
 #  define UNUSED(u) \
-        u __attribute__((__unused__))
+        __attribute__((__unused__)) u
 #else
 #  define PRINTF(format, arguments)
 #  define UNUSED(u) u

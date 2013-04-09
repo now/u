@@ -10,6 +10,12 @@ each(VALUE self, struct yield *yield)
                 yield_call(yield, INT2FIX(*p & 0xff));
 }
 
+UNUSED(static VALUE
+       size(VALUE self, UNUSED(VALUE args)))
+{
+        return LONG2NUM(USTRING_LENGTH(RVAL2USTRING(self)));
+}
+
 /* @overload each_byte{ |byte| … }
  *
  *   Enumerates the bytes in the receiver.
@@ -23,7 +29,7 @@ each(VALUE self, struct yield *yield)
 VALUE
 rb_u_string_each_byte(VALUE self)
 {
-        RETURN_ENUMERATOR(self, 0, NULL);
+        RETURN_SIZED_ENUMERATOR(self, 0, NULL, size);
         struct yield y = YIELD_INIT;
         each(self, &y);
         return self;
