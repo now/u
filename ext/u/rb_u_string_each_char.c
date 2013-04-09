@@ -1,4 +1,17 @@
 #include "rb_includes.h"
+#include "yield.h"
+
+static void
+each(VALUE self, struct yield *yield)
+{
+        const struct rb_u_string *string = RVAL2USTRING(self);
+        const char *q;
+        const char *end = USTRING_END(string);
+        for (const char *p = USTRING_STR(string); p < end; p = q) {
+                q = rb_u_next_validated(p, end);
+                yield_call(yield, rb_u_string_new_c(self, p, q - p));
+        }
+}
 
 /* @overload each_char{ |char| … }
  *
@@ -14,16 +27,17 @@ VALUE
 rb_u_string_each_char(VALUE self)
 {
         RETURN_ENUMERATOR(self, 0, NULL);
-
-        const struct rb_u_string *string = RVAL2USTRING(self);
-
-        const char *p = USTRING_STR(string);
-        const char *end = USTRING_END(string);
-        while (p < end) {
-                const char *q = rb_u_next_validated(p, end);
-                rb_yield(rb_u_string_new_c(self, p, q - p));
-                p = q;
-        }
-
+        struct yield y = YIELD_INIT;
+        each(self, &y);
         return self;
+}
+
+/* @return [Array<U::String>] The characters of the receiver, each inheriting
+ *   any taint and untrust. */
+VALUE
+rb_u_string_chars(VALUE self)
+{
+        struct yield_array y = YIELD_ARRAY_INIT;
+        each(self, &y.yield);
+        return y.array;
 }

@@ -1,7 +1,8 @@
 #include "rb_includes.h"
+#include "yield.h"
 
-static VALUE
-rb_u_string_each_line_default(VALUE self)
+static void
+rb_u_string_each_line_default(VALUE self, struct yield *yield)
 {
         const struct rb_u_string *string = RVAL2USTRING(self);
 
@@ -16,19 +17,18 @@ rb_u_string_each_line_default(VALUE self)
                         break;
                 p++;
 
-                rb_yield(rb_u_string_new_c(self, base, p - base));
+                yield_call(yield, rb_u_string_new_c(self, base, p - base));
 
                 base = p;
         }
 
         if (base != end)
-                rb_yield(rb_u_string_new_c(self, base, end - base));
-
-        return self;
+                yield_call(yield, rb_u_string_new_c(self, base, end - base));
 }
 
-static VALUE
-rb_u_string_each_line_separator(VALUE self, const struct rb_u_string *separator)
+static void
+rb_u_string_each_line_separator(VALUE self, const struct rb_u_string *separator,
+                                struct yield *yield)
 {
         const struct rb_u_string *string = RVAL2USTRING(self);
 
@@ -66,16 +66,33 @@ again:
                      (end - p >= separator_length &&
                       memcmp(USTRING_STR(separator), p, separator_length) == 0))) {
                         p += separator_length;
-                        rb_yield(rb_u_string_new_c(self, base, p - base));
+                        yield_call(yield, rb_u_string_new_c(self, base, p - base));
                         base = p;
                 } else
                         p = u_next(p);
         }
 
         if (base != end)
-                rb_yield(rb_u_string_new_c(self, base, end - base));
+                yield_call(yield, rb_u_string_new_c(self, base, end - base));
+}
 
-        return self;
+static void
+each(int argc, VALUE *argv, VALUE self, struct yield *yield)
+{
+        VALUE rs;
+        if (argc == 0)
+                rs = rb_rs;
+        else
+                rb_scan_args(argc, argv, "01", &rs);
+        if (NIL_P(rs)) {
+                yield_call(yield, self);
+                return;
+        }
+        const struct rb_u_string *separator = RVAL2USTRING_ANY(rs);
+        if (rs == rb_default_rs)
+                rb_u_string_each_line_default(self, yield);
+        else
+                rb_u_string_each_line_separator(self, separator, yield);
 }
 
 /* @overload each_line(separator = $/){ |lp| … }
@@ -102,20 +119,24 @@ VALUE
 rb_u_string_each_line(int argc, VALUE *argv, VALUE self)
 {
         RETURN_ENUMERATOR(self, argc, argv);
+        struct yield y = YIELD_INIT;
+        each(argc, argv, self, &y);
+        return self;
+}
 
-        VALUE rs;
-        if (argc == 0)
-                rs = rb_rs;
-        else
-                rb_scan_args(argc, argv, "01", &rs);
-        if (NIL_P(rs)) {
-                rb_yield(self);
-                return self;
-        }
-
-        const struct rb_u_string *separator = RVAL2USTRING_ANY(rs);
-        if (rs == rb_default_rs)
-                return rb_u_string_each_line_default(self);
-
-        return rb_u_string_each_line_separator(self, separator);
+/* @overload lines(separator = $/)
+ *
+ *   Returns the lines of the receiver, inheriting any taint and untrust.
+ *
+ *   If SEPARATOR is nil, yields self.  If SEPARATOR is {#empty?}, separates
+ *   each line (paragraph) by two or more U+000A LINE FEED characters.
+ *
+ *   @param [U::String, #to_str] separator
+ *   @return [Array<U::String>] */
+VALUE
+rb_u_string_lines(int argc, VALUE *argv, VALUE self)
+{
+        struct yield_array y = YIELD_ARRAY_INIT;
+        each(argc, argv, self, &y.yield);
+        return y.array;
 }

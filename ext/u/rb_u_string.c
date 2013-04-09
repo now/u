@@ -379,15 +379,15 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "width", rb_u_string_width, 0); /* in ext/u/rb_u_string_width.c */
 
         rb_define_method(rb_cUString, "each_byte", rb_u_string_each_byte, 0); /* in ext/u/rb_u_string_each_byte.c */
-        rb_define_alias(rb_cUString, "bytes", "each_byte");
+        rb_define_method(rb_cUString, "bytes", rb_u_string_bytes, 0); /* in ext/u/rb_u_string_each_byte.c */
         rb_define_method(rb_cUString, "each_char", rb_u_string_each_char, 0); /* in ext/u/rb_u_string_each_char.c */
-        rb_define_alias(rb_cUString, "chars", "each_char");
+        rb_define_method(rb_cUString, "chars", rb_u_string_chars, 0); /* in ext/u/rb_u_string_each_char.c */
         rb_define_method(rb_cUString, "each_codepoint", rb_u_string_each_codepoint, 0); /* in ext/u/rb_u_string_each_codepoint.c */
-        rb_define_alias(rb_cUString, "codepoints", "each_codepoint");
+        rb_define_method(rb_cUString, "codepoints", rb_u_string_codepoints, 0); /* in ext/u/rb_u_string_each_codepoint.c */
         rb_define_method(rb_cUString, "each_grapheme_cluster", rb_u_string_each_grapheme_cluster, 0); /* in ext/u/rb_u_string_each_grapheme_cluster.c */
         rb_define_alias(rb_cUString, "grapheme_clusters", "each_grapheme_cluster");
         rb_define_method(rb_cUString, "each_line", rb_u_string_each_line, -1); /* in ext/u/rb_u_string_each_line.c */
-        rb_define_alias(rb_cUString, "lines", "each_line");
+        rb_define_method(rb_cUString, "lines", rb_u_string_lines, -1); /* in ext/u/rb_u_string_each_line.c */
         rb_define_method(rb_cUString, "each_word", rb_u_string_each_word, 0); /* in ext/u/rb_u_string_each_word.c */
         rb_define_alias(rb_cUString, "words", "each_word");
 

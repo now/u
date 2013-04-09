@@ -281,7 +281,8 @@ module U
               u_words.c
               utf8.h
               word-break.c
-              word-break.h'
+              word-break.h
+              yield.h'
          end
 
          def additional_files
