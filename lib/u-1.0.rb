@@ -12,6 +12,8 @@ end
 class String
   # @return [U::String] A wrapper around the receiver that provides proper
   #   Unicode handling of its content
+  # @note The receiver will receive #encode(Encoding::UTF_8)#freeze and you
+  #   should thus probably not use the receiver after invoking #u on it.
   def u
     U::String.new(self)
   end
