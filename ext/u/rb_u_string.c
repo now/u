@@ -261,8 +261,9 @@ rb_u_string_dup(VALUE self)
  * Beyond interrogators there are quite a few methods for iterating over the
  * content of a U::String, each viewing it in its own way: {#each_byte},
  * {#each_char}, {#each_codepoint}, {#each_grapheme_cluster}, {#each_line}, and
- * {#each_word}.  They all have aliases ({#bytes}, {#chars}, {#codepoints},
- * {#grapheme_clusters}, {#lines}, {#words}) that sometimes read better.
+ * {#each_word}.  They all have respective methods ({#bytes}, {#chars},
+ * {#codepoints}, {#grapheme_clusters}, {#lines}, {#words}) that return an
+ * Array instead of yielding each result.
  *
  * Quite a few methods are devoted to extracting a substring of a U::String,
  * namely {#[]}, {#slice}, {#byteslice}, {#chomp}, {#chop}, {#chr}, {#getbyte},

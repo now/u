@@ -35,7 +35,7 @@ rb_u_string_each_codepoint(VALUE self)
         return self;
 }
 
-/* @return [Array<U::String>] The code points of the receiver. */
+/* @return [Array<Integer>] The code points of the receiver. */
 VALUE
 rb_u_string_codepoints(VALUE self)
 {
