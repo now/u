@@ -2,72 +2,11 @@
 
 require 'inventory-1.0'
 
-# TODO Move to inventory.
-class Inventory::Extension
-  def initialize(name)
-    @name = name
-    instance_exec(&Proc.new) if block_given?
-  end
-
-  def path
-    'ext/%s' % name
-  end
-
-  def extconf
-    '%s/extconf.rb' % path
-  end
-
-  def depend
-    '%s/depend' % path
-  end
-
-  def sources
-    []
-  end
-
-  def source_files
-    sources.map{ |e| '%s/%s' % [path, e] }
-  end
-
-  def additional_files
-    []
-  end
-
-  def files
-    [extconf, depend] + source_files + additional_files
-  end
-
-  def to_a
-    files
-  end
-
-  def to_s
-    name
-  end
-
-  def inspect
-    '#<%s: %s %s>' % [self.class, name, path]
-  end
-
-  attr_reader :name
-end
-
-class Inventory
-  def extensions
-    []
-  end
-
-  undef files
-  def files
-    lib_files + test_files + additional_files + extensions.map{ |e| e.files }.flatten
-  end
-end
-
 module U
   Version = Inventory.new(1, 0, 0){
     def dependencies
       super + Inventory::Dependencies.new{
-        development 'inventory-rake', 1, 3, 0
+        development 'inventory-rake', 1, 4, 0
         development 'inventory-rake-tasks-yard', 1, 3, 0
         development 'lookout-rake', 3, 0, 0
         development 'yard', 0, 8, 0

@@ -8,13 +8,12 @@ Inventory::Rake::Tasks.define U::Version, :gem => proc{ |_, s|
   s.author = 'Nikolai Weibull'
   s.email = 'now@bitwi.se'
   s.homepage = 'https://github.com/now/u'
-  # TODO Move to Inventory::Rake::Tasks::Gem.
-  s.extensions = U::Version.extensions.map{ |e| e.extconf }
 }
 
 Inventory::Rake::Tasks.unless_installing_dependencies do
   require 'lookout/rake-3.0'
   Lookout::Rake::Tasks::Test.new
+  Lookout::Rake::Tasks::Test.new :name => :'test:normalize', :files => %w[test/unit/normalize.rb]
 
   require 'inventory/rake/tasks/yard-1.0'
   Inventory::Rake::Tasks::YARD.new do |t|
@@ -22,67 +21,11 @@ Inventory::Rake::Tasks.unless_installing_dependencies do
     t.options += %w'--plugin yard-heuristics-1.0 --plugin yard-value-1.0'
     t.globals[:source_code_url] = 'https://github.com/now/%s/blob/v%s/%%s#L%%d' % [t.inventory.package, t.inventory]
   end
+end
 
-  # TODO Move to inventory-rake.
-  class Inventory::Rake::Tasks::Compile
-    include Rake::DSL
-
-    def initialize(options = {})
-      self.inventory = options.fetch(:inventory, Inventory::Rake::Tasks.inventory)
-      yield self if block_given?
-      define
-    end
-
-    def define
-      desc 'Compile extensions' unless Rake::Task.task_defined? :compile
-      task :compile
-
-      @inventory.extensions.each do |extension|
-        name = :"compile:#{extension}"
-        makefile = '%s/Makefile' % extension.path
-        ext_so = '%s/%s.%s' % [extension.path,
-                               extension.name.delete('-'),
-                               RbConfig::CONFIG['DLEXT']]
-        lib_so = 'lib/%s/%s' % [@inventory.package_path, File.basename(ext_so)]
-        task :compile => name
-        task name => [makefile, lib_so]
-        file makefile => [@inventory.path, extension.extconf, extension.depend] do
-          Dir.chdir extension.path do
-            ENV['CFLAGS'] = '-Werror' unless ENV['CFLAGS']
-            ruby File.basename(extension.extconf)
-            sh 'make'
-          end
-        end
-        file ext_so => extension.source_files do
-          sh 'make -C %s' % extension.path
-        end
-        file lib_so => ext_so do
-          install ext_so, lib_so
-        end
-        tags = '%s/TAGS' % extension.path
-        file tags => extension.source_files do
-          sh 'make -C %s tags' % extension.path
-        end
-        %w'clean distclean'.each do |rule|
-          clean_name = :"#{rule}:#{extension}"
-          task :clean => clean_name
-          desc 'Clean files build for %s extension' % extension
-          task clean_name do
-            sh 'make -C %s' % rule
-          end
-        end
-      end
-
-      # TODO :check instead?  Argh, this is a bit complicated
-      task :test => :compile if Rake::Task.task_defined? :test
-    end
-
-    attr_writer :inventory
-  end
-
-  Inventory::Rake::Tasks::Compile.new
-
-  Lookout::Rake::Tasks::Test.new :name => :'test:normalize', :files => %w[test/unit/normalize.rb]
+file 'TAGS' => U::Version.extensions.map(&:source_files).flatten do
+  rm_f 'TAGS'
+  sh 'etags %s' % U::Version.extensions.map(&:source_files).flatten.join(' ')
 end
 
 # TODO: Move to U::Version::Unicode
