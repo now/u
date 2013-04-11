@@ -1,8 +1,15 @@
                                        U
 
-  U extends Ruby’s support for Unicode.  It provides an interface that can be
-  used from both Ruby 1.8 and 1.9 and implements its methods completely
-  separately from those in Ruby 1.9.
+  U extends Ruby’s Unicode support.  It provides a string class called
+  U::String with an interface that mimics that of the String class in Ruby 2.0,
+  but that can also be used from both Ruby 1.8.  This interface also has more
+  complete Unicode support and never modifies the receiver.  Thus, a U::String
+  is a value object.
+
+  U comes with complete and very accurate documentation.  The documentation can
+  realistically also be used as a reference to the Ruby String API and may
+  actually be preferable, as it’s a lot more explicit and complete than the
+  documentation that comes with Ruby.
 
 § Installation
 
@@ -12,28 +19,56 @@
 
 § Usage
 
-    For now, take a look at the tests to see some examples of how to load the
-    library and use the methods.
+    Usage is basically the following:
 
-    It’s basically the following:
-
-      require 'u'
+      require 'u-1.0'
 
       a = 'äbc'
-      a.u.upcase # ⇒ 'ÄBC'
       a.upcase # ⇒ 'äBC'
-      a # ⇒ 'äbc'
-      a.u!.upcase # ⇒ 'ÄBC'
-      a.upcase # ⇒ 'ÄBC'
+      a.u.upcase # ⇒ 'ÄBC'
 
-§ Future
+    That is, you require the library, then you invoke #u on a String.  This’ll
+    give you a U::String that has much better Unicode support than a normal
+    String.  It’s important to note that U only uses UTF-8, which means that #u
+    will try to #encode the String as such.  This shouldn’t be an issue in most
+    cases, as UTF-8 is now more or less the universal encoding – and rightfully
+    so.
 
-    Currently, most of my time is spent at my day job and in my (again
-    flourishing) private life. Please motivate me to spend time on this library
-    by donating some of your money to this project. Yeah, I realize that
+    As U::Strings are value objects, there’s also a U::Buffer available for
+    building U::Strings efficiently.
+
+    See the API¹ for more complete usage information.
+
+¹ See http://disu.se/software/u/api/
+
+§ News
+
+  § 1.0.0
+
+      Initial public release!
+
+§ Financing
+
+    Currently, most of my time is spent at my day job and in my rather busy
+    private life.  Please motivate me to spend time on this piece of software
+    by donating some of your money to this project.  Yeah, I realize that
     requesting money to develop software is a bit, well, capitalistic of me.
     But please realize that I live in a capitalistic society and I need money
     to have other people give me the things that I need to continue living
-    under the rules of said society. So, if you feel that this library has
-    helped you out enough to warrant a reward, please PayPal a donation to
-    now@bitwi.se.  Thanks!  Your support won’t go unnoticed!
+    under the rules of said society.  So, if you feel that this piece of
+    software has helped you out enough to warrant a reward, please PayPal a
+    donation to now@disu.se¹.  Thanks!  Your support won’t go unnoticed!
+
+¹ Send a donation:
+  https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=now%40disu%2ese&item_name=Nikolai%20Weibull%20Software%20Services
+
+§ Reporting Bugs
+
+    Please report any bugs that you encounter to the {issue tracker}¹.
+
+¹ See https://github.com/now/u/issues
+
+§ Authors
+
+    Nikolai Weibull wrote the code, the tests, the documentation, and this
+    README.
