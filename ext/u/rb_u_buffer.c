@@ -382,7 +382,39 @@ rb_u_buffer_hash(VALUE self)
 
 /* Document-class: U::Buffer
  *
- * A buffer for building {U::String}s. */
+ * A buffer for building {U::String}s.  Buffers should be used when you want to
+ * create U::Strings step-wise, for example, when joining them together, or
+ * reading some input.  Create a new buffer with {#initialize}, optionally
+ * specifying an initial size.  Then, {#append} (or {#<<}) content to it.  You
+ * can also {#append_format}ted content.  You can check the {#length}
+ * ({#size}), {#bytesize}, and {#width} of the buffer, which can be useful if
+ * you want to limit how much content you want to generate.  Once all content
+ * has been appended, a buffer can be converted to a U::String via {#to_u} or
+ * {#to_u!} depending on whether you want to let the buffer keep its content or
+ * not.  You can also convert it to a String with {#to_s}.
+ *
+ * @example Benchmarking U::String#+ Versus U::Buffer#append/U::Buffer#to_u!
+ *   require 'benchmark'
+ *   require 'u-1.0'
+ *   Benchmark.bm do |x|
+ *     x.report do
+ *       a = ''.u
+ *       100000.times do
+ *         a = a + 'a'
+ *       end
+ *     end
+ *     x.report do
+ *      b = U::Buffer.new
+ *       100000.times do
+ *         b.append 'a'
+ *       end
+ *       a = b.to_u!
+ *     end
+ *   end
+ *   # ⇒
+ *   #       user     system      total        real
+ *   #   3.560000   0.650000   4.210000 (  4.726064)
+ *   #   0.060000   0.000000   0.060000 (  0.057134) */
 void
 Init_u_buffer(VALUE mU)
 {
