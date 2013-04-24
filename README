@@ -37,11 +37,152 @@
     As U::Strings¹ are value objects, there’s also a U::Buffer² available for
     building U::Strings efficiently.
 
-    See the API³ for more complete usage information.
+    See the API³ for more complete usage information.  The following sections
+    will only cover the extensions and differences that U::String exhibit from
+    Ruby’s built-in String class.
 
-¹ See http://disu.se/software/u/api/U/String/
-² See http://disu.se/software/u/api/U/Buffer/
-³ See http://disu.se/software/u/api/
+  ¹ See http://disu.se/software/u/api/U/String/
+  ² See http://disu.se/software/u/api/U/Buffer/
+  ³ See http://disu.se/software/u/api/
+
+  § Unicode Properties
+
+      There are quite a few property-checking interrogators that let you check
+      if all characters in a U::String have the given Unicode property:
+
+    •   #alnum?¹
+    •   #alpha?²
+    •   #assigned?³
+    •   #case_ignorable?⁴
+    •   #cased?⁵
+    •   #cntrl?⁶
+    •   #defined?⁷
+    •   #digit?⁸
+    •   #folded?⁹
+    •   #graph?¹⁰
+    •   #lower?¹¹
+    •   #newline?¹²
+    •   #print?¹³
+    •   #punct?¹⁴
+    •   #soft_dotted?¹⁵
+    •   #space?¹⁶
+    •   #title?¹⁷
+    •   #upper?¹⁸
+    •   #valid?¹⁹
+    •   #wide?²⁰
+    •   #wide_cjk?²¹
+    •   #xdigit?²²
+    •   #zero_width?²³
+
+    ¹  See http://disu.se/software/u/api/U/String/#alnum-p-instance-method
+    ²  See http://disu.se/software/u/api/U/String/#alpha-p-instance-method
+    ³  See http://disu.se/software/u/api/U/String/#assigned-p-instance-method
+    ⁴  See http://disu.se/software/u/api/U/String/#case_ignorable-p-instance-method
+    ⁵  See http://disu.se/software/u/api/U/String/#cased-p-instance-method
+    ⁶  See http://disu.se/software/u/api/U/String/#cntrl-p-instance-method
+    ⁷  See http://disu.se/software/u/api/U/String/#defined-p-instance-method
+    ⁸  See http://disu.se/software/u/api/U/String/#digit-p-instance-method
+    ⁹  See http://disu.se/software/u/api/U/String/#folded-p-instance-method
+    ¹⁰ See http://disu.se/software/u/api/U/String/#graph-p-instance-method
+    ¹¹ See http://disu.se/software/u/api/U/String/#lower-p-instance-method
+    ¹² See http://disu.se/software/u/api/U/String/#newline-p-instance-method
+    ¹³ See http://disu.se/software/u/api/U/String/#print-p-instance-method
+    ¹⁴ See http://disu.se/software/u/api/U/String/#punct-p-instance-method
+    ¹⁵ See http://disu.se/software/u/api/U/String/#soft_dotted-p-instance-method
+    ¹⁶ See http://disu.se/software/u/api/U/String/#space-p-instance-method
+    ¹⁷ See http://disu.se/software/u/api/U/String/#title-p-instance-method
+    ¹⁸ See http://disu.se/software/u/api/U/String/#upper-p-instance-method
+    ¹⁹ See http://disu.se/software/u/api/U/String/#valid-p-instance-method
+    ²⁰ See http://disu.se/software/u/api/U/String/#wide-p-instance-method
+    ²¹ See http://disu.se/software/u/api/U/String/#wide_cjk-p-instance-method
+    ²² See http://disu.se/software/u/api/U/String/#xdigit-p-instance-method
+    ²³ See http://disu.se/software/u/api/U/String/#zero_width-p-instance-method
+
+      You can also access certain Unicode properties of the characters of a
+      U::String:
+
+    •   #combining_class¹
+    •   #general_category²
+    •   #grapheme_break³
+    •   #line_break⁴
+    •   #script⁵
+    •   #word_break⁶
+
+    ¹  See http://disu.se/software/u/api/U/String/#combining_class-instance-method
+    ²  See http://disu.se/software/u/api/U/String/#general_category-instance-method
+    ³  See http://disu.se/software/u/api/U/String/#grapheme_break-instance-method
+    ⁴  See http://disu.se/software/u/api/U/String/#line_break-instance-method
+    ⁵  See http://disu.se/software/u/api/U/String/#script-instance-method
+    ⁶  See http://disu.se/software/u/api/U/String/#word_break-instance-method
+
+  § Locale-specific Comparisons
+
+      Comparisons of U::Strings respect the current locale (and also allow you
+      to specify a locale to use): ‹#<=>›¹, #casecmp², and #collation_key³.
+
+    ¹  See http://disu.se/software/u/api/U/String/#comparison-operator
+    ²  See http://disu.se/software/u/api/U/String/#casecmp-instance-method
+    ³  See http://disu.se/software/u/api/U/String/#collation_key-instance-method
+
+  § Additional Enumerators
+
+      There are a couple of additional enumerators in #each_grapheme_cluster¹
+      and #each_word² (along with aliases #grapheme_clusters³ and #words⁴).
+
+    ¹  See http://disu.se/software/u/api/U/String/#each_grapheme_cluster-instance-method
+    ²  See http://disu.se/software/u/api/U/String/#each_word-instance-method
+    ³  See http://disu.se/software/u/api/U/String/#grapheme_clusters-instance-method
+    ⁴  See http://disu.se/software/u/api/U/String/#words-instance-method
+
+  § Unicode-aware Sub-sequence Removal
+
+      #Chomp¹, #chop², #lstrip³, #rstrip⁴, and #strip⁵ all look for Unicode
+      newline and space characters, rather than only ASCII ones.
+
+    ¹  See http://disu.se/software/u/api/U/String/#chomp-instance-method
+    ²  See http://disu.se/software/u/api/U/String/#chop-instance-method
+    ³  See http://disu.se/software/u/api/U/String/#lstrip-instance-method
+    ⁴  See http://disu.se/software/u/api/U/String/#rstrip-instance-method
+    ⁵  See http://disu.se/software/u/api/U/String/#strip-instance-method
+
+  § Unicode-aware Conversions
+
+      Case-shifting methods #downcase¹ and #upcase² do proper Unicode casing
+      and the interface is further augmented by #foldcase³ and #titlecase⁴.
+      #Mirror⁵ and #normalize⁶ do conversions similar in nature to the
+      case-shifting methods.
+
+    ¹  See http://disu.se/software/u/api/U/String/#downcase-instance-method
+    ²  See http://disu.se/software/u/api/U/String/#upcase-instance-method
+    ³  See http://disu.se/software/u/api/U/String/#foldcase-instance-method
+    ⁴  See http://disu.se/software/u/api/U/String/#titlecase-instance-method
+    ⁵  See http://disu.se/software/u/api/U/String/#mirror-instance-method
+    ⁶  See http://disu.se/software/u/api/U/String/#normalize-instance-method
+
+  § Width Calculations
+
+      #Width¹ will return the number of cells on a terminal that a U::String
+      will occupy.
+
+      #Center², #ljust³, and #rjust⁴ deal in width rather than length, making
+      them much more useful for generating terminal output.  #%⁵ (and its alias
+      #format⁶) similarly deal in width.
+
+    ¹  See http://disu.se/software/u/api/U/String/#width-instance-method
+    ²  See http://disu.se/software/u/api/U/String/#center-instance-method
+    ³  See http://disu.se/software/u/api/U/String/#ljust-instance-method
+    ⁴  See http://disu.se/software/u/api/U/String/#rjust-instance-method
+    ⁵  See http://disu.se/software/u/api/U/String/#modulo-operator
+    ⁶  See http://disu.se/software/u/api/U/String/#format-instance-method
+
+  § Extended Type Conversions
+
+      Finally, #hex¹, #oct², and #to_i³ use Unicode alpha-numerics for their
+      respective conversions.
+
+    ¹  See http://disu.se/software/u/api/U/String/#hex-instance-method
+    ²  See http://disu.se/software/u/api/U/String/#oct-instance-method
+    ³  See http://disu.se/software/u/api/U/String/#to_i-instance-method
 
 § News
 
