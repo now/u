@@ -22,6 +22,7 @@ UNUSED(static VALUE
  *   Enumerates the code points of the receiver.
  *
  *   @yieldparam [Integer] codepoint
+ *   @return [self]
  *
  * @overload each_codepoint
  *   @return [Enumerator] An Enumerator over the code points of the receiver

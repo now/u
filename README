@@ -34,12 +34,14 @@
     cases, as UTF-8 is now more or less the universal encoding – and rightfully
     so.
 
-    As U::Strings are value objects, there’s also a U::Buffer available for
+    As U::Strings¹ are value objects, there’s also a U::Buffer² available for
     building U::Strings efficiently.
 
-    See the API¹ for more complete usage information.
+    See the API³ for more complete usage information.
 
-¹ See http://disu.se/software/u/api/
+¹ See http://disu.se/software/u/api/U/String/
+² See http://disu.se/software/u/api/U/Buffer/
+³ See http://disu.se/software/u/api/
 
 § News
 

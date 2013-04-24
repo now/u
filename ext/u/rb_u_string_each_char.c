@@ -26,6 +26,7 @@ UNUSED(static VALUE
  *   untrust.
  *
  *   @yieldparam [U::String] char
+ *   @return [self]
  *
  * @overload each_char
  *

@@ -104,6 +104,7 @@ each(int argc, VALUE *argv, VALUE self, struct yield *yield)
  *
  *   @param [U::String, #to_str] separator
  *   @yieldparam [U::String, self] lp
+ *   @return [self]
  *
  * @overload each_line(separator = $/)
  *

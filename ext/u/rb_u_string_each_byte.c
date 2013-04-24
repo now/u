@@ -21,6 +21,7 @@ UNUSED(static VALUE
  *   Enumerates the bytes in the receiver.
  *
  *   @yieldparam [Fixnum] byte
+ *   @return [self]
  *
  * @overload each_byte
  *

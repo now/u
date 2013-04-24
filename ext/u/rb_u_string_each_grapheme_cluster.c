@@ -12,6 +12,7 @@ each(const char *p, size_t n, VALUE *self)
  *   taint and untrust.
  *
  *   @yieldparam [U::String] cluster
+ *   @return [self]
  *   @see http://www.unicode.org/reports/tr29/
  *     Unicode Standard Annex #29: Unicode Text Segmentation
  *
