@@ -17,7 +17,7 @@ module U
     def extensions
       [Inventory::Extension.new('u'){
          def sources
-           %w'attributes.c
+           %w[attributes.c
               attributes.h
               case.h
               combining_class.c
@@ -221,11 +221,11 @@ module U
               utf8.h
               word-break.c
               word-break.h
-              yield.h'
+              yield.h]
          end
 
          def additional_files
-           %w'build/ext/u/data/attributes.rb
+           %w[build/ext/u/data/attributes.rb
               build/ext/u/data/bidi-mirroring.rb
               build/ext/u/data/break.rb
               build/ext/u/data/case-folding.rb
@@ -267,28 +267,28 @@ module U
               build/lib/u/build/header/tables/split/part1.rb
               build/lib/u/build/header/tables/split/part2.rb
               build/lib/u/build/header/tables/split/row.rb
-              build/lib/u/build/header/tables/split/rows.rb'
+              build/lib/u/build/header/tables/split/rows.rb]
          end
        }]
     end
 
-    def libs
-      %w'u/buffer.rb
-         u/string.rb'
+    def package_libs
+      %w[buffer.rb
+         string.rb]
     end
 
     def additional_unit_tests
-      %w'case.rb
+      %w[case.rb
          foldcase.rb
          graphemebreak.rb
-         wordbreak.rb'
+         wordbreak.rb]
     end
 
     def additional_files
-      %w'build/test/unit/break.rb
+      %w[build/test/unit/break.rb
          build/test/unit/case.rb
          build/test/unit/foldcase.rb
-         build/test/unit/normalize.rb'
+         build/test/unit/normalize.rb]
     end
   }
 end

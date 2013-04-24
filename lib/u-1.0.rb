@@ -3,8 +3,8 @@
 # The U namespace contains a string builder in {U::Buffer} and a string
 # representation in {U::String}.
 module U
-  load File.expand_path('../u/version.rb', __FILE__)
-  require File.expand_path('../u/u', __FILE__)
+  load File.expand_path('../u-1.0/version.rb', __FILE__)
+  require File.expand_path('../u-1.0/u', __FILE__)
   Version.load
 end
 
