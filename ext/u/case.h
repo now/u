@@ -33,6 +33,8 @@ is_after(const char *string, const char *p, bool predicate(uint32_t))
                 case U_CANONICAL_COMBINING_CLASS_ABOVE:
                 case U_CANONICAL_COMBINING_CLASS_NOT_REORDERED:
                         return false;
+                default:
+                        break;
                 }
 	}
         return predicate(u_dref(string));
