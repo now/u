@@ -4,7 +4,7 @@
   U::String with an interface that mimics that of the String class in Ruby 2.0,
   but that can also be used from both Ruby 1.8.  This interface also has more
   complete Unicode support and never modifies the receiver.  Thus, a U::String
-  is a value object.
+  is an immutable value object.
 
   U comes with complete and very accurate documentation.  The documentation can
   realistically also be used as a reference to the Ruby String API and may
@@ -34,8 +34,8 @@
     cases, as UTF-8 is now more or less the universal encoding – and rightfully
     so.
 
-    As U::Strings¹ are value objects, there’s also a U::Buffer² available for
-    building U::Strings efficiently.
+    As U::Strings¹ are immutable value objects, there’s also a U::Buffer²
+    available for building U::Strings efficiently.
 
     See the API³ for more complete usage information.  The following sections
     will only cover the extensions and differences that U::String exhibit from
