@@ -1,5 +1,7 @@
 require 'mkmf'
 
+have_func 'rb_memhash', 'ruby.h'
+
 $CFLAGS = $CFLAGS.sub('$(cflags) ', '')
 $CFLAGS += ' ' + ENV['CFLAGS'] if ENV['CFLAGS']
 
@@ -81,7 +83,6 @@ end
 have_func 'rb_long2int', 'ruby.h'
 have_func 'rb_hash_lookup2', 'ruby.h'
 have_func 'rb_reg_backref_number', 'ruby.h'
-have_func 'rb_memhash', 'ruby.h'
 checking_for 'number of arguments to rb_reg_regsub' do
   $defs.push '-DHAVE_RB_REG_REGSUB4' if try_compile <<EOC
 #include <ruby.h>
