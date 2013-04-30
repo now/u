@@ -52,6 +52,7 @@ end
 def data_file(name, url = UnicodeBaseUrl)
   path = 'build/data/%s' % name
   file path do
+    mkdir_p File.dirname(path)
     generate_file path do |tmp|
       url_path = '%s/%s' % [url, name]
       rake_output_message 'wget -O%s %s' % [tmp, url_path] if verbose
@@ -94,10 +95,13 @@ def generate_data_header(task, *arguments)
   end
 end
 
+desc 'Generate Unicode data files'
+task :data
+
 def data_header(headers, &block)
   block ||= proc{ |t| generate_data_header t }
   headers.each do |path, prerequisites|
-    task :'compile:u' => path
+    task :data => path
     file path => prerequisites, &block
   end
 end
