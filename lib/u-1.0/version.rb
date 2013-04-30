@@ -22,23 +22,6 @@ module U
               case.h
               combining_class.c
               combining_class.h
-              data/attributes.h
-              data/bidi-mirroring.h
-              data/case-folding.h
-              data/cased.h
-              data/combining-class.h
-              data/compose.h
-              data/constants.h
-              data/decompose.h
-              data/general-category.h
-              data/grapheme-break.h
-              data/line-break.h
-              data/script.h
-              data/soft-dotted.h
-              data/title-table.h
-              data/wide-cjk.h
-              data/wide.h
-              data/word-break.h
               general-category.c
               general-category.h
               grapheme-break.c
@@ -267,7 +250,24 @@ module U
               build/lib/u/build/header/tables/split/part1.rb
               build/lib/u/build/header/tables/split/part2.rb
               build/lib/u/build/header/tables/split/row.rb
-              build/lib/u/build/header/tables/split/rows.rb]
+              build/lib/u/build/header/tables/split/rows.rb
+              ext/u/data/attributes.h
+              ext/u/data/bidi-mirroring.h
+              ext/u/data/case-folding.h
+              ext/u/data/cased.h
+              ext/u/data/combining-class.h
+              ext/u/data/compose.h
+              ext/u/data/constants.h
+              ext/u/data/decompose.h
+              ext/u/data/general-category.h
+              ext/u/data/grapheme-break.h
+              ext/u/data/line-break.h
+              ext/u/data/script.h
+              ext/u/data/soft-dotted.h
+              ext/u/data/title-table.h
+              ext/u/data/wide-cjk.h
+              ext/u/data/wide.h
+              ext/u/data/word-break.h]
          end
        }]
     end
