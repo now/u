@@ -156,7 +156,7 @@ rb_u_string_object_as_string(VALUE object)
  *   Sets up a U::String wrapping STRING after encoding it as UTF-8 and
  *   freezing it.
  *
- *   @param [String] string
+ *   @param [String, nil] string
  */
 static VALUE
 rb_u_string_initialize(int argc, VALUE *argv, VALUE self)
