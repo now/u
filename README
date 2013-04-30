@@ -6,10 +6,12 @@
   complete Unicode support and never modifies the receiver.  Thus, a U::String
   is an immutable value object.
 
-  U comes with complete and very accurate documentation.  The documentation can
+  U comes with complete and very accurate documentation¹.  The documentation can
   realistically also be used as a reference to the Ruby String API and may
   actually be preferable, as it’s a lot more explicit and complete than the
   documentation that comes with Ruby.
+
+¹ See http://disu.se/software/u/api/
 
 § Installation
 

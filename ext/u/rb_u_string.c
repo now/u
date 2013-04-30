@@ -296,7 +296,7 @@ rb_u_string_dup(VALUE self)
  * of values via {#%} (and its alias {#format}) into a new U::String, much like
  * snprintf(3) in C.
  *
- * The contents of a U::String can be {#dump}ed and {#inspect}ed to make it
+ * The content of a U::String can be {#dump}ed and {#inspect}ed to make it
  * reader-friendly, but also debugger-friendly.
  *
  * Finally, a U::String has a few methods to turn its content into other
