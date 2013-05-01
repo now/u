@@ -11,8 +11,6 @@
 #include "data/decompose.h"
 #include "data/compose.h"
 
-#include "canonical_combining_class.h"
-
 static inline size_t
 u_char_to_u_char(uint32_t c, uint32_t *result)
 {
@@ -111,7 +109,7 @@ canonical_ordering_swap(uint32_t *string, size_t offset,
         size_t initial = offset + 1;
         size_t j = initial;
 
-        while (j > 0 && s_canonical_combining_class(string[j - 1]) > next) {
+        while (j > 0 && u_char_canonical_combining_class(string[j - 1]) > next) {
                 uint32_t c = string[j];
                 string[j] = string[j - 1];
                 string[j - 1] = c;
@@ -125,9 +123,9 @@ static inline bool
 canonical_ordering_reorder(uint32_t *string, size_t n)
 {
         bool swapped = false;
-        enum u_canonical_combining_class prev = s_canonical_combining_class(string[0]);
+        enum u_canonical_combining_class prev = u_char_canonical_combining_class(string[0]);
         for (size_t i = 0; i < n - 1; i++) {
-                enum u_canonical_combining_class next = s_canonical_combining_class(string[i + 1]);
+                enum u_canonical_combining_class next = u_char_canonical_combining_class(string[i + 1]);
 
                 if (next != 0 && prev > next) {
                         if (canonical_ordering_swap(string, i, next))
@@ -237,7 +235,7 @@ compose_loop(uint32_t *string, size_t n)
         size_t s = 0;
         size_t t = 1;
         for (size_t i = 1; i < n; i++) {
-                int cc = s_canonical_combining_class(string[i]);
+                int cc = u_char_canonical_combining_class(string[i]);
                 if (pcc < cc && combine(string[s], string[i], &string[s]))
                         continue;
                 else if (cc == 0) {

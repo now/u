@@ -21,8 +21,6 @@ module U
            %w[attributes.c
               attributes.h
               case.h
-              canonical_combining_class.c
-              canonical_combining_class.h
               general-category.c
               general-category.h
               grapheme-break.c
