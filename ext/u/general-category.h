@@ -24,25 +24,3 @@ s_general_category(uint32_t c)
 
         return _u_general_category_data[index][c & 0xff];
 }
-
-
-static inline bool
-s_isdigit(int category)
-{
-        return IS(category,
-                  OR(U_GENERAL_CATEGORY_NUMBER_DECIMAL,
-                     OR(U_GENERAL_CATEGORY_NUMBER_LETTER,
-                        OR(U_GENERAL_CATEGORY_NUMBER_OTHER, 0))));
-}
-
-
-static inline bool
-s_isalpha(int category)
-{
-        return IS(category,
-                  OR(U_GENERAL_CATEGORY_LETTER_LOWERCASE,
-                     OR(U_GENERAL_CATEGORY_LETTER_UPPERCASE,
-                        OR(U_GENERAL_CATEGORY_LETTER_TITLECASE,
-                           OR(U_GENERAL_CATEGORY_LETTER_MODIFIER,
-                              OR(U_GENERAL_CATEGORY_LETTER_OTHER, 0))))));
-}
