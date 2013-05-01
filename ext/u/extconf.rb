@@ -13,7 +13,9 @@ have_header 'stdio.h'
 have_header 'stdlib.h'
 have_header 'string.h'
 have_header 'sys/types.h'
-have_header 'wchar.h'
+have_header 'locale.h'
+$wchar_h = have_header('wchar.h')
+$xlocale_h = have_header('xlocale.h')
 
 checking_for 'broken RMATCH_REGS' do
   $defs.push '-DHAVE_BROKEN_RMATCH_REGS' unless try_compile <<EOC
@@ -33,6 +35,14 @@ main(void)
 }
 EOC
 end
+
+$defs.push '-D__USE_XOPEN2K8'
+
+headers = []
+headers << 'wchar.h' if $wchar_h
+headers << 'xlocale.h' if $xlocale_h
+have_func 'wcscoll_l', headers
+have_func 'wcsxfrm_l', headers
 
 have_func 'rb_long2int', 'ruby.h'
 have_func 'rb_hash_lookup2', 'ruby.h'

@@ -12,6 +12,7 @@ mkmf.log
 /.yardopts.html
 /build/data/
 /doc/
+/ext/u/.RUBYARCHDIR.time
 /ext/u/Makefile
 /ext/u/extconf.rb.options
 /ext/u/u.bundle.dSYM/

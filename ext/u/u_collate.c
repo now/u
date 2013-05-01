@@ -4,8 +4,20 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include "extconf.h"
 #include <wchar.h>
-#include <xlocale.h>
+#include <locale.h>
+#ifdef HAVE_XLOCALE_H
+#  include <xlocale.h>
+#endif
+#ifndef HAVE_WCSCOLL_L
+static inline size_t
+wcscoll_l(wchar_t *restrict ws1, wchar_t *restrict ws2, size_t n,
+          UNUSED(locale_t loc))
+{
+        wcsxfrm(ws1, ws2, n);
+}
+#endif
 
 #include "u.h"
 #include "utf8.h"
