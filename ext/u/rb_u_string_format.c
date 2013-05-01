@@ -74,7 +74,7 @@ rb_long2int(long l)
 #endif
 
 #ifndef RARRAY_LENINT
-#  define RARRAY_LENINT(ary) rb_long2int(RARRAY_LEN(ary)
+#  define RARRAY_LENINT(ary) rb_long2int(RARRAY_LEN(ary))
 #endif
 
 #ifndef HAVE_RB_HASH_LOOKUP2
