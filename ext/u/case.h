@@ -29,7 +29,7 @@ is_after(const char *string, const char *p, bool predicate(uint32_t))
                 uint32_t c = u_dref(q);
                 if (predicate(c))
                         return true;
-                switch (u_char_combining_class(u_dref(p))) {
+                switch (u_char_canonical_combining_class(u_dref(p))) {
                 case U_CANONICAL_COMBINING_CLASS_ABOVE:
                 case U_CANONICAL_COMBINING_CLASS_NOT_REORDERED:
                         return false;

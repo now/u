@@ -233,8 +233,8 @@ Expectations do
   expect result.tainted? do ''.u.taint.collation_key end
   expect result.untrusted? do ''.u.untrust.collation_key end
 
-  expect 0 do 'a'.u.combining_class end
-  expect 230 do [0x0307].pack('U').u.combining_class end
+  expect 0 do 'a'.u.canonical_combining_class end
+  expect 230 do [0x0307].pack('U').u.canonical_combining_class end
 
   expect :letter_uppercase do 'A'.u.general_category end
   expect :punctuation_other do '.'.u.general_category end

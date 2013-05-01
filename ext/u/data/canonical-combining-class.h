@@ -2,7 +2,7 @@
 
 
 
-static const uint8_t combining_class_data[][256] = {
+static const uint8_t canonical_combining_class_data[][256] = {
 	{ /* page 3, index 0 */
 		230, 230, 230, 230, 230, 230, 230, 230, 230, 230, 230, 230,
 		230, 230, 230, 230, 230, 230, 230, 230, 230, 232, 220, 220,
@@ -617,7 +617,7 @@ static const uint8_t combining_class_data[][256] = {
 
 
 /* U+0000 through U+2FAFF */
-static const int16_t combining_class_table_part1[UNICODE_LAST_PAGE_PART1 + 1] = {
+static const int16_t canonical_combining_class_table_part1[UNICODE_LAST_PAGE_PART1 + 1] = {
 	0 + UNICODE_MAX_TABLE_INDEX,
 	0 + UNICODE_MAX_TABLE_INDEX,
 	0 + UNICODE_MAX_TABLE_INDEX,
@@ -1385,7 +1385,7 @@ static const int16_t combining_class_table_part1[UNICODE_LAST_PAGE_PART1 + 1] = 
 
 
 /* U+E0000 through U+10FFFF */
-static const int16_t combining_class_table_part2[UNICODE_LAST_PAGE_PART2 + 1] = {
+static const int16_t canonical_combining_class_table_part2[UNICODE_LAST_PAGE_PART2 + 1] = {
 	0 + UNICODE_MAX_TABLE_INDEX,
 	0 + UNICODE_MAX_TABLE_INDEX,
 	0 + UNICODE_MAX_TABLE_INDEX,

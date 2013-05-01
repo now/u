@@ -22,9 +22,6 @@
 #define COMBINING_GREEK_YPOGEGRAMMENI ((uint32_t)0x0345)
 #define GREEK_CAPITAL_LETTER_IOTA ((uint32_t)0x0399)
 
-#define CANONICAL_COMBINING_CLASS_ABOVE 230
-#define CANONICAL_COMBINING_CLASS_NOT_REORDERED 0
-
 
 static inline const char *
 output_marks(const char *p, const char *end, bool use_end, struct output *output)

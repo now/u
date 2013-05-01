@@ -20,8 +20,8 @@ module U
            %w[attributes.c
               attributes.h
               case.h
-              combining_class.c
-              combining_class.h
+              canonical_combining_class.c
+              canonical_combining_class.h
               general-category.c
               general-category.h
               grapheme-break.c
@@ -56,7 +56,7 @@ module U
               rb_u_string_cntrl.c
               rb_u_string_collate.c
               rb_u_string_collation_key.c
-              rb_u_string_combining_class.c
+              rb_u_string_canonical_combining_class.c
               rb_u_string_count.c
               rb_u_string_defined.c
               rb_u_string_delete.c
@@ -141,7 +141,7 @@ module U
               u.h
               u_append.c
               u_char_downcase.c
-              u_char_combining_class.c
+              u_char_canonical_combining_class.c
               u_char_digit_value.c
               u_char_general_category.c
               u_char_grapheme_break.c
@@ -213,7 +213,7 @@ module U
               build/ext/u/data/break.rb
               build/ext/u/data/case-folding.rb
               build/ext/u/data/cased.rb
-              build/ext/u/data/combining-class.rb
+              build/ext/u/data/canonical-combining-class.rb
               build/ext/u/data/compose.rb
               build/ext/u/data/constants.rb
               build/ext/u/data/decompose.rb
@@ -255,7 +255,7 @@ module U
               ext/u/data/bidi-mirroring.h
               ext/u/data/case-folding.h
               ext/u/data/cased.h
-              ext/u/data/combining-class.h
+              ext/u/data/canonical-combining-class.h
               ext/u/data/compose.h
               ext/u/data/constants.h
               ext/u/data/decompose.h

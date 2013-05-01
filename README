@@ -103,14 +103,14 @@
       You can also access certain Unicode properties of the characters of a
       U::String:
 
-    •   #combining_class¹
+    •   #canonical_combining_class¹
     •   #general_category²
     •   #grapheme_break³
     •   #line_break⁴
     •   #script⁵
     •   #word_break⁶
 
-    ¹  See http://disu.se/software/u/api/U/String/#combining_class-instance-method
+    ¹  See http://disu.se/software/u/api/U/String/#canonical_combining_class-instance-method
     ²  See http://disu.se/software/u/api/U/String/#general_category-instance-method
     ³  See http://disu.se/software/u/api/U/String/#grapheme_break-instance-method
     ⁴  See http://disu.se/software/u/api/U/String/#line_break-instance-method

@@ -62,11 +62,13 @@ static inline bool
 has_more_above(const char *string, const char *end, bool use_end)
 {
 	for (const char *p = u_next(string); P_WITHIN_STR(p, end, use_end); p = u_next(p)) {
-		switch (u_char_combining_class(u_dref(p))) {
+		switch (u_char_canonical_combining_class(u_dref(p))) {
                 case U_CANONICAL_COMBINING_CLASS_ABOVE:
 			return true;
                 case U_CANONICAL_COMBINING_CLASS_NOT_REORDERED:
 			return false;
+                default:
+                        break;
                 }
 	}
 	return false;
@@ -114,10 +116,12 @@ is_before_dot(const char *p, const char *end, bool use_end)
                 uint32_t c = u_dref(q);
                 if (c == COMBINING_DOT_ABOVE)
                         return true;
-                switch (u_char_combining_class(u_dref(p))) {
+                switch (u_char_canonical_combining_class(u_dref(p))) {
                 case U_CANONICAL_COMBINING_CLASS_ABOVE:
                 case U_CANONICAL_COMBINING_CLASS_NOT_REORDERED:
                         return false;
+                default:
+                        break;
                 }
 	}
         return false;
