@@ -10,12 +10,10 @@
 #include "data/constants.h"
 #include "data/cased.h"
 
-#include "general-category.h"
-
 bool
 u_char_iscased(uint32_t c)
 {
-        return IS(s_general_category(c),
+        return IS(u_char_general_category(c),
                   OR(U_GENERAL_CATEGORY_LETTER_TITLECASE,
                      OR(U_GENERAL_CATEGORY_LETTER_UPPERCASE,
                         OR(U_GENERAL_CATEGORY_LETTER_LOWERCASE, 0)))) ||

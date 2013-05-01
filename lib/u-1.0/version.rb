@@ -21,8 +21,6 @@ module U
            %w[attributes.c
               attributes.h
               case.h
-              general-category.c
-              general-category.h
               grapheme-break.c
               grapheme-break.h
               output.h

@@ -1,3 +1,6 @@
+#define IS(category, class) (((unsigned int)1 << (category)) & (class))
+#define OR(class, rest) (((unsigned int)1 << (class)) | (rest))
+
 #define P_WITHIN_STR(p, end, use_end) \
         ((use_end) ? (p) < (end) : *(p) != '\0')
 

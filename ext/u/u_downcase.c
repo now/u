@@ -10,7 +10,6 @@
 
 #include "data/constants.h"
 #include "attributes.h"
-#include "general-category.h"
 #include "titled.h"
 #include "output.h"
 #include "u_locale.h"
@@ -175,7 +174,7 @@ _u_downcase_step(const char *string, const char *p, const char *end, bool use_en
         else if (locale == LOCALE_TURKIC &&
                  downcase_turkic(c, string, p, end, use_end, output))
                 ;
-        else if (IS(gc = s_general_category(c),
+        else if (IS(gc = u_char_general_category(c),
                     OR(U_GENERAL_CATEGORY_LETTER_UPPERCASE,
                        OR(U_GENERAL_CATEGORY_LETTER_TITLECASE, 0))))
                 case_simple(c, gc, false, false, output);

@@ -5,9 +5,6 @@
 #include "u.h"
 #include "private.h"
 
-#include "data/constants.h"
-#include "general-category.h"
-
 
 /* {{{1
  * Determine whether ‘c’ is printable, which works the same as
@@ -16,7 +13,7 @@
 bool
 u_char_isprint(uint32_t c)
 {
-        return !IS(s_general_category(c),
+        return !IS(u_char_general_category(c),
                    OR(U_GENERAL_CATEGORY_OTHER_CONTROL,
                       OR(U_GENERAL_CATEGORY_OTHER_FORMAT,
                          OR(U_GENERAL_CATEGORY_OTHER_NOT_ASSIGNED,

@@ -10,7 +10,6 @@
 
 #include "data/constants.h"
 #include "attributes.h"
-#include "general-category.h"
 #include "titled.h"
 #include "output.h"
 #include "u_locale.h"
@@ -38,7 +37,7 @@ output_marks(const char *p, const char *end, bool use_end, struct output *output
         const char *q = u_next(p);
         while (P_WITHIN_STR(q, end, use_end)) {
 		uint32_t c = u_dref(q);
-                if (!ismark(s_general_category(c)))
+                if (!ismark(u_char_general_category(c)))
                         break;
                 output_char(output, c);
                 q = u_next(q);
@@ -61,7 +60,7 @@ _u_upcase_step(const char *string, const char **p, const char *end, bool use_end
                 ;
         else if (locale == LOCALE_TURKIC && c == LATIN_SMALL_LETTER_I)
                 output_char(output, LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE);
-        else if (IS(gc = s_general_category(c),
+        else if (IS(gc = u_char_general_category(c),
                     OR(U_GENERAL_CATEGORY_LETTER_LOWERCASE,
                        OR(U_GENERAL_CATEGORY_LETTER_TITLECASE, 0))))
                 case_simple(c, gc,
