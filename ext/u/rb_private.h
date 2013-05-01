@@ -44,6 +44,14 @@ int rb_memhash(const char *string, long length);
         RETURN_ENUMERATOR(self, argc, argv)
 #endif
 
+#ifndef OBJ_UNTRUSTED
+#  define OBJ_UNTRUSTED(o) (false)
+#endif
+
+#ifndef OBJ_UNTRUST
+#  define OBJ_UNTRUST(o)
+#endif
+
 long rb_u_memsearch(const void *a, long a_n, const void *b, long b_n);
 
 NORETURN(void rb_u_raise(VALUE exception, const char *format, ...)) PRINTF(2, 3);
