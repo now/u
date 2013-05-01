@@ -39,12 +39,9 @@ format_message(const char *format, va_list args)
 #  ifdef HAVE_RB_VSPRINTF
         return rb_vsprintf(format, args);
 #  else
-        int n = vsnprintf(NULL, 0, format, args);
-        char *buf = ALLOC_N(char, n + 1);
-        vsnprintf(buf, n + 1, format, args);
-        VALUE message = rb_str_new(buf, n);
-        free(buf);
-        return message;
+        char buf[1024];
+        int n = vsnprintf(buf, sizeof(buf), format, args);
+        return rb_str_new(buf, n);
 #  endif
 #endif
 }
