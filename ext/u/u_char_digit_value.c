@@ -15,7 +15,7 @@ int
 u_char_digit_value(uint32_t c)
 {
 	if (u_char_general_category(c) == U_GENERAL_CATEGORY_NUMBER_DECIMAL)
-		return s_attribute(c);
+		return _u_attribute(c);
 
         return -1;
 }

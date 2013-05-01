@@ -9,7 +9,7 @@ void _u_upcase_step(const char *string, const char **p,
 static inline void
 case_simple(uint32_t c, enum u_general_category category, bool title, bool upper, struct output *output)
 {
-	uint32_t v = s_attribute(c);
+	uint32_t v = _u_attribute(c);
         uint32_t u;
 	if (v >= UNICODE_SPECIAL_CASE_TABLE_START)
                 output_zstring(output, _u_special_case(v, category, title));

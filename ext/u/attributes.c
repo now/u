@@ -11,10 +11,23 @@
 
 #include "attributes.h"
 
-const uint32_t (*_u_attr_data)[256] = attr_data;
-const int16_t *_u_attr_table_part1 = attr_table_part1;
-const int16_t *_u_attr_table_part2 = attr_table_part2;
-const char *_u_special_case_table = special_case_table;
+
+/* This function may only be called if C has been verified to be of a
+ * UnicodeType that supports attributes, as it doesn’t perform bounds checking
+ * on C. */
+uint32_t
+_u_attribute(uint32_t c)
+{
+        uint32_t page = c >> 8;
+        uint32_t index = page <= UNICODE_LAST_PAGE_PART1 ?
+                attr_table_part1[page] :
+                attr_table_part2[(c - UNICODE_FIRST_CHAR_PART2) >> 8];
+
+        if (index == UNICODE_MAX_TABLE_INDEX)
+                return 0;
+
+        return attr_data[index][c & 0xff];
+}
 
 /* {{{1
  * Convert ‘c’ to its uppercase representation (if any).
@@ -22,10 +35,10 @@ const char *_u_special_case_table = special_case_table;
 uint32_t
 _u_special_case_table_lookup(uint32_t c)
 {
-        uint32_t tv = s_attribute(c);
+        uint32_t tv = _u_attribute(c);
 
         if (tv >= UNICODE_SPECIAL_CASE_TABLE_START)
-                tv = u_dref(_u_special_case_table +
+                tv = u_dref(special_case_table +
                             tv - UNICODE_SPECIAL_CASE_TABLE_START);
 
         if (tv == '\0')
@@ -41,7 +54,7 @@ _u_special_case_table_lookup(uint32_t c)
 const char *
 _u_special_case(uint32_t v, enum u_general_category category, bool upper)
 {
-	const char *p = _u_special_case_table + v - UNICODE_SPECIAL_CASE_TABLE_START;
+	const char *p = special_case_table + v - UNICODE_SPECIAL_CASE_TABLE_START;
 	if (category != U_GENERAL_CATEGORY_LETTER_TITLECASE)
 		p = u_next(p);
         return upper ? p + u_n_bytes(p) + 1 : p;
