@@ -30,29 +30,32 @@ rb_u_memsearch(const void *a, long a_n, const void *b, long b_n)
 #endif
 }
 
+static VALUE
+format_message(const char *format, va_list args)
+{
+#ifdef HAVE_RUBY_ENCODING_H
+        return rb_enc_vsprintf(rb_utf8_encoding(), format, args);
+#else
+#  ifdef HAVE_RB_VSPRINTF
+        return rb_vsprintf(format, args);
+#  else
+        int n = vsnprintf(NULL, 0, format, args);
+        char *buf = ALLOC_N(char, n + 1);
+        vsnprintf(buf, n + 1, format, args);
+        VALUE message = rb_str_new(buf, n);
+        free(buf);
+        return message;
+#  endif
+#endif
+}
+
 void
 rb_u_raise(VALUE exception, const char *format, ...)
 {
         va_list args;
-        VALUE message;
-
         va_start(args, format);
-#ifdef HAVE_RUBY_ENCODING_H
-        message = rb_enc_vsprintf(rb_utf8_encoding(), format, args);
-#else
-#  ifdef HAVE_RB_VSPRINTF
-        message = rb_vsprintf(format, args);
-#  else
-        char *buf;
-        int n = vsnprintf(buf, 0, format, args);
-        buf = ALLOC_N(char, n + 1);
-        vsnprintf(buf, n + 1, format, args);
-        message = rb_str_new(buf, n);
-        free(buf);
-#  endif
-#endif
+        VALUE message = format_message(format, args);
         va_end(args);
-
         rb_exc_raise(rb_exc_new3(exception, message));
 }
 
@@ -60,23 +63,8 @@ void
 rb_u_raise_errno(VALUE exception, int number, const char *format, ...)
 {
         va_list args;
-        VALUE message;
-
         va_start(args, format);
-#ifdef HAVE_RUBY_ENCODING_H
-        message = rb_enc_vsprintf(rb_utf8_encoding(), format, args);
-#else
-#  ifdef HAVE_RB_VSPRINTF
-        message = rb_vsprintf(format, args);
-#  else
-        char *buf;
-        int n = vsnprintf(buf, 0, format, args);
-        buf = ALLOC_N(char, n + 1);
-        vsnprintf(buf, n + 1, format, args);
-        message = rb_str_new(buf, n);
-        free(buf);
-#  endif
-#endif
+        VALUE message = format_message(format, args);
         va_end(args);
 
         VALUE error = rb_str_new2(strerror(number));
