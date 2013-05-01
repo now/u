@@ -57,7 +57,16 @@ rb_u_raise_errno(VALUE exception, int number, const char *format, ...)
 #ifdef HAVE_RUBY_ENCODING_H
         message = rb_enc_vsprintf(rb_utf8_encoding(), format, args);
 #else
+#  ifdef HAVE_RB_VSPRINTF
         message = rb_vsprintf(format, args);
+#  else
+        char *buf;
+        int n = vsnprintf(buf, 0, format, args);
+        buf = ALLOC_N(char, n + 1);
+        vsnprintf(buf, n + 1, format, args);
+        message = rb_str_new(buf, n);
+        free(buf);
+#  endif
 #endif
         va_end(args);
 

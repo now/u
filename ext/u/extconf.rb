@@ -65,6 +65,7 @@ main(void)
 }
 EOC
 end
+have_func 'rb_vsprintf', 'ruby.h'
 
 have_var 'rb_eKeyError', 'ruby.h'
 
