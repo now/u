@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 untrust = Object.respond_to?(:untrust)
-word_regex = /\w/u =~ 'ä' ? /\w+/u : /[[:word:]]+/u
+word_regex = /\w/u =~ 'ä' ? /\w+/u : Regexp.new('[[:word:]]+')
 
 Expectations do
   expect ''.u do U::String.new end
