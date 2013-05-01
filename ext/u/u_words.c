@@ -5,9 +5,6 @@
 #include "u.h"
 #include "private.h"
 
-#include "data/constants.h"
-#include "word-break.h"
-
 
 #define ROW(other, cr, lf, newline, aletter, numeric, katakana, extendnumlet, \
             regional_indicator, midletter, midnumlet, midnum, format, extend) \
@@ -53,7 +50,7 @@ u_words(const char *string, size_t n, u_substring_fn fn, void *closure)
         const char *s = NULL;
         uint8_t state = 2;
         while (q < end) {
-                state = wb_dfa[state & 0xf][s_word_break(u_dref(q))];
+                state = wb_dfa[state & 0xf][u_char_word_break(u_dref(q))];
                 switch (state >> 4) {
                 case 1:
                         break;

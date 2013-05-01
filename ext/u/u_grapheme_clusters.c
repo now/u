@@ -5,8 +5,6 @@
 #include "u.h"
 #include "private.h"
 
-#include "data/constants.h"
-
 
 #define ROW(other, cr, lf, control, l, v, lv, lvt, t, regional_indicator, \
             prepend, extend, spacingmark) \

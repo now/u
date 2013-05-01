@@ -197,8 +197,6 @@ module U
               u_width.c
               u_words.c
               utf8.h
-              word-break.c
-              word-break.h
               yield.h]
          end
 
