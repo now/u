@@ -686,7 +686,7 @@ directive_signed_number(uint32_t directive, int flags, int precision, VALUE argu
                 directive_number_bignum_signed(directive, flags, bignum, base, sign, digits, str);
 }
 
-static const char *
+static U_PURE const char *
 directive_number_skip_bits(const char *digits, int base)
 {
         const char *p = digits;
