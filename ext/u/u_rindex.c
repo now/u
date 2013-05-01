@@ -11,7 +11,7 @@
  * Retrieve the index/offset of the right-most occurence of NEEDLE in
  * HAYSTACK, or -1 if it doesn’t exist.
  */
-static size_t
+static U_PURE size_t
 str_rindex(const char *haystack, const char *needle)
 {
 	assert(haystack != NULL);
@@ -46,7 +46,7 @@ str_rindex(const char *haystack, const char *needle)
  * Retrieve the index/offset of the right-most occurence of NEEDLE in
  * HAYSTACK, or -1 if it doesn’t exist.
  */
-static size_t
+static U_PURE size_t
 str_rindex_n(const char *haystack, const char *needle, size_t haystack_n)
 {
 	assert(haystack != NULL);

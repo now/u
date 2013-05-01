@@ -10,7 +10,7 @@
  * Retrieve the offset/index of ‘needle’ in ‘haystack’ which is of size
  * ‘haystack_len’.
  */
-static size_t
+static U_PURE size_t
 str_index_n(const char *haystack, const char *needle, size_t haystack_n)
 {
 	assert(haystack != NULL);
