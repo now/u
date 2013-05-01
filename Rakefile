@@ -95,7 +95,7 @@ def generate_data_header(task, *arguments)
   end
 end
 
-desc 'Generate Unicode data files'
+desc 'Generate Unicode data files and tests'
 task :data
 
 def data_header(headers, &block)
@@ -177,7 +177,7 @@ data_header 'ext/u/data/grapheme-break.h' => %w[build/ext/u/data/grapheme-word-b
   generate_data_header t, 'grapheme'
 end
 
-task :test => %w[test/unit/case.rb
+task :data => %w[test/unit/case.rb
                  test/unit/foldcase.rb
                  test/unit/graphemebreak.rb
                  test/unit/wordbreak.rb]
