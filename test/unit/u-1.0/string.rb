@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+untrust = Object.respond_to?(:untrust)
+word_regex = /\w/ =~ 'ä' ? /\w+/u : /[[:word:]]+/u
+
 Expectations do
   expect ''.u do U::String.new end
   expect ''.u do U::String.new(nil) end
@@ -10,12 +13,12 @@ Expectations do
     expect Encoding::UndefinedConversionError do U::String.new('äbc'.encode(Encoding::ASCII_8BIT)) end
   end
   expect result.tainted? do 'u'.taint.u end
-  expect result.untrusted? do 'u'.untrust.u end
+  expect result.untrusted? do 'u'.untrust.u end if untrust
 
   expect ''.u do ''.u.dup end
   expect false do a = ''.u; a.dup.object_id == a.object_id end
   expect result.tainted? do 'u'.u.taint.dup end
-  expect result.untrusted? do 'u'.u.untrust.dup end
+  expect result.untrusted? do 'u'.u.untrust.dup end if untrust
 
   expect true do 'äbc'.u.valid_encoding? end
   expect true do "äbc\0def".u.valid_encoding? end
@@ -158,13 +161,13 @@ Expectations do
   expect 'a' do 'abc'.u.match('a')[0] end
   expect nil do 'abc'.u.match('d') end
   expect result.tainted? do 'abc'.u.taint.match(/a/) end
-  expect result.untrusted? do 'abc'.u.untrust.match(/a/) end
+  expect result.untrusted? do 'abc'.u.untrust.match(/a/) end if untrust
   expect result.tainted? do 'abc'.u.taint.match('a') end
-  expect result.untrusted? do 'abc'.u.untrust.match('a') end
+  expect result.untrusted? do 'abc'.u.untrust.match('a') end if untrust
   expect result.tainted? do 'abc'.u.match(/a/.taint) end
-  expect result.untrusted? do 'abc'.u.match(/a/.untrust) end
+  expect result.untrusted? do 'abc'.u.match(/a/.untrust) end if untrust
   expect result.tainted? do 'abc'.u.match('a'.taint) end
-  expect result.untrusted? do 'abc'.u.match('a'.untrust) end
+  expect result.untrusted? do 'abc'.u.match('a'.untrust) end if untrust
 
   expect result.to.be.empty? do ''.u end
   expect result.not.to.be.empty? do 'not'.u end
@@ -231,7 +234,7 @@ Expectations do
   expect 'äbcdëf'.u do 'äbcdëf'.u.collation_key end
   expect 'äbcdëf'.u do "äbc\0dëf".u.collation_key end
   expect result.tainted? do ''.u.taint.collation_key end
-  expect result.untrusted? do ''.u.untrust.collation_key end
+  expect result.untrusted? do ''.u.untrust.collation_key end if untrust
 
   expect 0 do 'a'.u.canonical_combining_class end
   expect 230 do [0x0307].pack('U').u.canonical_combining_class end
@@ -384,11 +387,11 @@ Expectations do
   expect ['h'.u, 'ë'.u, 'l'.u, 'l'.u, 'ö'.u] do 'hëllö'.u.each_char.to_a end
   expect 5 do 'hëllö'.u.each_char.size end if ''.u.each_byte.respond_to? :size
   expect result.tainted? do 'a'.u.taint.each_char.first end
-  expect result.untrusted? do 'a'.u.untrust.each_char.first end
+  expect result.untrusted? do 'a'.u.untrust.each_char.first end if untrust
 
   expect ['h'.u, 'ë'.u, 'l'.u, 'l'.u, 'ö'.u] do 'hëllö'.u.chars end
   expect result.tainted? do 'a'.u.taint.chars.first end
-  expect result.untrusted? do 'a'.u.untrust.chars.first end
+  expect result.untrusted? do 'a'.u.untrust.chars.first end if untrust
 
   expect [0x0068, 0x00eb, 0x006c, 0x006c, 0x00f6] do 'hëllö'.u.each_codepoint.to_a end
   expect 5 do 'hëllö'.u.each_codepoint.size end if ''.u.each_byte.respond_to? :size
@@ -404,7 +407,7 @@ Expectations do
   expect ['hëll hëllö'.u, ' world'.u] do 'hëll hëllö world'.u.each_line('llö').to_a end
   expect ["hello\0".u, 'world'.u] do "hello\0world".u.each_line("\0").to_a end
   expect result.tainted? do 'a'.u.taint.each_line.first end
-  expect result.untrusted? do 'a'.u.untrust.each_line.first end
+  expect result.untrusted? do 'a'.u.untrust.each_line.first end if untrust
 
   expect ["hello\n".u, 'world'.u] do with_global(:$/, "\n"){ "hello\nworld".u.lines } end
   expect ["hello\n\n\n".u, 'world'.u] do "hello\n\n\nworld".u.lines('') end
@@ -413,7 +416,7 @@ Expectations do
   expect ['hëll hëllö'.u, ' world'.u] do 'hëll hëllö world'.u.lines('llö') end
   expect ["hello\0".u, 'world'.u] do "hello\0world".u.lines("\0") end
   expect result.tainted? do 'a'.u.taint.lines.first end
-  expect result.untrusted? do 'a'.u.untrust.lines.first end
+  expect result.untrusted? do 'a'.u.untrust.lines.first end if untrust
 
   expect ['hello'.u, ' '.u, 'world'.u] do 'hello world'.u.words.to_a end
 
@@ -462,25 +465,25 @@ Expectations do
   expect ArgumentError do 'hëllö'.u[1, 2, 3] end
   expect ArgumentError do 'hëllö'.u[] end
   expect result.tainted? do 'a'.u.taint[0] end
-  expect result.untrusted? do 'a'.u.untrust[0] end
+  expect result.untrusted? do 'a'.u.untrust[0] end if untrust
   expect result.tainted? do 'a'.u.taint[0, 1] end
-  expect result.untrusted? do 'a'.u.untrust[0, 1] end
+  expect result.untrusted? do 'a'.u.untrust[0, 1] end if untrust
   expect result.tainted? do 'a'.u.taint[0...1] end
-  expect result.untrusted? do 'a'.u.untrust[0...1] end
+  expect result.untrusted? do 'a'.u.untrust[0...1] end if untrust
   expect result.tainted? do 'a'.u.taint[/a/] end
-  expect result.untrusted? do 'a'.u.untrust[/a/] end
+  expect result.untrusted? do 'a'.u.untrust[/a/] end if untrust
   expect result.tainted? do 'a'.u[/a/.taint] end
-  expect result.untrusted? do 'a'.u[/a/.untrust] end
+  expect result.untrusted? do 'a'.u[/a/.untrust] end if untrust
   expect result.tainted? do 'a'.u[/(a)/.taint, 1] end
-  expect result.untrusted? do 'a'.u[/(a)/.untrust, 1] end
+  expect result.untrusted? do 'a'.u[/(a)/.untrust, 1] end if untrust
   expect result.not.tainted? do 'a'.u.taint['a'.u] end
-  expect result.not.untrusted? do 'a'.u.untrust['a'.u] end
+  expect result.not.untrusted? do 'a'.u.untrust['a'.u] end if untrust
   expect result.not.tainted? do 'a'.u.taint['a'] end
-  expect result.not.untrusted? do 'a'.u.untrust['a'] end
+  expect result.not.untrusted? do 'a'.u.untrust['a'] end if untrust
   expect result.tainted? do 'a'.u['a'.u.taint] end
-  expect result.untrusted? do 'a'.u['a'.u.untrust] end
+  expect result.untrusted? do 'a'.u['a'.u.untrust] end if untrust
   expect result.tainted? do 'a'.u['a'.taint] end
-  expect result.untrusted? do 'a'.u['a'.untrust] end
+  expect result.untrusted? do 'a'.u['a'.untrust] end if untrust
 
   expect nil do ''.u.byteslice(0, -2) end
   expect nil do ''.u.byteslice(0, -1) end
@@ -512,11 +515,11 @@ Expectations do
   expect ArgumentError do 'hëllö'.u.byteslice(1, 2, 3) end
   expect ArgumentError do 'hëllö'.u.byteslice() end
   expect result.tainted? do 'a'.u.taint.byteslice(0) end
-  expect result.untrusted? do 'a'.u.untrust.byteslice(0) end
+  expect result.untrusted? do 'a'.u.untrust.byteslice(0) end if untrust
   expect result.tainted? do 'a'.u.taint.byteslice(0, 1) end
-  expect result.untrusted? do 'a'.u.untrust.byteslice(0, 1) end
+  expect result.untrusted? do 'a'.u.untrust.byteslice(0, 1) end if untrust
   expect result.tainted? do 'a'.u.taint.byteslice(0...1) end
-  expect result.untrusted? do 'a'.u.untrust.byteslice(0...1) end
+  expect result.untrusted? do 'a'.u.untrust.byteslice(0...1) end if untrust
 
   expect 'hello'.u do 'hello'.u.chomp("\n") end
   expect 'hello'.u do "hello\n".u.chomp("\n") end
@@ -534,7 +537,7 @@ Expectations do
   expect 'hello'.u do "hello\r".u.chomp('') end
   expect 'a'.u do 'aā'.u.chomp('ā') end
   expect result.tainted? do 'hello'.u.taint.chomp end
-  expect result.untrusted? do 'hello'.u.untrust.chomp end
+  expect result.untrusted? do 'hello'.u.untrust.chomp end if untrust
 
   expect 'hell'.u do 'hellö'.u.chop end
   expect 'hellö'.u do "hellö\r\n".u.chop end
@@ -542,13 +545,13 @@ Expectations do
   expect ''.u do ''.u.chop end
   expect ''.u do "\r\n".u.chop end
   expect result.tainted? do 'hello'.u.taint.chop end
-  expect result.untrusted? do 'hello'.u.untrust.chop end
+  expect result.untrusted? do 'hello'.u.untrust.chop end if untrust
 
   expect ''.u do ''.u.chr end
   expect 'ä'.u do 'ä'.u.chr end
   expect 'ä'.u do 'äbc'.u.chr end
   expect result.tainted? do ''.u.taint.chr end
-  expect result.untrusted? do ''.u.untrust.chr end
+  expect result.untrusted? do ''.u.untrust.chr end if untrust
 
   expect 0x00c3 do 'äbc'.u.getbyte(0) end
   expect 0x00a4 do 'äbc'.u.getbyte(1) end
@@ -562,7 +565,7 @@ Expectations do
   expect 'あ'.u do '     あ'.u.lstrip end
   expect 'あ     '.u do 'あ     '.u.lstrip end
   expect result.tainted? do 'あ'.u.taint.lstrip end
-  expect result.untrusted? do 'あ'.u.untrust.lstrip end
+  expect result.untrusted? do 'あ'.u.untrust.lstrip end if untrust
 
   expect ArgumentError.new('string is empty') do ''.u.ord end
   expect 0x00e4 do 'ä'.u.ord end
@@ -573,7 +576,7 @@ Expectations do
   expect '     あ'.u do '     あ'.u.rstrip end
   expect 'あ'.u do 'あ     '.u.rstrip end
   expect result.tainted? do 'あ'.u.taint.rstrip end
-  expect result.untrusted? do 'あ'.u.untrust.rstrip end
+  expect result.untrusted? do 'あ'.u.untrust.rstrip end if untrust
 
   # TODO Add tests for Unicode whitespace characters
   expect 'あ'.u do 'あ'.u.strip end
@@ -581,7 +584,7 @@ Expectations do
   expect 'あ'.u do 'あ     '.u.strip end
   expect 'あ'.u do '     あ     '.u.strip end
   expect result.tainted? do 'あ'.u.taint.strip end
-  expect result.untrusted? do 'あ'.u.untrust.strip end
+  expect result.untrusted? do 'あ'.u.untrust.strip end if untrust
 
   expect 'hëllö'.u do 'hëlLÖ'.u.downcase end
   expect 'hëllö'.u do 'hëllö'.u.downcase end
@@ -609,11 +612,11 @@ Expectations do
   expect 'ı'.u do 'I'.u.downcase('tr') end
   expect 'ı'.u do 'I'.u.downcase('az') end
   expect result.tainted? do 'A'.u.taint.downcase end
-  expect result.untrusted? do 'A'.u.untrust.downcase end
+  expect result.untrusted? do 'A'.u.untrust.downcase end if untrust
 
   expect "abc\0ss".u do "abc\0ß".u.foldcase end
   expect result.tainted? do 'a'.u.taint.foldcase end
-  expect result.untrusted? do 'a'.u.untrust.foldcase end
+  expect result.untrusted? do 'a'.u.untrust.foldcase end if untrust
 
   expect 'Ab Iς Ssσ/Ffi'.u do 'aB iς ßσ/ﬃ'.u.titlecase end
   expect 'Ijssel Igloo Ijssel'.u do 'ijssEl iglOo IJSSEL'.u.titlecase end
@@ -630,25 +633,25 @@ Expectations do
   expect 'I'.u do 'i'.u.upcase end
   expect 'İ'.u do 'i'.u.upcase('tr') end
   expect result.tainted? do 'a'.u.taint.upcase end
-  expect result.untrusted? do 'a'.u.untrust.upcase end
+  expect result.untrusted? do 'a'.u.untrust.upcase end if untrust
 
   expect ''.u do ''.u.mirror end
   expect ')'.u do '('.u.mirror end
   expect ')('.u do '()'.u.mirror end
   expect result.tainted? do ''.u.taint.mirror end
-  expect result.untrusted? do ''.u.untrust.mirror end
+  expect result.untrusted? do ''.u.untrust.mirror end if untrust
 
   expect TypeError.new('not a symbol: 1') do ''.u.normalize(1) end
   expect ArgumentError.new('unknown normalization mode: :ufc') do ''.u.normalize(:ufc) end
   expect 'Ḋ'.u do "D\xcc\x87".u.normalize(:nfc) end
   expect result.tainted? do ''.u.taint.normalize end
-  expect result.untrusted? do ''.u.untrust.normalize end
+  expect result.untrusted? do ''.u.untrust.normalize end if untrust
 
   expect 'ateb'.u do 'beta'.u.reverse end
   expect 'madamImadam'.u do 'madamImadam'.u.reverse end
   expect "alpha\0beta".u do "ateb\0ahpla".u.reverse end
   expect result.tainted? do 'a'.u.taint.reverse end
-  expect result.untrusted? do 'a'.u.untrust.reverse end
+  expect result.untrusted? do 'a'.u.untrust.reverse end if untrust
 
   expect 'hëllö'.u do 'hëllö'.u.center(4) end
   expect '   hëllö   '.u do 'hëllö'.u.center(11) end
@@ -663,13 +666,13 @@ Expectations do
   # TODO Adjust this to LONG_MAX in Ruby
   # expect ArgumentError do ''.u.center(9223372036854775807) end
   expect result.tainted? do 'a'.u.taint.center(1) end
-  expect result.untrusted? do 'a'.u.untrust.center(1) end
+  expect result.untrusted? do 'a'.u.untrust.center(1) end if untrust
   expect result.tainted? do 'a'.u.taint.center(3) end
-  expect result.untrusted? do 'a'.u.untrust.center(3) end
+  expect result.untrusted? do 'a'.u.untrust.center(3) end if untrust
   expect result.not.tainted? do 'a'.u.center(1, ' '.taint) end
-  expect result.not.untrusted? do 'a'.u.center(1, ' '.untrust) end
+  expect result.not.untrusted? do 'a'.u.center(1, ' '.untrust) end if untrust
   expect result.tainted? do 'a'.u.taint.center(3, ' '.taint) end
-  expect result.untrusted? do 'a'.u.untrust.center(3, ' '.untrust) end
+  expect result.untrusted? do 'a'.u.untrust.center(3, ' '.untrust) end if untrust
 
   expect 'hëllö'.u do 'hëllö'.u.ljust(4) end
   expect 'hëllö      '.u do 'hëllö'.u.ljust(11) end
@@ -682,13 +685,13 @@ Expectations do
   expect '3あ あ '.u do '3'.u.ljust(7, 'あ ') end
   expect ArgumentError.new('padding is too wide to complete rounding (2 > 1)') do '3'.u.ljust(4, 'あ') end
   expect result.tainted? do 'a'.u.taint.ljust(1) end
-  expect result.untrusted? do 'a'.u.untrust.ljust(1) end
+  expect result.untrusted? do 'a'.u.untrust.ljust(1) end if untrust
   expect result.tainted? do 'a'.u.taint.ljust(3) end
-  expect result.untrusted? do 'a'.u.untrust.ljust(3) end
+  expect result.untrusted? do 'a'.u.untrust.ljust(3) end if untrust
   expect result.not.tainted? do 'a'.u.ljust(1, ' '.taint) end
-  expect result.not.untrusted? do 'a'.u.ljust(1, ' '.untrust) end
+  expect result.not.untrusted? do 'a'.u.ljust(1, ' '.untrust) end if untrust
   expect result.tainted? do 'a'.u.taint.ljust(3, ' '.taint) end
-  expect result.untrusted? do 'a'.u.untrust.ljust(3, ' '.untrust) end
+  expect result.untrusted? do 'a'.u.untrust.ljust(3, ' '.untrust) end if untrust
 
   expect 'hëllö'.u do 'hëllö'.u.rjust(4) end
   expect '      hëllö'.u do 'hëllö'.u.rjust(11) end
@@ -701,13 +704,13 @@ Expectations do
   expect 'あ あ 3'.u do '3'.u.rjust(7, 'あ ') end
   expect ArgumentError.new('padding is too wide to complete rounding (2 > 1)') do '3'.u.rjust(4, 'あ') end
   expect result.tainted? do 'a'.u.taint.rjust(1) end
-  expect result.untrusted? do 'a'.u.untrust.rjust(1) end
+  expect result.untrusted? do 'a'.u.untrust.rjust(1) end if untrust
   expect result.tainted? do 'a'.u.taint.rjust(3) end
-  expect result.untrusted? do 'a'.u.untrust.rjust(3) end
+  expect result.untrusted? do 'a'.u.untrust.rjust(3) end if untrust
   expect result.not.tainted? do 'a'.u.rjust(1, ' '.taint) end
-  expect result.not.untrusted? do 'a'.u.rjust(1, ' '.untrust) end
+  expect result.not.untrusted? do 'a'.u.rjust(1, ' '.untrust) end if untrust
   expect result.tainted? do 'a'.u.taint.rjust(3, ' '.taint) end
-  expect result.untrusted? do 'a'.u.untrust.rjust(3, ' '.untrust) end
+  expect result.untrusted? do 'a'.u.untrust.rjust(3, ' '.untrust) end if untrust
 
   expect 5 do 'hëllö wörld'.u.count('lö') end
   expect 3 do 'hëllö wörld'.u.count('l', 'lö') end
@@ -731,15 +734,15 @@ Expectations do
   expect 'あ'.u do 'abcあいう'.u.delete('^あ') end
   expect ArgumentError.new('wrong number of arguments (0 for at least 1)') do 'föö'.u.delete end
   expect result.tainted? do 'a'.u.taint.delete('a') end
-  expect result.untrusted? do 'a'.u.untrust.delete('a') end
+  expect result.untrusted? do 'a'.u.untrust.delete('a') end if untrust
 
   expect 'äbc'.u do 'äääbbbbccc'.u.squeeze end
   expect 'ää bb cc'.u do 'ää   bb   cc'.u.squeeze(' ') end
   expect 'BxTÿWz'.u do 'BxTÿÿÿWzzz'.u.squeeze('a-zä-ÿ') end
   expect result.tainted? do 'abc'.u.taint.squeeze end
-  expect result.untrusted? do 'abc'.u.untrust.squeeze end
+  expect result.untrusted? do 'abc'.u.untrust.squeeze end if untrust
   expect result.not.tainted? do 'abc'.u.squeeze('b'.taint) end
-  expect result.not.untrusted? do 'abc'.u.squeeze('b'.untrust) end
+  expect result.not.untrusted? do 'abc'.u.squeeze('b'.untrust) end if untrust
 
   expect 'hïppö' do 'hëllö'.u.tr('ël', 'ïp') end
   expect '*ë**ö' do 'hëllö'.u.tr('^aëiöu', '*') end
@@ -747,11 +750,11 @@ Expectations do
   expect 'hal' do 'hal'.u.tr('a-z', 'a-z') end
   expect true do a = 'hal'.u; a.tr('a-z', 'a-z').object_id == a.object_id end
   expect result.tainted? do 'abc'.u.taint.tr('a', 'b') end
-  expect result.untrusted? do 'abc'.u.untrust.tr('a', 'b') end
+  expect result.untrusted? do 'abc'.u.untrust.tr('a', 'b') end if untrust
   expect result.not.tainted? do 'abc'.u.tr('a'.taint, 'b') end
-  expect result.not.untrusted? do 'abc'.u.tr('a'.untrust, 'b') end
+  expect result.not.untrusted? do 'abc'.u.tr('a'.untrust, 'b') end if untrust
   expect result.not.tainted? do 'abc'.u.tr('a', 'b'.taint) end
-  expect result.not.untrusted? do 'abc'.u.tr('a', 'b'.untrust) end
+  expect result.not.untrusted? do 'abc'.u.tr('a', 'b'.untrust) end if untrust
 
   expect 'hïpö' do 'hëllö'.u.tr_s('ël', 'ïp') end
   expect '*ë*ö' do 'hëllö'.u.tr_s('^aëiöu', '*') end
@@ -759,11 +762,11 @@ Expectations do
   expect 'hal' do 'hal'.u.tr_s('a-z', 'a-z') end
   expect true do a = 'hal'.u; a.tr_s('a-z', 'a-z').object_id == a.object_id end
   expect result.tainted? do 'abc'.u.taint.tr_s('a', 'b') end
-  expect result.untrusted? do 'abc'.u.untrust.tr_s('a', 'b') end
+  expect result.untrusted? do 'abc'.u.untrust.tr_s('a', 'b') end if untrust
   expect result.not.tainted? do 'abc'.u.tr_s('a'.taint, 'b') end
-  expect result.not.untrusted? do 'abc'.u.tr_s('a'.untrust, 'b') end
+  expect result.not.untrusted? do 'abc'.u.tr_s('a'.untrust, 'b') end if untrust
   expect result.not.tainted? do 'abc'.u.tr_s('a', 'b'.taint) end
-  expect result.not.untrusted? do 'abc'.u.tr_s('a', 'b'.untrust) end
+  expect result.not.untrusted? do 'abc'.u.tr_s('a', 'b'.untrust) end if untrust
 
   expect ['hë'.u, 'l'.u, 'lö'.u] do 'hëllö'.u.partition(/l/u) end
   expect ['hë'.u, 'l'.u, 'lö'.u] do 'hëllö'.u.partition('l'.u) end
@@ -771,17 +774,17 @@ Expectations do
   expect TypeError do 'hëllö'.u.partition(0) end
   expect ['föö'.u, '-'.u, 'bär'.u] do 'föö-bär'.u.partition(stub(:to_str => '-')) end
   expect [true, true, true] do 'abc'.u.taint.partition(/b/).map(&:tainted?) end
-  expect [true, true, true] do 'abc'.u.untrust.partition(/b/).map(&:untrusted?) end
+  expect [true, true, true] do 'abc'.u.untrust.partition(/b/).map(&:untrusted?) end if untrust
   expect [false, true, false] do 'abc'.u.partition(/b/.taint).map(&:tainted?) end
-  expect [false, true, false] do 'abc'.u.partition(/b/.untrust).map(&:untrusted?) end
+  expect [false, true, false] do 'abc'.u.partition(/b/.untrust).map(&:untrusted?) end if untrust
   expect [true, true, true] do 'abc'.u.taint.partition(/b/.taint).map(&:tainted?) end
-  expect [true, true, true] do 'abc'.u.untrust.partition(/b/.untrust).map(&:untrusted?) end
+  expect [true, true, true] do 'abc'.u.untrust.partition(/b/.untrust).map(&:untrusted?) end if untrust
   expect [true, false, true] do 'abc'.u.taint.partition('b').map(&:tainted?) end
-  expect [true, false, true] do 'abc'.u.untrust.partition('b').map(&:untrusted?) end
+  expect [true, false, true] do 'abc'.u.untrust.partition('b').map(&:untrusted?) end if untrust
   expect [false, true, false] do 'abc'.u.partition('b'.taint).map(&:tainted?) end
-  expect [false, true, false] do 'abc'.u.partition('b'.untrust).map(&:untrusted?) end
+  expect [false, true, false] do 'abc'.u.partition('b'.untrust).map(&:untrusted?) end if untrust
   expect [true, true, true] do 'abc'.u.taint.partition('b'.taint).map(&:tainted?) end
-  expect [true, true, true] do 'abc'.u.untrust.partition('b'.untrust).map(&:untrusted?) end
+  expect [true, true, true] do 'abc'.u.untrust.partition('b'.untrust).map(&:untrusted?) end if untrust
 
   expect ['hël'.u, 'l'.u, 'ö'.u] do 'hëllö'.u.rpartition(/l/u) end
   expect ['hël'.u, 'l'.u, 'ö'.u] do 'hëllö'.u.rpartition('l'.u) end
@@ -789,43 +792,43 @@ Expectations do
   expect TypeError do 'hëllö'.u.rpartition(0) end
   expect ['föö'.u, '-'.u, 'bär'.u] do 'föö-bär'.u.rpartition(stub(:to_str => '-')) end
   expect [true, true, true] do 'abc'.u.taint.rpartition(/b/).map(&:tainted?) end
-  expect [true, true, true] do 'abc'.u.untrust.rpartition(/b/).map(&:untrusted?) end
+  expect [true, true, true] do 'abc'.u.untrust.rpartition(/b/).map(&:untrusted?) end if untrust
   expect [false, true, false] do 'abc'.u.rpartition(/b/.taint).map(&:tainted?) end
-  expect [false, true, false] do 'abc'.u.rpartition(/b/.untrust).map(&:untrusted?) end
+  expect [false, true, false] do 'abc'.u.rpartition(/b/.untrust).map(&:untrusted?) end if untrust
   expect [true, true, true] do 'abc'.u.taint.rpartition(/b/.taint).map(&:tainted?) end
-  expect [true, true, true] do 'abc'.u.untrust.rpartition(/b/.untrust).map(&:untrusted?) end
+  expect [true, true, true] do 'abc'.u.untrust.rpartition(/b/.untrust).map(&:untrusted?) end if untrust
   expect [true, false, true] do 'abc'.u.taint.rpartition('b').map(&:tainted?) end
-  expect [true, false, true] do 'abc'.u.untrust.rpartition('b').map(&:untrusted?) end
+  expect [true, false, true] do 'abc'.u.untrust.rpartition('b').map(&:untrusted?) end if untrust
   expect [false, true, false] do 'abc'.u.rpartition('b'.taint).map(&:tainted?) end
-  expect [false, true, false] do 'abc'.u.rpartition('b'.untrust).map(&:untrusted?) end
+  expect [false, true, false] do 'abc'.u.rpartition('b'.untrust).map(&:untrusted?) end if untrust
   expect [true, true, true] do 'abc'.u.taint.rpartition('b'.taint).map(&:tainted?) end
-  expect [true, true, true] do 'abc'.u.untrust.rpartition('b'.untrust).map(&:untrusted?) end
+  expect [true, true, true] do 'abc'.u.untrust.rpartition('b'.untrust).map(&:untrusted?) end if untrust
 
-  expect ['crüel'.u, 'wörld'.u] do 'crüel wörld'.u.scan(/[[:word:]]+/u) end
+  expect ['crüel'.u, 'wörld'.u] do 'crüel wörld'.u.scan(word_regex) end
   expect ['crü'.u, 'el '.u, 'wör'.u] do 'crüel wörld'.u.scan(/.../u) end
   expect [['crü'.u], ['el '.u], ['wör'.u]] do 'crüel wörld'.u.scan(/(...)/u) end
-  expect ['crüel'.u, 'wörld'.u] do 'crüel wörld'.u.to_enum(:scan, /[[:word:]]+/u).to_a end
+  expect ['crüel'.u, 'wörld'.u] do 'crüel wörld'.u.to_enum(:scan, word_regex).to_a end
   expect ['crü'.u, 'el '.u, 'wör'.u] do 'crüel wörld'.u.to_enum(:scan, /.../u).to_a end
   expect [['crü'.u], ['el '.u], ['wör'.u]] do 'crüel wörld'.u.to_enum(:scan, /(...)/u).to_a end
   expect [''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u, ''.u] do 'crüel wörld'.u.scan(//u) end
-  expect [true, true] do 'crüel wörld'.u.taint.scan(/[[:word:]]+/u).map(&:tainted?) end
-  expect [true, true] do 'crüel wörld'.u.untrust.scan(/[[:word:]]+/u).map(&:untrusted?) end
-  expect [true, true] do 'crüel wörld'.u.scan(/[[:word:]]+/u.taint).map(&:tainted?) end
-  expect [true, true] do 'crüel wörld'.u.scan(/[[:word:]]+/u.untrust).map(&:untrusted?) end
+  expect [true, true] do 'crüel wörld'.u.taint.scan(word_regex).map(&:tainted?) end
+  expect [true, true] do 'crüel wörld'.u.untrust.scan(word_regex).map(&:untrusted?) end if untrust
+  expect [true, true] do 'crüel wörld'.u.scan(word_regex.dup.taint).map(&:tainted?) end
+  expect [true, true] do 'crüel wörld'.u.scan(word_regex.dup.untrust).map(&:untrusted?) end if untrust
   expect [true] do 'crüel wörld'.u.taint.scan(' ').map(&:tainted?) end
-  expect [true] do 'crüel wörld'.u.untrust.scan(' ').map(&:untrusted?) end
+  expect [true] do 'crüel wörld'.u.untrust.scan(' ').map(&:untrusted?) end if untrust
   expect [false] do 'crüel wörld'.u.scan(' '.taint).map(&:tainted?) end
-  expect [false] do 'crüel wörld'.u.scan(' '.untrust).map(&:untrusted?) end
+  expect [false] do 'crüel wörld'.u.scan(' '.untrust).map(&:untrusted?) end if untrust
   expect [] do ''.u.split(''.u, 1) end
   expect ['abc'.u] do 'abc'.u.split(''.u, 1) end
   expect [true, true] do 'abc'.u.taint.split(/b/).map(&:tainted?) end
-  expect [true, true] do 'abc'.u.untrust.split(/b/).map(&:untrusted?) end
+  expect [true, true] do 'abc'.u.untrust.split(/b/).map(&:untrusted?) end if untrust
   expect [false, false] do 'abc'.u.split(/b/.taint).map(&:tainted?) end
-  expect [false, false] do 'abc'.u.split(/b/.untrust).map(&:untrusted?) end
+  expect [false, false] do 'abc'.u.split(/b/.untrust).map(&:untrusted?) end if untrust
   expect [true, true] do 'abc'.u.taint.split('b').map(&:tainted?) end
-  expect [true, true] do 'abc'.u.untrust.split('b').map(&:untrusted?) end
+  expect [true, true] do 'abc'.u.untrust.split('b').map(&:untrusted?) end if untrust
   expect [false, false] do 'abc'.u.split('b'.taint).map(&:tainted?) end
-  expect [false, false] do 'abc'.u.split('b'.untrust).map(&:untrusted?) end
+  expect [false, false] do 'abc'.u.split('b'.untrust).map(&:untrusted?) end if untrust
   expect [' ä '.u, ' b '.u, ' c '.u] do ' ä | b | c '.u.split('|'.u) end
   expect ['ä|b|c'.u] do 'ä|b|c'.u.split('|'.u, 1) end
   expect ['ä'.u, 'b|c'.u] do 'ä|b|c'.u.split('|'.u, 2) end
@@ -855,19 +858,19 @@ Expectations do
   expect 'HËLL-ö'.u do 'hëllö'.u.gsub(/(hëll)(.)/u){ |s| $1.u.upcase + '-'.u + $2.u } end
   expect ArgumentError do 'hëllö'.gsub end
   expect result.tainted? do 'a'.u.taint.gsub(/a/, 'b') end
-  expect result.untrusted? do 'a'.u.untrust.gsub(/a/, 'b') end
+  expect result.untrusted? do 'a'.u.untrust.gsub(/a/, 'b') end if untrust
   expect result.not.tainted? do 'a'.u.gsub(/a/.taint, 'b') end
-  expect result.not.untrusted? do 'a'.u.gsub(/a/.untrust, 'b') end
+  expect result.not.untrusted? do 'a'.u.gsub(/a/.untrust, 'b') end if untrust
   expect result.tainted? do 'a'.u.gsub(/a/, 'b'.taint) end
-  expect result.untrusted? do 'a'.u.gsub(/a/, 'b'.untrust) end
+  expect result.untrusted? do 'a'.u.gsub(/a/, 'b'.untrust) end if untrust
   expect result.tainted? do 'a'.u.gsub(/a/, {'a'.u => 'b'}.taint) end
-  expect result.not.untrusted? do 'a'.u.gsub(/a/, {'a'.u => 'b'}.untrust) end
+  expect result.not.untrusted? do 'a'.u.gsub(/a/, {'a'.u => 'b'}.untrust) end if untrust
   expect result.tainted? do 'a'.u.gsub(/a/, {'a'.u => 'b'.taint}) end
-  expect result.untrusted? do 'a'.u.gsub(/a/, {'a'.u => 'b'.untrust}) end
+  expect result.untrusted? do 'a'.u.gsub(/a/, {'a'.u => 'b'.untrust}) end if untrust
   expect result.tainted? do 'a'.u.gsub(/a/, Hash.new{ 'b'.taint }) end
-  expect result.untrusted? do 'a'.u.gsub(/a/, Hash.new{ 'b'.untrust }) end
+  expect result.untrusted? do 'a'.u.gsub(/a/, Hash.new{ 'b'.untrust }) end if untrust
   expect result.tainted? do 'a'.u.gsub(/a/){ 'b'.taint } end
-  expect result.untrusted? do 'a'.u.gsub(/a/){ 'b'.untrust } end
+  expect result.untrusted? do 'a'.u.gsub(/a/){ 'b'.untrust } end if untrust
 
   expect 'bbc'.u do 'abc'.u.sub('a', 'b') end
   expect 'h*llo'.u do 'hello'.u.sub(/[aeiou]/u, '*'.u) end
@@ -878,34 +881,34 @@ Expectations do
   expect 'HËLL-ö'.u do 'hëllö'.u.sub(/(hëll)(.)/u){ |s| $1.u.upcase + '-'.u + $2.u } end
   expect ArgumentError do 'hëllö'.sub end
   expect result.tainted? do 'a'.u.taint.sub(/a/, 'b') end
-  expect result.untrusted? do 'a'.u.untrust.sub(/a/, 'b') end
+  expect result.untrusted? do 'a'.u.untrust.sub(/a/, 'b') end if untrust
   expect result.not.tainted? do 'a'.u.sub(/a/.taint, 'b') end
-  expect result.not.untrusted? do 'a'.u.sub(/a/.untrust, 'b') end
+  expect result.not.untrusted? do 'a'.u.sub(/a/.untrust, 'b') end if untrust
   expect result.tainted? do 'a'.u.sub(/a/, 'b'.taint) end
-  expect result.untrusted? do 'a'.u.sub(/a/, 'b'.untrust) end
+  expect result.untrusted? do 'a'.u.sub(/a/, 'b'.untrust) end if untrust
   expect result.tainted? do 'a'.u.sub(/a/, {'a'.u => 'b'}.taint) end
-  expect result.untrusted? do 'a'.u.sub(/a/, {'a'.u => 'b'}.untrust) end
+  expect result.untrusted? do 'a'.u.sub(/a/, {'a'.u => 'b'}.untrust) end if untrust
   expect result.tainted? do 'a'.u.sub(/a/, {'a'.u => 'b'.taint}) end
-  expect result.untrusted? do 'a'.u.sub(/a/, {'a'.u => 'b'.untrust}) end
+  expect result.untrusted? do 'a'.u.sub(/a/, {'a'.u => 'b'.untrust}) end if untrust
   expect result.tainted? do 'a'.u.sub(/a/, Hash.new{ 'b'.taint }) end
-  expect result.untrusted? do 'a'.u.sub(/a/, Hash.new{ 'b'.untrust }) end
+  expect result.untrusted? do 'a'.u.sub(/a/, Hash.new{ 'b'.untrust }) end if untrust
   expect result.tainted? do 'a'.u.sub(/a/){ 'b'.taint } end
-  expect result.untrusted? do 'a'.u.sub(/a/){ 'b'.untrust } end
+  expect result.untrusted? do 'a'.u.sub(/a/){ 'b'.untrust } end if untrust
 
   expect 'hëll'.u do 'hëll'.u + ''.u end
   expect 'ö'.u do ''.u + 'ö'.u end
   expect 'hëllö'.u do 'hëll'.u + 'ö'.u end
   expect result.tainted? do ''.u.taint + ''.u end
   expect result.tainted? do ''.u + ''.u.taint end
-  expect result.not.untrusted? do ''.u.untrust + ''.u end
-  expect result.not.untrusted? do ''.u + ''.u.untrust end
+  expect result.not.untrusted? do ''.u.untrust + ''.u end if untrust
+  expect result.not.untrusted? do ''.u + ''.u.untrust end if untrust
 
   expect ArgumentError do '*'.u * -1 end
   expect ''.u do ''.u * 10 end
   expect '**********'.u do '*'.u * 10 end
   # TODO Test LONG_MAX.
   expect result.tainted? do ''.u.taint * 10 end
-  expect result.untrusted? do ''.u.untrust * 10 end
+  expect result.untrusted? do ''.u.untrust * 10 end if untrust
 
   expect 'äbc'.u do 'äbc'.u % [] end
 
@@ -1327,15 +1330,15 @@ Expectations do
   expect '1E+06'.u do '%G' % 1E+06 end
 
   expect result.tainted? do '%s'.u.taint % ['abc'] end
-  expect result.not.untrusted? do '%s'.u.untrust % ['abc'] end
+  expect result.not.untrusted? do '%s'.u.untrust % ['abc'] end if untrust
   expect result.tainted? do '%s'.u.taint % ['abc'.taint] end
-  expect result.not.untrusted? do '%s'.u.untrust % ['abc'.untrust] end
+  expect result.not.untrusted? do '%s'.u.untrust % ['abc'.untrust] end if untrust
   expect result.not.tainted? do '%c'.u % ['a'.taint] end
-  expect result.not.untrusted? do '%c'.u % ['a'.untrust] end
+  expect result.not.untrusted? do '%c'.u % ['a'.untrust] end if untrust
   expect result.tainted? do '%s'.u % ['abc'.taint] end
-  expect result.not.untrusted? do '%s'.u % ['abc'.untrust] end
+  expect result.not.untrusted? do '%s'.u % ['abc'.untrust] end if untrust
   expect result.tainted? do '%p'.u % ['abc'.taint] end
-  expect result.not.untrusted? do '%p'.u % ['abc'.untrust] end
+  expect result.not.untrusted? do '%p'.u % ['abc'.untrust] end if untrust
 
   expect '"abc".u'.u do "abc".u.dump end
   expect '"\u{e4}bc".u'.u do "äbc".u.dump end
@@ -1343,7 +1346,7 @@ Expectations do
   expect '"\"\\\\\n\r\t\f\v\b\a\e".u'.u do "\"\\\n\r\t\f\v\b\a\e".u.dump end
   expect '"\#$\#@\#{}".u'.u do '#$#@#{}'.u.dump end
   expect result.tainted? do ''.u.taint.dump end
-  expect result.untrusted? do ''.u.untrust.dump end
+  expect result.untrusted? do ''.u.untrust.dump end if untrust
 
   expect '"abc".u'.u do "abc".u.inspect end
   expect '"äbc".u'.u do "äbc".u.inspect end
@@ -1355,7 +1358,7 @@ Expectations do
   expect '"\"\\\\\n\r\t\f\v\b\a\e".u'.u do "\"\\\n\r\t\f\v\b\a\e".u.inspect end
   expect '"\#$\#@\#{}".u'.u do '#$#@#{}'.u.inspect end
   expect result.tainted? do ''.u.taint.inspect end
-  expect result.untrusted? do ''.u.untrust.inspect end
+  expect result.untrusted? do ''.u.untrust.inspect end if untrust
 
   expect true do 'hëllö'.u.hash == 'hëllö'.u.hash end
   expect false do 'hëllö'.u.hash == 'hëlLÖ'.u.hash end

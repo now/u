@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+untrust = Object.respond_to?(:untrust)
+
 Expectations do
   expect U::Buffer do U::Buffer.new end
   expect U::Buffer do U::Buffer.new(128) end
@@ -23,9 +25,9 @@ Expectations do
   expect result.tainted? do U::Buffer.new.taint.to_u end
   expect result.tainted? do U::Buffer.new.append(U::Buffer.new.taint).to_u end
   expect result.tainted? do U::Buffer.new.append(''.taint).to_u end
-  expect result.untrusted? do U::Buffer.new.untrust.to_u end
-  expect result.untrusted? do U::Buffer.new.append(U::Buffer.new.untrust).to_u end
-  expect result.untrusted? do U::Buffer.new.append(''.untrust).to_u end
+  expect result.untrusted? do U::Buffer.new.untrust.to_u end if untrust
+  expect result.untrusted? do U::Buffer.new.append(U::Buffer.new.untrust).to_u end if untrust
+  expect result.untrusted? do U::Buffer.new.append(''.untrust).to_u end if untrust
 
   expect 'äbc'.u do U::Buffer.new.append_format('%cbc'.u, 'ä').to_u end
   expect result.tainted? do U::Buffer.new.append_format('abc'.taint).to_u end
