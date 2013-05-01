@@ -27,7 +27,7 @@ u_char_istitle(uint32_t c)
 /* {{{1
  * Convert ‘c’ to its titlecase representation (if any).
  */
-U_CONST uint32_t
+uint32_t
 u_char_titlecase(uint32_t c)
 {
 	for (size_t i = 0; i < lengthof(title_table); i++)

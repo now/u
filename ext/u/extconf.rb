@@ -118,7 +118,7 @@ if $enable_gcc_warnings
   try_compiler_option '-Wstrict-aliasing=2'
   try_compiler_option '-Wsuggest-attribute=const'
   try_compiler_option '-Wsuggest-attribute=noreturn'
-  try_compiler_option '-Wsuggest-attribute=pure'
+#  try_compiler_option '-Wsuggest-attribute=pure'
   try_compiler_option '-Wundef'
   try_compiler_option '-Wunsafe-loop-optimizations'
   try_compiler_option '-Wwrite-strings'
