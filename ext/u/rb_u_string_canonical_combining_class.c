@@ -21,7 +21,7 @@ rb_u_string_canonical_combining_class(VALUE self)
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                enum u_canonical_combining_class ccc = u_char_canonical_combining_class(u_dref_validated_n(p, end - p));
+                int ccc = u_char_canonical_combining_class(u_dref_validated_n(p, end - p));
 
                 if (current == -1)
                         current = ccc;
