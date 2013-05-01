@@ -2,6 +2,7 @@ language: ruby
 before_script:
   - gem install inventory-rake -v '~> 1.4' --no-rdoc --no-ri
   - rake gem:deps:install
+script: rake EXTCONF_OPTIONS=--enable-gcc-warnings
 rvm:
   - 1.8.7
   - 1.9.3
