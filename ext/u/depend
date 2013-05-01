@@ -269,8 +269,8 @@ u_char_width.o: u_char_width.c u.h
 u_char_word_break.o: u_char_word_break.c u.h private.h data/constants.h \
   word-break.h
 u_char_xdigit_value.o: u_char_xdigit_value.c u.h private.h
-u_collate.o: u_collate.c u.h utf8.h private.h
-u_collation_key.o: u_collation_key.c u.h utf8.h private.h
+u_collate.o: u_collate.c extconf.h u.h utf8.h private.h
+u_collation_key.o: u_collation_key.c extconf.h u.h utf8.h private.h
 u_copy.o: u_copy.c u.h private.h
 u_downcase.o: u_downcase.c u.h private.h data/constants.h attributes.h \
   general-category.h titled.h output.h u_locale.h case.h
@@ -286,6 +286,8 @@ u_locale.o: u_locale.c u.h u_locale.h private.h
 u_n_bytes.o: u_n_bytes.c u.h private.h
 u_n_chars.o: u_n_chars.c u.h private.h
 u_next.o: u_next.c u.h private.h utf8.h
+u_normalize.o: u_normalize.c u.h private.h data/constants.h \
+  data/decompose.h data/compose.h canonical_combining_class.h output.h
 u_offset_to_pointer.o: u_offset_to_pointer.c u.h private.h
 u_pointer_to_offset.o: u_pointer_to_offset.c u.h private.h
 u_prev.o: u_prev.c u.h private.h utf8.h
