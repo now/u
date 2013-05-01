@@ -166,7 +166,7 @@ Expectations do
   expect result.untrusted? do 'abc'.u.untrust.match('a') end if untrust
   expect result.tainted? do 'abc'.u.match(/a/.taint) end
   expect result.untrusted? do 'abc'.u.match(/a/.untrust) end if untrust
-  expect result.tainted? do 'abc'.u.match('a'.taint) end
+  expect result.tainted? do 'abc'.u.match('a'.taint) end if 'abc'.match('a'.taint).tainted?
   expect result.untrusted? do 'abc'.u.match('a'.untrust) end if untrust
 
   expect result.to.be.empty? do ''.u end
