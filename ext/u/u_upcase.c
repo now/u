@@ -23,13 +23,22 @@
 #define GREEK_CAPITAL_LETTER_IOTA ((uint32_t)0x0399)
 
 
+static inline bool
+ismark(int category)
+{
+        return IS(category,
+                  OR(U_GENERAL_CATEGORY_MARK_NON_SPACING,
+                     OR(U_GENERAL_CATEGORY_MARK_SPACING_COMBINING,
+                        OR(U_GENERAL_CATEGORY_MARK_ENCLOSING, 0))));
+}
+
 static inline const char *
 output_marks(const char *p, const char *end, bool use_end, struct output *output)
 {
         const char *q = u_next(p);
         while (P_WITHIN_STR(q, end, use_end)) {
 		uint32_t c = u_dref(q);
-                if (!s_ismark(s_general_category(c)))
+                if (!ismark(s_general_category(c)))
                         break;
                 output_char(output, c);
                 q = u_next(q);

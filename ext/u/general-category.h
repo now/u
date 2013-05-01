@@ -46,13 +46,3 @@ s_isalpha(int category)
                            OR(U_GENERAL_CATEGORY_LETTER_MODIFIER,
                               OR(U_GENERAL_CATEGORY_LETTER_OTHER, 0))))));
 }
-
-
-static inline bool
-s_ismark(int category)
-{
-        return IS(category,
-                  OR(U_GENERAL_CATEGORY_MARK_NON_SPACING,
-                     OR(U_GENERAL_CATEGORY_MARK_SPACING_COMBINING,
-                        OR(U_GENERAL_CATEGORY_MARK_ENCLOSING, 0))));
-}
