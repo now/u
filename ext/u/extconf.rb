@@ -6,6 +6,7 @@ $CFLAGS = $CFLAGS.sub('$(cflags) ', '')
 have_header 'assert.h'
 have_header 'limits.h'
 have_header 'locale.h'
+have_header 'stdarg.h'
 have_header 'stdbool.h'
 have_header 'stddef.h'
 have_header 'stdint.h'

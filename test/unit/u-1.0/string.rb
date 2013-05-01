@@ -377,12 +377,12 @@ Expectations do
   expect 3 do 'a豈'.u.width end
 
   expect [0x61, 0x62, 0x63, 0x00, 0x64, 0xc3, 0xab, 0x66] do "abc\0dëf".u.each_byte.to_a end
-  expect 8 do "abc\0dëf".u.each_byte.size end
+  expect 8 do "abc\0dëf".u.each_byte.size end if ''.u.each_byte.respond_to? :size
 
   expect [0x61, 0x62, 0x63, 0x00, 0x64, 0xc3, 0xab, 0x66] do "abc\0dëf".u.bytes end
 
   expect ['h'.u, 'ë'.u, 'l'.u, 'l'.u, 'ö'.u] do 'hëllö'.u.each_char.to_a end
-  expect 5 do 'hëllö'.u.each_char.size end
+  expect 5 do 'hëllö'.u.each_char.size end if ''.u.each_byte.respond_to? :size
   expect result.tainted? do 'a'.u.taint.each_char.first end
   expect result.untrusted? do 'a'.u.untrust.each_char.first end
 
@@ -391,7 +391,7 @@ Expectations do
   expect result.untrusted? do 'a'.u.untrust.chars.first end
 
   expect [0x0068, 0x00eb, 0x006c, 0x006c, 0x00f6] do 'hëllö'.u.each_codepoint.to_a end
-  expect 5 do 'hëllö'.u.each_codepoint.size end
+  expect 5 do 'hëllö'.u.each_codepoint.size end if ''.u.each_byte.respond_to? :size
 
   expect [0x0068, 0x00eb, 0x006c, 0x006c, 0x00f6] do 'hëllö'.u.codepoints end
 
