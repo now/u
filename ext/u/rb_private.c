@@ -30,7 +30,7 @@ rb_u_memsearch(const void *a, long a_n, const void *b, long b_n)
 #endif
 }
 
-static VALUE
+static VALUE PRINTF(1, 0)
 format_message(const char *format, va_list args)
 {
 #ifdef HAVE_RUBY_ENCODING_H
