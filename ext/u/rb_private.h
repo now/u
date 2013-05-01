@@ -49,7 +49,7 @@ int rb_memhash(const char *string, long length);
 #endif
 
 #ifndef OBJ_UNTRUST
-#  define OBJ_UNTRUST(o)
+#  define OBJ_UNTRUST(o) do { } while (0)
 #endif
 
 long rb_u_memsearch(const void *a, long a_n, const void *b, long b_n);
