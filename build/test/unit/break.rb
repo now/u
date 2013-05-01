@@ -7,9 +7,9 @@ class Break
       '',
       'Expectations do'
     Lines.new(path).each do |splits|
-      io.printf "  expect [%s] do \"%s\".u.%s.to_a end\n",
-        splits.map{ |e| '"%s".u' % uify(e) }.join(', '),
-        uify(splits.join(' ')),
+      io.printf "  expect [%s] do [%s].pack('U*').u.%s.to_a end\n",
+        splits.map{ |e| "[%s].pack('U').u" % xify(e) }.join(', '),
+        splits.map{ |s| xify(s) }.join(', '),
         method
     end
     io.puts 'end'
@@ -17,8 +17,8 @@ class Break
 
 private
 
-  def uify(chars)
-    chars.split(' ').map{ |s| '\u{%s}' % (s == 'D800' ? '0001' : s) }.join('')
+  def xify(s)
+    '0x%04x' % (s == 'D800' ? 0x0001 : s.to_i(16))
   end
 
   class Lines
