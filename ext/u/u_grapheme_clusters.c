@@ -6,7 +6,6 @@
 #include "private.h"
 
 #include "data/constants.h"
-#include "grapheme-break.h"
 
 
 #define ROW(other, cr, lf, control, l, v, lv, lvt, t, regional_indicator, \
@@ -45,7 +44,7 @@ u_grapheme_clusters(const char *string, size_t n, u_substring_fn fn, void *closu
         const char *end = p + n;
         uint8_t state = 2;
         while (q < end) {
-                state = gb_dfa[state & 0xf][s_grapheme_break(u_dref(q))];
+                state = gb_dfa[state & 0xf][u_char_grapheme_break(u_dref(q))];
                 if (state >> 4 != 1) {
                         if (p < q)
                                 fn(p, q - p, closure);

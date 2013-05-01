@@ -21,8 +21,6 @@ module U
            %w[attributes.c
               attributes.h
               case.h
-              grapheme-break.c
-              grapheme-break.h
               output.h
               private.c
               private.h
