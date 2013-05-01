@@ -13,6 +13,7 @@ mkmf.log
 /build/data/
 /doc/
 /ext/u/Makefile
+/ext/u/extconf.rb.options
 /ext/u/u.bundle.dSYM/
 /packages
 /test/unit/normalize.rb

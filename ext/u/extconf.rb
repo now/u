@@ -1,50 +1,7 @@
 require 'mkmf'
+require 'optparse'
 
 $CFLAGS = $CFLAGS.sub('$(cflags) ', '')
-
-def try_compiler_option(opt, &block)
-  result = false
-  checking_for "#{opt} option to compiler" do
-    $CFLAGS += " #{opt}" if result = try_compile('', opt, &block)
-  end
-  result
-end
-
-try_compiler_option '-std=c99'
-try_compiler_option '-finline-functions'
-try_compiler_option '-fno-common'
-try_compiler_option '-Wall'
-try_compiler_option '-Waggregate-return'
-try_compiler_option '-Wcast-align'
-try_compiler_option '-Wextra'
-try_compiler_option '-Wformat=2'
-try_compiler_option '-Winit-self'
-try_compiler_option '-Winline'
-try_compiler_option '-Wmissing-declarations'
-try_compiler_option '-Wmissing-format-attribute'
-try_compiler_option '-Wmissing-include-dirs'
-try_compiler_option '-Wmissing-noreturn'
-try_compiler_option '-Wmissing-prototypes'
-try_compiler_option '-Wnested-externs'
-try_compiler_option '-Wold-style-definition'
-try_compiler_option '-Wpacked'
-try_compiler_option '-Wp,-D_FORTIFY_SOURCE=2'
-try_compiler_option '-Wpointer-arith'
-try_compiler_option '-Wsign-compare'
-try_compiler_option '-Wstrict-aliasing=2'
-try_compiler_option '-Wsuggest-attribute=const'
-try_compiler_option '-Wsuggest-attribute=noreturn'
-try_compiler_option '-Wsuggest-attribute=pure'
-try_compiler_option '-Wswitch-default'
-try_compiler_option '-Wswitch-enum'
-try_compiler_option '-Wundef'
-try_compiler_option '-Wunsafe-loop-optimizations'
-try_compiler_option '-Wwrite-strings'
-try_compiler_option '-Wshorten-64-to-32'
-
-try_compiler_option '-fvisibility=hidden'
-
-$defs.push '-DU_COMPILATION'
 
 have_header 'assert.h'
 have_header 'limits.h'
@@ -100,15 +57,70 @@ end
 
 have_var 'rb_eKeyError', 'ruby.h'
 
-$CFLAGS += ' ' + ENV['CFLAGS'] if ENV['CFLAGS']
+$enable_gcc_warnings = false
+OptionParser.new{ |opts|
+  opts.banner = 'Usage: ruby extconf.rb [OPTION]...'
+
+  opts.on '--enable-gcc-warnings', 'turn on lots of GCC warnings' do
+    $enable_gcc_warnings = true
+  end
+
+  opts.on '--disable-gcc-warnings', 'turn off lots of GCC warnings' do
+    $enable_gcc_warnings = false
+  end
+}.parse!
+
+def try_compiler_option(opt, &block)
+  result = false
+  checking_for "#{opt} option to compiler" do
+    $CFLAGS += " #{opt}" if result = try_cpp('', opt, &block)
+  end
+  result
+end
+
+try_compiler_option '-std=c99'
+try_compiler_option '-finline-functions'
+try_compiler_option '-fno-common'
+try_compiler_option '-fvisibility=hidden'
+
+if $enable_gcc_warnings
+  try_compiler_option '-Werror'
+  try_compiler_option '-Wall'
+  try_compiler_option '-Waggregate-return'
+  try_compiler_option '-Wcast-align'
+  try_compiler_option '-Wextra'
+  try_compiler_option '-Wformat=2'
+  try_compiler_option '-Winit-self'
+  try_compiler_option '-Winline'
+  try_compiler_option '-Wmissing-declarations'
+  try_compiler_option '-Wmissing-format-attribute'
+  try_compiler_option '-Wmissing-include-dirs'
+  try_compiler_option '-Wmissing-noreturn'
+  try_compiler_option '-Wmissing-prototypes'
+  try_compiler_option '-Wnested-externs'
+  try_compiler_option '-Wold-style-definition'
+  try_compiler_option '-Wpacked'
+  try_compiler_option '-Wp,-D_FORTIFY_SOURCE=2'
+  try_compiler_option '-Wpointer-arith'
+  try_compiler_option '-Wsign-compare'
+  try_compiler_option '-Wstrict-aliasing=2'
+  try_compiler_option '-Wsuggest-attribute=const'
+  try_compiler_option '-Wsuggest-attribute=noreturn'
+  try_compiler_option '-Wsuggest-attribute=pure'
+  try_compiler_option '-Wswitch-default'
+  try_compiler_option '-Wswitch-enum'
+  try_compiler_option '-Wundef'
+  try_compiler_option '-Wunsafe-loop-optimizations'
+  try_compiler_option '-Wwrite-strings'
+  try_compiler_option '-Wshorten-64-to-32'
+end
+
+$defs.push '-DU_COMPILATION'
 
 create_header
 create_makefile 'u/u'
 File.open('Makefile', 'ab') do |f|
   f.puts <<EOF
-Makefile: extconf.rb depend
-	ruby $<
-
 TAGS: $(SRCS)
 	ctags -f $@ -I UNUSED,HIDDEN,_ $^
 
