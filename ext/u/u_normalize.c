@@ -199,7 +199,7 @@ canonical_ordering(uint32_t *string, size_t n)
 }
 
 static inline bool
-combine_hangul(uint32_t a, uint32_t b, uint32_t *result)
+compose_hangul(uint32_t a, uint32_t b, uint32_t *result)
 {
         int LIndex = a - LBase;
         if (0 <= LIndex && LIndex < LCount) {
@@ -241,9 +241,9 @@ compose_index(uint32_t c)
 }
 
 static inline bool
-combine(uint32_t a, uint32_t b, uint32_t *result)
+compose(uint32_t a, uint32_t b, uint32_t *result)
 {
-        if (combine_hangul(a, b, result))
+        if (compose_hangul(a, b, result))
                 return true;
 
         uint16_t index_a = compose_index(a);
@@ -290,7 +290,7 @@ compose_loop(uint32_t *string, size_t n)
         size_t t = 1;
         for (size_t i = 1; i < n; i++) {
                 int cc = u_char_canonical_combining_class(string[i]);
-                if (pcc < cc && combine(string[s], string[i], &string[s]))
+                if (pcc < cc && compose(string[s], string[i], &string[s]))
                         continue;
                 else if (cc == 0) {
                         pcc = -1;
