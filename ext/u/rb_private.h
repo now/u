@@ -21,11 +21,13 @@ VALUE _rb_u_string_test_in_locale(int argc, VALUE *argv, VALUE self,
                                   char *(convert)(const char *, size_t,
                                                   const char *, size_t *));
 
-VALUE _rb_u_string_case_in_locale(int argc, VALUE *argv, VALUE self,
-                                  char *(case_in_locale_n)(const char *,
-                                                           size_t,
-                                                           const char *,
-                                                           size_t *));
+VALUE _rb_u_string_test_new(int argc, VALUE *argv, VALUE self,
+                            size_t convert(char *, size_t, const char *, size_t,
+                                           const char *));
+
+VALUE _rb_u_string_case(int argc, VALUE *argv, VALUE self,
+                        size_t string_case(char *, size_t, const char *, size_t,
+                                           const char *));
 
 VALUE _rb_u_string_property(VALUE self, const char *name,
                             int unknown, int property(uint32_t),

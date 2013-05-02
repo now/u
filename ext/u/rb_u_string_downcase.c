@@ -7,6 +7,5 @@
 VALUE
 rb_u_string_downcase(int argc, VALUE *argv, VALUE self)
 {
-        return _rb_u_string_case_in_locale(argc, argv, self,
-                                           u_downcase_in_locale_n);
+        return _rb_u_string_case(argc, argv, self, u_downcase);
 }

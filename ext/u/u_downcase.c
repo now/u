@@ -182,49 +182,16 @@ _u_downcase_step(const char *string, const char *p, const char *end, bool use_en
                 output_string(output, p, u_next(p) - p);
 }
 
-static void
-downcase_loop(const char *string, const char *end, bool use_end,
-              enum locale locale, struct output *output)
-{
-        for (const char *p = string; P_WITHIN_STR(p, end, use_end); p = u_next(p))
-                _u_downcase_step(string, p, end, use_end, locale, output);
-}
-
-static char *
-u_downcase_in_locale_impl(const char *string, size_t n, bool use_n,
-                          const char *locale, size_t *new_n)
+size_t
+u_downcase(char *result, size_t m, const char *string, size_t n,
+           const char *locale)
 {
 	assert(string != NULL);
+        assert(result != NULL || m == 0);
 	enum locale l = _u_locale_from_string(locale);
         const char *end = string + n;
-        struct output output = OUTPUT_INIT;
-	downcase_loop(string, end, use_n, l, &output);
-        output_alloc(&output);
-	downcase_loop(string, end, use_n, l, &output);
-        return output_finalize(&output, new_n);
-}
-
-char *
-u_downcase(const char *string)
-{
-	return u_downcase_in_locale_impl(string, 0, false, NULL, NULL);
-}
-
-char *
-u_downcase_n(const char *string, size_t n, size_t *new_n)
-{
-	return u_downcase_in_locale_impl(string, n, true, NULL, new_n);
-}
-
-char *
-u_downcase_in_locale(const char *string, const char *locale)
-{
-        return u_downcase_in_locale_impl(string, 0, false, locale, NULL);
-}
-
-char *
-u_downcase_in_locale_n(const char *string, size_t n, const char *locale,
-                       size_t *new_n)
-{
-        return u_downcase_in_locale_impl(string, n, true, locale, new_n);
+        struct output output = OUTPUT_INIT(result, m);
+        for (const char *p = string; p < end; p = u_next(p))
+                _u_downcase_step(string, p, end, true, l, &output);
+        return output_finalize(&output);
 }

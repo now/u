@@ -361,26 +361,17 @@ char *u_normalize(const char *string, enum u_normalize_mode mode);
 char *u_normalize_n(const char *string, size_t n,
                     enum u_normalize_mode mode, size_t *new_n);
 
-char *u_downcase(const char *string);
-char *u_downcase_n(const char *string, size_t n, size_t *new_n);
-char *u_downcase_in_locale(const char *string, const char *locale);
-char *u_downcase_in_locale_n(const char *string, size_t n, const char *locale,
-                             size_t *new_n);
+size_t u_downcase(char *result, size_t m, const char *string, size_t n,
+                  const char *locale);
 
 char *u_foldcase(const char *string);
 char *u_foldcase_n(const char *string, size_t n, size_t *new_n);
 
-char *u_titlecase(const char *string);
-char *u_titlecase_n(const char *string, size_t n, size_t *new_n);
-char *u_titlecase_in_locale(const char *string, const char *locale);
-char *u_titlecase_in_locale_n(const char *string, size_t n, const char *locale,
-                              size_t *new_n);
+size_t u_titlecase(char *result, size_t m, const char *string, size_t n,
+                   const char *locale);
 
-char *u_upcase(const char *string);
-char *u_upcase_n(const char *string, size_t n, size_t *new_n);
-char *u_upcase_in_locale(const char *string, const char *locale);
-char *u_upcase_in_locale_n(const char *string, size_t n, const char *locale,
-                           size_t *new_n);
+size_t u_upcase(char *result, size_t m, const char *string, size_t n,
+                const char *locale);
 
 extern const char * const u_skip_lengths;
 
@@ -466,6 +457,7 @@ void u_words(const char *string, size_t n, u_substring_fn fn, void *closure);
 void u_grapheme_clusters(const char *string, size_t n, u_substring_fn fn,
                          void *closure);
 
+int u_char_to_u_n(uint32_t c, char *result, size_t n);
 int u_char_to_u(uint32_t c, char *result);
 char *u_ucs4_to_u(uint32_t *str, size_t *items_read, size_t *items_written);
 char *u_ucs4_to_u_n(uint32_t *str, size_t n, size_t *items_read,

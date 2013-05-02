@@ -53,41 +53,15 @@ titlecase_words(const char *p, size_t n, struct titlecase_closure *closure)
         titlecase_step(p, p + n, closure);
 }
 
-static void
-titlecase_loop(const char *string, size_t n, enum locale locale,
-               struct output *output)
-{
-        struct titlecase_closure closure = { string, locale, output };
-        u_words(string, n, (u_substring_fn)titlecase_words, &closure);
-}
-
-char *
-u_titlecase(const char *string)
-{
-        return u_titlecase_in_locale(string, NULL);
-}
-
-char *
-u_titlecase_n(const char *string, size_t n, size_t *new_n)
-{
-        return u_titlecase_in_locale_n(string, n, NULL, new_n);
-}
-
-char *
-u_titlecase_in_locale(const char *string, const char *locale)
-{
-        return u_titlecase_in_locale_n(string, strlen(string), locale, NULL);
-}
-
-char *
-u_titlecase_in_locale_n(const char *string, size_t n, const char *locale,
-                        size_t *new_n)
+size_t
+u_titlecase(char *result, size_t m, const char *string, size_t n,
+            const char *locale)
 {
 	assert(string != NULL);
-	enum locale l = _u_locale_from_string(locale);
-        struct output output = OUTPUT_INIT;
-        titlecase_loop(string, n, l, &output);
-        output_alloc(&output);
-	titlecase_loop(string, n, l, &output);
-        return output_finalize(&output, new_n);
+        assert(result != NULL || m == 0);
+        struct output output = OUTPUT_INIT(result, m);
+        struct titlecase_closure closure =
+                { string, _u_locale_from_string(locale), &output };
+        u_words(string, n, (u_substring_fn)titlecase_words, &closure);
+        return output_finalize(&output);
 }

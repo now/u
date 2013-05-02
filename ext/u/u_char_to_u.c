@@ -11,9 +11,9 @@
  * store it in ‘result’, returning the length of the stored sequence.
  */
 int
-u_char_to_u(uint32_t c, char *result)
+u_char_to_u_n(uint32_t c, char *result, size_t n)
 {
-	int len = 0;
+	size_t len = 0;
 	int first;
 
 	if (c < UNI_LEN1) {
@@ -36,12 +36,18 @@ u_char_to_u(uint32_t c, char *result)
 		len = 6;
 	}
 
-	if (result != NULL) {
-		for (int i = len - 1; i > 0; i--)
+	if (result != NULL && len <= n) {
+		for (size_t i = len - 1; i > 0; i--)
 			c = PUT_X(c, result[i]);
 
 		result[0] = c | first;
 	}
 
-	return len;
+	return (int)len;
+}
+
+int
+u_char_to_u(uint32_t c, char *result)
+{
+        return u_char_to_u_n(c, result, 6);
 }
