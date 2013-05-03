@@ -8,5 +8,5 @@
 VALUE
 rb_u_string_upper(int argc, VALUE *argv, VALUE self)
 {
-        return _rb_u_string_test_new(argc, argv, self, u_upcase);
+        return _rb_u_string_test_locale(argc, argv, self, u_upcase);
 }

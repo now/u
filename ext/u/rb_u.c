@@ -132,9 +132,9 @@ _rb_u_string_test(VALUE self,
 }
 
 VALUE
-_rb_u_string_test_new(int argc, VALUE *argv, VALUE self,
-                      size_t convert(char *, size_t, const char *, size_t,
-                                     const char *))
+_rb_u_string_test_locale(int argc, VALUE *argv, VALUE self,
+                         size_t convert(char *, size_t, const char *, size_t,
+                                        const char *))
 {
         const char *locale = NULL;
 
@@ -168,9 +168,24 @@ _rb_u_string_test_new(int argc, VALUE *argv, VALUE self,
 }
 
 VALUE
-_rb_u_string_case(int argc, VALUE *argv, VALUE self,
-                  size_t string_case(char *, size_t, const char *, size_t,
-                                     const char *))
+_rb_u_string_convert(VALUE self,
+                     size_t convert(char *, size_t, const char *, size_t))
+{
+        const struct rb_u_string *string = RVAL2USTRING(self);
+
+        rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
+
+        size_t n = convert(NULL, 0, USTRING_STR(string), USTRING_LENGTH(string));
+        char *converted = ALLOC_N(char, n + 1);
+        convert(converted, n + 1, USTRING_STR(string), USTRING_LENGTH(string));
+
+        return rb_u_string_new_c_own(self, converted, n);
+}
+
+VALUE
+_rb_u_string_convert_locale(int argc, VALUE *argv, VALUE self,
+                            size_t convert(char *, size_t, const char *, size_t,
+                                           const char *))
 {
         const char *locale = NULL;
 
@@ -182,15 +197,13 @@ _rb_u_string_case(int argc, VALUE *argv, VALUE self,
 
         rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
 
-        size_t n = string_case(NULL, 0,
-                               USTRING_STR(string), USTRING_LENGTH(string),
-                               locale);
-        char *cased = ALLOC_N(char, n + 1);
-        string_case(cased, n + 1,
-                    USTRING_STR(string), USTRING_LENGTH(string),
-                    locale);
+        size_t n = convert(NULL, 0, USTRING_STR(string), USTRING_LENGTH(string),
+                           locale);
+        char *converted = ALLOC_N(char, n + 1);
+        convert(converted, n + 1, USTRING_STR(string), USTRING_LENGTH(string),
+                locale);
 
-        return rb_u_string_new_c_own(self, cased, n);
+        return rb_u_string_new_c_own(self, converted, n);
 }
 
 VALUE

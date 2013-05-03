@@ -17,13 +17,15 @@ VALUE _rb_u_character_test(VALUE string, bool (*test)(uint32_t));
 VALUE _rb_u_string_test(VALUE self,
                         size_t convert(char *, size_t, const char *, size_t));
 
-VALUE _rb_u_string_test_new(int argc, VALUE *argv, VALUE self,
-                            size_t convert(char *, size_t, const char *, size_t,
-                                           const char *));
+VALUE _rb_u_string_test_locale(int argc, VALUE *argv, VALUE self,
+                               size_t convert(char *, size_t, const char *, size_t,
+                                              const char *));
 
-VALUE _rb_u_string_case(int argc, VALUE *argv, VALUE self,
-                        size_t string_case(char *, size_t, const char *, size_t,
-                                           const char *));
+VALUE _rb_u_string_convert(VALUE self,
+                           size_t convert(char *, size_t, const char *, size_t));
+VALUE _rb_u_string_convert_locale(int argc, VALUE *argv, VALUE self,
+                                  size_t convert(char *, size_t, const char *, size_t,
+                                                 const char *));
 
 VALUE _rb_u_string_property(VALUE self, const char *name,
                             int unknown, int property(uint32_t),
