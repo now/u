@@ -371,6 +371,8 @@ size_t u_titlecase(char *result, size_t m, const char *string, size_t n,
 size_t u_upcase(char *result, size_t m, const char *string, size_t n,
                 const char *locale);
 
+size_t u_mirror(char *result, size_t m, const char *string, size_t n);
+
 extern const char * const u_skip_lengths;
 
 #define u_next(str) ((str) + u_skip_lengths[*(const unsigned char *)(str)])

@@ -182,6 +182,7 @@ module U
               u_isvalid.c
               u_locale.c
               u_locale.h
+              u_mirror.c
               u_n_bytes.c
               u_n_chars.c
               u_next.c

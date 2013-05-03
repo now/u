@@ -253,13 +253,14 @@ u_copy.o: u_copy.c u.h private.h
 u_downcase.o: u_downcase.c u.h private.h data/constants.h attributes.h \
   titled.h output.h u_locale.h case.h
 u_dref.o: u_dref.c u.h utf8.h private.h
-u_foldcase.o: u_foldcase.c u.h private.h data/case-folding.h
+u_foldcase.o: u_foldcase.c u.h private.h data/case-folding.h output.h
 u_grapheme_clusters.o: u_grapheme_clusters.c u.h private.h
 u_has_prefix.o: u_has_prefix.c u.h private.h
 u_index.o: u_index.c u.h private.h
 u_is_ascii_only.o: u_is_ascii_only.c u.h private.h
 u_isvalid.o: u_isvalid.c u.h private.h
 u_locale.o: u_locale.c u.h u_locale.h private.h
+u_mirror.o: u_mirror.c u.h private.h output.h
 u_n_bytes.o: u_n_bytes.c u.h private.h
 u_n_chars.o: u_n_chars.c u.h private.h
 u_next.o: u_next.c u.h private.h utf8.h
