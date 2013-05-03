@@ -38,24 +38,3 @@ enum {
  * Put bits from ‘c’ into ‘p’ and shift them off of ‘c’ afterwards.
  */
 #define PUT_X(c, p)	((p) = OCT_X | ((c) & MASK_X), (c) >> BIT_X)
-
-/* {{{1
- * Private function used to figure out the length of the UTF-8 representation
- * of a given Unicode character (UTF-32).
- */
-static inline unsigned short
-_utf8_length(const uint32_t c)
-{
-	if (c < UNI_LEN1)
-		return 1;
-	else if (c < UNI_LEN2)
-		return 2;
-	else if (c < UNI_LEN3)
-		return 3;
-	else if (c < UNI_LEN4)
-		return 4;
-	else if (c < UNI_LEN5)
-		return 5;
-	else
-		return 6;
-}

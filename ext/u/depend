@@ -273,7 +273,6 @@ u_reverse.o: u_reverse.c u.h private.h
 u_rindex.o: u_rindex.c u.h private.h
 u_titlecase.o: u_titlecase.c u.h private.h data/constants.h attributes.h \
   titled.h output.h u_locale.h case.h
-u_ucs4_to_u.o: u_ucs4_to_u.c u.h utf8.h private.h
 u_upcase.o: u_upcase.c u.h private.h data/constants.h attributes.h \
   titled.h output.h u_locale.h case.h
 u_width.o: u_width.c u.h private.h

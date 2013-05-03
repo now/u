@@ -459,6 +459,3 @@ void u_grapheme_clusters(const char *string, size_t n, u_substring_fn fn,
 
 int u_char_to_u_n(uint32_t c, char *result, size_t n);
 int u_char_to_u(uint32_t c, char *result);
-char *u_ucs4_to_u(uint32_t *str, size_t *items_read, size_t *items_written);
-char *u_ucs4_to_u_n(uint32_t *str, size_t n, size_t *items_read,
-                    size_t *items_written);

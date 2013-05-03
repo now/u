@@ -193,7 +193,6 @@ module U
               u_reverse.c
               u_rindex.c
               u_titlecase.c
-              u_ucs4_to_u.c
               u_upcase.c
               u_width.c
               u_words.c
