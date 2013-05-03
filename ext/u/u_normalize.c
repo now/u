@@ -11,70 +11,7 @@
 #include "data/decompose.h"
 #include "data/compose.h"
 
-static inline size_t
-u_char_to_u_char(uint32_t c, uint32_t *result)
-{
-        if (result != NULL)
-                *result = c;
-        return 1;
-}
-#define UNIT uint32_t
-#define UNIT_TO_U u_char_to_u_char
-#ifndef UNIT
-#  define UNIT char
-#  define UNIT_TO_U u_char_to_u
-#  define UNIT_N_BYTES u_n_bytes
-#endif
-
-struct output {
-        size_t n;
-        UNIT *result;
-};
-
-#define OUTPUT_INIT { 0, NULL }
-
-static inline struct output *
-output_char(struct output *output, uint32_t c)
-{
-        output->n += UNIT_TO_U(c, OFFSET_IF(output->result, output->n));
-        return output;
-}
-
-#ifdef UNIT_N_BYTES
-static inline struct output *
-output_string(struct output *output, const UNIT *string, size_t n)
-{
-        if (output->result)
-                memcpy(output->result + output->n, string, sizeof(UNIT) * n);
-        output->n += n;
-        return output;
-}
-
-static inline struct output *
-output_zstring(struct output *output, const UNIT *string)
-{
-        return output_string(output, string, UNIT_N_BYTES(string));
-}
-#endif
-
-static inline struct output *
-output_alloc(struct output *output)
-{
-        output->result = malloc(sizeof(UNIT) * (output->n + 1));
-        output->n = 0;
-        return output;
-}
-
-static inline UNIT *
-output_finalize(struct output *output, size_t *n)
-{
-        output->result[output->n] = '\0';
-        if (n != NULL)
-                *n = output->n;
-        UNIT *r = output->result;
-        *output = (struct output)OUTPUT_INIT;
-        return r;
-}
+#include "output.h"
 
 enum {
         SBase = 0xac00,
@@ -134,8 +71,7 @@ decompose_simple(uint32_t c, const char *(*decompose)(size_t),
         const char *decomposition;
         if (unicode_table_lookup(decomp_table, c, &index) &&
             (decomposition = decompose(index)) != NULL)
-                for (const char *p = decomposition; *p != '\0'; p = u_next(p))
-                        output_char(output, u_dref(p));
+                output_zstring(output, decomposition);
         else
                 output_char(output, c);
 }
@@ -149,49 +85,48 @@ decompose_step(uint32_t c, const char *(*decompose)(size_t),
 }
 
 static void
-decompose_loop(const char *string, const char *end, bool use_end,
+decompose_loop(const char *string, const char *end,
                const char *(*decompose)(size_t), struct output *output)
 {
-        for (const char *p = string; P_WITHIN_STR(p, end, use_end); p = u_next(p))
+        for (const char *p = string; p < end; p = u_next(p))
                 decompose_step(u_dref(p), decompose, output);
 }
 
-static inline bool
-canonical_ordering_swap(uint32_t *string, size_t offset,
-                        enum u_canonical_combining_class next)
+static inline void
+canonical_ordering_swap(char *string, char *p,
+                        enum u_canonical_combining_class ccc)
 {
-        size_t initial = offset + 1;
-        size_t j = initial;
-
-        while (j > 0 && u_char_canonical_combining_class(string[j - 1]) > next) {
-                uint32_t c = string[j];
-                string[j] = string[j - 1];
-                string[j - 1] = c;
-                j--;
-        }
-
-        return j != initial;
+        char *r = p;
+        char *s;
+        while (r > string && (s = u_prev(r), u_char_canonical_combining_class(u_dref(s)) > ccc))
+                r = s;
+        char buf[U_CHAR_MAX_BYTE_LENGTH];
+        size_t n = u_next(p) - p;
+        memcpy(buf, p, n);
+        memmove(r + n, r, p - r);
+        memcpy(r, buf, n);
 }
 
 static inline bool
-canonical_ordering_reorder(uint32_t *string, size_t n)
+canonical_ordering_reorder(char *string, size_t n)
 {
         bool swapped = false;
-        enum u_canonical_combining_class prev = u_char_canonical_combining_class(string[0]);
-        for (size_t i = 0; i < n - 1; i++) {
-                enum u_canonical_combining_class next = u_char_canonical_combining_class(string[i + 1]);
+        enum u_canonical_combining_class pcc = u_char_canonical_combining_class(u_dref(string));
+        char *end = string + n;
+        for (char *p = u_next(string); p < end; p = u_next(p)) {
+                enum u_canonical_combining_class cc = u_char_canonical_combining_class(u_dref(p));
 
-                if (next != 0 && prev > next) {
-                        if (canonical_ordering_swap(string, i, next))
-                                swapped = true;
+                if (cc != 0 && pcc > cc) {
+                        canonical_ordering_swap(string, p, cc);
+                        swapped = true;
                 } else
-                        prev = next;
+                        pcc = cc;
         }
         return swapped;
 }
 
 static void
-canonical_ordering(uint32_t *string, size_t n)
+canonical_ordering(char *string, size_t n)
 {
         if (n > 0)
                 while (canonical_ordering_reorder(string, n))
@@ -250,9 +185,7 @@ compose(uint32_t a, uint32_t b, uint32_t *result)
         if (COMPOSE_FIRST_SINGLE_START <= index_a && index_a < COMPOSE_SECOND_START) {
                 if (b != compose_first_single[index_a - COMPOSE_FIRST_SINGLE_START][0])
                         return false;
-
                 *result = compose_first_single[index_a - COMPOSE_FIRST_SINGLE_START][1];
-
                 return true;
         }
 
@@ -260,19 +193,15 @@ compose(uint32_t a, uint32_t b, uint32_t *result)
         if (COMPOSE_SECOND_SINGLE_START <= index_b) {
                 if (a != compose_second_single[index_b - COMPOSE_SECOND_SINGLE_START][0])
                         return false;
-
                 *result = compose_second_single[index_b - COMPOSE_SECOND_SINGLE_START][1];
-
                 return true;
         }
 
         if (COMPOSE_FIRST_START <= index_a && index_a < COMPOSE_FIRST_SINGLE_START &&
             COMPOSE_SECOND_START <= index_b && index_b < COMPOSE_SECOND_SINGLE_START) {
                 uint32_t r = compose_array[index_a - COMPOSE_FIRST_START][index_b - COMPOSE_SECOND_START];
-
                 if (r != 0) {
                         *result = r;
-
                         return true;
                 }
         }
@@ -281,65 +210,71 @@ compose(uint32_t a, uint32_t b, uint32_t *result)
 }
 
 static inline size_t
-compose_loop(uint32_t *string, size_t n)
+compose_loop(char *string, size_t n)
 {
         if (n == 0)
                 return 0;
         int pcc = -1;
-        size_t s = 0;
-        size_t t = 1;
-        for (size_t i = 1; i < n; i++) {
-                int cc = u_char_canonical_combining_class(string[i]);
-                if (pcc < cc && compose(string[s], string[i], &string[s]))
-                        continue;
-                else if (cc == 0) {
+        char *s = string;
+        char *t = u_next(s);
+        for (char *p = t, *q, *end = string + n; p < end; p = q) {
+                uint32_t c = u_dref(p);
+                q = u_next(p);
+                int cc = u_char_canonical_combining_class(c);
+                uint32_t d;
+                if (pcc < cc && compose(u_dref(s), c, &d)) {
+                        char *r = u_next(s);
+                        ptrdiff_t k = u_char_to_u(d, NULL) - (r - s);
+                        memmove(r + k, r, t - r);
+                        u_char_to_u(d, s);
+                        t += k;
+                } else if (cc == 0) {
                         pcc = -1;
                         s = t;
-                } else
+                        t += u_char_to_u(c, t);
+                } else {
                         pcc = cc;
-                string[t++] = string[i];
+                        t += u_char_to_u(c, t);
+                }
         }
-        return t;
+        return t - string;
+}
+
+size_t
+u_normalize(char *result, size_t m, const char *string, size_t n,
+            enum u_normalize_mode mode)
+{
+        const char *(*decompose)(size_t) =
+                (mode == U_NORMALIZE_NFKC || mode == U_NORMALIZE_NFKD) ?
+                compatible : canonical;
+        const char *end = string + n;
+        struct output output = OUTPUT_INIT(result, m);
+        decompose_loop(string, end, decompose, &output);
+        if (output.m > output.n) {
+                canonical_ordering(output.result, output.n);
+                if (mode == U_NORMALIZE_NFC || mode == U_NORMALIZE_NFKC)
+                        output.n = compose_loop(output.result, output.n);
+        }
+        return output_finalize(&output);
 }
 
 uint32_t *
 _u_normalize_wc(const char *string, size_t n, bool use_n,
                 enum u_normalize_mode mode, size_t *new_n)
 {
-        const char *(*decompose)(size_t) =
-                (mode == U_NORMALIZE_NFKC || mode == U_NORMALIZE_NFKD) ?
-                compatible : canonical;
-        const char *end = string + n;
-        struct output output = OUTPUT_INIT;
-        decompose_loop(string, end, use_n, decompose, &output);
-        output_alloc(&output);
-        decompose_loop(string, end, use_n, decompose, &output);
-        canonical_ordering(output.result, output.n);
-        if (mode == U_NORMALIZE_NFC || mode == U_NORMALIZE_NFKC)
-                output.n = compose_loop(output.result, output.n);
-        return output_finalize(&output, new_n);
-}
-
-char *
-u_normalize(const char *string, enum u_normalize_mode mode)
-{
-        uint32_t *wcs = _u_normalize_wc(string, 0, false, mode, NULL);
-        char *u = u_ucs4_to_u(wcs, NULL, NULL);
-
-        free(wcs);
-
-        return u;
-}
-
-char *
-u_normalize_n(const char *string, size_t n, enum u_normalize_mode mode,
-              size_t *new_n)
-{
-        size_t n_wcs;
-        uint32_t *wcs = _u_normalize_wc(string, n, true, mode, &n_wcs);
-        char *u = u_ucs4_to_u_n(wcs, n_wcs, NULL, new_n);
-
-        free(wcs);
-
-        return u;
+        if (!use_n)
+                n = u_n_bytes(string);
+        size_t n_norm = u_normalize(NULL, 0, string, n, mode);
+        char *norm = malloc(n_norm + 1);
+        n_norm = u_normalize(norm, n_norm + 1, string, n, mode);
+        uint32_t *u32 = malloc(sizeof(uint32_t) * (n_norm + 1));
+        uint32_t *u = u32;
+        size_t m = 0;
+        for (const char *p = norm, *end = norm + n_norm; p < end; p = u_next(p), u++, m++)
+                *u = u_dref(p);
+        *u = '\0';
+        free(norm);
+        if (new_n != NULL)
+                *new_n = m;
+        return u32;
 }

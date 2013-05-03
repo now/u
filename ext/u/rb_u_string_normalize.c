@@ -88,11 +88,16 @@ rb_u_string_normalize(int argc, VALUE *argv, VALUE self)
         if (rb_scan_args(argc, argv, "01", &rbmode) == 1)
                 mode = symbol_to_mode(rbmode);
 
-        size_t length;
-        char *normalized = u_normalize_n(USTRING_STR(string),
-                                         USTRING_LENGTH(string),
-                                         mode,
-                                         &length);
+        size_t n = u_normalize(NULL, 0,
+                               USTRING_STR(string), USTRING_LENGTH(string),
+                               mode);
+        char *normalized = ALLOC_N(char, n + 1);
+        n = u_normalize(normalized, n + 1,
+                        USTRING_STR(string), USTRING_LENGTH(string),
+                        mode);
+        char *t = REALLOC_N(normalized, char, n + 1);
+        if (t != NULL)
+                normalized = t;
 
-        return rb_u_string_new_c_own(self, normalized, length);
+        return rb_u_string_new_c_own(self, normalized, n);
 }

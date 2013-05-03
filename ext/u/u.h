@@ -357,9 +357,8 @@ enum u_normalize_mode {
 	U_NORMALIZE_NFKC = U_NORMALIZE_ALL_COMPOSE
 };
 
-char *u_normalize(const char *string, enum u_normalize_mode mode);
-char *u_normalize_n(const char *string, size_t n,
-                    enum u_normalize_mode mode, size_t *new_n);
+size_t u_normalize(char *result, size_t m, const char *string, size_t n,
+                   enum u_normalize_mode mode);
 
 size_t u_downcase(char *result, size_t m, const char *string, size_t n,
                   const char *locale);

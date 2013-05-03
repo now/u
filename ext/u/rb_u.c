@@ -110,53 +110,19 @@ _rb_u_string_test(VALUE self,
 
         rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
 
-        size_t nfd_length;
-        char *nfd = u_normalize_n(USTRING_STR(string),
-                                  USTRING_LENGTH(string),
-                                  U_NORMALIZE_NFD,
-                                  &nfd_length);
+        size_t nfd_n = u_normalize(NULL, 0,
+                                   USTRING_STR(string), USTRING_LENGTH(string),
+                                   U_NORMALIZE_NFD);
+        char *nfd = ALLOC_N(char, nfd_n + 1);
+        nfd_n = u_normalize(nfd, nfd_n + 1,
+                            USTRING_STR(string), USTRING_LENGTH(string),
+                            U_NORMALIZE_NFD);
 
-        size_t converted_length;
-        char *converted = convert(nfd, nfd_length, &converted_length);
+        size_t converted_n;
+        char *converted = convert(nfd, nfd_n, &converted_n);
 
-        VALUE result = converted_length == nfd_length &&
-                memcmp(converted, nfd, nfd_length) == 0 ? Qtrue : Qfalse;
-
-        free(converted);
-        free(nfd);
-
-        return result;
-}
-
-VALUE
-_rb_u_string_test_in_locale(int argc, VALUE *argv, VALUE self,
-                            char *(convert)(const char *, size_t,
-                                            const char *, size_t *))
-{
-        const char *locale = NULL;
-
-        VALUE rblocale;
-        if (rb_scan_args(argc, argv, "01", &rblocale) == 1)
-                locale = StringValuePtr(rblocale);
-
-        const struct rb_u_string *string = RVAL2USTRING(self);
-
-        rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
-
-        size_t nfd_length;
-        char *nfd = u_normalize_n(USTRING_STR(string),
-                                  USTRING_LENGTH(string),
-                                  U_NORMALIZE_NFD,
-                                  &nfd_length);
-
-        size_t converted_length;
-        char *converted = convert(nfd,
-                                  nfd_length,
-                                  locale,
-                                  &converted_length);
-
-        VALUE result = converted_length == nfd_length &&
-                memcmp(converted, nfd, nfd_length) == 0 ? Qtrue : Qfalse;
+        VALUE result = converted_n == nfd_n &&
+                memcmp(converted, nfd, nfd_n) == 0 ? Qtrue : Qfalse;
 
         free(converted);
         free(nfd);
@@ -179,18 +145,20 @@ _rb_u_string_test_new(int argc, VALUE *argv, VALUE self,
 
         rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
 
-        size_t nfd_length;
-        char *nfd = u_normalize_n(USTRING_STR(string),
-                                  USTRING_LENGTH(string),
-                                  U_NORMALIZE_NFD,
-                                  &nfd_length);
+        size_t nfd_n = u_normalize(NULL, 0,
+                                   USTRING_STR(string), USTRING_LENGTH(string),
+                                   U_NORMALIZE_NFD);
+        char *nfd = ALLOC_N(char, nfd_n + 1);
+        nfd_n = u_normalize(nfd, nfd_n + 1,
+                            USTRING_STR(string), USTRING_LENGTH(string),
+                            U_NORMALIZE_NFD);
 
-        size_t converted_length = convert(NULL, 0, nfd, nfd_length, locale);
-        char *converted = ALLOC_N(char, converted_length + 1);
-        convert(converted, converted_length + 1, nfd, nfd_length, locale);
+        size_t converted_n = convert(NULL, 0, nfd, nfd_n, locale);
+        char *converted = ALLOC_N(char, converted_n + 1);
+        convert(converted, converted_n + 1, nfd, nfd_n, locale);
 
-        VALUE result = converted_length == nfd_length &&
-                memcmp(converted, nfd, nfd_length) == 0 ? Qtrue : Qfalse;
+        VALUE result = converted_n == nfd_n &&
+                memcmp(converted, nfd, nfd_n) == 0 ? Qtrue : Qfalse;
 
         free(converted);
         free(nfd);

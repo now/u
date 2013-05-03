@@ -17,10 +17,6 @@ VALUE _rb_u_character_test(VALUE string, bool (*test)(uint32_t));
 VALUE _rb_u_string_test(VALUE self,
                         char *(convert)(const char *, size_t, size_t *));
 
-VALUE _rb_u_string_test_in_locale(int argc, VALUE *argv, VALUE self,
-                                  char *(convert)(const char *, size_t,
-                                                  const char *, size_t *));
-
 VALUE _rb_u_string_test_new(int argc, VALUE *argv, VALUE self,
                             size_t convert(char *, size_t, const char *, size_t,
                                            const char *));
