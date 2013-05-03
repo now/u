@@ -9,10 +9,5 @@
 VALUE
 rb_u_string_reverse(VALUE self)
 {
-        const struct rb_u_string *string = RVAL2USTRING(self);
-        long length = USTRING_LENGTH(string);
-
-        char *reversed = u_reverse_n(USTRING_STR(string), length);
-
-        return rb_u_string_new_c_own(self, reversed, length);
+        return _rb_u_string_convert(self, u_reverse);
 }

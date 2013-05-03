@@ -446,8 +446,7 @@ U_PURE size_t u_width_n(const char *string, size_t n);
 
 U_PURE size_t u_n_bytes(const char *str);
 
-char *u_reverse(const char *str);
-char *u_reverse_n(const char *str, size_t n);
+size_t u_reverse(char *result, size_t m, const char *string, size_t n);
 
 bool u_isvalid(const char *str);
 bool u_isvalid_n(const char *str, size_t max, const char **end);

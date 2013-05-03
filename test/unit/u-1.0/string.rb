@@ -647,6 +647,8 @@ Expectations do
   expect result.tainted? do ''.u.taint.normalize end
   expect result.untrusted? do ''.u.untrust.normalize end if untrust
 
+  expect ''.u do ''.u.reverse end
+  expect 'a'.u do 'a'.u.reverse end
   expect 'ateb'.u do 'beta'.u.reverse end
   expect 'madamImadam'.u do 'madamImadam'.u.reverse end
   expect "alpha\0beta".u do "ateb\0ahpla".u.reverse end
