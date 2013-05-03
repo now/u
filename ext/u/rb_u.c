@@ -104,7 +104,7 @@ _rb_u_character_test(VALUE self, bool (*test)(uint32_t))
 
 VALUE
 _rb_u_string_test(VALUE self,
-                  char *(convert)(const char *, size_t, size_t *))
+                  size_t convert(char *, size_t, const char *, size_t))
 {
         const struct rb_u_string *string = RVAL2USTRING(self);
 
@@ -118,8 +118,9 @@ _rb_u_string_test(VALUE self,
                             USTRING_STR(string), USTRING_LENGTH(string),
                             U_NORMALIZE_NFD);
 
-        size_t converted_n;
-        char *converted = convert(nfd, nfd_n, &converted_n);
+        size_t converted_n = convert(NULL, 0, nfd, nfd_n);
+        char *converted = ALLOC_N(char, converted_n + 1);
+        convert(converted, converted_n + 1, nfd, nfd_n);
 
         VALUE result = converted_n == nfd_n &&
                 memcmp(converted, nfd, nfd_n) == 0 ? Qtrue : Qfalse;

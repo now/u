@@ -30,19 +30,21 @@ rb_u_string_casecmp(int argc, VALUE *argv, VALUE self)
         rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
         rb_u_validate(USTRING_STR(other), USTRING_LENGTH(other));
 
-        size_t folded_length;
-        char *folded = u_foldcase_n(USTRING_STR(string),
-                                    USTRING_LENGTH(string),
-                                    &folded_length);
+        size_t folded_n = u_foldcase(NULL, 0,
+                                     USTRING_STR(string), USTRING_LENGTH(string));
+        char *folded = ALLOC_N(char, folded_n + 1);
+        u_foldcase(folded, folded_n + 1,
+                   USTRING_STR(string), USTRING_LENGTH(string));
 
-        size_t folded_other_length;
-        char *folded_other = u_foldcase_n(USTRING_STR(other),
-                                          USTRING_LENGTH(other),
-                                          &folded_other_length);
+        size_t folded_other_n = u_foldcase(NULL, 0,
+                                           USTRING_STR(other), USTRING_LENGTH(other));
+        char *folded_other = ALLOC_N(char, folded_other_n + 1);
+        u_foldcase(folded_other, folded_other_n + 1,
+                   USTRING_STR(other), USTRING_LENGTH(other));
 
         errno = 0;
-        int r = u_collate_in_locale_n(folded, folded_length,
-                                      folded_other, folded_other_length,
+        int r = u_collate_in_locale_n(folded, folded_n,
+                                      folded_other, folded_other_n,
                 locale);
 
         free(folded_other);

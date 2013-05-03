@@ -363,8 +363,7 @@ size_t u_normalize(char *result, size_t m, const char *string, size_t n,
 size_t u_downcase(char *result, size_t m, const char *string, size_t n,
                   const char *locale);
 
-char *u_foldcase(const char *string);
-char *u_foldcase_n(const char *string, size_t n, size_t *new_n);
+size_t u_foldcase(char *result, size_t m, const char *string, size_t n);
 
 size_t u_titlecase(char *result, size_t m, const char *string, size_t n,
                    const char *locale);

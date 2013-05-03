@@ -15,7 +15,7 @@ void rb_u_validate(const char *string, long length);
 VALUE _rb_u_character_test(VALUE string, bool (*test)(uint32_t));
 
 VALUE _rb_u_string_test(VALUE self,
-                        char *(convert)(const char *, size_t, size_t *));
+                        size_t convert(char *, size_t, const char *, size_t));
 
 VALUE _rb_u_string_test_new(int argc, VALUE *argv, VALUE self,
                             size_t convert(char *, size_t, const char *, size_t,
