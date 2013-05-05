@@ -200,6 +200,22 @@ rb_u_string_dup(VALUE self)
         return result;
 }
 
+#include <errno.h>
+
+static VALUE
+rb_u_string_recode(VALUE self, VALUE codeset)
+{
+        const struct rb_u_string *string = RVAL2USTRING(self);
+        const char *cs = StringValuePtr(codeset);
+        errno = 0;
+        size_t n = u_recode(NULL, 0, USTRING_STR(string), USTRING_LENGTH(string), cs);
+        if (errno != 0)
+                rb_u_raise_errno(rb_eRuntimeError, errno, "can’t recode");
+        char *recoded = ALLOC_N(char, n + 1);
+        u_recode(recoded, n + 1, USTRING_STR(string), USTRING_LENGTH(string), cs);
+        return rb_str_new(recoded, n);
+}
+
 /* Document-class: U::String
  *
  * A U::String is a sequence of zero or more Unicode characters encoded as
@@ -450,4 +466,6 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "b", rb_u_string_b, 0); /* in ext/u/rb_u_string_b.c */
         rb_define_method(rb_cUString, "to_sym", rb_u_string_to_sym, 0); /* in ext/u/rb_u_string_to_sym.c */
         rb_define_alias(rb_cUString, "intern", "to_sym");
+
+        rb_define_method(rb_cUString, "recode", rb_u_string_recode, 1);
 }

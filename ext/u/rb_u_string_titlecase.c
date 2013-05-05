@@ -7,5 +7,5 @@
 VALUE
 rb_u_string_titlecase(int argc, VALUE *argv, VALUE self)
 {
-        return _rb_u_string_convert_locale(argc, argv, self, u_titlecase);
+        return _rb_u_string_convert_locale(argc, argv, self, u_titlecase, NULL);
 }

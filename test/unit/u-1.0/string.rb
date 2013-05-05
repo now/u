@@ -230,11 +230,11 @@ Expectations do
   expect 1 do 'あB'.u.casecmp('あa') end
   expect 1 do 'あB'.u.casecmp('あa'.u) end
 
-  expect ''.u do "\0".u.collation_key end
-  expect 'äbcdëf'.u do 'äbcdëf'.u.collation_key end
-  expect 'äbcdëf'.u do "äbc\0dëf".u.collation_key end
-  expect result.tainted? do ''.u.taint.collation_key end
-  expect result.untrusted? do ''.u.untrust.collation_key end if untrust
+  expect "\0".u do "\0".u.collation_key('en_US.UTF-8') end
+  expect U::String do 'äbcdëf'.u.collation_key('en_US.UTF-8') end
+  expect U::String do "äbc\0dëf".u.collation_key('en_US.UTF-8') end
+  expect result.tainted? do ''.u.taint.collation_key('en_US.UTF-8') end
+  expect result.untrusted? do ''.u.untrust.collation_key('en_US.UTF-8') end if untrust
 
   expect 0 do 'a'.u.canonical_combining_class end
   expect 230 do [0x0307].pack('U').u.canonical_combining_class end

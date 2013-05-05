@@ -43,7 +43,20 @@ headers = []
 headers << 'wchar.h' if $wchar_h
 headers << 'xlocale.h' if $xlocale_h
 have_func 'wcscoll_l', headers
-have_func 'wcsxfrm_l', headers
+have_func 'strxfrm_l', headers
+
+checking_for 'nl_langinfo and CODESET' do
+  $defs.push '-DHAVE_NL_LANGINFO_CODESET' if try_compile <<EOC
+#include <langinfo.h>
+int
+main(void)
+{
+        char *cs = nl_langinfo(CODESET);
+        return 0;
+}
+EOC
+end
+have_func 'nl_langinfo_l', %w'langinfo.h xlocale.h'
 have_library 'iconv', 'iconv', 'iconv.h'
 have_func 'iconv', 'iconv.h'
 

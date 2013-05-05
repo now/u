@@ -24,8 +24,9 @@ VALUE _rb_u_string_test_locale(int argc, VALUE *argv, VALUE self,
 VALUE _rb_u_string_convert(VALUE self,
                            size_t convert(char *, size_t, const char *, size_t));
 VALUE _rb_u_string_convert_locale(int argc, VALUE *argv, VALUE self,
-                                  size_t convert(char *, size_t, const char *, size_t,
-                                                 const char *));
+                                  size_t convert(char *, size_t, const char *,
+                                                 size_t, const char *),
+                                  const char *lc_env);
 
 VALUE _rb_u_string_property(VALUE self, const char *name,
                             int unknown, int property(uint32_t),

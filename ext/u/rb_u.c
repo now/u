@@ -1,9 +1,11 @@
 /* -*- coding: utf-8 -*- */
 
+#include <errno.h>
 #include <ruby.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <limits.h>
 #include "u.h"
 #include "private.h"
@@ -182,26 +184,44 @@ _rb_u_string_convert(VALUE self,
         return rb_u_string_new_c_own(self, converted, n);
 }
 
+static size_t
+try_convert(char *result, size_t m, const struct rb_u_string *string,
+            size_t convert(char *, size_t, const char *, size_t,
+                           const char *), const char *locale)
+{
+        errno = 0;
+        size_t n = convert(result, m, USTRING_STR(string), USTRING_LENGTH(string),
+                           locale);
+        if (errno != 0)
+                rb_u_raise_errno(rb_eRuntimeError, errno, "can’t apply conversion");
+        return n;
+}
+
 VALUE
 _rb_u_string_convert_locale(int argc, VALUE *argv, VALUE self,
                             size_t convert(char *, size_t, const char *, size_t,
-                                           const char *))
+                                           const char *),
+                            const char *lc_env)
 {
         const char *locale = NULL;
 
         VALUE rblocale;
         if (rb_scan_args(argc, argv, "01", &rblocale) == 1)
                 locale = StringValuePtr(rblocale);
+        else if (lc_env != NULL) {
+                const char * const env[] = { "LC_ALL", lc_env, "LANG", NULL };
+                for (const char * const *p = env; *p != NULL; p++)
+                        if ((locale = getenv(*p)) != NULL)
+                                break;
+        }
 
         const struct rb_u_string *string = RVAL2USTRING(self);
 
         rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
 
-        size_t n = convert(NULL, 0, USTRING_STR(string), USTRING_LENGTH(string),
-                           locale);
+        size_t n = try_convert(NULL, 0, string, convert, locale);
         char *converted = ALLOC_N(char, n + 1);
-        convert(converted, n + 1, USTRING_STR(string), USTRING_LENGTH(string),
-                locale);
+        n = try_convert(converted, n + 1, string, convert, locale);
 
         return rb_u_string_new_c_own(self, converted, n);
 }

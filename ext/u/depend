@@ -248,7 +248,7 @@ u_char_word_break.o: u_char_word_break.c u.h private.h data/constants.h \
   data/word-break.h
 u_char_xdigit_value.o: u_char_xdigit_value.c u.h private.h
 u_collate.o: u_collate.c extconf.h u.h utf8.h private.h
-u_collation_key.o: u_collation_key.c extconf.h u.h utf8.h private.h
+u_collation_key.o: u_collation_key.c extconf.h u.h private.h
 u_copy.o: u_copy.c u.h private.h
 u_downcase.o: u_downcase.c u.h private.h data/constants.h attributes.h \
   titled.h output.h u_locale.h case.h
