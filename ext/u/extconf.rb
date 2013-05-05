@@ -44,6 +44,8 @@ headers << 'wchar.h' if $wchar_h
 headers << 'xlocale.h' if $xlocale_h
 have_func 'wcscoll_l', headers
 have_func 'wcsxfrm_l', headers
+have_library 'iconv', 'iconv', 'iconv.h'
+have_func 'iconv', 'iconv.h'
 
 have_func 'rb_long2int', 'ruby.h'
 have_func 'rb_hash_lookup2', 'ruby.h'
