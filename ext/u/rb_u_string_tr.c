@@ -1,6 +1,8 @@
 #include "rb_includes.h"
 #include "rb_u_string_internal_tr.h"
 
+#include "output.h"
+
 struct tr_range
 {
         uint32_t begin;
@@ -95,98 +97,76 @@ tr_trans_replace_include(uint32_t c, void *v_closure)
         return tr_trans_replace_include_find_to_u_char(closure, offset);
 }
 
-static long
+static void
 tr_trans_real_squeeze(const char *str, const char *end,
                       struct tr_table *translation,
-                      uint32_t (*replace)(uint32_t, void *), void *closure,
-                      char *result, bool *modified)
+                      uint32_t replace(uint32_t, void *), void *closure,
+                      struct output *output, bool *modified)
 {
-        long len = 0;
-
+        size_t n = output->n;
         const char *p = str;
-
         uint32_t prev_c = U_N_CODEPOINTS;
         while (p < end) {
                 uint32_t c0 = u_dref(p);
-
                 const char *prev = p;
                 p = u_next(p);
-
                 if (tr_table_lookup(translation, c0)) {
                         uint32_t c = replace(c0, closure);
                         if (prev_c == c)
                                 continue;
                         prev_c = c;
-                        len += u_char_to_u(c, OFFSET_IF(result, len));
+                        output_char(output, c);
                         if (c != c0)
                                 *modified = true;
                 } else {
-                        long run = p - prev;
-                        if (result != NULL)
-                                memcpy(result + len, prev, run);
-                        len += run;
-
+                        output_string(output, prev, p - prev);
                         prev_c = U_N_CODEPOINTS;
                 }
-
         }
 
-        if (end - str > len)
+        if ((size_t)(end - str) > (output->n - n))
                 *modified = true;
-
-        return len;
 }
 
-static long
+static void
 tr_trans_real_standard(const char *str, const char *end,
                        struct tr_table *translation,
-                       uint32_t (*replace)(uint32_t, void *), void *closure,
-                       char *result, bool *modified)
+                       uint32_t replace(uint32_t, void *), void *closure,
+                       struct output *output, bool *modified)
 {
-        long len = 0;
-
         const char *p = str;
 
         while (p < end) {
                 uint32_t c = u_dref(p);
-
                 const char *prev = p;
                 p = u_next(p);
-
                 if (tr_table_lookup(translation, c)) {
                         uint32_t replacement = replace(c, closure);
-                        len += u_char_to_u(replacement, OFFSET_IF(result, len));
+                        output_char(output, replacement);
                         if (replacement != c)
                                 *modified = true;
-                } else {
-                        long run = p - prev;
-                        if (result != NULL)
-                                memcpy(result + len, prev, run);
-                        len += run;
-                }
+                } else
+                        output_string(output, prev, p - prev);
         }
-
-        return len;
 }
 
-static long
+static void
 tr_trans_real(const char *str, const char *end,
               struct tr_table *translation,
-              uint32_t (*replace)(uint32_t, void *), void *closure, bool squeeze,
-              char *result, bool *modified)
+              uint32_t replace(uint32_t, void *), void *closure, bool squeeze,
+              struct output *output, bool *modified)
 {
         if (squeeze)
-                return tr_trans_real_squeeze(str, end,
-                                             translation,
-                                             replace, closure,
-                                             result, modified);
+                tr_trans_real_squeeze(str, end,
+                                      translation,
+                                      replace, closure,
+                                      output, modified);
         else
-                return tr_trans_real_standard(str, end,
-                                              translation,
-                                              replace, closure,
-                                              result, modified);
+                tr_trans_real_standard(str, end,
+                                       translation,
+                                       replace, closure,
+                                       output, modified);
 }
-
 
 static VALUE
 tr_trans_do(VALUE self, struct tr_table *translation,
@@ -197,20 +177,23 @@ tr_trans_do(VALUE self, struct tr_table *translation,
         const char *begin = USTRING_STR(string);
         const char *end = USTRING_END(string);
         bool modified = false;
-        long len = tr_trans_real(begin, end,
-                                 translation,
-                                 replace, closure, squeeze,
-                                 NULL, &modified);
-        if (!modified)
-                return self;
-        char *result = ALLOC_N(char, len + 1);
+        struct output output = OUTPUT_INIT(NULL, 0);
         tr_trans_real(begin, end,
                       translation,
                       replace, closure, squeeze,
-                      result, &modified);
-        result[len] = '\0';
+                      &output, &modified);
+        if (!modified)
+                return self;
+        output.result = ALLOC_N(char, output.n + 1);
+        output.m = output.n;
+        output.n = 0;
+        tr_trans_real(begin, end,
+                      translation,
+                      replace, closure, squeeze,
+                      &output, &modified);
+        output_finalize(&output);
 
-        return rb_u_string_new_c_own(self, result, len);
+        return rb_u_string_new_c_own(self, output.result, output.n);
 }
 
 static VALUE
