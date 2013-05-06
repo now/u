@@ -2,6 +2,8 @@
 
 /* @overload collation_key(locale = ENV['LC_COLLATE'])
  *
+ *   @raise [Errno::EILSEQ] If a character in the receiver can’t be converted
+ *     into the encoding of the locale
  *   @return [U::String] The locale-dependent collation key of the receiver in
  *     LOCALE, inheriting any taint and untrust
  *   @note Use the collation key when comparing U::Strings to each other

@@ -13,6 +13,8 @@
  *
  *   @param [U::String, #to_str] other
  *   @param [#to_str] locale
+ *   @raise [Errno::EILSEQ] If a character in the receiver can’t be converted
+ *     into the encoding of the locale
  *   @return [Fixnum]
  *   @see #==
  *   @see #eql? */
