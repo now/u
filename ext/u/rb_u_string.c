@@ -254,6 +254,10 @@ rb_u_string_recode(VALUE self, VALUE codeset)
  * interrogators check the corresponding Unicode property of each characters in
  * the U::String and if all characters have this property, they’ll return true.
  *
+ * A very close relative to the property-checking interrogators is
+ * {#normalized?}, which checks whether the receiver has been normalized,
+ * optionally to a specific normaliation form.
+ *
  * The content-matching interrogators are {#==}, {#===}, {#=~}, {#match},
  * {#empty?}, {#end_with?}, {#eql?}, {#include?}, {#index}, {#rindex}, and
  * {#start_with?}.  These interrogators check that a substring of the U::String
@@ -367,6 +371,8 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "wide_cjk?", rb_u_string_wide_cjk, 0); /* in ext/u/rb_u_string_wide_cjk.c */
         rb_define_method(rb_cUString, "xdigit?", rb_u_string_xdigit, 0); /* in ext/u/rb_u_string_xdigit.c */
         rb_define_method(rb_cUString, "zero_width?", rb_u_string_zero_width, 0); /* in ext/u/rb_u_string_zero_width.c */
+
+        rb_define_method(rb_cUString, "normalized?", rb_u_string_normalized, -1); /* in ext/u/rb_u_string_normalized.c */
 
         rb_define_method(rb_cUString, "==", rb_u_string_equal, 1); /* in ext/u/rb_u_string_equal.c */
         rb_define_alias(rb_cUString, "===", "==");

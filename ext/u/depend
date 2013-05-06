@@ -125,6 +125,8 @@ rb_u_string_newline.o: rb_u_string_newline.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_normalize.o: rb_u_string_normalize.c rb_includes.h extconf.h \
   u.h private.h rb_private.h rb_u_string.h
+rb_u_string_normalized.o: rb_u_string_normalized.c rb_includes.h \
+  extconf.h u.h private.h rb_private.h rb_u_string.h
 rb_u_string_oct.o: rb_u_string_oct.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h rb_u_string_to_inum.h
 rb_u_string_ord.o: rb_u_string_ord.c rb_includes.h extconf.h u.h \
@@ -239,6 +241,8 @@ u_char_iszerowidth.o: u_char_iszerowidth.c u.h private.h
 u_char_line_break.o: u_char_line_break.c u.h data/constants.h \
   data/line-break.h private.h
 u_char_mirror.o: u_char_mirror.c u.h private.h data/bidi-mirroring.h
+u_char_normalized.o: u_char_normalized.c u.h data/constants.h \
+  data/normalization-quick-check.h
 u_char_script.o: u_char_script.c u.h private.h data/script.h
 u_char_to_u.o: u_char_to_u.c u.h utf8.h
 u_char_upcase.o: u_char_upcase.c u.h private.h data/constants.h \
@@ -266,6 +270,7 @@ u_n_chars.o: u_n_chars.c u.h private.h
 u_next.o: u_next.c u.h private.h utf8.h
 u_normalize.o: u_normalize.c u.h private.h data/constants.h \
   data/decompose.h data/compose.h output.h
+u_normalized.o: u_normalized.c u.h
 u_offset_to_pointer.o: u_offset_to_pointer.c u.h private.h
 u_pointer_to_offset.o: u_pointer_to_offset.c u.h private.h
 u_prev.o: u_prev.c u.h private.h utf8.h

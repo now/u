@@ -360,6 +360,16 @@ enum u_normalize_mode {
 size_t u_normalize(char *result, size_t m, const char *string, size_t n,
                    enum u_normalize_mode mode);
 
+enum u_normalized {
+        U_NORMALIZED_YES,
+        U_NORMALIZED_NO,
+        U_NORMALIZED_MAYBE,
+};
+
+enum u_normalized u_char_normalized(uint32_t c, enum u_normalize_mode mode);
+enum u_normalized u_normalized(const char *string, size_t n,
+                               enum u_normalize_mode mode);
+
 size_t u_downcase(char *result, size_t m, const char *string, size_t n,
                   const char *locale);
 

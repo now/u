@@ -92,6 +92,7 @@ module U
               rb_u_string_mirror.c
               rb_u_string_newline.c
               rb_u_string_normalize.c
+              rb_u_string_normalized.c
               rb_u_string_oct.c
               rb_u_string_ord.c
               rb_u_string_partition.c
@@ -163,6 +164,7 @@ module U
               u_char_iszerowidth.c
               u_char_line_break.c
               u_char_mirror.c
+              u_char_normalized.c
               u_char_script.c
               u_char_to_u.c
               u_char_upcase.c
@@ -187,6 +189,7 @@ module U
               u_n_chars.c
               u_next.c
               u_normalize.c
+              u_normalized.c
               u_offset_to_pointer.c
               u_pointer_to_offset.c
               u_prev.c
@@ -256,6 +259,7 @@ module U
               ext/u/data/general-category.h
               ext/u/data/grapheme-break.h
               ext/u/data/line-break.h
+              ext/u/data/normalization-quick-check.h
               ext/u/data/script.h
               ext/u/data/soft-dotted.h
               ext/u/data/title-table.h

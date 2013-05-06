@@ -7,6 +7,7 @@ module U::Build::Data
   require 'u/build/data/casefolding'
   require 'u/build/data/compositionexclusions'
   require 'u/build/data/derivedeastasianwidth'
+  require 'u/build/data/derivednormalizationprops'
   require 'u/build/data/linebreak'
   require 'u/build/data/proplist'
   require 'u/build/data/scripts'

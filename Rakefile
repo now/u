@@ -76,8 +76,8 @@ end
 data_file 'BidiMirroring.txt'
 data_file 'CaseFolding.txt'
 data_file 'CompositionExclusions.txt'
+data_file 'DerivedNormalizationProps.txt'
 data_file 'LineBreak.txt'
-data_file 'NormalizationTest.txt'
 data_file 'NormalizationTest.txt'
 data_file 'PropList.txt'
 data_file 'Scripts.txt'
@@ -154,6 +154,10 @@ data_header 'ext/u/data/title-table.h' => %w[build/ext/u/data/title-table.rb
 
 data_header 'ext/u/data/general-category.h' => %w[build/ext/u/data/general-category.rb
                                                   build/data/UnicodeData.marshalled]
+
+data_header 'ext/u/data/normalization-quick-check.h' => %w[build/ext/u/data/normalization-quick-check.rb
+                                                           build/data/UnicodeData.marshalled
+                                                           build/data/DerivedNormalizationProps.txt]
 
 data_header 'ext/u/data/wide.h' => %w[build/ext/u/data/wide.rb
                                       build/data/DerivedEastAsianWidth.txt] do |t|

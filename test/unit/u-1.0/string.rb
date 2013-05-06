@@ -146,6 +146,10 @@ Expectations do
   expect true do [0x200b, 0x1160].pack('U*').u.zero_width? end
   expect false do 'a'.u.zero_width? end
 
+  expect result.normalized?(:nfc) do 'äbc'.u end
+  expect result.normalized?(:nfd) do 'äbc'.u.normalize(:nfd) end
+  expect result.normalized? do 'äbc'.u.normalize(:nfd) end
+
   expect result.not.eql?('abc') do 'abc'.u end
   expect result.not.eql?('äbc'.u) do 'äbc'.u.normalize(:nfd) end
   expect result.eql?('äbc'.u) do 'äbc'.u.normalize(:nfd).normalize(:nfc) end

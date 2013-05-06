@@ -32,6 +32,8 @@ VALUE _rb_u_string_property(VALUE self, const char *name,
                             int unknown, int property(uint32_t),
                             VALUE tosym(int));
 
+enum u_normalize_mode _rb_u_symbol_to_normalize_mode(VALUE symbol);
+
 VALUE rb_u_pattern_argument(VALUE pattern, bool quote);
 
 long rb_u_string_index_regexp(VALUE self, const char *begin, VALUE regex, bool reverse);
