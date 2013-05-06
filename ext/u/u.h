@@ -497,3 +497,5 @@ void u_grapheme_clusters(const char *string, size_t n, u_substring_fn fn,
 
 int u_char_to_u_n(uint32_t c, char *result, size_t n);
 int u_char_to_u(uint32_t c, char *result);
+
+#define U_IS_CONTINUE_BYTE(c) ((((unsigned char)(c)) & 0xc0) == 0x80)

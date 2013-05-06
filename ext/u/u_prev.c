@@ -4,8 +4,6 @@
 
 #include "u.h"
 #include "private.h"
-#include "utf8.h"
-
 
 /* {{{1
  * Return a pointer to the previous UTF-8 character sequence in ‘str’.
@@ -13,12 +11,9 @@
 char *
 u_prev(const char *p)
 {
-	while (true) {
-		p--;
-
-		if (!CONT_X(*p))
+	while (true)
+		if (!U_IS_CONTINUE_BYTE(*--p))
 			return (char *)p;
-	}
 }
 
 
@@ -30,10 +25,10 @@ u_prev(const char *p)
 char *
 u_find_prev(const char *begin, const char *p)
 {
-	for (p--; p >= begin; p--) {
-		if (!CONT_X(*p))
+        if (p <= begin)
+                return NULL;
+	for (p--; p >= begin; p--)
+		if (!U_IS_CONTINUE_BYTE(*p))
 			return (char *)p;
-	}
-
 	return NULL;
 }

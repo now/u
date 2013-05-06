@@ -180,7 +180,7 @@ rb_u_string_to_str.o: rb_u_string_to_str.c rb_includes.h extconf.h u.h \
 rb_u_string_to_sym.o: rb_u_string_to_sym.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_tr.o: rb_u_string_tr.c rb_includes.h extconf.h u.h private.h \
-  rb_private.h rb_u_string.h rb_u_string_internal_tr.h
+  rb_private.h rb_u_string.h rb_u_string_internal_tr.h output.h
 rb_u_string_upcase.o: rb_u_string_upcase.c rb_includes.h extconf.h u.h \
   private.h rb_private.h rb_u_string.h
 rb_u_string_upper.o: rb_u_string_upper.c rb_includes.h extconf.h u.h \
@@ -244,19 +244,19 @@ u_char_mirror.o: u_char_mirror.c u.h private.h data/bidi-mirroring.h
 u_char_normalized.o: u_char_normalized.c u.h data/constants.h \
   data/normalization-quick-check.h
 u_char_script.o: u_char_script.c u.h private.h data/script.h
-u_char_to_u.o: u_char_to_u.c u.h utf8.h
+u_char_to_u.o: u_char_to_u.c u.h
 u_char_upcase.o: u_char_upcase.c u.h private.h data/constants.h \
   attributes.h titled.h
 u_char_width.o: u_char_width.c u.h
 u_char_word_break.o: u_char_word_break.c u.h private.h data/constants.h \
   data/word-break.h
 u_char_xdigit_value.o: u_char_xdigit_value.c u.h private.h
-u_collate.o: u_collate.c extconf.h u.h utf8.h private.h
+u_collate.o: u_collate.c extconf.h u.h private.h
 u_collation_key.o: u_collation_key.c extconf.h u.h private.h
 u_copy.o: u_copy.c u.h private.h
 u_downcase.o: u_downcase.c u.h private.h data/constants.h attributes.h \
   titled.h output.h u_locale.h case.h
-u_dref.o: u_dref.c u.h utf8.h private.h
+u_dref.o: u_dref.c u.h private.h
 u_foldcase.o: u_foldcase.c u.h private.h data/case-folding.h output.h
 u_grapheme_clusters.o: u_grapheme_clusters.c u.h private.h
 u_has_prefix.o: u_has_prefix.c u.h private.h
@@ -267,13 +267,13 @@ u_locale.o: u_locale.c u.h u_locale.h private.h
 u_mirror.o: u_mirror.c u.h private.h output.h
 u_n_bytes.o: u_n_bytes.c u.h private.h
 u_n_chars.o: u_n_chars.c u.h private.h
-u_next.o: u_next.c u.h private.h utf8.h
+u_next.o: u_next.c u.h private.h
 u_normalize.o: u_normalize.c u.h private.h data/constants.h \
   data/decompose.h data/compose.h output.h
 u_normalized.o: u_normalized.c u.h
 u_offset_to_pointer.o: u_offset_to_pointer.c u.h private.h
 u_pointer_to_offset.o: u_pointer_to_offset.c u.h private.h
-u_prev.o: u_prev.c u.h private.h utf8.h
+u_prev.o: u_prev.c u.h private.h
 u_recode.o: u_recode.c extconf.h u.h
 u_reverse.o: u_reverse.c u.h private.h output.h
 u_rindex.o: u_rindex.c u.h private.h

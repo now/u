@@ -200,7 +200,6 @@ module U
               u_upcase.c
               u_width.c
               u_words.c
-              utf8.h
               yield.h]
          end
 
