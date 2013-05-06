@@ -15,7 +15,6 @@ have_header 'stdlib.h'
 have_header 'string.h'
 have_header 'sys/types.h'
 have_header 'locale.h'
-$wchar_h = have_header('wchar.h')
 $xlocale_h = have_header('xlocale.h')
 
 checking_for 'broken RMATCH_REGS' do
@@ -40,9 +39,8 @@ end
 $defs.push '-D__USE_XOPEN2K8'
 
 headers = []
-headers << 'wchar.h' if $wchar_h
 headers << 'xlocale.h' if $xlocale_h
-have_func 'wcscoll_l', headers
+have_func 'strcoll_l', headers
 have_func 'strxfrm_l', headers
 
 checking_for 'nl_langinfo and CODESET' do
@@ -56,7 +54,7 @@ main(void)
 }
 EOC
 end
-have_func 'nl_langinfo_l', %w'langinfo.h xlocale.h'
+have_func 'nl_langinfo_l', %w'langinfo.h' + headers
 have_library 'iconv', 'iconv', 'iconv.h'
 have_func 'iconv', 'iconv.h'
 

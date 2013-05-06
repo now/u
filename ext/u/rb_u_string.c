@@ -210,7 +210,7 @@ rb_u_string_recode(VALUE self, VALUE codeset)
         errno = 0;
         size_t n = u_recode(NULL, 0, USTRING_STR(string), USTRING_LENGTH(string), cs);
         if (errno != 0)
-                rb_u_raise_errno(rb_eRuntimeError, errno, "can’t recode");
+                rb_u_raise_errno(errno, "can’t recode");
         char *recoded = ALLOC_N(char, n + 1);
         u_recode(recoded, n + 1, USTRING_STR(string), USTRING_LENGTH(string), cs);
         return rb_str_new(recoded, n);

@@ -258,24 +258,3 @@ u_normalize(char *result, size_t m, const char *string, size_t n,
         }
         return output_finalize(&output);
 }
-
-uint32_t *
-_u_normalize_wc(const char *string, size_t n, bool use_n,
-                enum u_normalization_form form, size_t *new_n)
-{
-        if (!use_n)
-                n = u_n_bytes(string);
-        size_t n_norm = u_normalize(NULL, 0, string, n, form);
-        char *norm = malloc(n_norm + 1);
-        n_norm = u_normalize(norm, n_norm + 1, string, n, form);
-        uint32_t *u32 = malloc(sizeof(uint32_t) * (n_norm + 1));
-        uint32_t *u = u32;
-        size_t m = 0;
-        for (const char *p = norm, *end = norm + n_norm; p < end; p = u_next(p), u++, m++)
-                *u = u_dref(p);
-        *u = '\0';
-        free(norm);
-        if (new_n != NULL)
-                *new_n = m;
-        return u32;
-}

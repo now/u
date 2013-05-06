@@ -424,9 +424,8 @@ void u_copy_n(char *dest, const char *src, size_t n);
 void u_append(char *dest, const char *src);
 void u_append_n(char *dest, const char *src, size_t n);
 
-U_PURE int u_collate(const char *a, const char *b);
-U_PURE int u_collate_n(const char *a, size_t a_n, const char *b, size_t b_n);
-U_PURE int u_collate_in_locale_n(const char *a, size_t a_n, const char *b, size_t b_n, const char *locale);
+int u_collate(const char *a, size_t a_n, const char *b, size_t b_n,
+              const char *locale);
 size_t u_collation_key(char *result, size_t m, const char *string, size_t n,
                        const char *locale);
 size_t u_normalized_collation_key(char *result, size_t m,

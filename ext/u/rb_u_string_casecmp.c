@@ -43,15 +43,15 @@ rb_u_string_casecmp(int argc, VALUE *argv, VALUE self)
                    USTRING_STR(other), USTRING_LENGTH(other));
 
         errno = 0;
-        int r = u_collate_in_locale_n(folded, folded_n,
-                                      folded_other, folded_other_n,
-                locale);
+        int r = u_collate(folded, folded_n,
+                          folded_other, folded_other_n,
+                          locale);
 
         free(folded_other);
         free(folded);
 
         if (errno != 0)
-                rb_u_raise_errno(rb_eSystemCallError, errno, "can’t collate strings");
+                rb_u_raise_errno(errno, "can’t collate strings");
 
         return INT2FIX(r);
 }

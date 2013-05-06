@@ -39,7 +39,7 @@ format_message(const char *format, va_list args)
 #  ifdef HAVE_RB_VSPRINTF
         return rb_vsprintf(format, args);
 #  else
-        char buf[1024];
+        char buf[2048];
         int n = vsnprintf(buf, sizeof(buf), format, args);
         return rb_str_new(buf, n);
 #  endif
@@ -57,22 +57,20 @@ rb_u_raise(VALUE exception, const char *format, ...)
 }
 
 void
-rb_u_raise_errno(VALUE exception, int number, const char *format, ...)
+rb_u_raise_errno(int number, const char *format, ...)
 {
+#ifdef HAVE_RUBY_ENCODING_H
         va_list args;
         va_start(args, format);
         VALUE message = format_message(format, args);
         va_end(args);
-
-        VALUE error = rb_str_new2(strerror(number));
-#ifdef HAVE_RUBY_ENCODING_H
-        rb_enc_associate(error, rb_locale_encoding());
-        error = rb_str_encode(error, rb_enc_from_encoding(rb_utf8_encoding()), 0, Qnil);
+        rb_syserr_fail_str(number, message);
+#else
+        char buf[2048];
+        int n = vsnprintf(buf, sizeof(buf), format, args);
+        int errno = number;
+        rb_sys_fail(buf);
 #endif
-
-        rb_exc_raise(rb_exc_new3(exception,
-                                 rb_str_append(rb_str_append(message, rb_str_new2(": ")),
-                                               error)));
 }
 
 VALUE

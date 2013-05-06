@@ -3,7 +3,6 @@
 #include <stdbool.h>
 
 #include "u.h"
-#include "utf8.h"
 #include "private.h"
 
 

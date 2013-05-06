@@ -193,7 +193,7 @@ try_convert(char *result, size_t m, const struct rb_u_string *string,
         size_t n = convert(result, m, USTRING_STR(string), USTRING_LENGTH(string),
                            locale);
         if (errno != 0)
-                rb_u_raise_errno(rb_eRuntimeError, errno, "can’t apply conversion");
+                rb_u_raise_errno(errno, "can’t apply conversion");
         return n;
 }
 

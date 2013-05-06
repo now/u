@@ -1,99 +1,83 @@
+#include "extconf.h"
 #include <assert.h>
+#include <errno.h>
 #include <stdbool.h>
-#include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include "extconf.h"
-#include <wchar.h>
-#include <locale.h>
-#ifdef HAVE_XLOCALE_H
-#  include <xlocale.h>
-#endif
-#ifndef HAVE_WCSCOLL_L
-static inline size_t
-wcscoll_l(wchar_t *restrict ws1, wchar_t *restrict ws2, size_t n,
-          UNUSED(locale_t loc))
-{
-        wcsxfrm(ws1, ws2, n);
-}
-#endif
 
 #include "u.h"
-#include "utf8.h"
 #include "private.h"
 
 static int
-collate(uint32_t *a, uint32_t *b, locale_t locale)
+compare(const char *a, size_t a_n, const char *b, size_t b_n)
 {
-        return locale != NULL ?
-                wcscoll_l((wchar_t *)a, (wchar_t *)b, locale) :
-                wcscoll((wchar_t *)a, (wchar_t *)b);
-}
-
-/* {{{1
- * Compare two strings for ordering using the linguistically correct rules of
- * the current locale.
- */
-int
-u_collate(const char *a, const char *b)
-{
-	assert(a != NULL);
-	assert(b != NULL);
-
-	uint32_t *a_norm = _u_normalize_wc(a, 0, false, U_NORMALIZATION_FORM_KC, NULL);
-	uint32_t *b_norm = _u_normalize_wc(b, 0, false, U_NORMALIZATION_FORM_KC, NULL);
-
-        int result = collate(a_norm, b_norm, NULL);
-
-	free(a_norm);
-	free(b_norm);
-
-	return result;
-}
-
-int
-u_collate_in_locale_n(const char *a, size_t a_n, const char *b, size_t b_n,
-                      const char *locale)
-{
-        size_t a_norm_n;
-	uint32_t * const a_norm = _u_normalize_wc(a, a_n, true,
-                                                  U_NORMALIZATION_FORM_KC,
-                                                  &a_norm_n);
-
-        size_t b_norm_n;
-	uint32_t * const b_norm = _u_normalize_wc(b, b_n, true,
-                                                  U_NORMALIZATION_FORM_KC,
-                                                  &b_norm_n);
-
-        locale_t l = NULL;
-        if (locale != NULL)
-                l = newlocale(LC_COLLATE_MASK, locale, NULL);
-
-        int result = 0;
-
-        uint32_t *a_p = a_norm;
-        uint32_t *a_end = a_norm + a_norm_n;
-        uint32_t *b_p = b_norm;
-        uint32_t *b_end = b_norm + b_norm_n;
-        while (a_p <= a_end && b_p <= b_end) {
-                result = collate(a_p, b_p, l);
-                if (result != 0)
-                        break;
-                a_p += wcslen((wchar_t *)a_p) + 1;
-                b_p += wcslen((wchar_t *)b_p) + 1;
+        int r = memcmp(a, b, a_n < b_n ? a_n : b_n);
+        if (r == 0) {
+                if (a_n < b_n)
+                        return -1;
+                else if (a_n > b_n)
+                        return 1;
         }
+        return r;
+}
 
-        if (l != NULL)
-                freelocale(l);
-	free(a_norm);
-	free(b_norm);
-
-	return result;
+static size_t
+ckey(char **result, char *buf, size_t m,
+     const char *string, size_t n,
+     const char *locale)
+{
+        errno = 0;
+        size_t key_n = u_collation_key(buf, m, string, n, locale);
+        if (errno != 0)
+                return 0;
+        if (key_n < m) {
+                *result = buf;
+                return key_n;
+        }
+        char *key = malloc(key_n + 1);
+        if (key == NULL)
+                return 0;
+        key_n = u_collation_key(key, key_n + 1, string, n, locale);
+        if (errno != 0) {
+                free(key);
+                return 0;
+        }
+        *result = key;
+        return key_n;
 }
 
 int
-u_collate_n(const char *a, size_t a_n, const char *b, size_t b_n)
+u_collate(const char *a, size_t a_n, const char *b, size_t b_n,
+          const char *locale)
 {
-        return u_collate_in_locale_n(a, a_n, b, b_n, NULL);
+        char a_buf[2048];
+        char *a_key;
+        size_t a_key_n = ckey(&a_key, a_buf, sizeof(a_buf), a, a_n, locale);
+        int a_errno = errno;
+
+        char b_buf[2048];
+        char *b_key;
+        size_t b_key_n = ckey(&b_key, b_buf, sizeof(b_buf), b, b_n, locale);
+        int b_errno = errno;
+
+        int r;
+        if (a_errno != 0) {
+                if (b_errno != 0)
+                        r = compare(a, a_n, b, b_n);
+                else
+                        r = 1;
+                errno = a_errno;
+        } else if (b_errno != 0) {
+                r = -1;
+                errno = b_errno;
+        } else
+                r = compare(a_key, a_key_n, b_key, b_key_n);
+
+        if (a_key != a_buf)
+                free(a_key);
+        if (b_key != b_buf)
+                free(b_key);
+
+        return r;
 }

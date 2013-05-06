@@ -32,10 +32,10 @@ rb_u_string_collate(int argc, VALUE *argv, VALUE self)
         rb_u_validate(USTRING_STR(other), USTRING_LENGTH(other));
 
         errno = 0;
-        int r = u_collate_in_locale_n(USTRING_STR(string), USTRING_LENGTH(string),
-                                      USTRING_STR(other), USTRING_LENGTH(other),
-                                      locale);
+        int r = u_collate(USTRING_STR(string), USTRING_LENGTH(string),
+                          USTRING_STR(other), USTRING_LENGTH(other),
+                          locale);
         if (errno != 0)
-                rb_u_raise_errno(rb_eSystemCallError, errno, "can’t collate strings");
+                rb_u_raise_errno(errno, "can’t collate strings");
         return INT2FIX(r);
 }
