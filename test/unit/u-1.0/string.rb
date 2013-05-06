@@ -646,7 +646,7 @@ Expectations do
   expect result.untrusted? do ''.u.untrust.mirror end if untrust
 
   expect TypeError.new('not a symbol: 1') do ''.u.normalize(1) end
-  expect ArgumentError.new('unknown normalization mode: :ufc') do ''.u.normalize(:ufc) end
+  expect ArgumentError.new('unknown normalization form: :ufc') do ''.u.normalize(:ufc) end
   expect 'Ḋ'.u do "D\xcc\x87".u.normalize(:nfc) end
   expect result.tainted? do ''.u.taint.normalize end
   expect result.untrusted? do ''.u.untrust.normalize end if untrust

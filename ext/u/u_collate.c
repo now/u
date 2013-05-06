@@ -41,8 +41,8 @@ u_collate(const char *a, const char *b)
 	assert(a != NULL);
 	assert(b != NULL);
 
-	uint32_t *a_norm = _u_normalize_wc(a, 0, false, U_NORMALIZE_ALL_COMPOSE, NULL);
-	uint32_t *b_norm = _u_normalize_wc(b, 0, false, U_NORMALIZE_ALL_COMPOSE, NULL);
+	uint32_t *a_norm = _u_normalize_wc(a, 0, false, U_NORMALIZATION_FORM_KC, NULL);
+	uint32_t *b_norm = _u_normalize_wc(b, 0, false, U_NORMALIZATION_FORM_KC, NULL);
 
         int result = collate(a_norm, b_norm, NULL);
 
@@ -58,12 +58,12 @@ u_collate_in_locale_n(const char *a, size_t a_n, const char *b, size_t b_n,
 {
         size_t a_norm_n;
 	uint32_t * const a_norm = _u_normalize_wc(a, a_n, true,
-                                                  U_NORMALIZE_ALL_COMPOSE,
+                                                  U_NORMALIZATION_FORM_KC,
                                                   &a_norm_n);
 
         size_t b_norm_n;
 	uint32_t * const b_norm = _u_normalize_wc(b, b_n, true,
-                                                  U_NORMALIZE_ALL_COMPOSE,
+                                                  U_NORMALIZATION_FORM_KC,
                                                   &b_norm_n);
 
         locale_t l = NULL;

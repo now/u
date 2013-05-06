@@ -346,19 +346,15 @@ enum u_script {
 
 U_CONST enum u_script u_char_script(uint32_t c);
 
-enum u_normalize_mode {
-	U_NORMALIZE_DEFAULT,
-	U_NORMALIZE_NFD = U_NORMALIZE_DEFAULT,
-	U_NORMALIZE_DEFAULT_COMPOSE,
-	U_NORMALIZE_NFC = U_NORMALIZE_DEFAULT_COMPOSE,
-	U_NORMALIZE_ALL,
-	U_NORMALIZE_NFKD = U_NORMALIZE_ALL,
-	U_NORMALIZE_ALL_COMPOSE,
-	U_NORMALIZE_NFKC = U_NORMALIZE_ALL_COMPOSE
+enum u_normalization_form {
+        U_NORMALIZATION_FORM_D,
+        U_NORMALIZATION_FORM_C,
+        U_NORMALIZATION_FORM_KD,
+        U_NORMALIZATION_FORM_KC,
 };
 
 size_t u_normalize(char *result, size_t m, const char *string, size_t n,
-                   enum u_normalize_mode mode);
+                   enum u_normalization_form form);
 
 enum u_normalized {
         U_NORMALIZED_YES,
@@ -366,9 +362,9 @@ enum u_normalized {
         U_NORMALIZED_MAYBE,
 };
 
-enum u_normalized u_char_normalized(uint32_t c, enum u_normalize_mode mode);
+enum u_normalized u_char_normalized(uint32_t c, enum u_normalization_form form);
 enum u_normalized u_normalized(const char *string, size_t n,
-                               enum u_normalize_mode mode);
+                               enum u_normalization_form form);
 
 size_t u_downcase(char *result, size_t m, const char *string, size_t n,
                   const char *locale);

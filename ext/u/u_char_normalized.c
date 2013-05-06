@@ -8,7 +8,7 @@
 #include "data/normalization-quick-check.h"
 
 enum u_normalized
-u_char_normalized(uint32_t c, enum u_normalize_mode mode)
+u_char_normalized(uint32_t c, enum u_normalization_form form)
 {
         int16_t index;
 
@@ -22,5 +22,5 @@ u_char_normalized(uint32_t c, enum u_normalize_mode mode)
         uint8_t value = index >= UNICODE_MAX_TABLE_INDEX ?
 		index - UNICODE_MAX_TABLE_INDEX :
                 normalization_quick_check_data[index][c & 0xff];
-        return value & (((1 << 2) - 1) << (2 * mode));
+        return value & (((1 << 2) - 1) << (2 * form));
 }

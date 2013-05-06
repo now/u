@@ -17,12 +17,12 @@ rb_u_string_normalized(int argc, VALUE *argv, VALUE self)
 {
         const struct rb_u_string *string = RVAL2USTRING(self);
 
-        VALUE rbmode;
-        enum u_normalize_mode mode = U_NORMALIZE_DEFAULT;
-        if (rb_scan_args(argc, argv, "01", &rbmode) == 1)
-                mode = _rb_u_symbol_to_normalize_mode(rbmode);
+        VALUE rbform;
+        enum u_normalization_form form = U_NORMALIZATION_FORM_D;
+        if (rb_scan_args(argc, argv, "01", &rbform) == 1)
+                form = _rb_u_symbol_to_normalization_form(rbform);
 
         return u_normalized(USTRING_STR(string),
                             USTRING_LENGTH(string),
-                            mode) == U_NORMALIZED_YES ? Qtrue : Qfalse;
+                            form) == U_NORMALIZED_YES ? Qtrue : Qfalse;
 }

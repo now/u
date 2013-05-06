@@ -242,17 +242,18 @@ compose_loop(char *string, size_t n)
 
 size_t
 u_normalize(char *result, size_t m, const char *string, size_t n,
-            enum u_normalize_mode mode)
+            enum u_normalization_form form)
 {
         const char *(*decompose)(size_t) =
-                (mode == U_NORMALIZE_NFKC || mode == U_NORMALIZE_NFKD) ?
-                compatible : canonical;
+                (form == U_NORMALIZATION_FORM_KC ||
+                 form == U_NORMALIZATION_FORM_KD) ? compatible : canonical;
         const char *end = string + n;
         struct output output = OUTPUT_INIT(result, m);
         decompose_loop(string, end, decompose, &output);
         if (output.m > output.n) {
                 canonical_ordering(output.result, output.n);
-                if (mode == U_NORMALIZE_NFC || mode == U_NORMALIZE_NFKC)
+                if (form == U_NORMALIZATION_FORM_C ||
+                    form == U_NORMALIZATION_FORM_KC)
                         output.n = compose_loop(output.result, output.n);
         }
         return output_finalize(&output);
@@ -260,13 +261,13 @@ u_normalize(char *result, size_t m, const char *string, size_t n,
 
 uint32_t *
 _u_normalize_wc(const char *string, size_t n, bool use_n,
-                enum u_normalize_mode mode, size_t *new_n)
+                enum u_normalization_form form, size_t *new_n)
 {
         if (!use_n)
                 n = u_n_bytes(string);
-        size_t n_norm = u_normalize(NULL, 0, string, n, mode);
+        size_t n_norm = u_normalize(NULL, 0, string, n, form);
         char *norm = malloc(n_norm + 1);
-        n_norm = u_normalize(norm, n_norm + 1, string, n, mode);
+        n_norm = u_normalize(norm, n_norm + 1, string, n, form);
         uint32_t *u32 = malloc(sizeof(uint32_t) * (n_norm + 1));
         uint32_t *u = u32;
         size_t m = 0;

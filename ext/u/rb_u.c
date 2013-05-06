@@ -114,11 +114,11 @@ _rb_u_string_test(VALUE self,
 
         size_t nfd_n = u_normalize(NULL, 0,
                                    USTRING_STR(string), USTRING_LENGTH(string),
-                                   U_NORMALIZE_NFD);
+                                   U_NORMALIZATION_FORM_D);
         char *nfd = ALLOC_N(char, nfd_n + 1);
         nfd_n = u_normalize(nfd, nfd_n + 1,
                             USTRING_STR(string), USTRING_LENGTH(string),
-                            U_NORMALIZE_NFD);
+                            U_NORMALIZATION_FORM_D);
 
         size_t converted_n = convert(NULL, 0, nfd, nfd_n);
         char *converted = ALLOC_N(char, converted_n + 1);
@@ -150,11 +150,11 @@ _rb_u_string_test_locale(int argc, VALUE *argv, VALUE self,
 
         size_t nfd_n = u_normalize(NULL, 0,
                                    USTRING_STR(string), USTRING_LENGTH(string),
-                                   U_NORMALIZE_NFD);
+                                   U_NORMALIZATION_FORM_D);
         char *nfd = ALLOC_N(char, nfd_n + 1);
         nfd_n = u_normalize(nfd, nfd_n + 1,
                             USTRING_STR(string), USTRING_LENGTH(string),
-                            U_NORMALIZE_NFD);
+                            U_NORMALIZATION_FORM_D);
 
         size_t converted_n = convert(NULL, 0, nfd, nfd_n, locale);
         char *converted = ALLOC_N(char, converted_n + 1);
@@ -258,8 +258,8 @@ _rb_u_string_property(VALUE self, const char *name, int unknown,
                 return mode; \
 } while (0)
 
-enum u_normalize_mode
-_rb_u_symbol_to_normalize_mode(VALUE symbol)
+enum u_normalization_form
+_rb_u_symbol_to_normalization_form(VALUE symbol)
 {
         if (!SYMBOL_P(symbol)) {
                 VALUE inspected = rb_inspect(symbol);
@@ -271,17 +271,13 @@ _rb_u_symbol_to_normalize_mode(VALUE symbol)
 
         ID id = SYM2ID(symbol);
 
-        SYMBOL2MODE(default, U_NORMALIZE_DEFAULT, id);
-        SYMBOL2MODE(nfd, U_NORMALIZE_NFD, id);
-        SYMBOL2MODE(default_compose, U_NORMALIZE_DEFAULT_COMPOSE, id);
-        SYMBOL2MODE(nfc, U_NORMALIZE_NFC, id);
-        SYMBOL2MODE(all, U_NORMALIZE_ALL, id);
-        SYMBOL2MODE(nfkd, U_NORMALIZE_NFKD, id);
-        SYMBOL2MODE(all_compose, U_NORMALIZE_ALL_COMPOSE, id);
-        SYMBOL2MODE(nfkc, U_NORMALIZE_NFKC, id);
+        SYMBOL2MODE(nfd, U_NORMALIZATION_FORM_D, id);
+        SYMBOL2MODE(nfc, U_NORMALIZATION_FORM_C, id);
+        SYMBOL2MODE(nfkd, U_NORMALIZATION_FORM_KD, id);
+        SYMBOL2MODE(nfkc, U_NORMALIZATION_FORM_KC, id);
 
         rb_u_raise(rb_eArgError,
-                   "unknown normalization mode: :%s",
+                   "unknown normalization form: :%s",
                    rb_id2name(SYM2ID(symbol)));
 }
 

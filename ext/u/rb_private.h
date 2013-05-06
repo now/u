@@ -32,7 +32,7 @@ VALUE _rb_u_string_property(VALUE self, const char *name,
                             int unknown, int property(uint32_t),
                             VALUE tosym(int));
 
-enum u_normalize_mode _rb_u_symbol_to_normalize_mode(VALUE symbol);
+enum u_normalization_form _rb_u_symbol_to_normalization_form(VALUE symbol);
 
 VALUE rb_u_pattern_argument(VALUE pattern, bool quote);
 
