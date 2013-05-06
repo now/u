@@ -100,9 +100,12 @@ u_collation_key(char *result, size_t m, const char *string, size_t n,
         if (locale != NULL)
                 l = newlocale(LC_COLLATE_MASK | LC_CTYPE_MASK, locale, NULL);
         const char *cs = codeset(l);
-        return strcmp(cs, "UTF-8") != 0 ?
+        size_t r = strcmp(cs, "UTF-8") != 0 ?
                 recode_ckey(result, m, string, n, l, cs) :
                 ckey(result, m, string, n, l);
+        if (l != NULL)
+                freelocale(l);
+        return r;
 }
 
 size_t
@@ -110,13 +113,13 @@ u_normalized_collation_key(char *result, size_t m, const char *string, size_t n,
                            const char *locale)
 {
         char buf[2048];
-        size_t n_normalized = u_normalize(buf, sizeof(buf), string, n, U_NORMALIZE_ALL_COMPOSE);
+        size_t n_normalized = u_normalize(buf, sizeof(buf), string, n, U_NORMALIZATION_FORM_KC);
         if (n_normalized < sizeof(buf))
                 return u_collation_key(result, m, buf, n_normalized, locale);
         char *normalized = malloc(n_normalized + 1);
         if (normalized == NULL)
                 return 0;
-        u_normalize(normalized, n_normalized + 1, string, n, U_NORMALIZE_ALL_COMPOSE);
+        u_normalize(normalized, n_normalized + 1, string, n, U_NORMALIZATION_FORM_KC);
         size_t n_key = u_collation_key(result, m, normalized, n_normalized, locale);
         free(normalized);
         return n_key;
