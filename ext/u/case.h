@@ -1,9 +1,7 @@
-void _u_downcase_step(const char *string, const char *p,
-                      const char *end, bool use_end,
+void _u_downcase_step(const char *string, const char *p, const char *end,
                       enum locale locale, struct output *output);
 
-void _u_upcase_step(const char *string, const char **p,
-                    const char *end, bool use_end,
+void _u_upcase_step(const char *string, const char **p, const char *end,
                     enum locale locale, bool title, struct output *output);
 
 static inline void

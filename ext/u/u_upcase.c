@@ -32,10 +32,10 @@ ismark(int category)
 }
 
 static inline const char *
-output_marks(const char *p, const char *end, bool use_end, struct output *output)
+output_marks(const char *p, const char *end, struct output *output)
 {
         const char *q = u_next(p);
-        while (P_WITHIN_STR(q, end, use_end)) {
+        while (q < end) {
 		uint32_t c = u_dref(q);
                 if (!ismark(u_char_general_category(c)))
                         break;
@@ -46,13 +46,13 @@ output_marks(const char *p, const char *end, bool use_end, struct output *output
 }
 
 void
-_u_upcase_step(const char *string, const char **p, const char *end, bool use_end,
+_u_upcase_step(const char *string, const char **p, const char *end,
                enum locale locale, bool title, struct output *output)
 {
         uint32_t c = u_dref(*p);
         enum u_general_category gc;
         if (!title && c == COMBINING_GREEK_YPOGEGRAMMENI) {
-                *p = output_marks(*p, end, use_end, output);
+                *p = output_marks(*p, end, output);
                 output_char(output, GREEK_CAPITAL_LETTER_IOTA);
         } else if (locale == LOCALE_LITHUANIAN &&
                    c == COMBINING_DOT_ABOVE &&
@@ -81,6 +81,6 @@ u_upcase(char *result, size_t m, const char *string, size_t n,
         const char *end = string + n;
         struct output output = OUTPUT_INIT(result, m);
         for (const char *p = string; p < end; p = u_next(p))
-                _u_upcase_step(string, &p, end, true, l, false, &output);
+                _u_upcase_step(string, &p, end, l, false, &output);
         return output_finalize(&output);
 }

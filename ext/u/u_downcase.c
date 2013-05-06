@@ -34,11 +34,11 @@
 
 
 static inline bool
-is_final_sigma(const char *string, const char *p, const char *end, bool use_end)
+is_final_sigma(const char *string, const char *p, const char *end)
 {
         if (p == string)
                 return false;
-        for (const char *q = u_next(p); P_WITHIN_STR(q, end, use_end); q = u_next(q)) {
+        for (const char *q = u_next(p); q < end; q = u_next(q)) {
                 uint32_t c = u_dref(q);
                 if (u_char_iscaseignorable(c))
                         continue;
@@ -58,9 +58,9 @@ is_final_sigma(const char *string, const char *p, const char *end, bool use_end)
 }
 
 static inline bool
-has_more_above(const char *string, const char *end, bool use_end)
+has_more_above(const char *string, const char *end)
 {
-	for (const char *p = u_next(string); P_WITHIN_STR(p, end, use_end); p = u_next(p)) {
+	for (const char *p = u_next(string); p < end; p = u_next(p)) {
 		switch (u_char_canonical_combining_class(u_dref(p))) {
                 case U_CANONICAL_COMBINING_CLASS_ABOVE:
 			return true;
@@ -84,14 +84,14 @@ downcase_lithuanian_i(uint32_t c, uint32_t combiner, struct output *output)
 }
 
 static inline bool
-downcase_lithuanian(uint32_t c, const char *p, const char *end, bool use_end,
+downcase_lithuanian(uint32_t c, const char *p, const char *end,
                     struct output *output)
 {
         switch (c) {
         case LATIN_CAPITAL_LETTER_I:
         case LATIN_CAPITAL_LETTER_J:
         case LATIN_CAPITAL_LETTER_I_WITH_OGONEK:
-                if (!has_more_above(p, end, use_end))
+                if (!has_more_above(p, end))
                         return false;
                 return downcase_lithuanian_i(u_char_downcase(c), '\0', output);
         case LATIN_CAPITAL_LETTER_I_WITH_GRAVE:
@@ -109,9 +109,9 @@ downcase_lithuanian(uint32_t c, const char *p, const char *end, bool use_end,
 }
 
 static inline bool
-is_before_dot(const char *p, const char *end, bool use_end)
+is_before_dot(const char *p, const char *end)
 {
-	for (const char *q = u_next(p); P_WITHIN_STR(q, end, use_end); q = u_next(q)) {
+	for (const char *q = u_next(p); q < end; q = u_next(q)) {
                 uint32_t c = u_dref(q);
                 if (c == COMBINING_DOT_ABOVE)
                         return true;
@@ -133,13 +133,13 @@ is_i(uint32_t c)
 }
 
 static inline bool
-downcase_turkic(uint32_t c, const char *string, const char *p,
-                const char *end, bool use_end, struct output *output)
+downcase_turkic(uint32_t c, const char *string, const char *p, const char *end,
+                struct output *output)
 {
         switch (c) {
         case LATIN_CAPITAL_LETTER_I:
                 output_char(output,
-                            is_before_dot(p, end, use_end) ?
+                            is_before_dot(p, end) ?
                             LATIN_SMALL_LETTER_I :
                             LATIN_SMALL_LETTER_DOTLESS_I);
                 return true;
@@ -158,21 +158,21 @@ downcase_turkic(uint32_t c, const char *string, const char *p,
 }
 
 void
-_u_downcase_step(const char *string, const char *p, const char *end, bool use_end,
+_u_downcase_step(const char *string, const char *p, const char *end,
                  enum locale locale, struct output *output)
 {
         uint32_t c = u_dref(p);
         enum u_general_category gc;
         if (c == GREEK_CAPITAL_LETTER_SIGMA)
                 output_char(output,
-                            is_final_sigma(string, p, end, use_end) ?
+                            is_final_sigma(string, p, end) ?
                             GREEK_SMALL_LETTER_FINAL_SIGMA :
                             GREEK_SMALL_LETTER_SIGMA);
         else if (locale == LOCALE_LITHUANIAN &&
-                 downcase_lithuanian(c, p, end, use_end, output))
+                 downcase_lithuanian(c, p, end, output))
                 ;
         else if (locale == LOCALE_TURKIC &&
-                 downcase_turkic(c, string, p, end, use_end, output))
+                 downcase_turkic(c, string, p, end, output))
                 ;
         else if (IS(gc = u_char_general_category(c),
                     OR(U_GENERAL_CATEGORY_LETTER_UPPERCASE,
@@ -192,6 +192,6 @@ u_downcase(char *result, size_t m, const char *string, size_t n,
         const char *end = string + n;
         struct output output = OUTPUT_INIT(result, m);
         for (const char *p = string; p < end; p = u_next(p))
-                _u_downcase_step(string, p, end, true, l, &output);
+                _u_downcase_step(string, p, end, l, &output);
         return output_finalize(&output);
 }
