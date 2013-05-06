@@ -185,7 +185,7 @@ tr_trans_do(VALUE self, struct tr_table *translation,
         if (!modified)
                 return self;
         output.result = ALLOC_N(char, output.n + 1);
-        output.m = output.n;
+        output.m = output.n + 1;
         output.n = 0;
         tr_trans_real(begin, end,
                       translation,
