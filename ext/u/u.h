@@ -10,6 +10,12 @@
 #  define U_PURE
 #endif
 
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 2)
+#  define U_NON_NULL(parameters) __attribute__((__nonnull__ parameters))
+#else
+#  define U_NON_NULL(parameters)
+#endif
+
 #define U_CHAR_MAX UINT32_MAX
 
 #define U_CHAR_MAX_BYTE_LENGTH 6
@@ -150,7 +156,8 @@ enum u_canonical_combining_class {
         U_CANONICAL_COMBINING_CLASS_IOTA_SUBSCRIPT = 240,
 };
 
-U_CONST enum u_canonical_combining_class u_char_canonical_combining_class(uint32_t c);
+U_CONST enum u_canonical_combining_class
+        u_char_canonical_combining_class(uint32_t c);
 
 bool u_char_mirror(uint32_t c, uint32_t *mirrored);
 
@@ -355,7 +362,7 @@ enum u_normalization_form {
 
 size_t u_normalize(char *restrict result, size_t m,
                    const char *restrict string, size_t n,
-                   enum u_normalization_form form);
+                   enum u_normalization_form form) U_NON_NULL((3));
 
 enum u_normalized {
         U_NORMALIZED_YES,
@@ -365,44 +372,45 @@ enum u_normalized {
 
 enum u_normalized u_char_normalized(uint32_t c, enum u_normalization_form form);
 enum u_normalized u_normalized(const char *string, size_t n,
-                               enum u_normalization_form form);
+                               enum u_normalization_form form) U_NON_NULL((1));
 
 size_t u_downcase(char *restrict result, size_t m,
                   const char *restrict string, size_t n,
-                  const char *restrict locale);
+                  const char *restrict locale) U_NON_NULL((3));
 
 size_t u_foldcase(char *restrict result, size_t m,
-                  const char *restrict string, size_t n);
+                  const char *restrict string, size_t n) U_NON_NULL((3));
 
 size_t u_titlecase(char *restrict result, size_t m,
                    const char *restrict string, size_t n,
-                   const char *restrict locale);
+                   const char *restrict locale) U_NON_NULL((3));
 
 size_t u_upcase(char *restrict result, size_t m,
                 const char *restrict string, size_t n,
-                const char *restrict locale);
+                const char *restrict locale) U_NON_NULL((3));
 
 size_t u_mirror(char *restrict result, size_t m,
-                const char *restrict string, size_t n);
+                const char *restrict string, size_t n) U_NON_NULL((3));
 
 size_t u_recode(char *restrict result, size_t m,
                 const char *restrict string, size_t n,
-                const char *restrict codeset);
+                const char *restrict codeset) U_NON_NULL((3, 5));
 
 extern const char * const u_skip_lengths;
 
 #define u_next(str) ((str) + u_skip_lengths[*(const unsigned char *)(str)])
-U_PURE char *u_find_next(const char *p, const char *end);
+U_PURE char *u_find_next(const char *p, const char *end) U_NON_NULL((1));
 
-U_PURE char *u_prev(const char *p);
-U_PURE char *u_find_prev(const char *begin, const char *p);
+U_PURE char *u_prev(const char *p) U_NON_NULL((1));
+U_PURE char *u_find_prev(const char *begin, const char *p) U_NON_NULL((1));
 
-U_PURE uint32_t u_dref(const char *string);
-U_PURE uint32_t u_dref_n(const char *string, size_t n);
-U_PURE uint32_t u_dref_validated(const char *string);
-U_PURE uint32_t u_dref_validated_n(const char *string, size_t n);
+U_PURE uint32_t u_dref(const char *string) U_NON_NULL((1));
+U_PURE uint32_t u_dref_n(const char *string, size_t n) U_NON_NULL((1));
+U_PURE uint32_t u_dref_validated(const char *string) U_NON_NULL((1));
+U_PURE uint32_t u_dref_validated_n(const char *string, size_t n)
+        U_NON_NULL((1));
 
-static inline uint32_t
+static inline uint32_t U_NON_NULL((1))
 u_lref(const char *u, size_t *n)
 {
         uint32_t c = u_dref(u);
@@ -410,7 +418,7 @@ u_lref(const char *u, size_t *n)
         return c;
 }
 
-static inline uint32_t
+static inline uint32_t U_NON_NULL((1))
 u_iref(const char *u, size_t *n)
 {
         if (*(const unsigned char *)u < 0x80) {
@@ -420,60 +428,72 @@ u_iref(const char *u, size_t *n)
                 return u_lref(u, n);
 }
 
-U_PURE char *u_offset_to_pointer(const char *str, long offset);
-U_PURE char *u_offset_to_pointer_n(const char *str, long offset, size_t n);
+U_PURE char *u_offset_to_pointer(const char *str, long offset) U_NON_NULL((1));
+U_PURE char *u_offset_to_pointer_n(const char *str, long offset, size_t n)
+        U_NON_NULL((1));
 
-U_PURE long u_pointer_to_offset(const char *str, const char *pos);
+U_PURE long u_pointer_to_offset(const char *str, const char *pos)
+        U_NON_NULL((1, 2));
 
-void u_copy(char *restrict dest, const char *src);
-void u_copy_n(char *restrict dest, const char *src, size_t n);
+void u_copy(char *restrict dest, const char *src) U_NON_NULL((1, 2));
+void u_copy_n(char *restrict dest, const char *src, size_t n)
+        U_NON_NULL((1, 2));
 
-void u_append(char *restrict dest, const char *src);
-void u_append_n(char *restrict dest, const char *src, size_t n);
+void u_append(char *restrict dest, const char *src) U_NON_NULL((1, 2));
+void u_append_n(char *restrict dest, const char *src, size_t n)
+        U_NON_NULL((1, 2));
 
 U_PURE int u_collate(const char *a, size_t a_n, const char *b, size_t b_n,
-                     const char *locale);
+                     const char *locale) U_NON_NULL((1, 3));
 size_t u_collation_key(char *restrict result, size_t m,
                        const char *restrict string, size_t n,
-                       const char *restrict locale);
+                       const char *restrict locale) U_NON_NULL((3));
 size_t u_normalized_collation_key(char *restrict result, size_t m,
                                   const char *restrict string, size_t n,
-                                  const char *restrict locale);
+                                  const char *restrict locale) U_NON_NULL((3));
 
-U_PURE size_t u_char_index(const char *str, uint32_t c);
-U_PURE size_t u_char_index_n(const char *str, uint32_t c, size_t n);
-U_PURE size_t u_index(const char *haystack, const char *needle);
-U_PURE size_t u_index_n(const char *haystack, const char *needle, size_t n);
+U_PURE size_t u_char_index(const char *str, uint32_t c) U_NON_NULL((1));
+U_PURE size_t u_char_index_n(const char *str, uint32_t c, size_t n)
+        U_NON_NULL((1));
+U_PURE size_t u_index(const char *haystack, const char *needle)
+        U_NON_NULL((1, 2));
+U_PURE size_t u_index_n(const char *haystack, const char *needle, size_t n)
+        U_NON_NULL((1, 2));
 
-U_PURE size_t u_char_rindex(const char *str, uint32_t c);
-U_PURE size_t u_char_rindex_n(const char *str, uint32_t c, size_t n);
-U_PURE size_t u_rindex(const char *haystack, const char *needle);
-U_PURE size_t u_rindex_n(const char *haystack, const char *needle, size_t n);
+U_PURE size_t u_char_rindex(const char *str, uint32_t c) U_NON_NULL((1));
+U_PURE size_t u_char_rindex_n(const char *str, uint32_t c, size_t n)
+        U_NON_NULL((1));
+U_PURE size_t u_rindex(const char *haystack, const char *needle)
+        U_NON_NULL((1, 2));
+U_PURE size_t u_rindex_n(const char *haystack, const char *needle, size_t n)
+        U_NON_NULL((1, 2));
 
-U_PURE bool u_has_prefix(const char *str, const char *prefix);
+U_PURE bool u_has_prefix(const char *str, const char *prefix)
+        U_NON_NULL((1, 2));
 
-U_PURE bool u_is_ascii_only(const char *string);
-U_PURE bool u_is_ascii_only_n(const char *string, size_t n);
+U_PURE bool u_is_ascii_only(const char *string) U_NON_NULL((1));
+U_PURE bool u_is_ascii_only_n(const char *string, size_t n) U_NON_NULL((1));
 
-U_PURE size_t u_n_chars(const char *str);
-U_PURE size_t u_n_chars_n(const char *str, size_t n);
+U_PURE size_t u_n_chars(const char *str) U_NON_NULL((1));
+U_PURE size_t u_n_chars_n(const char *str, size_t n) U_NON_NULL((1));
 
-U_PURE size_t u_width(const char *string);
-U_PURE size_t u_width_n(const char *string, size_t n);
+U_PURE size_t u_width(const char *string) U_NON_NULL((1));
+U_PURE size_t u_width_n(const char *string, size_t n) U_NON_NULL((1));
 
-U_PURE size_t u_n_bytes(const char *str);
+U_PURE size_t u_n_bytes(const char *str) U_NON_NULL((1));
 
 size_t u_reverse(char *restrict result, size_t m,
-                 const char *restrict string, size_t n);
+                 const char *restrict string, size_t n) U_NON_NULL((3));
 
-bool u_isvalid(const char *str);
+bool u_isvalid(const char *str) U_NON_NULL((1));
 bool u_isvalid_n(const char *restrict str, size_t max,
-                 const char **restrict end);
+                 const char **restrict end) U_NON_NULL((1));
 
 typedef void (*u_substring_fn)(const char *, size_t, void *);
-void u_words(const char *string, size_t n, u_substring_fn fn, void *closure);
+void u_words(const char *string, size_t n, u_substring_fn fn, void *closure)
+        U_NON_NULL((1));
 void u_grapheme_clusters(const char *string, size_t n, u_substring_fn fn,
-                         void *closure);
+                         void *closure) U_NON_NULL((1));
 
 int u_char_to_u_n(uint32_t c, char *result, size_t n);
 int u_char_to_u(uint32_t c, char *result);
