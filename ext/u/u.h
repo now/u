@@ -353,7 +353,8 @@ enum u_normalization_form {
         U_NORMALIZATION_FORM_KC,
 };
 
-size_t u_normalize(char *result, size_t m, const char *string, size_t n,
+size_t u_normalize(char *restrict result, size_t m,
+                   const char *restrict string, size_t n,
                    enum u_normalization_form form);
 
 enum u_normalized {
@@ -366,21 +367,27 @@ enum u_normalized u_char_normalized(uint32_t c, enum u_normalization_form form);
 enum u_normalized u_normalized(const char *string, size_t n,
                                enum u_normalization_form form);
 
-size_t u_downcase(char *result, size_t m, const char *string, size_t n,
-                  const char *locale);
+size_t u_downcase(char *restrict result, size_t m,
+                  const char *restrict string, size_t n,
+                  const char *restrict locale);
 
-size_t u_foldcase(char *result, size_t m, const char *string, size_t n);
+size_t u_foldcase(char *restrict result, size_t m,
+                  const char *restrict string, size_t n);
 
-size_t u_titlecase(char *result, size_t m, const char *string, size_t n,
-                   const char *locale);
+size_t u_titlecase(char *restrict result, size_t m,
+                   const char *restrict string, size_t n,
+                   const char *restrict locale);
 
-size_t u_upcase(char *result, size_t m, const char *string, size_t n,
-                const char *locale);
+size_t u_upcase(char *restrict result, size_t m,
+                const char *restrict string, size_t n,
+                const char *restrict locale);
 
-size_t u_mirror(char *result, size_t m, const char *string, size_t n);
+size_t u_mirror(char *restrict result, size_t m,
+                const char *restrict string, size_t n);
 
-size_t u_recode(char *result, size_t m, const char *string, size_t n,
-                const char *codeset);
+size_t u_recode(char *restrict result, size_t m,
+                const char *restrict string, size_t n,
+                const char *restrict codeset);
 
 extern const char * const u_skip_lengths;
 
@@ -418,19 +425,20 @@ U_PURE char *u_offset_to_pointer_n(const char *str, long offset, size_t n);
 
 U_PURE long u_pointer_to_offset(const char *str, const char *pos);
 
-void u_copy(char *dest, const char *src);
-void u_copy_n(char *dest, const char *src, size_t n);
+void u_copy(char *restrict dest, const char *src);
+void u_copy_n(char *restrict dest, const char *src, size_t n);
 
-void u_append(char *dest, const char *src);
-void u_append_n(char *dest, const char *src, size_t n);
+void u_append(char *restrict dest, const char *src);
+void u_append_n(char *restrict dest, const char *src, size_t n);
 
-int u_collate(const char *a, size_t a_n, const char *b, size_t b_n,
-              const char *locale);
-size_t u_collation_key(char *result, size_t m, const char *string, size_t n,
-                       const char *locale);
-size_t u_normalized_collation_key(char *result, size_t m,
-                                  const char *string, size_t n,
-                                  const char *locale);
+U_PURE int u_collate(const char *a, size_t a_n, const char *b, size_t b_n,
+                     const char *locale);
+size_t u_collation_key(char *restrict result, size_t m,
+                       const char *restrict string, size_t n,
+                       const char *restrict locale);
+size_t u_normalized_collation_key(char *restrict result, size_t m,
+                                  const char *restrict string, size_t n,
+                                  const char *restrict locale);
 
 U_PURE size_t u_char_index(const char *str, uint32_t c);
 U_PURE size_t u_char_index_n(const char *str, uint32_t c, size_t n);
@@ -455,10 +463,12 @@ U_PURE size_t u_width_n(const char *string, size_t n);
 
 U_PURE size_t u_n_bytes(const char *str);
 
-size_t u_reverse(char *result, size_t m, const char *string, size_t n);
+size_t u_reverse(char *restrict result, size_t m,
+                 const char *restrict string, size_t n);
 
 bool u_isvalid(const char *str);
-bool u_isvalid_n(const char *str, size_t max, const char **end);
+bool u_isvalid_n(const char *restrict str, size_t max,
+                 const char **restrict end);
 
 typedef void (*u_substring_fn)(const char *, size_t, void *);
 void u_words(const char *string, size_t n, u_substring_fn fn, void *closure);
