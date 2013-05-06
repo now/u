@@ -96,6 +96,8 @@ size_t
 u_collation_key(char *result, size_t m, const char *string, size_t n,
                 const char *locale)
 {
+	assert(string != NULL);
+        assert(result != NULL || m == 0);
         locale_t l = NULL;
         if (locale != NULL)
                 l = newlocale(LC_COLLATE_MASK | LC_CTYPE_MASK, locale, NULL);
@@ -112,6 +114,8 @@ size_t
 u_normalized_collation_key(char *result, size_t m, const char *string, size_t n,
                            const char *locale)
 {
+	assert(string != NULL);
+        assert(result != NULL || m == 0);
         char buf[2048];
         size_t n_normalized = u_normalize(buf, sizeof(buf), string, n, U_NORMALIZATION_FORM_KC);
         if (n_normalized < sizeof(buf))
