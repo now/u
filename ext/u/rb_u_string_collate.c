@@ -24,11 +24,17 @@ rb_u_string_collate(int argc, VALUE *argv, VALUE self)
         VALUE rbother, rblocale;
         if (rb_scan_args(argc, argv, "11", &rbother, &rblocale) == 2)
                 locale = StringValuePtr(rblocale);
+        else {
+                const char * const env[] = { "LC_ALL", "LC_COLLATE", "LANG", NULL };
+                for (const char * const *p = env; *p != NULL; p++)
+                        if ((locale = getenv(*p)) != NULL)
+                                break;
+        }
 
         const struct rb_u_string *string = RVAL2USTRING(self);
-        const struct rb_u_string *other = RVAL2USTRING_ANY(rbother);
-
         rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
+
+        const struct rb_u_string *other = RVAL2USTRING_ANY(rbother);
         rb_u_validate(USTRING_STR(other), USTRING_LENGTH(other));
 
         errno = 0;
