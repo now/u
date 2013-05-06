@@ -4,9 +4,6 @@
 #define P_WITHIN_STR(p, end, use_end) \
         ((use_end) ? (p) < (end) : *(p) != '\0')
 
-#define OFFSET_IF(buf, len) \
-        (((buf) != NULL) ? (buf) + (len) : NULL)
-
 #define lengthof(ary)   (sizeof(ary) / sizeof((ary)[0]))
 
 #if defined(_WIN32) || defined(__CYGWIN__)

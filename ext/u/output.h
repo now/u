@@ -15,7 +15,10 @@ struct output {
 static inline struct output *
 output_char(struct output *output, uint32_t c)
 {
-        output->n += UNIT_TO_U(c, OFFSET_IF(output->result, output->n),
+        output->n += UNIT_TO_U(c,
+                               output->result != NULL ?
+                               output->result + output->n :
+                               NULL,
                                output->m > output->n ?
                                output->m - output->n - 1 :
                                0);
