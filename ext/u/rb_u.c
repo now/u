@@ -221,7 +221,13 @@ _rb_u_string_convert_locale(int argc, VALUE *argv, VALUE self,
 
         size_t n = try_convert(NULL, 0, string, convert, locale);
         char *converted = ALLOC_N(char, n + 1);
-        n = try_convert(converted, n + 1, string, convert, locale);
+        size_t m = try_convert(converted, n + 1, string, convert, locale);
+        if (m < n) {
+                char *t = REALLOC_N(converted, char, m + 1);
+                if (t != NULL)
+                        converted = t;
+                n = m;
+        }
 
         return rb_u_string_new_c_own(self, converted, n);
 }

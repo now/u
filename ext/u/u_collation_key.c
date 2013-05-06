@@ -52,7 +52,7 @@ ckey(char *result, size_t m, const char *string, size_t n, locale_t locale)
         ((char *)string)[n] = '\0';
         size_t l = 0;
         const char *p = string;
-        const char *end = string + n +1;
+        const char *end = string + n + 1;
         while (true) {
                 errno = 0;
                 size_t k = m > l ?
