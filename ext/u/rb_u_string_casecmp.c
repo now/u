@@ -1,6 +1,19 @@
 #include <errno.h>
 #include "rb_includes.h"
 
+static size_t
+foldcase(char **result, const struct rb_u_string *string, const char *locale,
+         char *previous)
+{
+        size_t n = u_foldcase(NULL, 0,
+                              USTRING_STR(string), USTRING_LENGTH(string),
+                              locale);
+        *result = _rb_u_guarded_alloc(n + 1, previous, NULL);
+        return u_foldcase(*result, n + 1,
+                          USTRING_STR(string), USTRING_LENGTH(string),
+                          locale);
+}
+
 /* @overload casecmp(other, locale = ENV['LC_COLLATE'])
  *
  *   Returns the comparison of {#foldcase} to _other_{#foldcase} using the
@@ -30,17 +43,11 @@ rb_u_string_casecmp(int argc, VALUE *argv, VALUE self)
         rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
         rb_u_validate(USTRING_STR(other), USTRING_LENGTH(other));
 
-        size_t folded_n = u_foldcase(NULL, 0,
-                                     USTRING_STR(string), USTRING_LENGTH(string));
-        char *folded = ALLOC_N(char, folded_n + 1);
-        u_foldcase(folded, folded_n + 1,
-                   USTRING_STR(string), USTRING_LENGTH(string));
+        char *folded;
+        size_t folded_n = foldcase(&folded, string, locale, NULL);
 
-        size_t folded_other_n = u_foldcase(NULL, 0,
-                                           USTRING_STR(other), USTRING_LENGTH(other));
-        char *folded_other = ALLOC_N(char, folded_other_n + 1);
-        u_foldcase(folded_other, folded_other_n + 1,
-                   USTRING_STR(other), USTRING_LENGTH(other));
+        char *folded_other;
+        size_t folded_other_n = foldcase(&folded_other, other, locale, folded);
 
         errno = 0;
         int r = u_collate(folded, folded_n,

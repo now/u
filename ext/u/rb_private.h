@@ -1,6 +1,14 @@
+#if __GNUC__ >= 4
+#  define RB_U_NULL_TERMINATED(parameter) __attribute__((__sentinel__(parameter)))
+#else
+#  define RB_U_NULL_TERMINATED(parameter)
+#endif
+
 void need_at_least_n_arguments(int argc, int n);
 
 void need_m_to_n_arguments(int argc, int m, int n);
+
+void *_rb_u_guarded_alloc(size_t n, ...) RB_U_NULL_TERMINATED(0);
 
 uint32_t _rb_u_dref(const char *str, const char *end);
 
@@ -13,9 +21,6 @@ int rb_u_char_to_u(uint32_t c, char *result);
 void rb_u_validate(const char *string, long length);
 
 VALUE _rb_u_character_test(VALUE string, bool (*test)(uint32_t));
-
-VALUE _rb_u_string_test(VALUE self,
-                        size_t convert(char *, size_t, const char *, size_t));
 
 VALUE _rb_u_string_test_locale(int argc, VALUE *argv, VALUE self,
                                size_t convert(char *, size_t, const char *, size_t,

@@ -31,6 +31,36 @@ need_m_to_n_arguments(int argc, int m, int n)
                            argc, m, n);
 }
 
+struct guarded_alloc_closure {
+        void *result;
+        size_t n;
+};
+
+static VALUE
+guarded_alloc(VALUE data)
+{
+        struct guarded_alloc_closure *closure = (struct guarded_alloc_closure *)data;
+        closure->result = (void *)ALLOC_N(char, closure->n);
+        return Qnil;
+}
+
+void *
+_rb_u_guarded_alloc(size_t n, ...)
+{
+        struct guarded_alloc_closure closure = { NULL, n };
+        int error;
+        rb_protect(guarded_alloc, (VALUE)&closure, &error);
+        if (error == 0)
+                return closure.result;
+        va_list args;
+        va_start(args, n);
+        void *previous;
+        while ((previous = va_arg(args, void *)) != NULL)
+                free(previous);
+        va_end(args);
+        rb_exc_raise(rb_errinfo());
+}
+
 uint32_t
 _rb_u_dref(const char *str, const char *end)
 {
@@ -102,35 +132,6 @@ _rb_u_character_test(VALUE self, bool (*test)(uint32_t))
         }
 
         return Qtrue;
-}
-
-VALUE
-_rb_u_string_test(VALUE self,
-                  size_t convert(char *, size_t, const char *, size_t))
-{
-        const struct rb_u_string *string = RVAL2USTRING(self);
-
-        rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
-
-        size_t nfd_n = u_normalize(NULL, 0,
-                                   USTRING_STR(string), USTRING_LENGTH(string),
-                                   U_NORMALIZATION_FORM_D);
-        char *nfd = ALLOC_N(char, nfd_n + 1);
-        nfd_n = u_normalize(nfd, nfd_n + 1,
-                            USTRING_STR(string), USTRING_LENGTH(string),
-                            U_NORMALIZATION_FORM_D);
-
-        size_t converted_n = convert(NULL, 0, nfd, nfd_n);
-        char *converted = ALLOC_N(char, converted_n + 1);
-        convert(converted, converted_n + 1, nfd, nfd_n);
-
-        VALUE result = converted_n == nfd_n &&
-                memcmp(converted, nfd, nfd_n) == 0 ? Qtrue : Qfalse;
-
-        free(converted);
-        free(nfd);
-
-        return result;
 }
 
 VALUE

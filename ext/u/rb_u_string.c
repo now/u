@@ -356,7 +356,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "cntrl?", rb_u_string_cntrl, 0); /* in ext/u/rb_u_string_cntrl.c */
         rb_define_method(rb_cUString, "defined?", rb_u_string_defined, 0); /* in ext/u/rb_u_string_defined.c */
         rb_define_method(rb_cUString, "digit?", rb_u_string_digit, 0); /* in ext/u/rb_u_string_digit.c */
-        rb_define_method(rb_cUString, "folded?", rb_u_string_folded, 0); /* in ext/u/rb_u_string_folded.c */
+        rb_define_method(rb_cUString, "folded?", rb_u_string_folded, -1); /* in ext/u/rb_u_string_folded.c */
         rb_define_method(rb_cUString, "graph?", rb_u_string_graph, 0); /* in ext/u/rb_u_string_graph.c */
         rb_define_method(rb_cUString, "lower?", rb_u_string_lower, -1); /* in ext/u/rb_u_string_lower.c */
         rb_define_method(rb_cUString, "newline?", rb_u_string_newline, 0); /* in ext/u/rb_u_string_newline.c */
@@ -428,7 +428,7 @@ Init_u_string(VALUE mU)
         rb_define_method(rb_cUString, "strip", rb_u_string_strip, 0); /* in ext/u/rb_u_string_strip.c */
 
         rb_define_method(rb_cUString, "downcase", rb_u_string_downcase, -1); /* in ext/u/rb_u_string_downcase.c */
-        rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, 0); /* in ext/u/rb_u_string_foldcase.c */
+        rb_define_method(rb_cUString, "foldcase", rb_u_string_foldcase, -1); /* in ext/u/rb_u_string_foldcase.c */
         rb_define_method(rb_cUString, "titlecase", rb_u_string_titlecase, -1); /* in ext/u/rb_u_string_titlecase.c */
         rb_define_method(rb_cUString, "upcase", rb_u_string_upcase, -1); /* in ext/u/rb_u_string_upcase.c */
 

@@ -379,7 +379,8 @@ size_t u_downcase(char *restrict result, size_t m,
                   const char *restrict locale) U_NON_NULL((3));
 
 size_t u_foldcase(char *restrict result, size_t m,
-                  const char *restrict string, size_t n) U_NON_NULL((3));
+                  const char *restrict string, size_t n,
+                  const char *restrict locale) U_NON_NULL((3));
 
 size_t u_titlecase(char *restrict result, size_t m,
                    const char *restrict string, size_t n,
