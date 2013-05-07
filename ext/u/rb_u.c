@@ -158,7 +158,7 @@ _rb_u_string_test_locale(int argc, VALUE *argv, VALUE self,
                             U_NORMALIZATION_FORM_D);
 
         size_t converted_n = convert(NULL, 0, nfd, nfd_n, locale);
-        char *converted = ALLOC_N(char, converted_n + 1);
+        char *converted = _rb_u_guarded_alloc(converted_n + 1, nfd, NULL);
         convert(converted, converted_n + 1, nfd, nfd_n, locale);
 
         VALUE result = converted_n == nfd_n &&
@@ -193,8 +193,10 @@ try_convert(char *result, size_t m, const struct rb_u_string *string,
         errno = 0;
         size_t n = convert(result, m, USTRING_STR(string), USTRING_LENGTH(string),
                            locale);
-        if (errno != 0)
+        if (errno != 0) {
+                free(result);
                 rb_u_raise_errno(errno, "can’t apply conversion");
+        }
         return n;
 }
 
