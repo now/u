@@ -21,12 +21,9 @@ rb_u_string_canonical_combining_class(VALUE self)
         const char *end = USTRING_END(string);
         if (p == end)
                 return 0;
-        uint32_t c;
-        p = u_decode(&c, p, end);
-        int first = u_char_canonical_combining_class(c);
+        int first = u_char_canonical_combining_class(u_decode(&p, p, end));
         while (p < end) {
-                p = u_decode(&c, p, end);
-                int value = u_char_canonical_combining_class(c);
+                int value = u_char_canonical_combining_class(u_decode(&p, p, end));
                 if (value != first)
                         rb_u_raise(rb_eArgError,
                                    "string consists of characters with different canonical combining class values: %d+, %d",

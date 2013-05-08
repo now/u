@@ -29,9 +29,8 @@ static void
 titlecase_step(const char *p, const char *q, struct titlecase_closure *closure)
 {
         const char *t = p;
-        uint32_t c;
         const char *u;
-        while (t < q && (u = u_decode(&c, t, q), !u_char_iscased(c)))
+        while (t < q && !u_char_iscased(u_decode(&u, t, q)))
                 t = u;
         output_string(closure->output, p, t - p);
         if (t == q)

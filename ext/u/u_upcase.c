@@ -36,8 +36,8 @@ output_marks(const char *q, const char *end,
              struct output *output)
 {
         while (q < end) {
-		uint32_t c;
-                const char *r = u_decode(&c, q, end);
+                const char *r;
+		uint32_t c = u_decode(&r, q, end);
                 if (!ismark(u_char_general_category(c)))
                         break;
                 output_char(output, c);
@@ -50,8 +50,8 @@ const char *
 _u_upcase_step(const char *string, const char *p, const char *end,
                enum locale locale, bool title, struct output *output)
 {
-        uint32_t c;
-        const char *q = u_decode(&c, p, end);
+        const char *q;
+        uint32_t c = u_decode(&q, p, end);
         enum u_general_category gc;
         if (!title && c == COMBINING_GREEK_YPOGEGRAMMENI) {
                 q = output_marks(q, end, output);

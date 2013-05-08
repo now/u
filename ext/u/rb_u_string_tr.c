@@ -108,8 +108,7 @@ tr_trans_real_squeeze(const char *str, const char *end,
         uint32_t prev_c = U_N_CODEPOINTS;
         while (p < end) {
                 const char *prev = p;
-                uint32_t c0;
-                p = u_decode(&c0, p, end);
+                uint32_t c0 = u_decode(&p, p, end);
                 if (tr_table_lookup(translation, c0)) {
                         uint32_t c = replace(c0, closure);
                         if (prev_c == c)
@@ -138,8 +137,7 @@ tr_trans_real_standard(const char *str, const char *end,
 
         while (p < end) {
                 const char *prev = p;
-                uint32_t c;
-                p = u_decode(&c, p, end);
+                uint32_t c = u_decode(&p, p, end);
                 if (tr_table_lookup(translation, c)) {
                         uint32_t replacement = replace(c, closure);
                         output_char(output, replacement);

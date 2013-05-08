@@ -17,12 +17,10 @@ rb_u_string_rstrip(VALUE self)
         const char *p = end;
         while (p > begin) {
                 const char *prev = rb_u_prev_validated(begin, p);
-                uint32_t c;
-                u_decode(&c, prev, end);
-
+                const char *q;
+                uint32_t c = u_decode(&q, prev, end);
                 if (c != '\0' && !u_char_isspace(c))
                         break;
-
                 p = prev;
         }
         if (p == end)

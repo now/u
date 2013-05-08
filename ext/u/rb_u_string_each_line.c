@@ -33,11 +33,10 @@ rb_u_string_each_line_separator(VALUE self, const struct rb_u_string *separator,
         const struct rb_u_string *string = RVAL2USTRING(self);
 
         long separator_length = USTRING_LENGTH(separator);
-        uint32_t first;
-        if (separator_length == 0)
-                first = '\n';
-        else
-                u_decode(&first, USTRING_STR(separator), USTRING_END(separator));
+        const char *q;
+        uint32_t first = separator_length == 0 ?
+                '\n' :
+                u_decode(&q, USTRING_STR(separator), USTRING_END(separator));
 
         const char *begin = USTRING_STR(string);
         const char *base = begin;
@@ -45,20 +44,17 @@ rb_u_string_each_line_separator(VALUE self, const struct rb_u_string *separator,
         const char *end = USTRING_END(string);
 
         while (p < end) {
-                uint32_t c;
-                const char *q = u_decode(&c, p, end);
+                uint32_t c = u_decode(&q, p, end);
 again:
                 if (separator_length == 0 && c == first) {
                         p = q;
                         if (p < end) {
-                                q = u_decode(&c, p, end);
+                                c = u_decode(&q, p, end);
                                 if (c != first)
                                         goto again;
                         }
                         while (p < end) {
-                                uint32_t d;
-                                q = u_decode(&d, p, end);
-                                if (d != first)
+                                if (u_decode(&q, p, end) != first)
                                         break;
                                 p = q;
                         }

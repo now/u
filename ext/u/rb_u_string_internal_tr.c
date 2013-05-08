@@ -26,25 +26,23 @@ tr_next_char(struct tr *t)
         if (t->p == t->end)
                 return TR_FINISHED;
 
-        t->p = u_decode(&t->now, t->p, t->end);
+        t->now = u_decode(&t->p, t->p, t->end);
         if (t->p == t->end)
                 return TR_FOUND;
         if (t->now == '\\') {
-                t->p = u_decode(&t->now, t->p, t->end);
+                t->now = u_decode(&t->p, t->p, t->end);
                 if (t->p == t->end)
                         return TR_FOUND;
         }
 
-        uint32_t c;
-        const char *next = u_decode(&c, t->p, t->end);
-        if (c == '-') {
+        const char *next;
+        if (u_decode(&next, t->p, t->end) == '-') {
                 /* TODO: Make this simpler.  Perhaps we don’t need
                  * TR_READ_ANOTHER, as we advance it here ourselves.  I got to
                  * check the offsets here.  Perhaps TR_READ_ANOTHER should also
                  * have advanced t->p one more step. */
                 if (next < t->end) {
-                        uint32_t max;
-                        t->p = u_decode(&max, next, t->end);
+                        uint32_t max = u_decode(&t->p, next, t->end);
                         if (max < t->now) {
                                 t->p = next;
                                 return TR_READ_ANOTHER;

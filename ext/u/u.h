@@ -405,7 +405,7 @@ U_PURE char *u_find_next(const char *p, const char *end) U_NON_NULL((1));
 U_PURE char *u_prev(const char *p) U_NON_NULL((1));
 U_PURE char *u_find_prev(const char *begin, const char *p) U_NON_NULL((1));
 
-char *u_decode(uint32_t *result, const char *u, const char *end)
+uint32_t u_decode(const char **q, const char *u, const char *end)
         U_NON_NULL((1, 2, 3));
 int u_decode_n(uint32_t *result, const char *u, size_t n)
         U_NON_NULL((1, 2));

@@ -40,32 +40,30 @@ is_final_sigma(const char *string, const char *p, const char *end)
                 return false;
         uint32_t c;
         for (const char *q = u_next(p); q < end; ) {
-                q = u_decode(&c, q, end);
+                c = u_decode(&q, q, end);
                 if (u_char_iscaseignorable(c))
                         continue;
                 if (u_char_iscased(c))
                         return false;
                 break;
         }
-        for (const char *r = u_prev(p); r > string; r = u_prev(r)) {
-                u_decode(&c, r, p);
+        const char *r;
+        for (const char *o = u_prev(p); o > string; o = u_prev(o)) {
+                c = u_decode(&r, o, p);
                 if (u_char_iscaseignorable(c))
                         continue;
                 if (u_char_iscased(c))
                         return true;
                 return false;
         }
-        u_decode(&c, string, p);
-        return u_char_iscased(c);
+        return u_char_iscased(u_decode(&r, string, p));
 }
 
 static inline bool
 has_more_above(const char *string, const char *end)
 {
 	for (const char *p = u_next(string); p < end; ) {
-                uint32_t c;
-                p = u_decode(&c, p, end);
-		switch (u_char_canonical_combining_class(c)) {
+		switch (u_char_canonical_combining_class(u_decode(&p, p, end))) {
                 case U_CANONICAL_COMBINING_CLASS_ABOVE:
 			return true;
                 case U_CANONICAL_COMBINING_CLASS_NOT_REORDERED:
@@ -116,8 +114,7 @@ static inline bool
 is_before_dot(const char *p, const char *end)
 {
 	for (const char *q = u_next(p); q < end; ) {
-                uint32_t c;
-                q = u_decode(&c, q, end);
+                uint32_t c = u_decode(&q, q, end);
                 if (c == COMBINING_DOT_ABOVE)
                         return true;
                 switch (u_char_canonical_combining_class(c)) {
@@ -166,8 +163,8 @@ const char *
 _u_downcase_step(const char *string, const char *p, const char *end,
                  enum locale locale, struct output *output)
 {
-        uint32_t c;
-        const char *q = u_decode(&c, p, end);
+        const char *q;
+        uint32_t c = u_decode(&q, p, end);
         enum u_general_category gc;
         if (c == GREEK_CAPITAL_LETTER_SIGMA)
                 output_char(output,

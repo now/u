@@ -9,7 +9,6 @@ rb_u_string_ord(VALUE self)
         const char *end = USTRING_END(s);
         if (p == end)
                 rb_u_raise(rb_eArgError, "empty string");
-        uint32_t c;
-        u_decode(&c, p, end);
-        return UINT2NUM(c);
+        const char *q;
+        return UINT2NUM(u_decode(&q, p, end));
 }

@@ -5,11 +5,8 @@ static void
 each(VALUE self, struct yield *yield)
 {
         const struct rb_u_string *s = RVAL2USTRING(self);
-        for (const char *p = USTRING_STR(s), *end = USTRING_END(s); p < end; ) {
-                uint32_t c;
-                p = u_decode(&c, p, end);
-                yield_call(yield, UINT2NUM(c));
-        }
+        for (const char *p = USTRING_STR(s), *end = USTRING_END(s); p < end; )
+                yield_call(yield, UINT2NUM(u_decode(&p, p, end)));
 }
 
 UNUSED(static VALUE

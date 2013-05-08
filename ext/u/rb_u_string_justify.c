@@ -13,11 +13,8 @@ rb_u_string_justify_one_side(char *p, const struct rb_u_string *padding, long pa
 
         const char *q = padding_str;
         const char *end = padding_str + padding_size;
-        while (i < n) {
-                uint32_t c;
-                q = u_decode(&c, q, end);
-                i += u_char_width(c);
-        }
+        while (i < n)
+                i += u_char_width(u_decode(&q, q, end));
         memcpy(p, padding_str, q - padding_str);
         p += q - padding_str;
 
@@ -31,11 +28,8 @@ rounding_size(const struct rb_u_string *padding, long padding_width, long n)
         const char *q = padding_str, *end = padding_str + USTRING_LENGTH(padding);
         long r = n % padding_width;
         long i = 0;
-        while (i < r && q < end) {
-                uint32_t c;
-                q = u_decode(&c, q, end);
-                i += u_char_width(c);
-        }
+        while (i < r && q < end)
+                i += u_char_width(u_decode(&q, q, end));
         // NOTE I think i ≮ r is guaranteed, but I can’t seem to prove it, so
         // leave this in for safety.
         if (i < r)

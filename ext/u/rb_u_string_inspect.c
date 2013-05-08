@@ -57,8 +57,7 @@ rb_u_string_inspect_hash_char(const char *q, const char *end,
         }
 
         const char *p = q;
-        uint32_t c;
-        q = u_decode(&c, p, end);
+        uint32_t c = u_decode(&q, p, end);
         switch (c) {
         case REPLACEMENT_CHARACTER:
                 rb_str_buf_cat2(result, "#");
@@ -135,8 +134,8 @@ rb_u_string_inspect(VALUE self)
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                uint32_t c;
-                const char *q = u_decode(&c, p, end);
+                const char *q;
+                uint32_t c = u_decode(&q, p, end);
                 switch (c) {
                 case '"':
                 case '\\':

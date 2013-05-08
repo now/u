@@ -16,11 +16,8 @@ u_width_impl(const char *string, size_t n, bool use_n)
 
         const char *p = string;
         const char *end = p + n;
-        while (P_WITHIN_STR(p, end, use_n)) {
-                uint32_t c;
-                p = u_decode(&c, p, end);
-		width += u_char_width(c);
-        }
+        while (P_WITHIN_STR(p, end, use_n))
+		width += u_char_width(u_decode(&p, p, end));
 
 	return width;
 }

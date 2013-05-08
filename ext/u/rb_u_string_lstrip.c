@@ -14,13 +14,9 @@ rb_u_string_lstrip(VALUE self)
                 return self;
 
         const char *p = begin, *end = USTRING_END(string);
-        while (p < end) {
-                uint32_t c;
-                const char *q = u_decode(&c, p, end);
-                if (!u_char_isspace(c))
+        for (const char *q; p < end; p = q)
+                if (!u_char_isspace(u_decode(&q, p, end)))
                         break;
-                p = q;
-        }
         if (p == begin)
                 return self;
 

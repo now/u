@@ -13,12 +13,11 @@ rb_u_string_squeeze_loop(const struct rb_u_string *string, struct tr_table *tabl
         uint32_t previous = U_N_CODEPOINTS;
         char *base = result;
         while (p < end) {
-                uint32_t c;
-                const char *next = u_decode(&c, p, end);
-
+                const char *q;
+                uint32_t c = u_decode(&q, p, end);
                 if (c != previous ||
                     (table != NULL && !tr_table_lookup(table, c))) {
-                        long run = next - p;
+                        long run = q - p;
                         if (base != NULL) {
                                 memcpy(base, p, run);
                                 base += run;
@@ -26,8 +25,7 @@ rb_u_string_squeeze_loop(const struct rb_u_string *string, struct tr_table *tabl
                         count += run;
                         previous = c;
                 }
-
-                p = next;
+                p = q;
         }
 
         return count;

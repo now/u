@@ -104,8 +104,8 @@ directive_parse_int(const char **p, const char *end, const char *type)
         int n = 0;
 
         while (q < end) {
-                uint32_t c;
-                const char *r = u_decode(&c, q, end);
+                const char *r;
+                uint32_t c = u_decode(&r, q, end);
                 if (!u_char_isdigit(c)) {
                         *p = q;
                         return n;
@@ -115,8 +115,7 @@ directive_parse_int(const char **p, const char *end, const char *type)
                 int m = 10 * n + u_char_digit_value(c);
                 if (m / 10 != n) {
                         for ( ; q < end; q = r) {
-                                r = u_decode(&c, q, end);
-                                if (!u_char_isdigit(c))
+                                if (!u_char_isdigit(u_decode(&r, q, end)))
                                         break;
                         }
                         rb_u_raise(rb_eArgError,
@@ -267,8 +266,8 @@ directive_flags(const char **p, const char *end,
         ID argument_id = 0;
 
         while (*p < end) {
-                uint32_t c;
-                const char *q = u_decode(&c, *p, end);
+                const char *q;
+                uint32_t c = u_decode(&q, *p, end);
 
                 int flag;
 
@@ -348,12 +347,9 @@ directive_width(const char **p, const char *end,
         if (*p == end)
                 return 0;
 
-        uint32_t c;
-        const char *q = u_decode(&c, *p, end);
-
-        if (c != '*')
+        const char *q;
+        if (u_decode(&q, *p, end) != '*')
                 return directive_parse_int(p, end, "field width");
-
         *p = q;
 
         int argument_number = 0;
@@ -377,12 +373,9 @@ directive_precision(const char **p, const char *end)
         if (*p == end)
                 return -1;
 
-        uint32_t c;
-        const char *q = u_decode(&c, *p, end);
-
-        if (c != '.')
+        const char *q;
+        if (u_decode(&q, *p, end) != '.')
                 return -1;
-
         *p = q;
 
         return directive_parse_int(p, end, "field precision");
@@ -483,7 +476,9 @@ directive_character(UNUSED(uint32_t directive), int flags, int width, UNUSED(int
                 const char *end = USTRING_END(string);
                 if (p == end)
                         rb_u_raise(rb_eArgError, "%%c requires a character");
-                length = (int)(u_decode(&c, p, end) - p);
+                const char *q;
+                c = u_decode(&q, p, end);
+                length = (int)(q - p);
         } else {
                 char buf[U_CHAR_MAX_BYTE_LENGTH];
                 p = buf;
@@ -515,11 +510,8 @@ directive_string(UNUSED(uint32_t directive), int flags, int width, int precision
         if (precision > 0) {
                 int i = 0;
                 const char *q = p, *end = p + length;
-                while (i < precision && q < end) {
-                        uint32_t c;
-                        q = u_decode(&c, q, end);
-                        i += (int)u_char_width(c);
-                }
+                while (i < precision && q < end)
+                        i += (int)u_char_width(u_decode(&q, q, end));
                 length = q - p;
         }
 
@@ -1015,7 +1007,7 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
 
         uint32_t c = '\0';
         if (*p < end)
-                *p = u_decode(&c, *p, end);
+                c = u_decode(p, *p, end);
         switch (c) {
         case '%':
         case '\0':

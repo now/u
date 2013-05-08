@@ -17,13 +17,14 @@ rb_u_string_strip(VALUE self)
         const char *s = begin;
         uint32_t c;
         const char *t;
-        while (s < end && (t = u_decode(&c, s, end), u_char_isspace(c)))
+        while (s < end && u_char_isspace(u_decode(&t, s, end)))
                 s = t;
 
         t = end;
         while (t > begin) {
                 const char *prev = rb_u_prev_validated(begin, t);
-                u_decode(&c, prev, end);
+                const char *q;
+                c = u_decode(&q, prev, end);
 
                 if (c != '\0' && !u_char_isspace(c))
                         break;

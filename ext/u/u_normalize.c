@@ -81,8 +81,7 @@ decompose_loop(const char *string, const char *end,
                const char *(*decompose)(size_t), struct output *output)
 {
         for (const char *p = string; p < end; ) {
-                uint32_t c;
-                p = u_decode(&c, p, end);
+                uint32_t c = u_decode(&p, p, end);
                 if (!decompose_hangul(c, output))
                         decompose_simple(c, decompose, output);
         }
@@ -93,9 +92,9 @@ canonical_ordering_swap(char *string, char *p,
                         enum u_canonical_combining_class ccc)
 {
         char *r = p;
-        uint32_t c;
         char *s;
-        while (r > string && (s = u_prev(r), u_decode(&c, s, r), u_char_canonical_combining_class(c) > ccc))
+        const char *t;
+        while (r > string && (s = u_prev(r), u_char_canonical_combining_class(u_decode(&t, s, r)) > ccc))
                 r = s;
         char buf[U_CHAR_MAX_BYTE_LENGTH];
         size_t n = u_next(p) - p;
@@ -108,12 +107,12 @@ static inline bool
 canonical_ordering_reorder(char *string, char *end)
 {
         bool swapped = false;
-        uint32_t c;
-        char *p = u_decode(&c, string, end);
+        char *p;
+        uint32_t c = u_decode((const char **)&p, string, end);
         enum u_canonical_combining_class pcc = u_char_canonical_combining_class(c);
         while (p < end) {
-                char *q = u_decode(&c, p, end);
-                enum u_canonical_combining_class cc = u_char_canonical_combining_class(c);
+                char *q;
+                enum u_canonical_combining_class cc = u_char_canonical_combining_class(u_decode((const char **)&q, p, end));
 
                 if (cc != 0 && pcc > cc) {
                         canonical_ordering_swap(string, p, cc);
@@ -216,11 +215,10 @@ compose_loop(char *string, size_t n)
         char *s = string;
         char *t = u_next(s);
         for (char *p = t, *q, *end = string + n; p < end; p = q) {
-                uint32_t c;
-                q = u_decode(&c, p, end);
+                uint32_t c = u_decode((const char **)&q, p, end);
                 int cc = u_char_canonical_combining_class(c);
-                uint32_t b, d;
-                u_decode(&b, s, t);
+                const char *ignored;
+                uint32_t b = u_decode(&ignored, s, t), d;
                 if (pcc < cc && compose(b, c, &d)) {
                         char *r = u_next(s);
                         ptrdiff_t k = u_char_to_u(d, NULL) - (r - s);

@@ -103,12 +103,9 @@ VALUE
 _rb_u_character_test(VALUE self, bool (*test)(uint32_t))
 {
         const struct rb_u_string *s = RVAL2USTRING(self);
-        for (const char *p = USTRING_STR(s), *end = USTRING_END(s); p < end; ) {
-                uint32_t c;
-                p = u_decode(&c, p, end);
-                if (!test(c))
+        for (const char *p = USTRING_STR(s), *end = USTRING_END(s); p < end; )
+                if (!test(u_decode(&p, p, end)))
                         return Qfalse;
-        }
         return Qtrue;
 }
 
@@ -222,12 +219,9 @@ _rb_u_string_property(VALUE self, const char *name, int unknown,
         const char *end = USTRING_END(string);
         if (p == end)
                 return tosym(unknown);
-        uint32_t c;
-        p = u_decode(&c, p, end);
-        int first = property(c);
+        int first = property(u_decode(&p, p, end));
         while (p < end) {
-                p = u_decode(&c, p, end);
-                int value = property(c);
+                int value = property(u_decode(&p, p, end));
                 if (value != first)
                         rb_u_raise(rb_eArgError,
                                    "string consists of characters with different %s values: :%s+, :%s",

@@ -25,9 +25,8 @@ foldcase(uint32_t c, struct output *output)
 static inline const char *
 foldcase_step(const char *p, const char *end, struct output *output)
 {
-        uint32_t c;
-        const char *q = u_decode(&c, p, end);
-        foldcase(c, output);
+        const char *q;
+        foldcase(u_decode(&q, p, end), output);
         return q;
 }
 
@@ -39,8 +38,8 @@ foldcase_step(const char *p, const char *end, struct output *output)
 static inline const char *
 foldcase_step_turkic(const char *p, const char *end, struct output *output)
 {
-        uint32_t c;
-        const char *q = u_decode(&c, p, end);
+        const char *q;
+        uint32_t c = u_decode(&q, p, end);
         if (c == LATIN_CAPITAL_LETTER_I)
                 output_char(output, LATIN_SMALL_LETTER_DOTLESS_I);
         else if (c == LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE)

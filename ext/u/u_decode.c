@@ -48,8 +48,8 @@ decode(uint32_t *state, uint32_t *c, uint32_t b)
 
 #define REPLACEMENT_CHARACTER ((uint32_t)0xfffd)
 
-char *
-u_decode(uint32_t *result, const char *u, const char *end)
+uint32_t
+u_decode(const char **q, const char *u, const char *end)
 {
         assert(u < end);
         uint32_t c, state = ACCEPT;
@@ -57,18 +57,20 @@ u_decode(uint32_t *result, const char *u, const char *end)
         for (p = (const unsigned char *)u; p < (const unsigned char *)end; p++)
                 switch (decode(&state, &c, *p)) {
                 case ACCEPT:
-                        *result = c;
-                        return (char *)p + 1;
+                        *q = (const char *)p + 1;
+                        return c;
                 case REJECT:
-                        *result = REPLACEMENT_CHARACTER;
-                        return (char *)p + 1;
+                        *q = (const char *)p + 1;
+                        return REPLACEMENT_CHARACTER;
                 }
-        *result = REPLACEMENT_CHARACTER;
-        return (char *)p;
+        *q = (const char *)p;
+        return REPLACEMENT_CHARACTER;
 }
 
 int
 u_decode_n(uint32_t *result, const char *u, size_t n)
 {
-        return (int)(u_decode(result, u, u + n) - u);
+        const char *q;
+        *result = u_decode(&q, u, u + n);
+        return (int)(q - u);
 }

@@ -43,9 +43,8 @@ rb_u_string_split_awk(VALUE self, bool limit_given, int limit)
         const char *end = USTRING_END(string);
         int i = 1;
         while (p < end) {
-                uint32_t c;
                 const char *q;
-                while (p < end && (q = u_decode(&c, p, end), u_char_isspace(c)))
+                while (p < end && u_char_isspace(u_decode(&q, p, end)))
                         p = q;
 
                 if (p == end || (limit_given && i >= limit))
@@ -54,7 +53,7 @@ rb_u_string_split_awk(VALUE self, bool limit_given, int limit)
 
                 q = p;
                 const char *r;
-                while (q < end && (r = u_decode(&c, q, end), !u_char_isspace(c)))
+                while (q < end && !u_char_isspace(u_decode(&r, q, end)))
                         q = r;
 
                 rb_ary_push(result,

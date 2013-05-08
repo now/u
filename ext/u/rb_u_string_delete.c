@@ -7,22 +7,16 @@ rb_u_string_delete_loop(const struct rb_u_string *string, struct tr_table *table
 {
         long count = 0;
 
-        const char *p = USTRING_STR(string);
-        const char *end = USTRING_END(string);
         char *base = result;
-        while (p < end) {
-                uint32_t c;
-                const char *next = u_decode(&c, p, end);
-                if (!tr_table_lookup(table, c)) {
-                        long run = next - p;
+        for (const char *p = USTRING_STR(string), *q, *end = USTRING_END(string); p < end; p = q)
+                if (!tr_table_lookup(table, u_decode(&q, p, end))) {
+                        long run = q - p;
                         if (base != NULL) {
                                 memcpy(base, p, run);
                                 base += run;
                         }
                         count += run;
                 }
-                p = next;
-        }
 
         return count;
 }
