@@ -104,19 +104,21 @@ directive_parse_int(const char **p, const char *end, const char *type)
         int n = 0;
 
         while (q < end) {
-                uint32_t c = _rb_u_dref(q, end);
-
+                uint32_t c;
+                const char *r = u_decode(&c, q, end);
                 if (!u_char_isdigit(c)) {
                         *p = q;
                         return n;
                 }
-
-                q = u_next(q);
+                q = r;
 
                 int m = 10 * n + u_char_digit_value(c);
                 if (m / 10 != n) {
-                        while (q < end && u_char_isdigit(u_dref_validated_n(q, end - q)))
-                                q = u_next(q);
+                        for ( ; q < end; q = r) {
+                                r = u_decode(&c, q, end);
+                                if (!u_char_isdigit(c))
+                                        break;
+                        }
                         rb_u_raise(rb_eArgError,
                                    "%s too large: %*s > %d",
                                    type, (int)(q - *p), *p, INT_MAX);
@@ -265,7 +267,8 @@ directive_flags(const char **p, const char *end,
         ID argument_id = 0;
 
         while (*p < end) {
-                uint32_t c = _rb_u_dref(*p, end);
+                uint32_t c;
+                const char *q = u_decode(&c, *p, end);
 
                 int flag;
 
@@ -322,7 +325,7 @@ directive_flags(const char **p, const char *end,
                         rb_warning("repeated flag in format: ‘%c’", c);
                 flags |= flag;
 
-                *p = u_next(*p);
+                *p = q;
         }
 
         if (flags != DIRECTIVE_FLAGS_NONE && *p == end)
@@ -345,12 +348,13 @@ directive_width(const char **p, const char *end,
         if (*p == end)
                 return 0;
 
-        uint32_t c = _rb_u_dref(*p, end);
+        uint32_t c;
+        const char *q = u_decode(&c, *p, end);
 
         if (c != '*')
                 return directive_parse_int(p, end, "field width");
 
-        *p = u_next(*p);
+        *p = q;
 
         int argument_number = 0;
         VALUE argument = directive_argument_number(p, end,
@@ -373,12 +377,13 @@ directive_precision(const char **p, const char *end)
         if (*p == end)
                 return -1;
 
-        uint32_t c = _rb_u_dref(*p, end);
+        uint32_t c;
+        const char *q = u_decode(&c, *p, end);
 
         if (c != '.')
                 return -1;
 
-        *p = u_next(*p);
+        *p = q;
 
         return directive_parse_int(p, end, "field precision");
 }
@@ -475,8 +480,10 @@ directive_character(UNUSED(uint32_t directive), int flags, int width, UNUSED(int
         if (!NIL_P(tmp)) {
                 const struct rb_u_string *string = RVAL2USTRING_ANY(tmp);
                 p = USTRING_STR(string);
-                c = _rb_u_dref(p, USTRING_END(string));
-                length = (int)(u_next(p) - p);
+                const char *end = USTRING_END(string);
+                if (p == end)
+                        rb_u_raise(rb_eArgError, "%%c requires a character");
+                length = (int)(u_decode(&c, p, end) - p);
         } else {
                 char buf[U_CHAR_MAX_BYTE_LENGTH];
                 p = buf;
@@ -509,8 +516,9 @@ directive_string(UNUSED(uint32_t directive), int flags, int width, int precision
                 int i = 0;
                 const char *q = p, *end = p + length;
                 while (i < precision && q < end) {
-                        i += (int)u_char_width(_rb_u_dref(q, end));
-                        q = u_next(q);
+                        uint32_t c;
+                        q = u_decode(&c, q, end);
+                        i += (int)u_char_width(c);
                 }
                 length = q - p;
         }
@@ -1006,10 +1014,8 @@ directive(const char **p, const char *end, struct format_arguments *arguments, V
         int precision = directive_precision(p, end);
 
         uint32_t c = '\0';
-        if (*p < end) {
-                c = _rb_u_dref(*p, end);
-                *p = u_next(*p);
-        }
+        if (*p < end)
+                *p = u_decode(&c, *p, end);
         switch (c) {
         case '%':
         case '\0':

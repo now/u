@@ -42,13 +42,15 @@ u_grapheme_clusters(const char *string, size_t n, u_substring_fn fn, void *closu
         const char *end = p + n;
         uint8_t state = 2;
         while (q < end) {
-                state = gb_dfa[state & 0xf][u_char_grapheme_break(u_dref(q))];
+                uint32_t c;
+                const char *r = u_decode(&c, q, end);
+                state = gb_dfa[state & 0xf][u_char_grapheme_break(c)];
                 if (state >> 4 != 1) {
                         if (p < q)
                                 fn(p, q - p, closure);
                         p = q;
                 }
-                q = u_next(q);
+                q = r;
         }
         if (p < q)
                 fn(p, q - p, closure);

@@ -30,10 +30,12 @@ rb_u_string_count(int argc, VALUE *argv, VALUE self)
         tr_table_initialize_from_strings(&table, argc, argv);
 
         long count = 0;
-        const char *end = USTRING_END(string);
-        for (char const *p = USTRING_STR(string); p < end; p = u_next(p))
-                if (tr_table_lookup(&table, _rb_u_dref(p, end)))
+        for (const char *p = USTRING_STR(string), *end = USTRING_END(string); p < end; ) {
+                uint32_t c;
+                p = u_decode(&c, p, end);
+                if (tr_table_lookup(&table, c))
                         count++;
+        }
 
         return LONG2NUM(count);
 }

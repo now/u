@@ -26,46 +26,31 @@ tr_next_char(struct tr *t)
         if (t->p == t->end)
                 return TR_FINISHED;
 
-        if (_rb_u_dref(t->p, t->end) == '\\') {
-                const char *next = u_find_next(t->p, t->end);
-
-                if (next == NULL) {
-                        t->now = '\\';
-                        t->p = t->end;
-                        return TR_FOUND;
-                }
-
-                t->p = next;
-        }
-
-        t->now = _rb_u_dref(t->p, t->end);
-
-        const char *next = u_find_next(t->p, t->end);
-        if (next == NULL) {
-                t->p = t->end;
+        t->p = u_decode(&t->now, t->p, t->end);
+        if (t->p == t->end)
                 return TR_FOUND;
+        if (t->now == '\\') {
+                t->p = u_decode(&t->now, t->p, t->end);
+                if (t->p == t->end)
+                        return TR_FOUND;
         }
-        t->p = next;
 
-        if (_rb_u_dref(t->p, t->end) == '-') {
-                next = u_find_next(t->p, t->end);
+        uint32_t c;
+        const char *next = u_decode(&c, t->p, t->end);
+        if (c == '-') {
                 /* TODO: Make this simpler.  Perhaps we don’t need
                  * TR_READ_ANOTHER, as we advance it here ourselves.  I got to
                  * check the offsets here.  Perhaps TR_READ_ANOTHER should also
                  * have advanced t->p one more step. */
-                if (next != NULL) {
-                        uint32_t max = u_dref(next);
-
+                if (next < t->end) {
+                        uint32_t max;
+                        t->p = u_decode(&max, next, t->end);
                         if (max < t->now) {
                                 t->p = next;
                                 return TR_READ_ANOTHER;
                         }
-
                         t->inside_range = true;
                         t->max = max;
-
-                        next = u_find_next(next, t->end);
-                        t->p = (next != NULL) ? next : t->end;
                 }
         }
 

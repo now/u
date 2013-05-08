@@ -11,9 +11,8 @@ rb_u_string_delete_loop(const struct rb_u_string *string, struct tr_table *table
         const char *end = USTRING_END(string);
         char *base = result;
         while (p < end) {
-                uint32_t c = _rb_u_dref(p, end);
-                const char *next = u_next(p);
-
+                uint32_t c;
+                const char *next = u_decode(&c, p, end);
                 if (!tr_table_lookup(table, c)) {
                         long run = next - p;
                         if (base != NULL) {
@@ -22,7 +21,6 @@ rb_u_string_delete_loop(const struct rb_u_string *string, struct tr_table *table
                         }
                         count += run;
                 }
-
                 p = next;
         }
 

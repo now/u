@@ -76,20 +76,16 @@ decompose_simple(uint32_t c, const char *(*decompose)(size_t),
                 output_char(output, c);
 }
 
-static inline void
-decompose_step(uint32_t c, const char *(*decompose)(size_t),
-               struct output *output)
-{
-        if (!decompose_hangul(c, output))
-                decompose_simple(c, decompose, output);
-}
-
 static void
 decompose_loop(const char *string, const char *end,
                const char *(*decompose)(size_t), struct output *output)
 {
-        for (const char *p = string; p < end; p = u_next(p))
-                decompose_step(u_dref(p), decompose, output);
+        for (const char *p = string; p < end; ) {
+                uint32_t c;
+                p = u_decode(&c, p, end);
+                if (!decompose_hangul(c, output))
+                        decompose_simple(c, decompose, output);
+        }
 }
 
 static inline void
@@ -97,8 +93,9 @@ canonical_ordering_swap(char *string, char *p,
                         enum u_canonical_combining_class ccc)
 {
         char *r = p;
+        uint32_t c;
         char *s;
-        while (r > string && (s = u_prev(r), u_char_canonical_combining_class(u_dref(s)) > ccc))
+        while (r > string && (s = u_prev(r), u_decode(&c, s, r), u_char_canonical_combining_class(c) > ccc))
                 r = s;
         char buf[U_CHAR_MAX_BYTE_LENGTH];
         size_t n = u_next(p) - p;
@@ -108,19 +105,22 @@ canonical_ordering_swap(char *string, char *p,
 }
 
 static inline bool
-canonical_ordering_reorder(char *string, size_t n)
+canonical_ordering_reorder(char *string, char *end)
 {
         bool swapped = false;
-        enum u_canonical_combining_class pcc = u_char_canonical_combining_class(u_dref(string));
-        char *end = string + n;
-        for (char *p = u_next(string); p < end; p = u_next(p)) {
-                enum u_canonical_combining_class cc = u_char_canonical_combining_class(u_dref(p));
+        uint32_t c;
+        char *p = u_decode(&c, string, end);
+        enum u_canonical_combining_class pcc = u_char_canonical_combining_class(c);
+        while (p < end) {
+                char *q = u_decode(&c, p, end);
+                enum u_canonical_combining_class cc = u_char_canonical_combining_class(c);
 
                 if (cc != 0 && pcc > cc) {
                         canonical_ordering_swap(string, p, cc);
                         swapped = true;
                 } else
                         pcc = cc;
+                p = q;
         }
         return swapped;
 }
@@ -128,9 +128,9 @@ canonical_ordering_reorder(char *string, size_t n)
 static void
 canonical_ordering(char *string, size_t n)
 {
-        if (n > 0)
-                while (canonical_ordering_reorder(string, n))
-                        ;
+        char *end = string + n;
+        while (canonical_ordering_reorder(string, end))
+                ;
 }
 
 static inline bool
@@ -212,17 +212,16 @@ compose(uint32_t a, uint32_t b, uint32_t *result)
 static inline size_t
 compose_loop(char *string, size_t n)
 {
-        if (n == 0)
-                return 0;
         int pcc = -1;
         char *s = string;
         char *t = u_next(s);
         for (char *p = t, *q, *end = string + n; p < end; p = q) {
-                uint32_t c = u_dref(p);
-                q = u_next(p);
+                uint32_t c;
+                q = u_decode(&c, p, end);
                 int cc = u_char_canonical_combining_class(c);
-                uint32_t d;
-                if (pcc < cc && compose(u_dref(s), c, &d)) {
+                uint32_t b, d;
+                u_decode(&b, s, t);
+                if (pcc < cc && compose(b, c, &d)) {
                         char *r = u_next(s);
                         ptrdiff_t k = u_char_to_u(d, NULL) - (r - s);
                         memmove(r + k, r, t - r);
@@ -250,7 +249,7 @@ u_normalize(char *result, size_t m, const char *string, size_t n,
         const char *end = string + n;
         struct output output = OUTPUT_INIT(result, m);
         decompose_loop(string, end, decompose, &output);
-        if (output.m > output.n) {
+        if (output.m > output.n && output.n > 0) {
                 canonical_ordering(output.result, output.n);
                 if (form == U_NORMALIZATION_FORM_C ||
                     form == U_NORMALIZATION_FORM_KC)

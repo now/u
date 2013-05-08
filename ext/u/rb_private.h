@@ -10,8 +10,6 @@ void need_m_to_n_arguments(int argc, int m, int n);
 
 void *_rb_u_guarded_alloc(size_t n, ...) RB_U_NULL_TERMINATED(0);
 
-uint32_t _rb_u_dref(const char *str, const char *end);
-
 char *rb_u_prev_validated(const char *begin, const char *p);
 
 char *rb_u_next_validated(const char *p, const char *end);

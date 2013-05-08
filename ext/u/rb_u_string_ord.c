@@ -4,9 +4,12 @@
 VALUE
 rb_u_string_ord(VALUE self)
 {
-        const struct rb_u_string *string = RVAL2USTRING(self);
-        uint32_t c = _rb_u_dref(USTRING_STR(string),
-                                USTRING_END(string));
-
+        const struct rb_u_string *s = RVAL2USTRING(self);
+        const char *p = USTRING_STR(s);
+        const char *end = USTRING_END(s);
+        if (p == end)
+                rb_u_raise(rb_eArgError, "empty string");
+        uint32_t c;
+        u_decode(&c, p, end);
         return UINT2NUM(c);
 }

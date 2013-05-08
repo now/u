@@ -4,10 +4,12 @@
 static void
 each(VALUE self, struct yield *yield)
 {
-        const struct rb_u_string *string = RVAL2USTRING(self);
-        const char *end = USTRING_END(string);
-        for (const char *p = USTRING_STR(string); p < end; p = u_next(p))
-                yield_call(yield, UINT2NUM(_rb_u_dref(p, end)));
+        const struct rb_u_string *s = RVAL2USTRING(self);
+        for (const char *p = USTRING_STR(s), *end = USTRING_END(s); p < end; ) {
+                uint32_t c;
+                p = u_decode(&c, p, end);
+                yield_call(yield, UINT2NUM(c));
+        }
 }
 
 UNUSED(static VALUE

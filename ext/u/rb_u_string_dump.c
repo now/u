@@ -52,23 +52,7 @@ rb_u_string_dump_ascii_printable(VALUE buffer, unsigned char c)
         return true;
 }
 
-static inline bool
-rb_u_string_dump_codepoint(VALUE buffer, const char **p, const char *end)
-{
-        uint32_t c = u_dref_n(*p, end - *p);
-
-        if (c == U_INCOMPLETE_INPUT_CHAR || c == U_BAD_INPUT_CHAR)
-                return false;
-
-        char escaped[3 + sizeof(c) * CHAR_BIT + 2 + 1];
-        int length = snprintf(escaped, sizeof(escaped), "\\u{%x}", c);
-        rb_u_buffer_append(buffer, escaped, length);
-
-        /* -1, since we increase p inside the loop. */
-        *p = u_next(*p) - 1;
-
-        return true;
-}
+#define REPLACEMENT_CHARACTER ((uint32_t)0xfffd)
 
 static inline void
 rb_u_string_dump_hex(VALUE buffer, unsigned char c)
@@ -76,6 +60,26 @@ rb_u_string_dump_hex(VALUE buffer, unsigned char c)
         char escaped[4 + 1];
         int length = snprintf(escaped, sizeof(escaped), "\\x%02X", c);
         rb_u_buffer_append(buffer, escaped, length);
+}
+
+static inline bool
+rb_u_string_dump_codepoint(VALUE buffer, const char **p, const char *end)
+{
+        uint32_t c;
+        const char *q = u_decode(&c, *p, end);
+        if (c == REPLACEMENT_CHARACTER && !u_isvalid_n(*p, q - *p, NULL)) {
+                for (const char *r = *p; r < q; r++)
+                        rb_u_string_dump_hex(buffer, (unsigned char)*r);
+                /* -1, since we increase p inside the loop. */
+                *p = q - 1;
+                return true;
+        }
+        /* -1, since we increase p inside the loop. */
+        *p = q - 1;
+        char escaped[3 + sizeof(c) * CHAR_BIT + 2 + 1];
+        int length = snprintf(escaped, sizeof(escaped), "\\u{%x}", c);
+        rb_u_buffer_append(buffer, escaped, length);
+        return true;
 }
 
 /* Returns the receiver in a reader-friendly format, inheriting any taint and

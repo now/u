@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -45,57 +46,29 @@ decode(uint32_t *state, uint32_t *c, uint32_t b)
         return *state;
 }
 
-uint32_t
-u_dref(const char *u)
+#define REPLACEMENT_CHARACTER ((uint32_t)0xfffd)
+
+char *
+u_decode(uint32_t *result, const char *u, const char *end)
 {
+        assert(u < end);
         uint32_t c, state = ACCEPT;
-        for (const unsigned char *p = (const unsigned char *)u; *p != '\0'; p++)
+        const unsigned char *p;
+        for (p = (const unsigned char *)u; p < (const unsigned char *)end; p++)
                 switch (decode(&state, &c, *p)) {
                 case ACCEPT:
-                        return c;
+                        *result = c;
+                        return (char *)p + 1;
                 case REJECT:
-                        return U_BAD_INPUT_CHAR;
+                        *result = REPLACEMENT_CHARACTER;
+                        return (char *)p + 1;
                 }
-        return *u == '\0' ? '\0' : U_INCOMPLETE_INPUT_CHAR;
+        *result = REPLACEMENT_CHARACTER;
+        return (char *)p;
 }
 
-uint32_t
-u_dref_n(const char *u, size_t n)
+int
+u_decode_n(uint32_t *result, const char *u, size_t n)
 {
-        if (n == 0)
-                return U_INCOMPLETE_INPUT_CHAR;
-
-        uint32_t c, state = ACCEPT;
-        const unsigned char *end = (const unsigned char *)u + n;
-        for (const unsigned char *p = (const unsigned char *)u; p < end; p++)
-                switch (decode(&state, &c, *p)) {
-                case ACCEPT:
-                        return c;
-                case REJECT:
-                        return *p == '\0' ? U_INCOMPLETE_INPUT_CHAR : U_BAD_INPUT_CHAR;
-                }
-        return U_INCOMPLETE_INPUT_CHAR;
-}
-
-static inline uint32_t
-validate(uint32_t c)
-{
-	if (c & 0x80000000)
-		return c;
-	else if (!u_char_isvalid(c))
-		return U_BAD_INPUT_CHAR;
-	else
-		return c;
-}
-
-uint32_t
-u_dref_validated(const char *u)
-{
-	return validate(u_dref(u));
-}
-
-uint32_t
-u_dref_validated_n(const char *u, size_t n)
-{
-	return validate(u_dref_n(u, n));
+        return (int)(u_decode(result, u, u + n) - u);
 }

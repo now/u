@@ -201,8 +201,8 @@ rb_u_string_to_inum_as_fix(const char *str, const char *s, int sign, int base,
 
         bool previous_was_separator = false;
         while (*s != '\0') {
-                uint32_t c = u_dref(s);
-                s = u_next(s);
+                uint32_t c;
+                s = u_decode(&c, s, s + 4);
 
                 if (rb_u_string_to_inum_num_separator(str, s, verify, c, &previous_was_separator))
                         continue;
@@ -215,8 +215,10 @@ rb_u_string_to_inum_as_fix(const char *str, const char *s, int sign, int base,
         }
 
         if (verify) {
-                while (*s != '\0' && u_char_isspace(u_dref(s)))
-                        s = u_next(s);
+                uint32_t c;
+                const char *t;
+                while (*s != '\0' && (t = u_decode(&c, s, s + 4), u_char_isspace(c)))
+                        s = t;
                 if (*s != '\0')
                         rb_u_raise(rb_eArgError,
                                    "trailing garbage found at position %ld",
@@ -242,10 +244,11 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
         }
 
         const char *s = str;
-
+        uint32_t c;
+        const char *t;
         /* Skip any leading whitespace. */
-        while (u_char_isspace(u_dref(s)))
-                s = u_next(s);
+        while ((t = u_decode(&c, s, s + 4), u_char_isspace(c)))
+                s = t;
 
         /* Figure out what sign this number uses. */
         int sign;
@@ -292,8 +295,8 @@ rb_cutf_to_inum(const char * const str, int base, bool verify)
 
         bool previous_was_separator = false;
         while (true) {
-                uint32_t c = u_dref(s);
-                s = u_next(s);
+                uint32_t c;
+                s = u_decode(&c, s, s + 4);
 
                 if (rb_u_string_to_inum_num_separator(str, s, verify, c, &previous_was_separator))
                         continue;

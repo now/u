@@ -50,7 +50,9 @@ u_words(const char *string, size_t n, u_substring_fn fn, void *closure)
         const char *s = NULL;
         uint8_t state = 2;
         while (q < end) {
-                state = wb_dfa[state & 0xf][u_char_word_break(u_dref(q))];
+                uint32_t c;
+                const char *r = u_decode(&c, q, end);
+                state = wb_dfa[state & 0xf][u_char_word_break(c)];
                 switch (state >> 4) {
                 case 1:
                         break;
@@ -70,7 +72,7 @@ u_words(const char *string, size_t n, u_substring_fn fn, void *closure)
                                 fn(p, q - p, closure);
                         p = q;
                 }
-                q = u_next(q);
+                q = r;
         }
         if (s != NULL) {
                 fn(p, s - p, closure);

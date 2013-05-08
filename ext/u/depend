@@ -254,10 +254,11 @@ u_char_xdigit_value.o: u_char_xdigit_value.c u.h private.h
 u_collate.o: u_collate.c extconf.h u.h private.h
 u_collation_key.o: u_collation_key.c extconf.h u.h private.h
 u_copy.o: u_copy.c u.h private.h
+u_decode.o: u_decode.c u.h private.h
 u_downcase.o: u_downcase.c u.h private.h data/constants.h attributes.h \
   titled.h output.h u_locale.h case.h
-u_dref.o: u_dref.c u.h private.h
-u_foldcase.o: u_foldcase.c u.h private.h data/case-folding.h output.h
+u_foldcase.o: u_foldcase.c u.h private.h data/case-folding.h output.h \
+  u_locale.h
 u_grapheme_clusters.o: u_grapheme_clusters.c u.h private.h
 u_has_prefix.o: u_has_prefix.c u.h private.h
 u_index.o: u_index.c u.h private.h

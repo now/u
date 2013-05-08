@@ -175,7 +175,7 @@ module U
               u_collation_key.c
               u_copy.c
               u_downcase.c
-              u_dref.c
+              u_decode.c
               u_foldcase.c
               u_grapheme_clusters.c
               u_has_prefix.c

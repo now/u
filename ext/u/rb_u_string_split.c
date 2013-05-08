@@ -43,16 +43,19 @@ rb_u_string_split_awk(VALUE self, bool limit_given, int limit)
         const char *end = USTRING_END(string);
         int i = 1;
         while (p < end) {
-                while (p < end && u_char_isspace(_rb_u_dref(p, end)))
-                        p = u_next(p);
+                uint32_t c;
+                const char *q;
+                while (p < end && (q = u_decode(&c, p, end), u_char_isspace(c)))
+                        p = q;
 
                 if (p == end || (limit_given && i >= limit))
                         break;
                 i++;
 
-                const char *q = p;
-                while (q < end && !u_char_isspace(_rb_u_dref(q, end)))
-                        q = u_next(q);
+                q = p;
+                const char *r;
+                while (q < end && (r = u_decode(&c, q, end), !u_char_isspace(c)))
+                        q = r;
 
                 rb_ary_push(result,
                             rb_u_string_new_subsequence(self,

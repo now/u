@@ -405,29 +405,10 @@ U_PURE char *u_find_next(const char *p, const char *end) U_NON_NULL((1));
 U_PURE char *u_prev(const char *p) U_NON_NULL((1));
 U_PURE char *u_find_prev(const char *begin, const char *p) U_NON_NULL((1));
 
-U_PURE uint32_t u_dref(const char *string) U_NON_NULL((1));
-U_PURE uint32_t u_dref_n(const char *string, size_t n) U_NON_NULL((1));
-U_PURE uint32_t u_dref_validated(const char *string) U_NON_NULL((1));
-U_PURE uint32_t u_dref_validated_n(const char *string, size_t n)
-        U_NON_NULL((1));
-
-static inline uint32_t U_NON_NULL((1))
-u_lref(const char *u, size_t *n)
-{
-        uint32_t c = u_dref(u);
-        *n = u_next(u) - u;
-        return c;
-}
-
-static inline uint32_t U_NON_NULL((1))
-u_iref(const char *u, size_t *n)
-{
-        if (*(const unsigned char *)u < 0x80) {
-                *n = 1;
-                return *u;
-        } else
-                return u_lref(u, n);
-}
+char *u_decode(uint32_t *result, const char *u, const char *end)
+        U_NON_NULL((1, 2, 3));
+int u_decode_n(uint32_t *result, const char *u, size_t n)
+        U_NON_NULL((1, 2));
 
 U_PURE char *u_offset_to_pointer(const char *str, long offset) U_NON_NULL((1));
 U_PURE char *u_offset_to_pointer_n(const char *str, long offset, size_t n)

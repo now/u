@@ -318,7 +318,7 @@ Expectations do
   expect :syloti_nagri do [0xA800].pack('U').u.script end
   expect :old_persian do [0x103D0].pack('U').u.script end
   expect :kharoshthi do [0x10A3F].pack('U').u.script end
-  expect :unknown do [0x1111111].pack('U').u.script end
+  expect :unknown do ''.u.script end
   expect :balinese do [0x1B04].pack('U').u.script end
   expect :cuneiform do [0x12000].pack('U').u.script end
   expect :phoenician do [0x10900].pack('U').u.script end
@@ -571,7 +571,7 @@ Expectations do
   expect result.tainted? do 'あ'.u.taint.lstrip end
   expect result.untrusted? do 'あ'.u.untrust.lstrip end if untrust
 
-  expect ArgumentError.new('string is empty') do ''.u.ord end
+  expect ArgumentError.new('empty string') do ''.u.ord end
   expect 0x00e4 do 'ä'.u.ord end
   expect 0x00e4 do 'äbc'.u.ord end
 
@@ -951,6 +951,9 @@ Expectations do
   expect 'あ'.u do '%2c'.u % 0x3042 end
   expect ' あ'.u do '%3c'.u % 0x3042 end
   expect '   ​'.u do '%3c'.u % 0x200b end
+  expect ArgumentError.new('%c requires a character') do '%c'.u % "" end
+  expect 'ä'.u do '%c'.u % "ä" end
+  expect 'ä'.u do '%c'.u % "äbc" end
   expect ArgumentError.new('cannot use absolute argument number 1: relative argument number already used') do '%c%1$c'.u % [0x00e4] end
   expect ArgumentError.new('cannot use absolute argument number 1: named argument already used') do '%<a>c%1$c'.u % { :a => 0x00e4 } end
   expect ArgumentError.new('absolute argument number beyond end of argument list: 1 > 0') do '%1$%'.u % [] end
@@ -1349,6 +1352,7 @@ Expectations do
   expect '"abc".u'.u do "abc".u.dump end
   expect '"\u{e4}bc".u'.u do "äbc".u.dump end
   expect '"\xC3".u'.u do "\xC3".u.dump end
+  expect '"\xF1\x80\x80".u'.u do "\xF1\x80\x80".u.dump end
   expect '"\"\\\\\n\r\t\f\v\b\a\e".u'.u do "\"\\\n\r\t\f\v\b\a\e".u.dump end
   expect '"\#$\#@\#{}".u'.u do '#$#@#{}'.u.dump end
   expect result.tainted? do ''.u.taint.dump end
@@ -1362,6 +1366,7 @@ Expectations do
   expect result.not.print? do [0x110BD].pack('U').u end
   expect '"\u{110BD}".u'.u do [0x110BD].pack('U').u.inspect end
   expect '"\"\\\\\n\r\t\f\v\b\a\e".u'.u do "\"\\\n\r\t\f\v\b\a\e".u.inspect end
+  expect '"#\xC3".u'.u do "#\xC3".u.inspect end
   expect '"\#$\#@\#{}".u'.u do '#$#@#{}'.u.inspect end
   expect result.tainted? do ''.u.taint.inspect end
   expect result.untrusted? do ''.u.untrust.inspect end if untrust

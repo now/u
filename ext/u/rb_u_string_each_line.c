@@ -33,8 +33,11 @@ rb_u_string_each_line_separator(VALUE self, const struct rb_u_string *separator,
         const struct rb_u_string *string = RVAL2USTRING(self);
 
         long separator_length = USTRING_LENGTH(separator);
-        uint32_t first = (separator_length == 0) ?
-                '\n' : _rb_u_dref(USTRING_STR(separator), USTRING_END(separator));
+        uint32_t first;
+        if (separator_length == 0)
+                first = '\n';
+        else
+                u_decode(&first, USTRING_STR(separator), USTRING_END(separator));
 
         const char *begin = USTRING_STR(string);
         const char *base = begin;
@@ -42,22 +45,22 @@ rb_u_string_each_line_separator(VALUE self, const struct rb_u_string *separator,
         const char *end = USTRING_END(string);
 
         while (p < end) {
-                uint32_t c = _rb_u_dref(p, end);
-
+                uint32_t c;
+                const char *q = u_decode(&c, p, end);
 again:
                 if (separator_length == 0 && c == first) {
-                        p = u_next(p);
+                        p = q;
                         if (p < end) {
-                                c = _rb_u_dref(p, end);
-
+                                q = u_decode(&c, p, end);
                                 if (c != first)
                                         goto again;
                         }
                         while (p < end) {
-                                if (_rb_u_dref(p, end) != first)
+                                uint32_t d;
+                                q = u_decode(&d, p, end);
+                                if (d != first)
                                         break;
-
-                                p = u_next(p);
+                                p = q;
                         }
                 }
 
@@ -69,7 +72,7 @@ again:
                         yield_call(yield, rb_u_string_new_c(self, base, p - base));
                         base = p;
                 } else
-                        p = u_next(p);
+                        p = q;
         }
 
         if (base != end)

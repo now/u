@@ -1,20 +1,14 @@
 #include "rb_includes.h"
 
-static const char *
-rb_u_string_inspect_bad_input(const char *p, const char *end, VALUE result)
+static void
+rb_u_string_inspect_bad_input(const char *p, const char *q, VALUE result)
 {
-        const char *next = u_find_next(p, end);
-        if (next == NULL)
-                next = end;
-        while (p < next) {
+        while (p < q) {
                 char hex[5];
-
                 snprintf(hex, lengthof(hex), "\\x%02X", *p & 0xff);
                 rb_str_buf_cat2(result, hex);
                 p++;
         }
-
-        return next;
 }
 
 static void
@@ -24,32 +18,6 @@ rb_u_string_inspect_special_char(uint32_t c, VALUE result)
 
         rb_str_buf_cat2(result, "\\");
         rb_str_buf_cat(result, str, u_char_to_u(c, str));
-}
-
-static const char *
-rb_u_string_inspect_hash_char(const char *p, const char *end, VALUE result)
-{
-        const char *next = u_next(p);
-
-        if (next == end) {
-                rb_str_buf_cat2(result, "#");
-                return end;
-        }
-
-        uint32_t c = u_dref(next);
-        switch (c) {
-        case U_BAD_INPUT_CHAR:
-                rb_str_buf_cat2(result, "#");
-                return rb_u_string_inspect_bad_input(p, end, result);
-        case '$':
-        case '@':
-        case '{':
-                rb_str_buf_cat2(result, "\\#");
-                return next;
-        default:
-                rb_str_buf_cat2(result, "#");
-                return next;
-        }
 }
 
 static void
@@ -75,6 +43,40 @@ rb_u_string_inspect_default(uint32_t c, VALUE result)
 
         char str[U_CHAR_MAX_BYTE_LENGTH];
         rb_str_buf_cat(result, str, u_char_to_u(c, str));
+}
+
+#define REPLACEMENT_CHARACTER ((uint32_t)0xfffd)
+
+static const char *
+rb_u_string_inspect_hash_char(const char *q, const char *end,
+                              VALUE result)
+{
+        if (q == end) {
+                rb_str_buf_cat2(result, "#");
+                return q;
+        }
+
+        const char *p = q;
+        uint32_t c;
+        q = u_decode(&c, p, end);
+        switch (c) {
+        case REPLACEMENT_CHARACTER:
+                rb_str_buf_cat2(result, "#");
+                if (!u_isvalid_n(p, q - p, NULL))
+                        rb_u_string_inspect_bad_input(p, q, result);
+                else
+                        rb_u_string_inspect_default(c, result);
+                return q;
+        case '$':
+        case '@':
+        case '{':
+                rb_str_buf_cat2(result, "\\#");
+                rb_u_string_inspect_default(c, result);
+                return q;
+        default:
+                rb_str_buf_cat2(result, "#");
+                return p;
+        }
 }
 
 /* Returns the receiver in a reader-friendly inspectable format, inheriting
@@ -133,18 +135,15 @@ rb_u_string_inspect(VALUE self)
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         while (p < end) {
-                uint32_t c = u_dref(p);
+                uint32_t c;
+                const char *q = u_decode(&c, p, end);
                 switch (c) {
-                case U_INCOMPLETE_INPUT_CHAR:
-                case U_BAD_INPUT_CHAR:
-                        p = rb_u_string_inspect_bad_input(p, end, result);
-                        continue;
                 case '"':
                 case '\\':
                         rb_u_string_inspect_special_char(c, result);
                         break;
                 case '#':
-                        p = rb_u_string_inspect_hash_char(p, end, result);
+                        p = rb_u_string_inspect_hash_char(q, end, result);
                         continue;
                 case '\n':
                         rb_str_buf_cat2(result, "\\n");
@@ -170,11 +169,17 @@ rb_u_string_inspect(VALUE self)
                 case '\033':
                         rb_str_buf_cat2(result, "\\e");
                         break;
+                case REPLACEMENT_CHARACTER:
+                        if (!u_isvalid_n(p, q - p, NULL)) {
+                                rb_u_string_inspect_bad_input(p, q, result);
+                                break;
+                        }
+                        /* fall through */
                 default:
                         rb_u_string_inspect_default(c, result);
                         break;
                 }
-                p = u_next(p);
+                p = q;
         }
 
         rb_str_buf_cat2(result, "\".u");

@@ -15,13 +15,15 @@ rb_u_string_strip(VALUE self)
 
         const char *end = USTRING_END(string);
         const char *s = begin;
-        while (s < end && u_char_isspace(_rb_u_dref(s, end)))
-                s = u_next(s);
+        uint32_t c;
+        const char *t;
+        while (s < end && (t = u_decode(&c, s, end), u_char_isspace(c)))
+                s = t;
 
-        const char *t = end;
+        t = end;
         while (t > begin) {
                 const char *prev = rb_u_prev_validated(begin, t);
-                uint32_t c = u_dref(prev);
+                u_decode(&c, prev, end);
 
                 if (c != '\0' && !u_char_isspace(c))
                         break;

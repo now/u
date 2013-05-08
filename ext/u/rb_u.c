@@ -61,24 +61,6 @@ _rb_u_guarded_alloc(size_t n, ...)
         rb_exc_raise(rb_errinfo());
 }
 
-uint32_t
-_rb_u_dref(const char *str, const char *end)
-{
-        if (str >= end)
-                rb_u_raise(rb_eArgError, "string is empty");
-
-        uint32_t c = u_dref_validated_n(str, end - str);
-        switch (c) {
-        case U_BAD_INPUT_CHAR:
-                rb_u_raise(rb_eArgError, "input isn’t valid UTF-8");
-        case U_INCOMPLETE_INPUT_CHAR:
-                rb_u_raise(rb_eArgError,
-                           "input contains an incomplete UTF-8-encoded character");
-        default:
-                return c;
-        }
-}
-
 char *
 rb_u_prev_validated(const char *begin, const char *p)
 {
@@ -120,17 +102,13 @@ rb_u_validate(const char *string, long length)
 VALUE
 _rb_u_character_test(VALUE self, bool (*test)(uint32_t))
 {
-        const struct rb_u_string *string = RVAL2USTRING(self);
-
-        const char *p = USTRING_STR(string);
-        const char *end = USTRING_END(string);
-        while (p < end) {
-                if (!test(_rb_u_dref(p, end)))
+        const struct rb_u_string *s = RVAL2USTRING(self);
+        for (const char *p = USTRING_STR(s), *end = USTRING_END(s); p < end; ) {
+                uint32_t c;
+                p = u_decode(&c, p, end);
+                if (!test(c))
                         return Qfalse;
-
-                p = u_next(p);
         }
-
         return Qtrue;
 }
 
@@ -243,18 +221,19 @@ _rb_u_string_property(VALUE self, const char *name, int unknown,
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         if (p == end)
-                return unknown;
-        int first = property(u_dref_validated_n(p, end - p));
-        p = u_next(p);
+                return tosym(unknown);
+        uint32_t c;
+        p = u_decode(&c, p, end);
+        int first = property(c);
         while (p < end) {
-                int value = property(u_dref_validated_n(p, end - p));
+                p = u_decode(&c, p, end);
+                int value = property(c);
                 if (value != first)
                         rb_u_raise(rb_eArgError,
                                    "string consists of characters with different %s values: :%s+, :%s",
                                    name,
                                    rb_id2name(SYM2ID(tosym(first))),
                                    rb_id2name(SYM2ID(tosym(value))));
-                p = u_next(p);
         }
         return tosym(first);
 }

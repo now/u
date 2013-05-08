@@ -1,8 +1,9 @@
-void _u_downcase_step(const char *string, const char *p, const char *end,
-                      enum locale locale, struct output *output);
+const char *_u_downcase_step(const char *string, const char *p, const char *end,
+                             enum locale locale, struct output *output);
 
-void _u_upcase_step(const char *string, const char **p, const char *end,
-                    enum locale locale, bool title, struct output *output);
+const char *_u_upcase_step(const char *string, const char *p, const char *end,
+                           enum locale locale, bool title,
+                           struct output *output);
 
 static inline void
 case_simple(uint32_t c, enum u_general_category category, bool title, bool upper, struct output *output)
@@ -23,11 +24,12 @@ is_after(const char *string, const char *p, bool predicate(uint32_t))
 {
         if (p == string)
                 return false;
+        uint32_t c;
         for (const char *q = u_prev(p); q > string; q = u_prev(q)) {
-                uint32_t c = u_dref(q);
+                u_decode(&c, q, p);
                 if (predicate(c))
                         return true;
-                switch (u_char_canonical_combining_class(u_dref(p))) {
+                switch (u_char_canonical_combining_class(c)) {
                 case U_CANONICAL_COMBINING_CLASS_ABOVE:
                 case U_CANONICAL_COMBINING_CLASS_NOT_REORDERED:
                         return false;
@@ -35,5 +37,6 @@ is_after(const char *string, const char *p, bool predicate(uint32_t))
                         break;
                 }
 	}
-        return predicate(u_dref(string));
+        u_decode(&c, string, p);
+        return predicate(c);
 }

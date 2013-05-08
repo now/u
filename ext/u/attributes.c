@@ -38,8 +38,9 @@ _u_special_case_table_lookup(uint32_t c)
         uint32_t tv = _u_attribute(c);
 
         if (tv >= UNICODE_SPECIAL_CASE_TABLE_START)
-                tv = u_dref(special_case_table +
-                            tv - UNICODE_SPECIAL_CASE_TABLE_START);
+                u_decode_n(&tv,
+                           special_case_table +
+                           tv - UNICODE_SPECIAL_CASE_TABLE_START, 4);
 
         if (tv == '\0')
                 return c;

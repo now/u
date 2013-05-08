@@ -38,8 +38,9 @@ is_final_sigma(const char *string, const char *p, const char *end)
 {
         if (p == string)
                 return false;
-        for (const char *q = u_next(p); q < end; q = u_next(q)) {
-                uint32_t c = u_dref(q);
+        uint32_t c;
+        for (const char *q = u_next(p); q < end; ) {
+                q = u_decode(&c, q, end);
                 if (u_char_iscaseignorable(c))
                         continue;
                 if (u_char_iscased(c))
@@ -47,21 +48,24 @@ is_final_sigma(const char *string, const char *p, const char *end)
                 break;
         }
         for (const char *r = u_prev(p); r > string; r = u_prev(r)) {
-                uint32_t c = u_dref(r);
+                u_decode(&c, r, p);
                 if (u_char_iscaseignorable(c))
                         continue;
                 if (u_char_iscased(c))
                         return true;
                 return false;
         }
-        return u_char_iscased(u_dref(string));
+        u_decode(&c, string, p);
+        return u_char_iscased(c);
 }
 
 static inline bool
 has_more_above(const char *string, const char *end)
 {
-	for (const char *p = u_next(string); p < end; p = u_next(p)) {
-		switch (u_char_canonical_combining_class(u_dref(p))) {
+	for (const char *p = u_next(string); p < end; ) {
+                uint32_t c;
+                p = u_decode(&c, p, end);
+		switch (u_char_canonical_combining_class(c)) {
                 case U_CANONICAL_COMBINING_CLASS_ABOVE:
 			return true;
                 case U_CANONICAL_COMBINING_CLASS_NOT_REORDERED:
@@ -111,11 +115,12 @@ downcase_lithuanian(uint32_t c, const char *p, const char *end,
 static inline bool
 is_before_dot(const char *p, const char *end)
 {
-	for (const char *q = u_next(p); q < end; q = u_next(q)) {
-                uint32_t c = u_dref(q);
+	for (const char *q = u_next(p); q < end; ) {
+                uint32_t c;
+                q = u_decode(&c, q, end);
                 if (c == COMBINING_DOT_ABOVE)
                         return true;
-                switch (u_char_canonical_combining_class(u_dref(p))) {
+                switch (u_char_canonical_combining_class(c)) {
                 case U_CANONICAL_COMBINING_CLASS_ABOVE:
                 case U_CANONICAL_COMBINING_CLASS_NOT_REORDERED:
                         return false;
@@ -157,11 +162,12 @@ downcase_turkic(uint32_t c, const char *string, const char *p, const char *end,
         }
 }
 
-void
+const char *
 _u_downcase_step(const char *string, const char *p, const char *end,
                  enum locale locale, struct output *output)
 {
-        uint32_t c = u_dref(p);
+        uint32_t c;
+        const char *q = u_decode(&c, p, end);
         enum u_general_category gc;
         if (c == GREEK_CAPITAL_LETTER_SIGMA)
                 output_char(output,
@@ -179,7 +185,8 @@ _u_downcase_step(const char *string, const char *p, const char *end,
                        OR(U_GENERAL_CATEGORY_LETTER_TITLECASE, 0))))
                 case_simple(c, gc, false, false, output);
         else
-                output_string(output, p, u_next(p) - p);
+                output_string(output, p, q - p);
+        return q;
 }
 
 size_t
@@ -191,7 +198,7 @@ u_downcase(char *result, size_t m, const char *string, size_t n,
 	enum locale l = _u_locale_from_string(locale);
         const char *end = string + n;
         struct output output = OUTPUT_INIT(result, m);
-        for (const char *p = string; p < end; p = u_next(p))
-                _u_downcase_step(string, p, end, l, &output);
+        for (const char *p = string; p < end; )
+                p = _u_downcase_step(string, p, end, l, &output);
         return output_finalize(&output);
 }

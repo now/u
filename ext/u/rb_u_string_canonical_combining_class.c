@@ -6,6 +6,8 @@
  * 254].  The canonical combining class is used when generating a canonical
  * ordering of the characters in a string.
  *
+ * The empty string has a canonical combining class of 0.
+ *
  * @raise [ArgumentError] If the receiver contains two characters belonging to
  *   different combining classes
  * @raise [ArgumentError] If the receiver contains an incomplete UTF-8 sequence
@@ -14,25 +16,21 @@
 VALUE
 rb_u_string_canonical_combining_class(VALUE self)
 {
-        int current = -1;
-
         const struct rb_u_string *string = RVAL2USTRING(self);
-
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
+        if (p == end)
+                return 0;
+        uint32_t c;
+        p = u_decode(&c, p, end);
+        int first = u_char_canonical_combining_class(c);
         while (p < end) {
-                int ccc = u_char_canonical_combining_class(u_dref_validated_n(p, end - p));
-
-                if (current == -1)
-                        current = ccc;
-                else if (ccc != current)
+                p = u_decode(&c, p, end);
+                int value = u_char_canonical_combining_class(c);
+                if (value != first)
                         rb_u_raise(rb_eArgError,
                                    "string consists of characters with different canonical combining class values: %d+, %d",
-                                   current,
-                                   ccc);
-
-                p = u_next(p);
+                                   first, value);
         }
-
-        return INT2FIX(current);
+        return INT2FIX(first);
 }

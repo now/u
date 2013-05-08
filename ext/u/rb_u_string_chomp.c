@@ -12,14 +12,15 @@ rb_u_string_chomp_default(VALUE self)
         if (last == NULL)
                 return self;
 
-        if (_rb_u_dref(last, end) == '\n') {
+        uint32_t c;
+        u_decode(&c, last, end);
+        if (c == '\n') {
                 const char *last_but_one = u_find_prev(begin, last);
 
                 if (last_but_one != NULL && *last_but_one == '\r')
                         last = last_but_one;
-        } else if (!u_char_isnewline(u_dref(last))) {
+        } else if (!u_char_isnewline(c))
                 return self;
-        }
 
         return rb_u_string_new_c(self, begin, last - begin);
 }
@@ -34,7 +35,11 @@ rb_u_string_chomp_newlines(VALUE self)
         const char *last = end;
         while (last > begin) {
                 const char *last_but_one = u_find_prev(begin, last);
-                if (last == NULL || !u_char_isnewline(u_dref(last_but_one)))
+                if (last_but_one == NULL)
+                        break;
+                uint32_t c;
+                u_decode(&c, last_but_one, end);
+                if (!u_char_isnewline(c))
                         break;
                 last = last_but_one;
         }

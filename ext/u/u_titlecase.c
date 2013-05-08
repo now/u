@@ -29,12 +29,14 @@ static void
 titlecase_step(const char *p, const char *q, struct titlecase_closure *closure)
 {
         const char *t = p;
-        while (t < q && !u_char_iscased(u_dref(t)))
-                t = u_next(t);
+        uint32_t c;
+        const char *u;
+        while (t < q && (u = u_decode(&c, t, q), !u_char_iscased(c)))
+                t = u;
         output_string(closure->output, p, t - p);
         if (t == q)
                 return;
-        _u_upcase_step(closure->string, &t, q, closure->locale, true,
+        _u_upcase_step(closure->string, t, q, closure->locale, true,
                        closure->output);
         if (t + 1 < q && closure->locale == LOCALE_DUTCH &&
             (*t == LATIN_CAPITAL_LETTER_I || *t == LATIN_SMALL_LETTER_I) &&

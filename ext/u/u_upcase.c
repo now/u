@@ -32,31 +32,33 @@ ismark(int category)
 }
 
 static inline const char *
-output_marks(const char *p, const char *end, struct output *output)
+output_marks(const char *q, const char *end,
+             struct output *output)
 {
-        const char *q = u_next(p);
         while (q < end) {
-		uint32_t c = u_dref(q);
+		uint32_t c;
+                const char *r = u_decode(&c, q, end);
                 if (!ismark(u_char_general_category(c)))
                         break;
                 output_char(output, c);
-                q = u_next(q);
+                q = r;
 	}
-        return u_prev(q);
+        return q;
 }
 
-void
-_u_upcase_step(const char *string, const char **p, const char *end,
+const char *
+_u_upcase_step(const char *string, const char *p, const char *end,
                enum locale locale, bool title, struct output *output)
 {
-        uint32_t c = u_dref(*p);
+        uint32_t c;
+        const char *q = u_decode(&c, p, end);
         enum u_general_category gc;
         if (!title && c == COMBINING_GREEK_YPOGEGRAMMENI) {
-                *p = output_marks(*p, end, output);
+                q = output_marks(q, end, output);
                 output_char(output, GREEK_CAPITAL_LETTER_IOTA);
         } else if (locale == LOCALE_LITHUANIAN &&
                    c == COMBINING_DOT_ABOVE &&
-                   is_after(string, *p, u_char_issoftdotted))
+                   is_after(string, p, u_char_issoftdotted))
                 ;
         else if (locale == LOCALE_TURKIC && c == LATIN_SMALL_LETTER_I)
                 output_char(output, LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE);
@@ -68,7 +70,8 @@ _u_upcase_step(const char *string, const char **p, const char *end,
                             true,
                             output);
         else
-                output_string(output, *p, u_next(*p) - *p);
+                output_string(output, p, q - p);
+        return q;
 }
 
 size_t
@@ -80,7 +83,7 @@ u_upcase(char *result, size_t m, const char *string, size_t n,
 	enum locale l = _u_locale_from_string(locale);
         const char *end = string + n;
         struct output output = OUTPUT_INIT(result, m);
-        for (const char *p = string; p < end; p = u_next(p))
-                _u_upcase_step(string, &p, end, l, false, &output);
+        for (const char *p = string; p < end; )
+                p = _u_upcase_step(string, p, end, l, false, &output);
         return output_finalize(&output);
 }
