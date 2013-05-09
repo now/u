@@ -104,8 +104,6 @@ _rb_u_string_test_locale(int argc, VALUE *argv, VALUE self,
 
         const struct rb_u_string *string = RVAL2USTRING(self);
 
-        rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
-
         size_t nfd_n = u_normalize(NULL, 0,
                                    USTRING_STR(string), USTRING_LENGTH(string),
                                    U_NORMALIZATION_FORM_D);
@@ -132,8 +130,6 @@ _rb_u_string_convert(VALUE self,
                      size_t convert(char *, size_t, const char *, size_t))
 {
         const struct rb_u_string *string = RVAL2USTRING(self);
-
-        rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
 
         size_t n = convert(NULL, 0, USTRING_STR(string), USTRING_LENGTH(string));
         char *converted = ALLOC_N(char, n + 1);
@@ -176,8 +172,6 @@ _rb_u_string_convert_locale(int argc, VALUE *argv, VALUE self,
         }
 
         const struct rb_u_string *string = RVAL2USTRING(self);
-
-        rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
 
         size_t n = try_convert(NULL, 0, string, convert, locale);
         char *converted = ALLOC_N(char, n + 1);

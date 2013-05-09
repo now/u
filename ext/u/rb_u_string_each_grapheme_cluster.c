@@ -31,7 +31,6 @@ rb_u_string_each_grapheme_cluster(VALUE self)
         const char *p = USTRING_STR(string);
         const char *end = USTRING_END(string);
         size_t length = end - p;
-        rb_u_validate(p, length);
         u_grapheme_clusters(p, length, (u_substring_fn)each, &self);
         return self;
 }

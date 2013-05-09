@@ -40,9 +40,6 @@ rb_u_string_casecmp(int argc, VALUE *argv, VALUE self)
         const struct rb_u_string *string = RVAL2USTRING(self);
         const struct rb_u_string *other = RVAL2USTRING_ANY(rbother);
 
-        rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
-        rb_u_validate(USTRING_STR(other), USTRING_LENGTH(other));
-
         char *folded;
         size_t folded_n = foldcase(&folded, string, locale, NULL);
 

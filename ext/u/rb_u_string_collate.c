@@ -34,10 +34,7 @@ rb_u_string_collate(int argc, VALUE *argv, VALUE self)
         }
 
         const struct rb_u_string *string = RVAL2USTRING(self);
-        rb_u_validate(USTRING_STR(string), USTRING_LENGTH(string));
-
         const struct rb_u_string *other = RVAL2USTRING_ANY(rbother);
-        rb_u_validate(USTRING_STR(other), USTRING_LENGTH(other));
 
         errno = 0;
         int r = u_collate(USTRING_STR(string), USTRING_LENGTH(string),

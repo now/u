@@ -29,7 +29,6 @@ rb_u_string_each_word(VALUE self)
         const struct rb_u_string *string = RVAL2USTRING(self);
         const char *p = USTRING_STR(string);
         size_t length = USTRING_LENGTH(string);
-        rb_u_validate(p, length);
         u_words(p, length, (u_substring_fn)each, &self);
         return self;
 }
