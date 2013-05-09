@@ -2,23 +2,15 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "u.h"
-#include "private.h"
+
 #include "data/bidi-mirroring.h"
+#include "private.h"
 
-
-/* Store the mirrored representation of C in MIRRORED.
- *
- * Returns true if a mirrored representation was stored in MIRRORED. */
-bool
-u_char_mirror(uint32_t c, uint32_t *mirrored)
+uint32_t
+u_char_mirror(uint32_t c)
 {
-        size_t index;
-
-        if (!unicode_table_lookup(bidi_mirroring_table, c, &index))
-                return false;
-
-        if (mirrored != NULL)
-                *mirrored = bidi_mirroring_table[index].mirrored_ch;
-
-        return true;
+        size_t i;
+        return unicode_table_lookup(bidi_mirroring_table, c, &i) ?
+                bidi_mirroring_table[i].mirrored_ch :
+                c;
 }

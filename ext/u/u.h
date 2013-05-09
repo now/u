@@ -16,19 +16,9 @@
 #  define U_NON_NULL(parameters)
 #endif
 
-#define U_CHAR_MAX UINT32_MAX
-
-#define U_CHAR_MAX_BYTE_LENGTH 6
+#define U_CHAR_MAX_BYTE_LENGTH 4
 
 #define U_N_CODEPOINTS (0x10ffff + 1)
-
-/* uint32_t return used for representing bad input to a function. */
-#define U_BAD_INPUT_CHAR ((uint32_t)-1)
-
-
-/* uint32_t return used for representing an incomplete input to a function. */
-#define U_INCOMPLETE_INPUT_CHAR ((uint32_t)-2)
-
 
 enum u_general_category {
         U_GENERAL_CATEGORY_OTHER_CONTROL,
@@ -159,8 +149,7 @@ enum u_canonical_combining_class {
 U_CONST enum u_canonical_combining_class
         u_char_canonical_combining_class(uint32_t c);
 
-bool u_char_mirror(uint32_t c, uint32_t *mirrored);
-
+uint32_t u_char_mirror(uint32_t c);
 
 enum u_line_break {
         U_LINE_BREAK_MANDATORY,
@@ -391,7 +380,7 @@ size_t u_upcase(char *restrict result, size_t m,
                 const char *restrict locale) U_NON_NULL((3));
 
 size_t u_mirror(char *restrict result, size_t m,
-                const char *restrict string, size_t n) U_NON_NULL((3));
+                const char *restrict u, size_t n) U_NON_NULL((3));
 
 size_t u_recode(char *restrict result, size_t m,
                 const char *restrict string, size_t n,
