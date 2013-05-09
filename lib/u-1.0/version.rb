@@ -172,7 +172,6 @@ module U
               u_char_width.c
               u_collate.c
               u_collation_key.c
-              u_copy.c
               u_downcase.c
               u_decode.c
               u_foldcase.c

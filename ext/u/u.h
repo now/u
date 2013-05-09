@@ -414,10 +414,6 @@ U_PURE char *u_offset_to_pointer_n(const char *str, long offset, size_t n)
 U_PURE long u_pointer_to_offset(const char *str, const char *pos)
         U_NON_NULL((1, 2));
 
-void u_copy(char *restrict dest, const char *src) U_NON_NULL((1, 2));
-void u_copy_n(char *restrict dest, const char *src, size_t n)
-        U_NON_NULL((1, 2));
-
 U_PURE int u_collate(const char *a, size_t a_n, const char *b, size_t b_n,
                      const char *locale) U_NON_NULL((1, 3));
 size_t u_collation_key(char *restrict result, size_t m,
