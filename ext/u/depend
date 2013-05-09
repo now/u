@@ -268,7 +268,6 @@ u_locale.o: u_locale.c u.h u_locale.h private.h
 u_mirror.o: u_mirror.c u.h private.h output.h
 u_n_bytes.o: u_n_bytes.c u.h private.h
 u_n_chars.o: u_n_chars.c u.h private.h
-u_next.o: u_next.c u.h private.h
 u_normalize.o: u_normalize.c u.h private.h data/constants.h \
   data/decompose.h data/compose.h output.h
 u_normalized.o: u_normalized.c u.h

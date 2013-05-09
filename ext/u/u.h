@@ -400,7 +400,6 @@ size_t u_recode(char *restrict result, size_t m,
 extern const char * const u_skip_lengths;
 
 #define u_next(str) ((str) + u_skip_lengths[*(const unsigned char *)(str)])
-U_PURE char *u_find_next(const char *p, const char *end) U_NON_NULL((1));
 
 uint32_t u_decode(const char **q, const char *u, const char *end)
         U_NON_NULL((1, 2, 3));

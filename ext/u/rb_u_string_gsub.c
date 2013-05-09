@@ -142,11 +142,8 @@ rb_u_string_gsub(int argc, VALUE *argv, VALUE self)
                 OBJ_INFECT(substituted, result);
 
                 p = base + registers->end[0];
-                if (registers->beg[0] == registers->end[0]) {
-                        p = u_find_next(p, end);
-                        if (p == NULL)
-                                break;
-                }
+                if (registers->beg[0] == registers->end[0])
+                        p = u_next(p);
                 if (p >= end)
                         break;
 

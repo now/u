@@ -187,7 +187,6 @@ module U
               u_mirror.c
               u_n_bytes.c
               u_n_chars.c
-              u_next.c
               u_normalize.c
               u_normalized.c
               u_offset_to_pointer.c
