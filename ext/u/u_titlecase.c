@@ -37,15 +37,15 @@ titlecase_step(const char *p, const char *q, struct titlecase_closure *closure)
                 return;
         _u_upcase_step(closure->string, t, q, closure->locale, true,
                        closure->output);
-        if (t + 1 < q && closure->locale == LOCALE_DUTCH &&
+        if (u < q && closure->locale == LOCALE_DUTCH &&
             (*t == LATIN_CAPITAL_LETTER_I || *t == LATIN_SMALL_LETTER_I) &&
-            (*(t + 1) == LATIN_CAPITAL_LETTER_J || *(t + 1) == LATIN_SMALL_LETTER_J)) {
+            (*u == LATIN_CAPITAL_LETTER_J || *u == LATIN_SMALL_LETTER_J)) {
                 output_char(closure->output, LATIN_CAPITAL_LETTER_J);
-                t++;
+                u++;
         }
-        for (t = u_next(t); t < q; t = u_next(t))
-                _u_downcase_step(closure->string, t, q, closure->locale,
-                                 closure->output);
+        while (u < q)
+                u = _u_downcase_step(closure->string, u, q, closure->locale,
+                                     closure->output);
 }
 
 static void

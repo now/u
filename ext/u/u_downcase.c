@@ -34,12 +34,12 @@
 
 
 static inline bool
-is_final_sigma(const char *string, const char *p, const char *end)
+is_final_sigma(const char *string, const char *p, const char *q, const char *end)
 {
         if (p == string)
                 return false;
         uint32_t c;
-        for (const char *q = u_next(p); q < end; ) {
+        while (q < end) {
                 c = u_decode(&q, q, end);
                 if (u_char_iscaseignorable(c))
                         continue;
@@ -47,9 +47,8 @@ is_final_sigma(const char *string, const char *p, const char *end)
                         return false;
                 break;
         }
-        const char *r;
-        for (const char *o = p; string < o; o = r) {
-                c = u_decode_r(&r, string, o);
+        while (string < p) {
+                c = u_decode_r(&p, string, p);
                 if (u_char_iscaseignorable(c))
                         continue;
                 if (u_char_iscased(c))
@@ -60,10 +59,10 @@ is_final_sigma(const char *string, const char *p, const char *end)
 }
 
 static inline bool
-has_more_above(const char *string, const char *end)
+has_more_above(const char *q, const char *end)
 {
-	for (const char *p = u_next(string); p < end; ) {
-		switch (u_char_canonical_combining_class(u_decode(&p, p, end))) {
+        while (q < end) {
+		switch (u_char_canonical_combining_class(u_decode(&q, q, end))) {
                 case U_CANONICAL_COMBINING_CLASS_ABOVE:
 			return true;
                 case U_CANONICAL_COMBINING_CLASS_NOT_REORDERED:
@@ -86,14 +85,14 @@ downcase_lithuanian_i(uint32_t c, uint32_t combiner, struct output *output)
 }
 
 static inline bool
-downcase_lithuanian(uint32_t c, const char *p, const char *end,
+downcase_lithuanian(uint32_t c, const char *q, const char *end,
                     struct output *output)
 {
         switch (c) {
         case LATIN_CAPITAL_LETTER_I:
         case LATIN_CAPITAL_LETTER_J:
         case LATIN_CAPITAL_LETTER_I_WITH_OGONEK:
-                if (!has_more_above(p, end))
+                if (!has_more_above(q, end))
                         return false;
                 return downcase_lithuanian_i(u_char_downcase(c), '\0', output);
         case LATIN_CAPITAL_LETTER_I_WITH_GRAVE:
@@ -111,9 +110,9 @@ downcase_lithuanian(uint32_t c, const char *p, const char *end,
 }
 
 static inline bool
-is_before_dot(const char *p, const char *end)
+is_before_dot(const char *q, const char *end)
 {
-	for (const char *q = u_next(p); q < end; ) {
+        while (q < end) {
                 uint32_t c = u_decode(&q, q, end);
                 if (c == COMBINING_DOT_ABOVE)
                         return true;
@@ -135,13 +134,14 @@ is_i(uint32_t c)
 }
 
 static inline bool
-downcase_turkic(uint32_t c, const char *string, const char *p, const char *end,
+downcase_turkic(uint32_t c,
+                const char *string, const char *p, const char *q, const char *end,
                 struct output *output)
 {
         switch (c) {
         case LATIN_CAPITAL_LETTER_I:
                 output_char(output,
-                            is_before_dot(p, end) ?
+                            is_before_dot(q, end) ?
                             LATIN_SMALL_LETTER_I :
                             LATIN_SMALL_LETTER_DOTLESS_I);
                 return true;
@@ -168,14 +168,14 @@ _u_downcase_step(const char *string, const char *p, const char *end,
         enum u_general_category gc;
         if (c == GREEK_CAPITAL_LETTER_SIGMA)
                 output_char(output,
-                            is_final_sigma(string, p, end) ?
+                            is_final_sigma(string, p, q, end) ?
                             GREEK_SMALL_LETTER_FINAL_SIGMA :
                             GREEK_SMALL_LETTER_SIGMA);
         else if (locale == LOCALE_LITHUANIAN &&
-                 downcase_lithuanian(c, p, end, output))
+                 downcase_lithuanian(c, q, end, output))
                 ;
         else if (locale == LOCALE_TURKIC &&
-                 downcase_turkic(c, string, p, end, output))
+                 downcase_turkic(c, string, p, q, end, output))
                 ;
         else if (IS(gc = u_char_general_category(c),
                     OR(U_GENERAL_CATEGORY_LETTER_UPPERCASE,
