@@ -4,11 +4,9 @@
 static void
 each(VALUE self, struct yield *yield)
 {
-        const struct rb_u_string *string = RVAL2USTRING(self);
-        const char *q;
-        const char *end = USTRING_END(string);
-        for (const char *p = USTRING_STR(string); p < end; p = q) {
-                q = rb_u_next_validated(p, end);
+        const struct rb_u_string *s = RVAL2USTRING(self);
+        for (const char *p = USTRING_STR(s), *q, *end = USTRING_END(s); p < end; p = q) {
+                u_decode(&q, p, end);
                 yield_call(yield, rb_u_string_new_c(self, p, q - p));
         }
 }

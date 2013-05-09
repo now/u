@@ -137,15 +137,20 @@ rb_u_string_split_pattern(VALUE self, VALUE pattern, bool limit_given, int limit
                                 rb_ary_push(result, rb_u_string_new_empty(self));
                                 break;
                         } else if (last_was_empty) {
+                                const char *q;
+                                u_decode(&q, p, end);
                                 rb_ary_push(result,
                                             rb_u_string_new_subsequence(self,
                                                                         p - begin,
-                                                                        rb_u_next_validated(p, end) - p));
+                                                                        q - p));
                         } else {
                                 if (begin + start == end)
                                         start++;
-                                else
-                                        start += rb_u_next_validated(p, end) - p;
+                                else {
+                                        const char *q;
+                                        u_decode(&q, p, end);
+                                        start += q - p;
+                                }
                                 last_was_empty = true;
                                 continue;
                         }

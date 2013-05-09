@@ -61,15 +61,6 @@ _rb_u_guarded_alloc(size_t n, ...)
         rb_exc_raise(rb_errinfo());
 }
 
-char *
-rb_u_next_validated(const char *p, const char *end)
-{
-        char *next = (char *)u_next(p);
-        if (next > end)
-                rb_u_raise(rb_eArgError, "input isn’t valid UTF-8");
-        return next;
-}
-
 int
 rb_u_char_to_u(uint32_t c, char *result)
 {

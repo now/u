@@ -158,8 +158,9 @@ directive_argument_name(const char **p, const char *end, char right,
 
         const char *q = *p;
 
-        while (q < end && *q != right)
-                q = rb_u_next_validated(q, end);
+        const char *r = q;
+        while (r < end && u_decode(&r, q, end) != (uint32_t)right)
+                q = r;
 
         if (q == end)
                 rb_u_raise(rb_eArgError,
@@ -177,7 +178,7 @@ directive_argument_name(const char **p, const char *end, char right,
         *argument_id = rb_intern(name);
 #endif
 
-        *p = rb_u_next_validated(q, end);
+        *p = r;
 
         if (*p == end)
                 rb_u_raise(rb_eArgError, "directive missing after argument name");
