@@ -537,6 +537,7 @@ Expectations do
   # NOTE This differs from Ruby because U treats \r as a newline character and
   # thus removes it.
   expect 'hello'.u do "hello\r".u.chomp('') end
+  expect 'a'.u do 'a'.u.chomp("\xC3") end
   expect 'a'.u do 'aā'.u.chomp('ā') end
   expect result.tainted? do 'hello'.u.taint.chomp end
   expect result.untrusted? do 'hello'.u.untrust.chomp end if untrust

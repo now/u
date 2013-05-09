@@ -61,7 +61,7 @@ rb_u_string_inspect_hash_char(const char *q, const char *end,
         switch (c) {
         case REPLACEMENT_CHARACTER:
                 rb_str_buf_cat2(result, "#");
-                if (!u_isvalid_n(p, q - p, NULL))
+                if (!u_valid(p, q - p, NULL))
                         rb_u_string_inspect_bad_input(p, q, result);
                 else
                         rb_u_string_inspect_default(c, result);
@@ -169,7 +169,7 @@ rb_u_string_inspect(VALUE self)
                         rb_str_buf_cat2(result, "\\e");
                         break;
                 case REPLACEMENT_CHARACTER:
-                        if (!u_isvalid_n(p, q - p, NULL)) {
+                        if (!u_valid(p, q - p, NULL)) {
                                 rb_u_string_inspect_bad_input(p, q, result);
                                 break;
                         }

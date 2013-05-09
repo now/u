@@ -179,7 +179,6 @@ module U
               u_has_prefix.c
               u_index.c
               u_is_ascii_only.c
-              u_isvalid.c
               u_locale.c
               u_locale.h
               u_mirror.c

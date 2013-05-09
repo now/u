@@ -67,7 +67,7 @@ rb_u_string_dump_codepoint(VALUE buffer, const char **p, const char *end)
 {
         const char *q;
         uint32_t c = u_decode(&q, *p, end);
-        if (c == REPLACEMENT_CHARACTER && !u_isvalid_n(*p, q - *p, NULL)) {
+        if (c == REPLACEMENT_CHARACTER && !u_valid(*p, q - *p, NULL)) {
                 for (const char *r = *p; r < q; r++)
                         rb_u_string_dump_hex(buffer, (unsigned char)*r);
                 /* -1, since we increase p inside the loop. */

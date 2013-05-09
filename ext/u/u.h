@@ -442,6 +442,9 @@ U_PURE size_t u_rindex_n(const char *haystack, const char *needle, size_t n)
 U_PURE bool u_has_prefix(const char *str, const char *prefix)
         U_NON_NULL((1, 2));
 
+bool u_valid(const char *restrict u, size_t n, const char **restrict end)
+        U_NON_NULL((1));
+
 U_PURE bool u_is_ascii_only(const char *string) U_NON_NULL((1));
 U_PURE bool u_is_ascii_only_n(const char *string, size_t n) U_NON_NULL((1));
 
@@ -456,10 +459,6 @@ U_PURE size_t u_n_bytes(const char *str) U_NON_NULL((1));
 size_t u_reverse(char *restrict result, size_t m,
                  const char *restrict string, size_t n) U_NON_NULL((3));
 
-bool u_isvalid(const char *str) U_NON_NULL((1));
-bool u_isvalid_n(const char *restrict str, size_t max,
-                 const char **restrict end) U_NON_NULL((1));
-
 typedef void (*u_substring_fn)(const char *, size_t, void *);
 void u_words(const char *string, size_t n, u_substring_fn fn, void *closure)
         U_NON_NULL((1));
@@ -468,5 +467,3 @@ void u_grapheme_clusters(const char *string, size_t n, u_substring_fn fn,
 
 int u_char_to_u_n(uint32_t c, char *result, size_t n);
 int u_char_to_u(uint32_t c, char *result);
-
-#define U_IS_CONTINUE_BYTE(c) ((((unsigned char)(c)) & 0xc0) == 0x80)

@@ -124,3 +124,33 @@ u_decode_r(const char **p, const char *begin, const char *u)
         *p = (const char *)begin;
         return REPLACEMENT_CHARACTER;
 }
+
+static inline uint32_t
+validate(uint32_t *state, uint32_t b)
+{
+        uint32_t type = dfa[b];
+        return *state = dfa[256 + *state + type];
+}
+
+bool
+u_valid(const char *u, size_t n, const char **end)
+{
+        uint32_t state = ACCEPT;
+        const unsigned char *o;
+        const unsigned char *p = (const unsigned char *)u;
+        const unsigned char *q = p + n;
+        for ( ; p < q; p++)
+                switch (validate(&state, *p)) {
+                case ACCEPT:
+                        o = p;
+                        break;
+                case REJECT:
+                reject:
+                        if (end != NULL)
+                                *end = (const char *)o;
+                        return false;
+                }
+        if (p == q)
+                return state == ACCEPT;
+        goto reject;
+}
