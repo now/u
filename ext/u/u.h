@@ -350,7 +350,7 @@ enum u_normalization_form {
 };
 
 size_t u_normalize(char *restrict result, size_t m,
-                   const char *restrict string, size_t n,
+                   const char *restrict u, size_t n,
                    enum u_normalization_form form) U_NON_NULL((3));
 
 enum u_normalized {
