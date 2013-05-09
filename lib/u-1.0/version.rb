@@ -192,7 +192,6 @@ module U
               u_normalized.c
               u_offset_to_pointer.c
               u_pointer_to_offset.c
-              u_prev.c
               u_recode.c
               u_reverse.c
               u_rindex.c

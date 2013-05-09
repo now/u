@@ -62,15 +62,6 @@ _rb_u_guarded_alloc(size_t n, ...)
 }
 
 char *
-rb_u_prev_validated(const char *begin, const char *p)
-{
-        char *prev = u_find_prev(begin, p);
-        if (prev == NULL)
-                rb_u_raise(rb_eArgError, "input isn’t valid UTF-8");
-        return prev;
-}
-
-char *
 rb_u_next_validated(const char *p, const char *end)
 {
         char *next = (char *)u_next(p);

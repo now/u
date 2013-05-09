@@ -14,17 +14,16 @@ rb_u_string_rstrip(VALUE self)
                 return self;
 
         const char *end = USTRING_END(string);
-        const char *p = end;
-        while (p > begin) {
-                const char *prev = rb_u_prev_validated(begin, p);
-                const char *q;
-                uint32_t c = u_decode(&q, prev, end);
+        const char *q = end;
+        while (begin < q) {
+                const char *p;
+                uint32_t c = u_decode_r(&p, begin, q);
                 if (c != '\0' && !u_char_isspace(c))
                         break;
-                p = prev;
+                q = p;
         }
-        if (p == end)
+        if (q == end)
                 return self;
 
-        return rb_u_string_new_c(self, begin, p - begin);
+        return rb_u_string_new_c(self, begin, q - begin);
 }

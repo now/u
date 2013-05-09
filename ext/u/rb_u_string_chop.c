@@ -23,16 +23,11 @@ rb_u_string_chop(VALUE self)
         const char *begin = USTRING_STR(string);
         const char *end = USTRING_END(string);
 
-        const char *last = u_find_prev(begin, end);
-        if (last == NULL)
-                return self;
-
-        if (*last == '\n') {
-                const char *last_but_one = u_find_prev(begin, last);
-
-                if (last_but_one != NULL && *last_but_one == '\r')
-                        last = last_but_one;
-        }
+        const char *last;
+        uint32_t c = u_decode_r(&last, begin, end);
+        if (c == '\n')
+                if (*(last - 1) == '\r')
+                        last--;
 
         return rb_u_string_new_c(self, begin, last - begin);
 }

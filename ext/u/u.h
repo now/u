@@ -402,13 +402,11 @@ extern const char * const u_skip_lengths;
 #define u_next(str) ((str) + u_skip_lengths[*(const unsigned char *)(str)])
 U_PURE char *u_find_next(const char *p, const char *end) U_NON_NULL((1));
 
-U_PURE char *u_prev(const char *p) U_NON_NULL((1));
-U_PURE char *u_find_prev(const char *begin, const char *p) U_NON_NULL((1));
-
 uint32_t u_decode(const char **q, const char *u, const char *end)
         U_NON_NULL((1, 2, 3));
 int u_decode_n(uint32_t *result, const char *u, size_t n)
         U_NON_NULL((1, 2));
+uint32_t u_decode_r(const char **p, const char *begin, const char *u);
 
 U_PURE char *u_offset_to_pointer(const char *str, long offset) U_NON_NULL((1));
 U_PURE char *u_offset_to_pointer_n(const char *str, long offset, size_t n)

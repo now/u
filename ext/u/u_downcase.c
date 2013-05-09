@@ -48,15 +48,15 @@ is_final_sigma(const char *string, const char *p, const char *end)
                 break;
         }
         const char *r;
-        for (const char *o = u_prev(p); o > string; o = u_prev(o)) {
-                c = u_decode(&r, o, p);
+        for (const char *o = p; string < o; o = r) {
+                c = u_decode_r(&r, string, o);
                 if (u_char_iscaseignorable(c))
                         continue;
                 if (u_char_iscased(c))
                         return true;
                 return false;
         }
-        return u_char_iscased(u_decode(&r, string, p));
+        return false;
 }
 
 static inline bool

@@ -24,10 +24,9 @@ is_after(const char *string, const char *p, bool predicate(uint32_t))
 {
         if (p == string)
                 return false;
-        const char *r;
         uint32_t c;
-        for (const char *q = u_prev(p); q > string; q = u_prev(q)) {
-                c = u_decode(&r, q, p);
+        for (const char *q = p; string < q; ) {
+                c = u_decode_r(&q, string, q);
                 if (predicate(c))
                         return true;
                 switch (u_char_canonical_combining_class(c)) {
@@ -38,5 +37,5 @@ is_after(const char *string, const char *p, bool predicate(uint32_t))
                         break;
                 }
 	}
-        return predicate(u_decode(&r, string, p));
+        return false;
 }

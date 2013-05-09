@@ -21,15 +21,12 @@ rb_u_string_strip(VALUE self)
                 s = t;
 
         t = end;
-        while (t > begin) {
-                const char *prev = rb_u_prev_validated(begin, t);
-                const char *q;
-                c = u_decode(&q, prev, end);
-
+        while (begin < t) {
+                const char *p;
+                c = u_decode_r(&p, begin, t);
                 if (c != '\0' && !u_char_isspace(c))
                         break;
-
-                t = prev;
+                t = p;
         }
 
         if (s == begin && t == end)

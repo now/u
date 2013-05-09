@@ -93,8 +93,9 @@ canonical_ordering_swap(char *string, char *p,
 {
         char *r = p;
         char *s;
-        const char *t;
-        while (r > string && (s = u_prev(r), u_char_canonical_combining_class(u_decode(&t, s, r)) > ccc))
+        while (r > string &&
+               u_char_canonical_combining_class(u_decode_r((const char **)&s,
+                                                           string, r)) > ccc)
                 r = s;
         char buf[U_CHAR_MAX_BYTE_LENGTH];
         size_t n = u_next(p) - p;

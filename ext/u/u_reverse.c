@@ -14,10 +14,8 @@ u_reverse(char *result, size_t m, const char *string, size_t n)
 {
 	assert(string != NULL);
         assert(result != NULL || m == 0);
-        const char *end = string + n;
         struct output output = OUTPUT_INIT(result, m);
-        if (n > 0)
-                for (const char *p = u_prev(end), *q; p >= string; p = u_prev(p))
-                        output_char(&output, u_decode(&q, p, end));
+        for (const char *p = string + n; p > string; )
+                output_char(&output, u_decode_r(&p, string, p));
         return output_finalize(&output);
 }
