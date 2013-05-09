@@ -135,7 +135,6 @@ module U
               titled.h
               u.c
               u.h
-              u_append.c
               u_char_downcase.c
               u_char_canonical_combining_class.c
               u_char_digit_value.c

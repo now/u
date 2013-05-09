@@ -418,10 +418,6 @@ void u_copy(char *restrict dest, const char *src) U_NON_NULL((1, 2));
 void u_copy_n(char *restrict dest, const char *src, size_t n)
         U_NON_NULL((1, 2));
 
-void u_append(char *restrict dest, const char *src) U_NON_NULL((1, 2));
-void u_append_n(char *restrict dest, const char *src, size_t n)
-        U_NON_NULL((1, 2));
-
 U_PURE int u_collate(const char *a, size_t a_n, const char *b, size_t b_n,
                      const char *locale) U_NON_NULL((1, 3));
 size_t u_collation_key(char *restrict result, size_t m,

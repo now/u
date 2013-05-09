@@ -204,7 +204,6 @@ rb_u_string_zero_width.o: rb_u_string_zero_width.c rb_includes.h \
 titled.o: titled.c u.h private.h data/constants.h data/title-table.h \
   titled.h
 u.o: u.c u.h
-u_append.o: u_append.c u.h private.h
 u_char_canonical_combining_class.o: u_char_canonical_combining_class.c \
   u.h private.h data/constants.h data/canonical-combining-class.h
 u_char_digit_value.o: u_char_digit_value.c u.h private.h data/constants.h \
