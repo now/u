@@ -140,7 +140,7 @@ directive_argument_number(const char **p, const char *end, const char *type,
         int n = directive_parse_int(&q, end, type);
         if (*q != '$')
                 return false;
-        *p = u_next(q);
+        *p = q + 1;
         *argument_number = n;
 
         if (*p == end)
@@ -166,7 +166,7 @@ directive_argument_name(const char **p, const char *end, char right,
                            "missing argument name end delimiter ‘%c’: %s",
                            right, *p);
 
-        const char *base = u_next(*p);
+        const char *base = *p + 1;
         long length = q - base;
 #ifdef HAVE_RUBY_ENCODING_H
         *argument_id = rb_intern3(base, length, rb_utf8_encoding());
