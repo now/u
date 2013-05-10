@@ -59,6 +59,7 @@ have_func 'nl_langinfo_l', %w'langinfo.h' + headers
 have_library 'iconv', 'iconv', 'iconv.h'
 have_func 'iconv', 'iconv.h'
 
+have_func 'rb_errinfo', 'ruby.h'
 have_func 'rb_long2int', 'ruby.h'
 have_func 'rb_hash_lookup2', 'ruby.h'
 have_func 'rb_reg_backref_number', 'ruby.h'
