@@ -154,3 +154,5 @@ tags: TAGS
 DISTCLEANFILES += TAGS
 EOF
 end
+
+puts File.open('extconf.h', 'rb', &:read)
