@@ -364,7 +364,7 @@ enum u_normalized u_normalized(const char *u, size_t n,
                                enum u_normalization_form form) U_NON_NULL((1));
 
 size_t u_downcase(char *restrict result, size_t m,
-                  const char *restrict string, size_t n,
+                  const char *restrict u, size_t n,
                   const char *restrict locale) U_NON_NULL((3));
 
 size_t u_foldcase(char *restrict result, size_t m,

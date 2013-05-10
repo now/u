@@ -1,19 +1,19 @@
-#include <ruby.h>
-#include <assert.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <string.h>
-
 #include "u.h"
-#include "private.h"
+
+#include <assert.h>
+
+#include <string.h>
+#include "output.h"
 
 #include "data/constants.h"
 #include "attributes.h"
-#include "titled.h"
-#include "output.h"
 #include "u_locale.h"
+#include "titled.h"
 #include "case.h"
+#include "private.h"
 
 #define LATIN_CAPITAL_LETTER_I ((uint32_t)0x0049)
 #define LATIN_CAPITAL_LETTER_J ((uint32_t)0x004a)
@@ -187,15 +187,15 @@ _u_downcase_step(const char *string, const char *p, const char *end,
 }
 
 size_t
-u_downcase(char *result, size_t m, const char *string, size_t n,
+u_downcase(char *result, size_t m, const char *u, size_t n,
            const char *locale)
 {
-	assert(string != NULL);
+	assert(u != NULL);
         assert(result != NULL || m == 0);
 	enum locale l = _u_locale_from_string(locale);
-        const char *end = string + n;
-        struct output output = OUTPUT_INIT(result, m);
-        for (const char *p = string; p < end; )
-                p = _u_downcase_step(string, p, end, l, &output);
-        return output_finalize(&output);
+        const char *end = u + n;
+        struct output o = OUTPUT_INIT(result, m);
+        for (const char *p = u; p < end; )
+                p = _u_downcase_step(u, p, end, l, &o);
+        return output_finalize(&o);
 }
