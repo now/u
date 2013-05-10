@@ -156,3 +156,4 @@ EOF
 end
 
 puts File.open('extconf.h', 'rb', &:read)
+puts File.open('mkmf.log', 'rb', &:read)
