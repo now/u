@@ -2,15 +2,15 @@
 #include <assert.h>
 #include <errno.h>
 #define __USE_XOPEN2K8 1
-#include <langinfo.h>
 #include <locale.h>
+#ifdef HAVE_XLOCALE_H
+#  include <xlocale.h>
+#endif
+#include <langinfo.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_XLOCALE_H
-#  include <xlocale.h>
-#endif
 #ifndef HAVE_STRXFRM_L
 static inline size_t
 strxfrm_l(char *restrict s1, const char *restrict s2, size_t n,
