@@ -1,12 +1,12 @@
 #include "extconf.h"
 #include <assert.h>
 #include <errno.h>
+#define __USE_XOPEN2K8 1
 #include <langinfo.h>
 #include <locale.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
-#define __USE_XOPEN2K8 1
 #include <string.h>
 #ifdef HAVE_XLOCALE_H
 #  include <xlocale.h>
