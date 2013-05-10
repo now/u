@@ -360,7 +360,7 @@ enum u_normalized {
 };
 
 enum u_normalized u_char_normalized(uint32_t c, enum u_normalization_form form);
-enum u_normalized u_normalized(const char *string, size_t n,
+enum u_normalized u_normalized(const char *u, size_t n,
                                enum u_normalization_form form) U_NON_NULL((1));
 
 size_t u_downcase(char *restrict result, size_t m,
