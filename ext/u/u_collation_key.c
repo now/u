@@ -6,6 +6,7 @@
 #ifdef HAVE_XLOCALE_H
 #  include <xlocale.h>
 #endif
+#define __USE_XOPEN2K 1
 #include <langinfo.h>
 #include <stdbool.h>
 #include <stdint.h>

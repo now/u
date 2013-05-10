@@ -36,6 +36,7 @@ main(void)
 EOC
 end
 
+$defs.push '-D__USE_XOPEN2K'
 $defs.push '-D__USE_XOPEN2K8'
 
 headers = []
@@ -154,6 +155,3 @@ tags: TAGS
 DISTCLEANFILES += TAGS
 EOF
 end
-
-puts File.open('extconf.h', 'rb', &:read)
-puts File.open('mkmf.log', 'rb', &:read)

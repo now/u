@@ -136,8 +136,8 @@ bool
 u_valid(const char *u, size_t n, const char **end)
 {
         uint32_t state = ACCEPT;
-        const unsigned char *o;
         const unsigned char *p = (const unsigned char *)u;
+        const unsigned char *o = p;
         const unsigned char *q = p + n;
         for ( ; p < q; p++)
                 switch (validate(&state, *p)) {
