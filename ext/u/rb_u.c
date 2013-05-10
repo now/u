@@ -1,5 +1,6 @@
 /* -*- coding: utf-8 -*- */
 
+#include "extconf.h"
 #include <errno.h>
 #include <ruby.h>
 #include <stdarg.h>
