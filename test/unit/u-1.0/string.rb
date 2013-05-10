@@ -231,8 +231,8 @@ Expectations do
   expect result.to.start_with?('a', 'ä') do 'äbc'.u end
   expect result.not.to.start_with? do 'äbc'.u end
 
-  expect 1 do 'あB'.u.casecmp('あa') end
-  expect 1 do 'あB'.u.casecmp('あa'.u) end
+  expect result.>(0) do 'あB'.u.casecmp('あa') end
+  expect result.>(0) do 'あB'.u.casecmp('あa'.u) end
 
   expect "\0".u do "\0".u.collation_key('en_US.UTF-8') end
   expect U::String do 'äbcdëf'.u.collation_key('en_US.UTF-8') end
