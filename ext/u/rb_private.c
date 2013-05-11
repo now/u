@@ -2,6 +2,7 @@
 #ifdef HAVE_RUBY_ENCODING_H
 #  include <ruby/encoding.h>
 #endif
+#include <errno.h>
 
 #ifndef HAVE_RB_MEMHASH
 int
@@ -67,7 +68,7 @@ rb_u_raise_errno(int number, const char *format, ...)
         rb_syserr_fail_str(number, message);
 #else
         char buf[2048];
-        int n = vsnprintf(buf, sizeof(buf), format, args);
+        vsnprintf(buf, sizeof(buf), format, args);
         int errno = number;
         va_end(args);
         rb_sys_fail(buf);
