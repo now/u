@@ -60,11 +60,7 @@ _rb_u_guarded_alloc(size_t n, ...)
         while ((previous = va_arg(args, void *)) != NULL)
                 free(previous);
         va_end(args);
-#ifdef HAVE_RB_ERRINFO
         rb_exc_raise(rb_errinfo());
-#else
-        rb_exc_raise(rb_errinfo);
-#endif
 }
 
 int
