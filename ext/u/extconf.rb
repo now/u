@@ -156,3 +156,5 @@ tags: TAGS
 DISTCLEANFILES += TAGS
 EOF
 end
+
+puts File.open('mkmf.log', 'rb', &:read)
