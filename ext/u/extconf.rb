@@ -137,7 +137,7 @@ if $enable_gcc_warnings
   try_compiler_option '-Wundef'
   try_compiler_option '-Wunsafe-loop-optimizations'
   try_compiler_option '-Wwrite-strings'
-  try_compiler_option '-Wshorten-64-to-32'
+  try_compiler_option '-Wshorten-64-to-32' unless RUBY_VERSION < '1.9'
 end
 
 $defs.push '-DU_COMPILATION'
@@ -156,5 +156,3 @@ tags: TAGS
 DISTCLEANFILES += TAGS
 EOF
 end
-
-puts File.open('mkmf.log', 'rb', &:read)
