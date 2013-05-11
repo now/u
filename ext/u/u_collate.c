@@ -52,12 +52,12 @@ u_collate(const char *a, size_t a_n, const char *b, size_t b_n,
           const char *locale)
 {
         char a_buf[2048];
-        char *a_key;
+        char *a_key = NULL;
         size_t a_key_n = ckey(&a_key, a_buf, sizeof(a_buf), a, a_n, locale);
         int a_errno = errno;
 
         char b_buf[2048];
-        char *b_key;
+        char *b_key = NULL;
         size_t b_key_n = ckey(&b_key, b_buf, sizeof(b_buf), b, b_n, locale);
         int b_errno = errno;
 
