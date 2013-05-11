@@ -59,9 +59,9 @@ rb_u_raise(VALUE exception, const char *format, ...)
 void
 rb_u_raise_errno(int number, const char *format, ...)
 {
-#ifdef HAVE_RUBY_ENCODING_H
         va_list args;
         va_start(args, format);
+#ifdef HAVE_RUBY_ENCODING_H
         VALUE message = format_message(format, args);
         va_end(args);
         rb_syserr_fail_str(number, message);
@@ -69,6 +69,7 @@ rb_u_raise_errno(int number, const char *format, ...)
         char buf[2048];
         int n = vsnprintf(buf, sizeof(buf), format, args);
         int errno = number;
+        va_end(args);
         rb_sys_fail(buf);
 #endif
 }
