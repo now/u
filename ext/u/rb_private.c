@@ -69,7 +69,7 @@ rb_u_raise_errno(int number, const char *format, ...)
 #else
         char buf[2048];
         vsnprintf(buf, sizeof(buf), format, args);
-        int errno = number;
+        errno = number;
         va_end(args);
         rb_sys_fail(buf);
 #endif
