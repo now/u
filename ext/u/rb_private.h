@@ -37,10 +37,6 @@ VALUE rb_u_pattern_argument(VALUE pattern, bool quote);
 
 long rb_u_string_index_regexp(VALUE self, const char *begin, VALUE regex, bool reverse);
 
-#ifndef HAVE_RB_ERRINFO
-#  define rb_errinfo() (rb_errinfo)
-#endif
-
 #ifndef HAVE_RB_MEMHASH
 int rb_memhash(const char *string, long length);
 #endif
