@@ -248,15 +248,16 @@ rb_u_string_recode(VALUE self, VALUE codeset)
  *
  * The property-checking interrogators are {#alnum?}, {#alpha?},
  * {#ascii_only?}, {#assigned?}, {#case_ignorable?}, {#cased?}, {#cntrl?},
- * {#defined?}, {#digit?}, {#folded?}, {#graph?}, {#lower?}, {#newline?},
- * {#print?}, {#punct?}, {#soft_dotted?}, {#space?}, {#title?}, {#upper?},
- * {#valid?}, {#wide?}, {#wide_cjk?}, {#xdigit?}, and {#zero_width?}.  These
- * interrogators check the corresponding Unicode property of each characters in
- * the U::String and if all characters have this property, they’ll return true.
+ * {#defined?}, {#digit?}, {#graph?}, {#newline?}, {#print?}, {#punct?},
+ * {#soft_dotted?}, {#space?}, {#title?}, {#valid?}, {#wide?}, {#wide_cjk?},
+ * {#xdigit?}, and {#zero_width?}.  These interrogators check the corresponding
+ * Unicode property of each characters in the U::String and if all characters
+ * have this property, they’ll return true.
  *
- * A very close relative to the property-checking interrogators is
- * {#normalized?}, which checks whether the receiver has been normalized,
- * optionally to a specific normaliation form.
+ * Very close relatives to the property-checking interrogators are {#folded?},
+ * {#lower?}, and {#upper?}, which check whether a string has been cased in a
+ * given way, and {#normalized?}, which checks whether the receiver has been
+ * normalized, optionally to a specific normalization form.
  *
  * The content-matching interrogators are {#==}, {#===}, {#=~}, {#match},
  * {#empty?}, {#end_with?}, {#eql?}, {#include?}, {#index}, {#rindex}, and

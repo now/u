@@ -60,21 +60,18 @@
     •   #cntrl?⁶
     •   #defined?⁷
     •   #digit?⁸
-    •   #folded?⁹
-    •   #graph?¹⁰
-    •   #lower?¹¹
-    •   #newline?¹²
-    •   #print?¹³
-    •   #punct?¹⁴
-    •   #soft_dotted?¹⁵
-    •   #space?¹⁶
-    •   #title?¹⁷
-    •   #upper?¹⁸
-    •   #valid?¹⁹
-    •   #wide?²⁰
-    •   #wide_cjk?²¹
-    •   #xdigit?²²
-    •   #zero_width?²³
+    •   #graph?⁹
+    •   #newline?¹⁰
+    •   #print?¹¹
+    •   #punct?¹²
+    •   #soft_dotted?¹³
+    •   #space?¹⁴
+    •   #title?¹⁵
+    •   #valid?¹⁶
+    •   #wide?¹⁷
+    •   #wide_cjk?¹⁸
+    •   #xdigit?¹⁹
+    •   #zero_width?²⁰
 
     ¹  See http://disu.se/software/u/api/U/String/#alnum-p-instance-method
     ²  See http://disu.se/software/u/api/U/String/#alpha-p-instance-method
@@ -84,21 +81,35 @@
     ⁶  See http://disu.se/software/u/api/U/String/#cntrl-p-instance-method
     ⁷  See http://disu.se/software/u/api/U/String/#defined-p-instance-method
     ⁸  See http://disu.se/software/u/api/U/String/#digit-p-instance-method
-    ⁹  See http://disu.se/software/u/api/U/String/#folded-p-instance-method
-    ¹⁰ See http://disu.se/software/u/api/U/String/#graph-p-instance-method
-    ¹¹ See http://disu.se/software/u/api/U/String/#lower-p-instance-method
-    ¹² See http://disu.se/software/u/api/U/String/#newline-p-instance-method
-    ¹³ See http://disu.se/software/u/api/U/String/#print-p-instance-method
-    ¹⁴ See http://disu.se/software/u/api/U/String/#punct-p-instance-method
-    ¹⁵ See http://disu.se/software/u/api/U/String/#soft_dotted-p-instance-method
-    ¹⁶ See http://disu.se/software/u/api/U/String/#space-p-instance-method
-    ¹⁷ See http://disu.se/software/u/api/U/String/#title-p-instance-method
-    ¹⁸ See http://disu.se/software/u/api/U/String/#upper-p-instance-method
-    ¹⁹ See http://disu.se/software/u/api/U/String/#valid-p-instance-method
-    ²⁰ See http://disu.se/software/u/api/U/String/#wide-p-instance-method
-    ²¹ See http://disu.se/software/u/api/U/String/#wide_cjk-p-instance-method
-    ²² See http://disu.se/software/u/api/U/String/#xdigit-p-instance-method
-    ²³ See http://disu.se/software/u/api/U/String/#zero_width-p-instance-method
+    ⁹  See http://disu.se/software/u/api/U/String/#graph-p-instance-method
+    ¹⁰ See http://disu.se/software/u/api/U/String/#newline-p-instance-method
+    ¹¹ See http://disu.se/software/u/api/U/String/#print-p-instance-method
+    ¹² See http://disu.se/software/u/api/U/String/#punct-p-instance-method
+    ¹³ See http://disu.se/software/u/api/U/String/#soft_dotted-p-instance-method
+    ¹⁴ See http://disu.se/software/u/api/U/String/#space-p-instance-method
+    ¹⁵ See http://disu.se/software/u/api/U/String/#title-p-instance-method
+    ¹⁶ See http://disu.se/software/u/api/U/String/#valid-p-instance-method
+    ¹⁷ See http://disu.se/software/u/api/U/String/#wide-p-instance-method
+    ¹⁸ See http://disu.se/software/u/api/U/String/#wide_cjk-p-instance-method
+    ¹⁹ See http://disu.se/software/u/api/U/String/#xdigit-p-instance-method
+    ²⁰ See http://disu.se/software/u/api/U/String/#zero_width-p-instance-method
+
+      Similar to these methods are
+
+    •   #folded?¹
+    •   #lower?²
+    •   #upper?³
+
+      which check whether a ‹U::String› has been cased in a given manner.
+
+    ¹ See http://disu.se/software/u/api/U/String/#folded-p-instance-method
+    ² See http://disu.se/software/u/api/U/String/#lower-p-instance-method
+    ³ See http://disu.se/software/u/api/U/String/#upper-p-instance-method
+
+      There’s also a #normalized?¹ method that checks whether a ‹U::String› has
+      been normalized on a given form.
+
+    ¹ See http://disu.se/software/u/api/U/String/#normalized-p-instance-method
 
       You can also access certain Unicode properties of the characters of a
       U::String:
