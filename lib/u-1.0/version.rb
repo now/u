@@ -201,7 +201,6 @@ module U
          def additional_files
            %w[build/ext/u/data/attributes.rb
               build/ext/u/data/bidi-mirroring.rb
-              build/ext/u/data/break.rb
               build/ext/u/data/case-folding.rb
               build/ext/u/data/cased.rb
               build/ext/u/data/canonical-combining-class.rb
@@ -257,6 +256,7 @@ module U
               ext/u/data/script.h
               ext/u/data/soft-dotted.h
               ext/u/data/title-table.h
+              ext/u/data/types.h
               ext/u/data/wide-cjk.h
               ext/u/data/wide.h
               ext/u/data/word-break.h]
@@ -280,7 +280,8 @@ module U
       %w[build/test/unit/break.rb
          build/test/unit/case.rb
          build/test/unit/foldcase.rb
-         build/test/unit/normalize.rb]
+         build/test/unit/normalize.rb
+         test/unit/normalize.rb]
     end
   }
 end
