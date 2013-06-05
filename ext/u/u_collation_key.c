@@ -18,7 +18,7 @@
 #include "u.h"
 #include "private.h"
 
-#ifndef HAVE_LOCALE_T
+#ifndef HAVE_TYPE_LOCALE_T
 typedef struct { } *locale_t;
 #endif
 
@@ -31,7 +31,7 @@ strxfrm_l(char *restrict s1, const char *restrict s2, size_t n,
 }
 #endif
 
-#if defined(HAVE_NL_LANGINFO_L) && defined(HAVE_NL_LANGINFO_CODESET)
+#if !defined(HAVE_NL_LANGINFO_L) && defined(HAVE_NL_LANGINFO_CODESET)
 static inline char *
 nl_langinfo_l(nl_item item, UNUSED(locale_t loc))
 {
