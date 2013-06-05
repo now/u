@@ -78,8 +78,8 @@ rb_u_validate(const char *string, long length)
         const char *end;
         if (!u_valid(string, length, &end))
                 rb_u_raise(rb_eArgError,
-                           "invalid byte sequence at byte %"PRIdPTRDIFF,
-                           end - string);
+                           "invalid byte sequence at byte %"PRIdMAX,
+                           (intmax_t)(end - string));
 }
 
 VALUE
