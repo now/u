@@ -7,10 +7,37 @@
 #include <string.h>
 
 #include "u.h"
+#include "private.h"
 
 #ifdef HAVE_ICONV
 #  include <iconv.h>
 #  include <limits.h>
+#else
+typedef void *iconv_t;
+
+static iconv_t
+iconv_open(UNUSED(const char *restrict tocode),
+           UNUSED(const char *restrict fromcode))
+{
+        errno = ENOSYS;
+        return (iconv_t)-1;
+}
+
+static size_t
+iconv(UNUSED(iconv_t cd),
+      UNUSED(char **restrict inbuf), UNUSED(size_t *restrict inbytesleft),
+      UNUSED(char **restrict outbuf), UNUSED(size_t *restrict outbytesleft))
+{
+        errno = ENOSYS;
+        return (size_t)-1;
+}
+
+static int
+iconv_close(UNUSED(iconv_t cd))
+{
+        errno = ENOSYS;
+        return -1;
+}
 #endif
 
 size_t
