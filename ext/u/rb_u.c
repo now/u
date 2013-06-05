@@ -2,11 +2,11 @@
 
 #include "extconf.h"
 #include <errno.h>
+#include <inttypes.h>
 #include <ruby.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
-#include <stdint.h>
 #include <stdlib.h>
 #include <limits.h>
 #include "u.h"

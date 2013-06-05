@@ -1,10 +1,10 @@
 /* -*- coding: utf-8 -*- */
 
+#include <inttypes.h>
 #include <ruby.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
-#include <stdint.h>
 #include <limits.h>
 #include "u.h"
 #include "private.h"
