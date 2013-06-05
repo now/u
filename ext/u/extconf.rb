@@ -3,6 +3,7 @@ require 'optparse'
 
 have_header 'assert.h'
 have_header 'limits.h'
+have_header 'langinfo.h'
 have_header 'locale.h'
 have_header 'stdarg.h'
 have_header 'stdbool.h'
@@ -37,8 +38,10 @@ end
 $defs.push '-D__USE_XOPEN2K'
 $defs.push '-D__USE_XOPEN2K8'
 
-headers = []
+headers = %w'locale.h'
 headers << 'xlocale.h' if $xlocale_h
+have_type 'locale_t', headers
+have_func 'newlocale', headers
 have_func 'strcoll_l', headers
 have_func 'strxfrm_l', headers
 

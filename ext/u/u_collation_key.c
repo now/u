@@ -7,11 +7,21 @@
 #  include <xlocale.h>
 #endif
 #define __USE_XOPEN2K 1
-#include <langinfo.h>
+#ifdef HAVE_LANGINFO_H
+#  include <langinfo.h>
+#endif
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "u.h"
+#include "private.h"
+
+#ifndef HAVE_LOCALE_T
+typedef struct { } *locale_t;
+#endif
+
 #ifndef HAVE_STRXFRM_L
 static inline size_t
 strxfrm_l(char *restrict s1, const char *restrict s2, size_t n,
@@ -20,7 +30,8 @@ strxfrm_l(char *restrict s1, const char *restrict s2, size_t n,
         return strxfrm(s1, s2, n);
 }
 #endif
-#ifndef HAVE_NL_LANGINFO_L
+
+#if defined(HAVE_NL_LANGINFO_L) && defined(HAVE_NL_LANGINFO_CODESET)
 static inline char *
 nl_langinfo_l(nl_item item, UNUSED(locale_t loc))
 {
@@ -28,9 +39,33 @@ nl_langinfo_l(nl_item item, UNUSED(locale_t loc))
 }
 #endif
 
-#include "u.h"
-#include "private.h"
+#ifdef HAVE_NEWLOCALE
+static inline locale_t
+collocale(const char *locale)
+{
+        return locale == NULL ?
+                NULL :
+                newlocale(LC_COLLATE_MASK | LC_CTYPE_MASK, locale, NULL);
+}
+static inline void
+delocale(locale_t locale)
+{
+        if (locale != NULL)
+                freelocale(locale);
+}
+#else
+static inline locale_t
+collocale(UNUSED(const char *locale))
+{
+        return NULL;
+}
+static inline void
+delocale(UNUSED(locale_t locale))
+{
+}
+#endif
 
+#ifdef HAVE_NL_LANGINFO_CODESET
 static inline const char *
 codeset(locale_t locale)
 {
@@ -38,6 +73,13 @@ codeset(locale_t locale)
                 nl_langinfo(CODESET) :
                 nl_langinfo_l(CODESET, locale);
 }
+#else
+static inline const char *
+codeset(UNUSED(locale_t locale))
+{
+        return "UTF-8";
+}
+#endif
 
 static inline size_t
 transform(char *result, const char *string, size_t n, locale_t locale)
@@ -100,15 +142,12 @@ u_collation_key(char *result, size_t m, const char *string, size_t n,
 {
 	assert(string != NULL);
         assert(result != NULL || m == 0);
-        locale_t l = NULL;
-        if (locale != NULL)
-                l = newlocale(LC_COLLATE_MASK | LC_CTYPE_MASK, locale, NULL);
+        locale_t l = collocale(locale);
         const char *cs = codeset(l);
         size_t r = strcmp(cs, "UTF-8") != 0 ?
                 recode_ckey(result, m, string, n, l, cs) :
                 ckey(result, m, string, n, l);
-        if (l != NULL)
-                freelocale(l);
+        delocale(l);
         return r;
 }
 
