@@ -104,8 +104,8 @@ def try_compiler_option(opt, &block)
   result = false
   checking_for "#{opt} option to compiler" do
     if result = try_cpp('', opt, &block)
-      $warnflags += ' ' unless $warnflags.empty?
-      $warnflags += opt
+      $CFLAGS += ' ' unless $CFLAGS.empty?
+      $CFLAGS += opt
     end
   end
   result
@@ -116,34 +116,45 @@ try_compiler_option '-finline-functions'
 try_compiler_option '-fno-common'
 try_compiler_option '-fvisibility=hidden'
 
+def try_warning_option(opt, &block)
+  result = false
+  checking_for "#{opt} option to compiler" do
+    if result = try_cpp('', opt, &block)
+      $warnflags += ' ' unless $warnflags.empty?
+      $warnflags += opt
+    end
+  end
+  result
+end
+
 if $enable_gcc_warnings
   try_compiler_option '-Werror'
-  try_compiler_option '-Wall'
-  try_compiler_option '-Waggregate-return'
-  try_compiler_option '-Wcast-align'
-  try_compiler_option '-Wextra'
-  try_compiler_option '-Wformat=2'
-  try_compiler_option '-Winit-self'
-  try_compiler_option '-Winline'
-  try_compiler_option '-Wmissing-declarations'
-  try_compiler_option '-Wmissing-format-attribute'
-  try_compiler_option '-Wmissing-include-dirs'
-  try_compiler_option '-Wmissing-noreturn'
-  try_compiler_option '-Wmissing-prototypes'
-  try_compiler_option '-Wnested-externs'
-  try_compiler_option '-Wold-style-definition'
-  try_compiler_option '-Wpacked'
-  try_compiler_option '-Wp,-D_FORTIFY_SOURCE=2'
-  try_compiler_option '-Wpointer-arith'
-  try_compiler_option '-Wsign-compare'
-  try_compiler_option '-Wstrict-aliasing=2'
-#  try_compiler_option '-Wsuggest-attribute=const'
-  try_compiler_option '-Wsuggest-attribute=noreturn'
-#  try_compiler_option '-Wsuggest-attribute=pure'
-  try_compiler_option '-Wundef'
-  try_compiler_option '-Wunsafe-loop-optimizations'
-  try_compiler_option '-Wwrite-strings'
-  try_compiler_option '-Wshorten-64-to-32' unless RUBY_VERSION < '1.9'
+  try_warning_option '-Wall'
+  try_warning_option '-Waggregate-return'
+  try_warning_option '-Wcast-align'
+  try_warning_option '-Wextra'
+  try_warning_option '-Wformat=2'
+  try_warning_option '-Winit-self'
+  try_warning_option '-Winline'
+  try_warning_option '-Wmissing-declarations'
+  try_warning_option '-Wmissing-format-attribute'
+  try_warning_option '-Wmissing-include-dirs'
+  try_warning_option '-Wmissing-noreturn'
+  try_warning_option '-Wmissing-prototypes'
+  try_warning_option '-Wnested-externs'
+  try_warning_option '-Wold-style-definition'
+  try_warning_option '-Wpacked'
+  try_warning_option '-Wp,-D_FORTIFY_SOURCE=2'
+  try_warning_option '-Wpointer-arith'
+  try_warning_option '-Wsign-compare'
+  try_warning_option '-Wstrict-aliasing=2'
+#  try_warning_option '-Wsuggest-attribute=const'
+  try_warning_option '-Wsuggest-attribute=noreturn'
+#  try_warning_option '-Wsuggest-attribute=pure'
+  try_warning_option '-Wundef'
+  try_warning_option '-Wunsafe-loop-optimizations'
+  try_warning_option '-Wwrite-strings'
+  try_warning_option '-Wshorten-64-to-32' unless RUBY_VERSION < '1.9'
 end
 
 $defs.push '-DU_COMPILATION'
