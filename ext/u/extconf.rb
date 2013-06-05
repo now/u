@@ -1,8 +1,6 @@
 require 'mkmf'
 require 'optparse'
 
-$CFLAGS = $CFLAGS.sub('$(cflags) ', '')
-
 have_header 'assert.h'
 have_header 'limits.h'
 have_header 'locale.h'
@@ -84,6 +82,8 @@ have_func 'rb_vsprintf', 'ruby.h'
 
 have_var 'rb_eKeyError', 'ruby.h'
 
+$warnflags = ''
+
 $enable_gcc_warnings = false
 OptionParser.new{ |opts|
   opts.banner = 'Usage: ruby extconf.rb [OPTION]...'
@@ -100,7 +100,10 @@ OptionParser.new{ |opts|
 def try_compiler_option(opt, &block)
   result = false
   checking_for "#{opt} option to compiler" do
-    $CFLAGS += " #{opt}" if result = try_cpp('', opt, &block)
+    if result = try_cpp('', opt, &block)
+      $warnflags += ' ' unless $warnflags.empty?
+      $warnflags += opt
+    end
   end
   result
 end
