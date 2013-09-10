@@ -4,23 +4,17 @@ require 'inventory-1.0'
 
 module U
   Version = Inventory.new(1, 0, 0){
-    def authors
-      Authors.new{
-        author 'Nikolai Weibull', 'now@disu.se'
-      }
-    end
+    authors{
+      author 'Nikolai Weibull', 'now@disu.se'
+    }
 
-    def homepage
-      'http://disu.se/software/u-1.0/'
-    end
+    homepage 'http://disu.se/software/u-1.0/'
 
-    def licenses
-      Licenses.new{
-        license 'LGPLv3+',
-                'GNU Lesser General Public License, version 3 or later',
-                'http://www.gnu.org/licenses/'
-      }
-    end
+    licenses{
+      license 'LGPLv3+',
+              'GNU Lesser General Public License, version 3 or later',
+              'http://www.gnu.org/licenses/'
+    }
 
     def dependencies
       super + Inventory::Dependencies.new{
