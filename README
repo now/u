@@ -228,3 +228,13 @@
 
     Nikolai Weibull wrote the code, the tests, the documentation, and this
     README.
+
+§ Licensing
+
+    U is free software: you may redistribute it and/or modify it under the
+    terms of the {GNU Lesser General Public License, version 3}¹ or later², as
+    published by the {Free Software Foundation}³.
+
+¹ See http://disu.se/licenses/lgpl-3.0/
+² See http://gnu.org/licenses/
+³ See http://fsf.org/
