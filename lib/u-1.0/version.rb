@@ -4,14 +4,32 @@ require 'inventory-1.0'
 
 module U
   Version = Inventory.new(1, 0, 0){
+    def authors
+      Authors.new{
+        author 'Nikolai Weibull', 'now@disu.se'
+      }
+    end
+
+    def homepage
+      'http://disu.se/software/u-1.0/'
+    end
+
+    def licenses
+      Licenses.new{
+        license 'LGPLv3+',
+                'GNU Lesser General Public License, version 3 or later',
+                'http://www.gnu.org/licenses/'
+      }
+    end
+
     def dependencies
       super + Inventory::Dependencies.new{
-        development 'inventory-rake', 1, 5, 0
-        development 'inventory-rake-tasks-yard', 1, 3, 0
+        development 'inventory-rake', 1, 6, 0
+        development 'inventory-rake-tasks-yard', 1, 4, 0
         development 'lookout', 3, 0, 0
-        development 'lookout-rake', 3, 0, 0
+        development 'lookout-rake', 3, 1, 0
         development 'yard', 0, 8, 0
-        development 'yard-heuristics', 1, 1, 0
+        development 'yard-heuristics', 1, 2, 0
       }
     end
 

@@ -4,11 +4,7 @@ require 'inventory-rake-1.0'
 
 load File.expand_path('../lib/u-1.0/version.rb', __FILE__)
 
-Inventory::Rake::Tasks.define U::Version, :gem => proc{ |_, s|
-  s.author = 'Nikolai Weibull'
-  s.email = 'now@bitwi.se'
-  s.homepage = 'https://github.com/now/u'
-}
+Inventory::Rake::Tasks.define U::Version
 
 Inventory::Rake::Tasks.unless_installing_dependencies do
   require 'lookout-rake-3.0'
