@@ -3,7 +3,7 @@
 require 'inventory-1.0'
 
 module U
-  Version = Inventory.new(1, 0, 1){
+  Version = Inventory.new(1, 0, 2){
     authors{
       author 'Nikolai Weibull', 'now@disu.se'
     }

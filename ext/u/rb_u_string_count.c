@@ -3,19 +3,19 @@
 
 /* @overload count(set, *sets)
  *
- * Returns the number of characters in the receiver that are included in the
- * intersection of SET and any additional SETS of characters.
+ *   Returns the number of characters in the receiver that are included in the
+ *   intersection of SET and any additional SETS of characters.
  *
- * The complement of all Unicode characters and a given set of characters may
- * be specified by prefixing a non-empty set with ‘`^`’ (U+005E CIRCUMFLEX
- * ACCENT).
+ *   The complement of all Unicode characters and a given set of characters may
+ *   be specified by prefixing a non-empty set with ‘`^`’ (U+005E CIRCUMFLEX
+ *   ACCENT).
  *
- * Any sequence of characters _a_-_b_ inside a set will expand to also
- * include all characters whose code points lay between those of _a_ and _b_.
+ *   Any sequence of characters _a_-_b_ inside a set will expand to also
+ *   include all characters whose code points lay between those of _a_ and _b_.
  *
- * @param [U::String, #to_str] set
- * @param [Array<U::String, #to_str>] sets
- * @return [Integer] */
+ *   @param [U::String, #to_str] set
+ *   @param [Array<U::String, #to_str>] sets
+ *   @return [Integer] */
 VALUE
 rb_u_string_count(int argc, VALUE *argv, VALUE self)
 {
